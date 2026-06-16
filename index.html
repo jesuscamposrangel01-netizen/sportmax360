@@ -373,8 +373,7 @@ async function cargarProximos() {
     } else lista.innerHTML = `<li>Sin próximos partidos</li>`;
   } catch (e) { console.error("Próximos:", e); }
 }
-
-// 📰 NOTICIAS DE FÚTBOL
+    
 // 📰 NOTICIAS DE FÚTBOL
 async function cargarNoticias() {
   try {
@@ -413,7 +412,7 @@ formForo.addEventListener('submit',e=>{
     listaForo.prepend(nuevo);
     formForo.reset();
 });
-
+    
 document.addEventListener('DOMContentLoaded',()=>{
     cargarResultados();
     cargarPosiciones();
@@ -422,7 +421,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 });
 
-});
 </script>
 
 </body>
