@@ -446,10 +446,11 @@ async function cargarProximos() {
 // 📰 NOTICIAS DE FÚTBOL
 async function cargarNoticias() {
   try {
-    const res = await fetch("https://api.rss2json.com/v1/api.json?rss_url=https://www.tycsports.com.ar/rss/futbol/mundial-2026.xml");
+    const res = await fetch("https://api.rss2json.com/v1/api.json?rss_url=https://as.com/futbol/rss.xml");
     const json = await res.json();
     const cont = document.getElementById("contenedor-noticias");
     cont.innerHTML = "";
+
     if (json.items?.length) {
       json.items.slice(0,4).forEach(n => {
         cont.innerHTML += `
@@ -464,23 +465,10 @@ async function cargarNoticias() {
     }
   } catch (e) {
     console.error("Noticias:", e);
+    cont.innerHTML = `<div class="card"><p>No se pudieron cargar las noticias</p></div>`;
   }
 }
 
-
-const formForo=document.getElementById('formForo');
-const listaForo=document.getElementById('listaForo');
-formForo.addEventListener('submit',e=>{
-    e.preventDefault();
-    const nom=document.getElementById('nombreUsuario').value;
-    const tit=document.getElementById('tituloTema').value;
-    const txt=document.getElementById('textoComentario').value;
-    const nuevo=document.createElement('div');
-    nuevo.className='comentario';
-    nuevo.innerHTML=`<strong>${tit}</strong><p>${txt}</p><small>— ${nom} • Ahora mismo</small>`;
-    listaForo.prepend(nuevo);
-    formForo.reset();
-});
     
 document.addEventListener('DOMContentLoaded',()=>{
     cargarEnVivo();
