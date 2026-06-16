@@ -375,18 +375,29 @@ async function cargarProximos() {
 }
 
 // 📰 NOTICIAS DE FÚTBOL
+// 📰 NOTICIAS DE FÚTBOL
 async function cargarNoticias() {
   try {
     const res = await fetch("https://api.rss2json.com/v1/api.json?rss_url=https://www.tycsports.com.ar/rss/futbol/mundial-2026.xml");
     const json = await res.json();
     const cont = document.getElementById("contenedor-noticias");
     cont.innerHTML = "";
-    json.items.slice(0,3).forEach(n => {
-      cont.innerHTML += `<div class="card"><h3>${n.title}</h3><p>${n.description.substring(0,120)}…</p><small>${n.pubDate}</small></div>`;
-    });
-  } catch (e) { console.error("Noticias:", e); }
+    if (json.items?.length) {
+      json.items.slice(0,4).forEach(n => {
+        cont.innerHTML += `
+          <div class="card">
+            <h3>${n.title}</h3>
+            <p>${n.description.substring(0,130)}…</p>
+            <small>📰 ${n.pubDate}</small>
+          </div>`;
+      });
+    } else {
+      cont.innerHTML = `<div class="card"><p>No hay noticias nuevas</p></div>`;
+    }
+  } catch (e) {
+    console.error("Noticias:", e);
+  }
 }
-
 
 
 const formForo=document.getElementById('formForo');
