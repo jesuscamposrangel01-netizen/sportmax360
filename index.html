@@ -332,13 +332,26 @@ async function cargarResultados() {
     const json = await res.json();
     const tabla = document.getElementById("tabla-resultados");
     tabla.innerHTML = `<tr><th>Partido</th><th>Resultado</th></tr>`;
+
     if (json.matches?.length) {
       json.matches.forEach(p => {
-        tabla.innerHTML += `<tr><td>${p.home_team} vs ${p.away_team}</td><td>${p.score || p.status}</td></tr>`;
+        const local = p.home_team || p.home_team_name || "Desconocido";
+        const visitante = p.away_team || p.away_team_name || "Desconocido";
+        const resultado = p.score || p.status || "—";
+
+        tabla.innerHTML += `<tr>
+          <td>${local} vs ${visitante}</td>
+          <td>${resultado}</td>
+        </tr>`;
       });
-    } else tabla.innerHTML += `<tr><td colspan="2">Sin partidos hoy</td></tr>`;
-  } catch (e) { console.error("Resultados:", e); }
+    } else {
+      tabla.innerHTML += `<tr><td colspan="2">Sin partidos hoy</td></tr>`;
+    }
+  } catch (e) {
+    console.error("Resultados:", e);
+  }
 }
+
 
 // 📊 POSICIONES POR GRUPO
 async function cargarPosiciones() {
@@ -347,15 +360,28 @@ async function cargarPosiciones() {
     const json = await res.json();
     const cont = document.getElementById("contenedor-posiciones");
     cont.innerHTML = "";
+
     for (const grupo in json.groups) {
       cont.innerHTML += `<div class="card"><h3>Grupo ${grupo}</h3>
-      <table><tr><th>Selección</th><th>Pts</th><th>PJ</th><th>PG</th><th>PE</th><th>PP</th></tr>`;
-      json.groups[grupo].forEach(sel => {
-        cont.innerHTML += `<tr><td>${sel.team}</td><td>${sel.points}</td><td>${sel.played}</td><td>${sel.won}</td><td>${sel.drawn}</td><td>${sel.lost}</td></tr>`;
+      <table><tr><th>#</th><th>Selección</th><th>Pts</th><th>PJ</th><th>PG</th><th>PE</th><th>PP</th></tr>`;
+      json.groups[grupo].forEach((sel, i) => {
+        const equipo = sel.team || sel.name || "Desconocido";
+        const pts = sel.points ?? 0;
+        const pj = sel.played ?? 0;
+        const pg = sel.won ?? 0;
+        const pe = sel.drawn ?? 0;
+        const pp = sel.lost ?? 0;
+
+        cont.innerHTML += `<tr>
+          <td>${i+1}</td><td>${equipo}</td><td>${pts}</td>
+          <td>${pj}</td><td>${pg}</td><td>${pe}</td><td>${pp}</td>
+        </tr>`;
       });
       cont.innerHTML += `</table></div>`;
     }
-  } catch (e) { console.error("Posiciones:", e); }
+  } catch (e) {
+    console.error("Posiciones:", e);
+  }
 }
 
 // 📅 PRÓXIMOS PARTIDOS
@@ -365,14 +391,24 @@ async function cargarProximos() {
     const json = await res.json();
     const lista = document.getElementById("lista-proximos");
     lista.innerHTML = "";
+
     if (json.matches?.length) {
       json.matches.slice(0,4).forEach(p => {
-        const f = new Date(p.date).toLocaleString("es-ES",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
-        lista.innerHTML += `<li>${p.home_team} vs ${p.away_team} — ${f}</li>`;
+        const local = p.home_team || p.home_team_name || "Desconocido";
+        const visitante = p.away_team || p.away_team_name || "Desconocido";
+        const fecha = new Date(p.date).toLocaleString("es-ES", {
+          day:"2-digit", month:"2-digit", hour:"2-digit", minute:"2-digit"
+        });
+        lista.innerHTML += `<li>${local} vs ${visitante} — ${fecha}</li>`;
       });
-    } else lista.innerHTML = `<li>Sin próximos partidos</li>`;
-  } catch (e) { console.error("Próximos:", e); }
+    } else {
+      lista.innerHTML = `<li>Sin próximos partidos programados</li>`;
+    }
+  } catch (e) {
+    console.error("Próximos:", e);
+  }
 }
+
     
 // 📰 NOTICIAS DE FÚTBOL
 async function cargarNoticias() {
@@ -426,3 +462,4 @@ document.addEventListener('DOMContentLoaded',()=>{
 </body>
          Agregué API de fútbol completa                                                               </html>
                                                                         
+Arreglé undefined y finalicé todas las funciones
