@@ -200,19 +200,10 @@ footer{
     </div>
 </section>
 
-<section id="posiciones">
-    <h2>📊 Posiciones por Grupo</h2>
-    <div class="card">
-        <h3>Grupo A</h3>
-        <table>
-            <tr><th>Selección</th><th>Pts</th><th>PJ</th><th>PG</th><th>PE</th><th>PP</th></tr>
-            <tr><td>México</td><td>3</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
-            <tr><td>Estados Unidos</td><td>3</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
-            <tr><td>Paraguay</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
-            <tr><td>Sudáfrica</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
-        </table>
-    </div>
-</section>
+<<section id="posiciones">          <!-- 🔴 FALTA ESTA LÍNEA -->
+     <h2>📊 Posiciones por Grupo</h2>  <!-- 🔴 FALTA ESTA LÍNEA -->
+     <div id="contenedor-posiciones"></div>
+ </section>                          <!-- 🔴 FALTA ESTA LÍNEA -->
 
 <section id="sedes">
     <h2>🏟️ Sedes y Estadios</h2>
@@ -334,9 +325,19 @@ footer{
 </footer>
 
 <script>
-async function cargarResultados(){}
-async function cargarNoticias(){}
-async function cargarProximos(){}
+// 🏀 NBA — Resultados automáticos
+async function cargarNBA(){
+  try {
+    const res = await fetch("https://www.balldontlie.io/api/v1/games?seasons[]=2023");
+    const json = await res.json();
+    const lista = document.getElementById("contenedor-nba");
+    lista.innerHTML = "<h3>Resultados recientes</h3>";
+    json.data.slice(0,4).forEach(p => {
+      lista.innerHTML += `<p>${p.home_team.full_name} ${p.home_team_score} - ${p.away_team_score} ${p.away_team.full_name}</p>`;
+    });
+  } catch(e){ console.error("NBA:", e); }
+}
+
 
 const formForo=document.getElementById('formForo');
 const listaForo=document.getElementById('listaForo');
@@ -353,10 +354,16 @@ formForo.addEventListener('submit',e=>{
 });
 
 document.addEventListener('DOMContentLoaded',()=>{
-    cargarResultados();cargarNoticias();cargarProximos();
+    cargarResultados();
+    cargarPosiciones();
+    cargarProximos();
+    cargarNoticias();
+    cargarNBA();
+});
+
 });
 </script>
 
 </body>
-                                                                        </html>
+         Agregué API de fútbol completa                                                               </html>
                                                                         
