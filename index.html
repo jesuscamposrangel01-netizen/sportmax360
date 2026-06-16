@@ -173,10 +173,11 @@ footer{
 <section id="mundial">
     <h2>🏆 Mundial 2026 • México, EE.UU., Canadá</h2>
 
-    <div class="card">
-        <h3>🔴 En vivo</h3>
-        <p class="estado-vivo">Estados Unidos 2 - 1 Paraguay • 65'</p>
-    </div>
+<div class="card">
+    <h3>🔴 En vivo</h3>
+    <p id="partido-en-vivo">Sin partidos en curso</p>
+</div>
+
 
     <div class="card">
         <h3>Últimos Resultados</h3>
@@ -323,8 +324,30 @@ footer{
 <footer>
     <p>© 2026 SPORTMAX 360 - Todos los derechos reservados</p>
 </footer>
-
-<script>
+<script> 
+    async function cargarEnVivo() {
+  try {
+    const res = await fetch("https://api.football-data.org/v4/competitions/WC/matches?status=LIVE", {
+      headers: { "X-Auth-Token": "b48a0c4b3c444a78a8a2b48a0c4b3c44" }
+    });
+    const json = await res.json();
+    const elem = document.getElementById("partido-en-vivo");
+    if (json.matches?.length) {
+      const p = json.matches[0];
+      const local = p.homeTeam.name;
+      const vis = p.awayTeam.name;
+      const golL = p.score.fullTime.home ?? "-";
+      const golV = p.score.fullTime.away ?? "-";
+      const minuto = p.minute ?? "En curso";
+      elem.textContent = `${local} ${golL} - ${golV} ${vis} • ${minuto}'`;
+    } else {
+      elem.textContent = "Sin partidos en curso";
+    }
+  } catch (e) {
+    console.error("En vivo:", e);
+  }
+}
+    
 // ⚽ MUNDIAL 2026 — RESULTADOS
 async function cargarResultados() {
   try {
@@ -460,12 +483,13 @@ formForo.addEventListener('submit',e=>{
 });
     
 document.addEventListener('DOMContentLoaded',()=>{
+    cargarEnVivo();
     cargarResultados();
     cargarPosiciones();
     cargarProximos();
     cargarNoticias();
-
 });
+
 
 </script>
 
