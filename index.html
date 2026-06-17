@@ -146,40 +146,12 @@ async function cargarNBAProximos(){try{const d=new Date().toISOString().split("T
 async function cargarNBAResultados(){try{const d=new Date(Date.now()-86400000).toISOString().split("T")[0],r=await fetch(`https://data.nba.net/10s/prod/v1/${d}/scoreboard.json`),j=await r.json(),t=document.getElementById("tabla-nba-resultados");t.innerHTML=`<tr><th>Visitante</th><th>Local</th><th>Resultado</th></tr>`;j.games?.filter(x=>x.gameStatus===3).slice(0,4).forEach(g=>t.innerHTML+=`<tr><td>${g.vTeam.city} ${g.vTeam.name}</td><td>${g.hTeam.city} ${g.hTeam.name}</td><td>${g.vTeam.score}‑${g.hTeam.score}</td></tr>`)}catch(e){console.error("NBA‑resultados:",e)}}
 async function cargarNBAPosiciones(){try{const [E,W]=await Promise.all([fetch("https://data.nba.net/10s/prod/v1/current/standings_east.json").then(x=>x.json()),fetch("https://data.nba.net/10s/prod/v1/current/standings_west.json").then(x=>x.json())]),c=document.getElementById("contenedor-nba-posiciones");c.innerHTML=`<h3>📊 Clasificaciones NBA</h3>`;[["Este",E.league.standard],["Oeste",W.league.standard]].forEach(([n,a])=>{c.innerHTML+=`<div class="card"><h4>Conferencia ${n}</h4><table><tr><th>#</th><th>Equipo</th><th>G</th><th>P</th><th>%</th></tr>`;a.slice(0,8).forEach((eq,i)=>c.innerHTML+=`<tr><td>${i+1}</td><td>${eq.teamCity} ${eq.teamName}</td><td>${eq.win}</td><td>${eq.loss}</td><td>${eq.pct}</td></tr>`);c.innerHTML+=`</table></div>`})}catch(e){console.error("NBA‑posiciones:",e)}}
 
-    // ⚾ MLB
-async function cargarMLBProximos(){
-  try{
-    const d=new Date().toISOString().split("T")[0],
-    r=await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${d}&language=es`),
-    j=await r.json(),
-    u=document.getElementById("lista-mlb");
-    u.innerHTML="";
-    if(!j.dates?.[0]?.games?.length){
-      u.innerHTML=`<li>Sin partidos programados hoy</li>`
-    }else{
-      j.dates?.[0]?.games?.slice(0,6).forEach(g=>{
-        const h=new Date(g.gameDate).toLocaleString("es‑ES",ZONA_LIMA),
-        v=g.status?.abstractGameState==="Live"?"🔴":"⏰";
-        u.innerHTML+=`<li>${v} ${g.teams.away.team.name} @ ${g.teams.home.team.name} — ${h}</li>`
-      })
-    }
-  }catch(e){console.error("MLB‑próximos:",e)}
-}
+ // ⚾ MLB
+async function cargarMLBProximos(){try{const d=new Date().toISOString().split("T")[0],r=await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${d}&language=es`),j=await r.json(),u=document.getElementById("lista-mlb");u.innerHTML="";if(!j.dates?.[0]?.games?.length){u.innerHTML=`<li>Sin partidos programados hoy</li>`}else j.dates?.[0]?.games?.slice(0,6).forEach(g=>{const h=new Date(g.gameDate).toLocaleString("es‑ES",ZONA_LIMA),v=g.status?.abstractGameState==="Live"?"🔴":"⏰";u.innerHTML+=`<li>${v} ${g.teams.away.team.name} @ ${g.teams.home.team.name} — ${h}</li>`})}catch(e){console.error("MLB‑próximos:",e)}}
 
-async function cargarMLBResultados(){
-  try{
-    const d=new Date(Date.now()-86400000).toISOString().split("T")[0],
-    r=await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${d}&language=es`),
-    j=await r.json(),
-    t=document.getElementById("tabla-mlb-resultados");
-    t.innerHTML=`<tr><th>Visitante</th><th>Local</th><th>Resultado</th></tr>`;
-    j.dates?.[0]?.games?.filter(x=>x.status?.abstractGameState==="Final")?.slice(0,4).forEach(g=>{
-      t.innerHTML+=`<tr><td>${g.teams.away.team.name}</td><td>${g.teams.home.team.name}</td><td>${g.teams.away.score??"-"}‑${g.teams.home.score??"-"}</td></tr>`
-    })
-  }catch(e){console.error("MLB‑resultados:",e)}
-}
+async function cargarMLBResultados(){try{const d=new Date(Date.now()-86400000).toISOString().split("T")[0],r=await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${d}&language=es`),j=await r.json(),t=document.getElementById("tabla-mlb-resultados");t.innerHTML=`<tr><th>Visitante</th><th>Local</th><th>Resultado</th></tr>`;j.dates?.[0]?.games?.filter(x=>x.status?.abstractGameState==="Final")?.slice(0,4).forEach(g=>t.innerHTML+=`<tr><td>${g.teams.away.team.name}</td><td>${g.teams.home.team.name}</td><td>${g.teams.away.score??"-"}‑${g.teams.home.score??"-"}</td></tr>`)}catch(e){console.error("MLB‑resultados:",e)}}
 
-// ✅ FUNCIÓN MLB‑POSICIONES FINAL, TABLAS ALINEADAS Y NOMBRES CORRECTOS
+// ✅ FUNCIÓN MLB‑POSICIONES CORREGIDA Y COMPLETA
 async function cargarMLBPosiciones() {
   try {
     const res = await fetch("https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=2026&language=es");
@@ -193,7 +165,7 @@ async function cargarMLBPosiciones() {
     }
 
     json.records.forEach(registro => {
-      const titulo = registro.league?.name || registro.division?.name || "Liga";
+      const titulo = registro.league?.name || registro.division?.name || "Clasificación";
       let filasTabla = "";
       if (registro.teamRecords && Array.isArray(registro.teamRecords)) {
         registro.teamRecords.slice(0, 8).forEach(eq => {
@@ -203,7 +175,6 @@ async function cargarMLBPosiciones() {
           const perdidos = eq.losses ?? "-";
           const porc = eq.winningPercentage ?? "-";
           const dif = eq.divisionGamesBack ?? "-";
-
           filasTabla += `
           <tr>
             <td>${pos}</td>
@@ -245,4 +216,4 @@ async function iniciarTodo(){
 }
 document.addEventListener("DOMContentLoaded", iniciarTodo);
 setInterval(iniciarTodo, 300000);
-    
+
