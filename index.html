@@ -149,7 +149,44 @@ async function cargarNBAPosiciones(){try{const [E,W]=await Promise.all([fetch("h
 // ⚾ MLB
 async function cargarMLBProximos(){try{const d=new Date().toISOString().split("T")[0],r=await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${d}&language=es`),j=await r.json(),u=document.getElementById("lista-mlb");u.innerHTML="";if(!j.dates?.[0]?.games?.length){u.innerHTML=`<li>Sin partidos programados hoy</li>`}else j.dates?.[0]?.games?.slice(0,6).forEach(g=>{const h=new Date(g.gameDate).toLocaleString("es‑ES",ZONA_LIMA),v=g.status?.abstractGameState==="Live"?"🔴":"⏰";u.innerHTML+=`<li>${v} ${g.teams.away.team.name} @ ${g.teams.home.team.name} — ${h}</li>`})}catch(e){console.error("MLB‑próximos:",e)}}
 async function cargarMLBResultados(){try{const d=new Date(Date.now()-86400000).toISOString().split("T")[0],r=await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${d}&language=es`),j=await r.json(),t=document.getElementById("tabla-mlb-resultados");t.innerHTML=`<tr><th>Visitante</th><th>Local</th><th>Resultado</th></tr>`;j.dates?.[0]?.games?.filter(x=>x.status?.abstractGameState==="Final")?.slice(0,4).forEach(g=>t.innerHTML+=`<tr><td>${g.teams.away.team.name}</td><td>${g.teams.home.team.name}</td><td>${g.teams.away.score??"-"}‑${g.teams.home.score??"-"}</td></tr>`)}catch(e){console.error("MLB‑resultados:",e)}}
-async function cargarMLBPosiciones(){try{const r=await fetch("https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=2026&language=es"),j=await r.json(),c=document.getElementById("contenedor-mlb-posiciones");c.innerHTML=`<h3>📊 MLB 2026</h3>`;j.records?.forEach(l=>{c.innerHTML+=`<div class="card"><h4>${l.league.name}</h4><table><tr><th>#</th><th>Equipo</th><th>G</th><th>P</th><th>%</th><th>Dif</th></tr>`;l.teamRecords?.slice(0,8).forEach(r=>c.innerHTML+=`<tr><td>${r.divisionRank}</td><td>${r.team.name}</td><td>${r.wins}</td><td>${r.losses}</td><td>${r.winningPercentage}</td><td>${r.divisionGamesBack??"-"}</td></tr>`);c.innerHTML+=`</table></div>`})}catch(e){console.error("MLB‑posiciones:",e)}}
+async function cargarMLBPosiciones() {
+  try {
+    const res = await fetch("https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=2026&language=es");
+    const json = await res.json();
+    const c = document.getElementById("contenedor-mlb-posiciones");
+    c.innerHTML = `<h3>📊 MLB 2026</h3>`;
+
+    if (!json.records) {
+      c.innerHTML += `<p>No hay datos de posiciones disponibles</p>`;
+      return;
+    }
+
+    json.records.forEach(liga => {
+      const nombre = liga.league?.name || liga.division?.name || "Liga";
+      c.innerHTML += `
+      <div class="card">
+        <h4>${nombre}</h4>
+        <table>
+          <tr><th>#</th><th>Equipo</th><th>G</th><th>P</th><th>%</th><th>Dif</th></tr>`;
+
+      liga.teamRecords?.slice(0,8).forEach(r => {
+        c.innerHTML += `
+          <tr>
+            <td>${r.divisionRank ?? "-"}</td>
+            <td>${r.team?.name ?? "—"}</td>
+            <td>${r.wins ?? "-"}</td>
+            <td>${r.losses ?? "-"}</td>
+            <td>${r.winningPercentage ?? "-"}</td>
+            <td>${r.divisionGamesBack ?? "-"}</td>
+          </tr>`;
+      });
+
+      c.innerHTML += `</table></div>`;
+    });
+  } catch (e) {
+    console.error("MLB‑posiciones:", e);
+  }
+}
 
 // 🚀 INICIO + ACTUALIZACIÓN CADA 5 MIN
 async function iniciarTodo(){
