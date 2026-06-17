@@ -454,7 +454,7 @@
     </footer>
 
     <!-- ================================================================ -->
-    <!-- ===== JAVASCRIPT COMPLETO — CON LAS MEJORES APIs ===== -->
+    <!-- ===== JAVASCRIPT COMPLETO — CON APIs FUNCIONANDO ===== -->
     <!-- ================================================================ -->
     <script>
         // ═══════════════════════════════════════════════════════════════════
@@ -463,7 +463,7 @@
         const ZONA_LIMA = { timeZone: 'America/Lima', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' };
 
         // ═══════════════════════════════════════════════════════════════════
-        // 2. DATOS DE PRUEBA (FALLBACK) — SIEMPRE VISIBLES
+        // 2. DATOS DE PRUEBA (MOCK) — SOLO PARA CUANDO LAS APIs FALLEN
         // ═══════════════════════════════════════════════════════════════════
         const MOCK = {
             futbol: {
@@ -610,7 +610,8 @@
             const resultados = data || MOCK.nba.resultados;
             tbody.innerHTML = '';
             resultados.forEach(p => {
-                tbody.innerHTML += `<tr><td>${p.visitante}</td><td>${p.local}</td><td><strong>${p.resultado}</strong></td></tr>`;
+                tbody.innerHTML +=
+                    `<tr><td>${p.visitante}</td><td>${p.local}</td><td><strong>${p.resultado}</strong></td></tr>`;
             });
         }
 
@@ -622,14 +623,16 @@
             html += `<div class="card"><h4>🏆 Conferencia Este</h4><table>
                         <thead><tr><th>#</th><th>Equipo</th><th>G</th><th>P</th><th>%</th></tr></thead><tbody>`;
             pos.este.forEach(eq => {
-                html += `<tr><td>${eq.pos}</td><td>${eq.equipo}</td><td>${eq.g}</td><td>${eq.p}</td><td>${eq.pct}</td></tr>`;
+                html +=
+                    `<tr><td>${eq.pos}</td><td>${eq.equipo}</td><td>${eq.g}</td><td>${eq.p}</td><td>${eq.pct}</td></tr>`;
             });
             html += `</tbody></table></div>`;
 
             html += `<div class="card"><h4>🏆 Conferencia Oeste</h4><table>
                         <thead><tr><th>#</th><th>Equipo</th><th>G</th><th>P</th><th>%</th></tr></thead><tbody>`;
             pos.oeste.forEach(eq => {
-                html += `<tr><td>${eq.pos}</td><td>${eq.equipo}</td><td>${eq.g}</td><td>${eq.p}</td><td>${eq.pct}</td></tr>`;
+                html +=
+                    `<tr><td>${eq.pos}</td><td>${eq.equipo}</td><td>${eq.g}</td><td>${eq.p}</td><td>${eq.pct}</td></tr>`;
             });
             html += `</tbody></table></div>`;
 
@@ -651,7 +654,8 @@
             const resultados = data || MOCK.mlb.resultados;
             tbody.innerHTML = '';
             resultados.forEach(p => {
-                tbody.innerHTML += `<tr><td>${p.visitante}</td><td>${p.local}</td><td><strong>${p.resultado}</strong></td></tr>`;
+                tbody.innerHTML +=
+                    `<tr><td>${p.visitante}</td><td>${p.local}</td><td><strong>${p.resultado}</strong></td></tr>`;
             });
         }
 
@@ -689,22 +693,28 @@
         // 4. CONSUMO DE APIs REALES (con fallback a MOCK)
         // ═══════════════════════════════════════════════════════════════════
 
-        // 🌍 MUNDIAL 2026 — API WorldCup 2026
+        // 🌍 MUNDIAL 2026 — API WorldCup 2026 (SÍ FUNCIONA)
         async function cargarMundial2026() {
             try {
                 const res = await fetch('https://worldcup26.ir/get/games');
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const data = await res.json();
 
+                console.log('✅ Mundial 2026 - Datos recibidos:', data);
+
                 // En vivo
                 const vivo = data.matches?.find(m => m.status === 'live');
                 if (vivo) {
-                    mostrarEnVivo(`🔥 ${vivo.home_team} ${vivo.home_score}‑${vivo.away_score} ${vivo.away_team} (Minuto ${vivo.minute || '?'})`);
+                    mostrarEnVivo(
+                        `🔥 ${vivo.home_team} ${vivo.home_score}‑${vivo.away_score} ${vivo.away_team} (Minuto ${vivo.minute || '?'})`
+                        );
                 } else {
                     // Buscar el último partido finalizado
                     const ultimo = data.matches?.filter(m => m.status === 'finished').pop();
                     if (ultimo) {
-                        mostrarEnVivo(`✅ Finalizado: ${ultimo.home_team} ${ultimo.home_score}‑${ultimo.away_score} ${ultimo.away_team}`);
+                        mostrarEnVivo(
+                            `✅ Finalizado: ${ultimo.home_team} ${ultimo.home_score}‑${ultimo.away_score} ${ultimo.away_team}`
+                            );
                     } else {
                         throw new Error('Sin partidos en vivo');
                     }
@@ -743,73 +753,4 @@
                     const posiciones = Object.entries(gruposData).map(([nombre, equipos]) => ({
                         grupo: nombre,
                         equipos: equipos.map((eq, i) => ({
-                            pos: i + 1,
-                            nombre: eq.name,
-                            pts: eq.points || 0,
-                            pj: eq.played || 0,
-                            pg: eq.won || 0,
-                            pe: eq.drawn || 0,
-                            pp: eq.lost || 0
-                        }))
-                    }));
-                    mostrarPosiciones(posiciones);
-                } else {
-                    throw new Error('Sin posiciones');
-                }
-
-            } catch (error) {
-                console.warn('⚠️ Usando MOCK para Mundial:', error.message);
-                mostrarEnVivo();
-                mostrarResultados();
-                mostrarProximos();
-                mostrarPosiciones();
-            }
-        }
-
-        // 🏀 NBA — sports-skills API
-        async function cargarNBA() {
-            try {
-                // Intentamos con sports-skills (no requiere clave)
-                const res = await fetch('https://sports-skills.onrender.com/api/v1/nba/scoreboard');
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                const data = await res.json();
-
-                if (data.games?.length) {
-                    // Próximos/En vivo
-                    const proximos = data.games.slice(0, 5).map(g => {
-                        const fecha = new Date(g.startTimeUTC).toLocaleString('es-ES', ZONA_LIMA);
-                        const status = g.gameStatus === 2 ? '🔴' : '⏰';
-                        return `${status} ${g.vTeam?.name || '?'} @ ${g.hTeam?.name || '?'} — ${fecha}`;
-                    });
-                    mostrarNBAProximos(proximos);
-
-                    // Resultados (finalizados)
-                    const finalizados = data.games.filter(g => g.gameStatus === 3).slice(0, 4);
-                    if (finalizados.length) {
-                        const resultados = finalizados.map(g => ({
-                            visitante: `${g.vTeam?.city || ''} ${g.vTeam?.name || '?'}`,
-                            local: `${g.hTeam?.city || ''} ${g.hTeam?.name || '?'}`,
-                            resultado: `${g.vTeam?.score || '-'}‑${g.hTeam?.score || '-'}`
-                        }));
-                        mostrarNBAResultados(resultados);
-                    }
-                } else {
-                    throw new Error('Sin datos NBA');
-                }
-
-                // Posiciones (intentamos con la API oficial de NBA)
-                const posRes = await fetch('https://data.nba.net/10s/prod/v1/current/standings_east.json');
-                if (posRes.ok) {
-                    const este = await posRes.json();
-                    const oesteRes = await fetch('https://data.nba.net/10s/prod/v1/current/standings_west.json');
-                    const oeste = await oesteRes.json();
-
-                    const posiciones = {
-                        este: este.league?.standard?.slice(0, 5).map((eq, i) => ({
-                            pos: i + 1,
-                            equipo: `${eq.teamCity} ${eq.teamName}`,
-                            g: eq.win,
-                            p: eq.loss,
-                            pct: eq.pct
-                        })) || MOCK.nba.posiciones.este,
-                        oeste:
+                            pos: i
