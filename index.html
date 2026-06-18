@@ -30,7 +30,7 @@
         li:hover { background:#0d1b2a55; border-radius:8px; }
         li:last-child { border-bottom:none; }
         .live-badge { background:#ff0040; color:#fff; font-size:.7rem; font-weight:700; padding:.2rem .6rem; border-radius:20px; animation:pulse 1.5s infinite; text-transform:uppercase; letter-spacing:1px; }
-        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.95);} }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.5;transform:scale(.95);} }
         .vivo-texto { color:#00d4ff; font-weight:600; font-size:1.2rem; }
         .fase-etapa { color:#ffce56; font-weight:600; }
         .video-container { position:relative; width:100%; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:12px; border:1px solid #00d4ff44; margin-top:1rem; }
@@ -75,26 +75,43 @@
             </div>
             <div class="card">
                 <h3>🔴 <span class="live-badge">En Vivo</span> Partido destacado</h3>
-                <p id="partido-en-vivo" class="vivo-texto">Cargando partido...</p>
+                <p id="partido-en-vivo" class="vivo-texto">Cargando partido destacado en tiempo real...</p>
             </div>
             <div class="card" id="videos">
                 <h3>📺 Ver partido en vivo — Emisión oficial</h3>
                 <div class="video-container">
-                    <iframe id="reproductor-partido" src="https://www.youtube.com/embed/?autoplay=0&rel=0" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
+                    <iframe id="reproductor-partido" src="https://youtube.com" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
                 </div>
                 <p class="aviso-legal">ℹ️ Solo enlaces oficiales: FIFA, YouTube, ESPN, DAZN, MLB.tv, NBA League Pass.</p>
             </div>
             <div class="card">
                 <h3>📋 Todos los partidos en vivo ahora</h3>
-                <ul id="lista-en-vivo"><li>🔄 Comprobando encuentros...</li></ul>
+                <ul id="lista-en-vivo">
+                    <li>🔄 Sincronizando cartelera global...</li>
+                </ul>
             </div>
             <div class="card">
                 <h3>📋 Últimos Resultados</h3>
-                <table id="tabla-resultados"><thead><tr><th>Local</th><th>Visitante</th><th>Resultado</th></tr></thead><tbody></tbody></table>
+                <table id="tabla-resultados">
+                    <thead>
+                        <tr>
+                            <th>Local</th>
+                            <th>Visitante</th>
+                            <th>Resultado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="3" style="text-align: center; color: #8899aa;">Consultando base de datos de marcadores...</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="card">
                 <h3>📅 Próximos Partidos</h3>
-                <ul id="lista-proximos"></ul>
+                <ul id="lista-proximos">
+                    <li>🔄 Estructurando agenda deportiva...</li>
+                </ul>
             </div>
             <div id="contenedor-posiciones"></div>
             <div class="card">
@@ -108,106 +125,35 @@
             </div>
             <div class="card">
                 <h3>⚽ Máximos goleadores</h3>
-                <table><thead><tr><th>Jugador</th><th>Selección</th><th>Goles</th></tr></thead><tbody>
-                    <tr><td>Lionel Messi</td><td>🇦🇷 Argentina</td><td>6</td></tr>
-                    <tr><td>Kylian Mbappé</td><td>🇫🇷 Francia</td><td>5</td></tr>
-                    <tr><td>Harry Kane</td><td>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</td><td>4</td></tr>
-                    <tr><td>Vinícius Jr.</td><td>🇧🇷 Brasil</td><td>4</td></tr>
-                </tbody></table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Jugador</th>
+                            <th>Selección</th>
+                            <th>Goles</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Lionel Messi</td><td>🇦🇷 Argentina</td><td>6</td></tr>
+                        <tr><td>Kylian Mbappé</td><td>🇫🇷 Francia</td><td>5</td></tr>
+                        <tr><td>Harry Kane</td><td>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</td><td>4</td></tr>
+                        <tr><td>Vinícius Jr.</td><td>🇧🇷 Brasil</td><td>4</td></tr>
+                    </tbody>
+                </table>
             </div>
         </section>
-        <section id="nba"><h2>🏀 NBA 2025‑2026</h2>
-            <div class="card"><h3>📅 Hoy / Próximos</h3><ul id="lista-nba"></ul></div>
-            <div class="card"><h3>📋 Últimos Resultados</h3><table id="tabla-nba-resultados"><thead><tr><th>Visitante</th><th>Local</th><th>Resultado</th></tr></thead><tbody></tbody></table></div>
-            <div id="contenedor-nba-posiciones"></div>
+        
+        <section id="sedes">
+            <h2>📍 Sedes Oficiales</h2>
+            <div class="sedes-grid">
+                <div class="sede-item"><h4>Ciudad de México</h4><p class="pais">🇲🇽 México</p></div>
+                <div class="sede-item"><h4>Guadalajara</h4><p class="pais">🇲🇽 México</p></div>
+                <div class="sede-item"><h4>Monterrey</h4><p class="pais">🇲🇽 México</p></div>
+                <div class="sede-item"><h4>Nueva York</h4><p class="pais">🇺🇸 EE.UU.</p></div>
+                <div class="sede-item"><h4>Los Ángeles</h4><p class="pais">🇺🇸 EE.UU.</p></div>
+                <div class="sede-item"><h4>Miami</h4><p class="pais">🇺🇸 EE.UU.</p></div>
+                <div class="sede-item"><h4>Vancouver</h4><p class="pais">🇨🇦 Canadá</p></div>
+                <div class="sede-item"><h4>Toronto</h4><p class="pais">🇨🇦 Canadá</p></div>
+            </div>
         </section>
-        <section id="mlb"><h2>⚾ MLB 2026</h2>
-            <div class="card"><h3>📅 Hoy / Próximos</h3><ul id="lista-mlb"></ul></div>
-            <div class="card"><h3>📋 Últimos Resultados</h3><table id="tabla-mlb-resultados"><thead><tr><th>Visitante</th><th>Local</th><th>Resultado</th></tr></thead><tbody></tbody></table></div>
-            <div id="contenedor-mlb-posiciones"></div>
-        </section>
-        <section id="sedes"><h2>📍 Sedes Mundial 2026</h2>
-            <div class="card"><div class="sedes-grid">
-                <div class="sede-item">🏟️ Estadio Azteca <div class="pais">🇲🇽 CDMX</div></div>
-                <div class="sede-item">🏟️ MetLife <div class="pais">🇺🇸 NY/NJ</div></div>
-                <div class="sede-item">🏟️ BC Place <div class="pais">🇨🇦 Vancouver</div></div>
-                <div class="sede-item">🏟️ AT&T <div class="pais">🇺🇸 Dallas</div></div>
-                <div class="sede-item">🏟️ BBVA <div class="pais">🇲🇽 Monterrey</div></div>
-                <div class="sede-item">🏟️ SoFi <div class="pais">🇺🇸 LA</div></div>
-                <div class="sede-item">🏟️ Lincoln <div class="pais">🇺🇸 Filadelfia</div></div>
-                <div class="sede-item">🏟️ NRG <div class="pais">🇺🇸 Houston</div></div>
-            </div></div>
-        </section>
-        <section id="noticias"><h2>📰 Noticias</h2><div class="card" id="contenedor-noticias"><p>Cargando...</p></div></section>
-        <section id="galeria"><h2>📸 Galería</h2><div class="card">Próximamente...</div></section>
-        <section id="videos"><h2>🎥 Videos</h2><div class="card">Próximamente...</div></section>
-        <section id="foro"><h2>💬 Foro</h2><div class="card">Próximamente...</div></section>
-        <section id="contacto"><h2>📞 Contacto</h2><div class="card">Próximamente...</div></section>
     </main>
-    <footer>
-        <p>© 2026 <span>SPORTMAX 360</span> — Todos los derechos reservados ⚡</p>
-        <p class="update-time">📡 Actualizado: <span id="hora-actualizacion">--:--</span></p>
-    </footer>
-
-    <script>
-        // ✅ Protección contra localStorage nulo
-        const getStorage = (key) => { try{ return typeof localStorage !== 'undefined' ? localStorage?.getItem?.(key) : null; }catch{ return null; }};
-        // 🔑 Claves
-        const RAPIDAPI_KEY = 'f019ce89dfmhsh54169a00fd80f9b1c5aadjsn50be5f785083';
-        const RAPIDAPI_HOST_FOOTBALL = 'api-football-v1.p.rapidapi.com';
-        const RAPIDAPI_HOST_NBA = 'api-nba-v1.p.rapidapi.com';
-        // ⏰ Zona Lima
-        const ZONA_LIMA = { timeZone:'America/Lima', day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' };
-        const actualizarHora = () => { try{ document.getElementById('hora-actualizacion').textContent = new Date().toLocaleString('es-ES',ZONA_LIMA); }catch{} };
-        // 🎬 Video
-        const cambiarVideoEnVivo = id => { try{ const ifr=document.getElementById('reproductor-partido'); if(ifr&&id) ifr.src=`https://www.youtube.com/embed/${id}?autoplay=0&rel=0`; }catch{} };
-        // 📦 Datos de respaldo
-        const MOCK = {
-            futbol:{
-                enVivo:'🔥 México 1‑0 Argentina (Min 67)',
-                resultados:[{local:'Brasil',visitante:'Alemania',resultado:'2‑1'},{local:'Francia',visitante:'Inglaterra',resultado:'0‑0'}],
-                proximos:[{local:'Argentina',visitante:'Brasil',fecha:'15/06/2026 20:00'}],
-                posiciones:[{grupo:'Grupo A',equipos:[{pos:1,nombre:'México',pts:6,pj:2,pg:2,pe:0,pp:0},{pos:2,nombre:'Argentina',pts:4,pj:2,pg:1,pe:1,pp:0}]}]
-            },
-            nba:{proximos:['🏀 Lakers @ Warriors — 15/06 22:00'],resultados:[{visitante:'Timberwolves',local:'Mavericks',resultado:'112‑108'}]},
-            mlb:{proximos:['⚾ Yankees @ Red Sox — 15/06 19:00'],resultados:[{visitante:'Mets',local:'Braves',resultado:'6‑4'}]},
-            noticias:[{titulo:'Messi: listos para Mundial',fecha:'14/06/2026'}]
-        };
-        // ⚽ Mostrar
-        const mostrarEnVivo = d => { try{ document.getElementById('partido-en-vivo').textContent = d||MOCK.futbol.enVivo; }catch{} };
-        const mostrarListaEnVivo = datos => {
-            try{ const ul=document.getElementById('lista-en-vivo'); ul.innerHTML='';
-                if(!datos||!Array.isArray(datos)||datos.length===0){ ul.innerHTML='<li>ℹ️ Sin partidos en vivo ahora</li>';return; }
-                datos.forEach(p=>{ const min=p?.fixture?.status?.elapsed??'–'; ul.innerHTML+=`<li>🔴 <strong>${p?.teams?.home?.name??'–'} ${p?.goals?.home??0}‑${p?.goals?.away??0} ${p?.teams?.away?.name??'–'}</strong><br><small>⏱️ Min ${min} | ${p?.league?.name??'Liga'}</small></li>`; });
-            }catch{}
-        };
-        const mostrarResultados = d => { try{ const b=document.querySelector('#tabla-resultados tbody'),r=d||MOCK.futbol.resultados; b.innerHTML=''; r.forEach(p=>b.innerHTML+=`<tr><td>${p.local}</td><td>${p.visitante}</td><td><strong>${p.resultado}</strong></td></tr>`); }catch{} };
-        const mostrarProximos = d => { try{ const u=document.getElementById('lista-proximos'),p=d||MOCK.futbol.proximos; u.innerHTML=''; p.forEach(x=>u.innerHTML+=`<li>⚽ ${x.local} vs ${x.visitante} — 📅 ${x.fecha}</li>`); }catch{} };
-        const mostrarPosiciones = d => { try{ const c=document.getElementById('contenedor-posiciones'),p=d||MOCK.futbol.posiciones; c.innerHTML=''; p.forEach(g=>{ let h=`<div class="card"><h4>${g.grupo}</h4><table><thead><tr><th>#</th><th>Equipo</th><th>Pts</th><th>PJ</th><th>PG</th><th>PE</th><th>PP</th></tr></thead><tbody>`; g.equipos.forEach(e=>h+=`<tr><td>${e.pos}</td><td>${e.nombre}</td><td>${e.pts}</td><td>${e.pj}</td><td>${e.pg}</td><td>${e.pe}</td><td>${e.pp}</td></tr>`); c.innerHTML+=h+'</tbody></table></div>'; }); }catch{} };
-        // 🏀 NBA
-        const mostrarNBAProximos=d=>{try{const u=document.getElementById('lista-nba');u.innerHTML='';(d||MOCK.nba.proximos).forEach(x=>u.innerHTML+=`<li>${x}</li>`);}catch{}};
-        const mostrarNBAResultados=d=>{try{const b=document.querySelector('#tabla-nba-resultados tbody');b.innerHTML='';(d||MOCK.nba.resultados).forEach(x=>b.innerHTML+=`<tr><td>${x.visitante}</td><td>${x.local}</td><td><strong>${x.resultado}</strong></td></tr>`);}catch{}};
-        // ⚾ MLB
-        const mostrarMLBProximos=d=>{try{const u=document.getElementById('lista-mlb');u.innerHTML='';(d||MOCK.mlb.proximos).forEach(x=>u.innerHTML+=`<li>${x}</li>`);}catch{}};
-        const mostrarMLBResultados=d=>{try{const b=document.querySelector('#tabla-mlb-resultados tbody');b.innerHTML='';(d||MOCK.mlb.resultados).forEach(x=>b.innerHTML+=`<tr><td>${x.visitante}</td><td>${x.local}</td><td><strong>${x.resultado}</strong></td></tr>`);}catch{}};
-        // 📰 Noticias
-        const mostrarNoticias=d=>{try{const c=document.getElementById('contenedor-noticias');c.innerHTML='';(d||MOCK.noticias).forEach(n=>c.innerHTML+=`<div style="padding:.6rem 0;border-bottom:1px solid #1a2a3a;"><strong>${n.titulo}</strong><br><small>${n.fecha}</small></div>`);}catch{}};
-        // 🔄 Cargar API con tiempo límite
-        async function cargarFutbolRapid(){
-            try{ const hoy=new Date().toISOString().split('T')[0];
-                const resLive=await fetch('https://api-football-v1.p.rapidapi.com/v3/fixtures?live=all',{headers:{'X-RapidAPI-Key':RAPIDAPI_KEY,'X-RapidAPI-Host':RAPIDAPI_HOST_FOOTBALL},signal:AbortSignal.timeout(8000)});
-                if(!resLive.ok) throw new Error('HTTP '+resLive.status);
-                const dLive=await resLive.json();
-                if(Array.isArray(dLive?.response)&&dLive.response.length>0){ const v=dLive.response[0]; mostrarEnVivo(`🔥 ${v?.teams?.home?.name??'‑'} ${v?.goals?.home??'‑'}‑${v?.goals?.away??'‑'} ${v?.teams?.away?.name??'‑'}`); mostrarListaEnVivo(dLive.response); }
-            }catch(e){ console.log('API fútbol:',e); mostrarListaEnVivo([]); }
-        }
-        async function cargarTodo(){
-            mostrarEnVivo(); mostrarListaEnVivo(); mostrarResultados(); mostrarProximos(); mostrarPosiciones();
-            mostrarNBAProximos(); mostrarNBAResultados(); mostrarMLBProximos(); mostrarMLBResultados(); mostrarNoticias(); actualizarHora();
-            await cargarFutbolRapid();
-        }
-        document.addEventListener('DOMContentLoaded',cargarTodo);
-        setInterval(cargarTodo,300000); // 5 min
-    </script>
-</body>
-</html>
