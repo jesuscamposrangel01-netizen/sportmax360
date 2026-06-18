@@ -3,244 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPORTMAX 360 - Deportes en Vivo</title>
+    <title>SPORTMAX 360 - Test</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo LT', tahoma, sans-serif; }
-        body { background: #0a0e17; color: #e0e0e0; line-height: 1.6; min-height: 100vh; }
-        header { background: linear-gradient(135deg, #0d1b2a, #1b3a4b); padding: 2rem 1.5rem; text-align: center; border-bottom: 3px solid #00d4ff; box-shadow: 0 4px 30px rgba(0,212,255,0.15); }
-        header h1 { font-size: 2.8rem; font-weight: 800; background: linear-gradient(90deg,#00d4ff,#7b2ffc); -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:2px; }
-        header p { color:#8899aa; font-size:1.1rem; margin-top:.3rem; }
-        nav { background:#111927; padding:.8rem 1.5rem; display:flex; flex-wrap:wrap; justify-content:center; gap:.5rem 1.2rem; border-bottom:1px solid #1a2a3a; position:sticky; top:0; z-index:100; backdrop-filter:blur(10px); }
-        nav a { color:#b0c4de; text-decoration:none; font-weight:500; font-size:.95rem; padding:.4rem .8rem; border-radius:20px; transition:.3s; }
-        nav a:hover { color:#fff; background:rgba(0,212,255,.15); }
-        main { max-width:1300px; margin:2rem auto; padding:0 1.5rem; }
-        section { margin-bottom:3.5rem; animation:fadeInUp .6s ease forwards; }
-        @keyframes fadeInUp { from{opacity:0;transform:translateY(30px);} to{opacity:1;transform:translateY(0);} }
-        h2 { font-size:2rem; font-weight:700; margin-bottom:1.5rem; padding-left:1rem; border-left:5px solid #00d4ff; color:#fff; }
-        h3 { color:#00d4ff; font-size:1.3rem; margin-bottom:1rem; display:flex; align-items:center; gap:.5rem; }
-        .card { background:linear-gradient(145deg,#111927,#0d1520); border-radius:16px; padding:1.8rem; margin-bottom:1.8rem; border:1px solid #1a2a3a; box-shadow:0 8px 32px rgba(0,0,0,.4); transition:.2s; }
-        .card:hover { transform:translateY(-3px); border-color:#00d4ff44; }
-        ul { list-style:none; padding:0; }
-        li { padding:.6rem .8rem; border-bottom:1px solid #1a2a3a; color:#d0d8e0; display:flex; align-items:center; gap:.5rem; }
-        li:hover { background:#0d1b2a55; border-radius:8px; }
-        .live-badge { background:#ff0040; color:#fff; font-size:.7rem; font-weight:700; padding:.2rem .6rem; border-radius:20px; animation:pulse 1.5s infinite; text-transform:uppercase; }
-        @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.5;} }
-        .vivo-texto { color:#00d4ff; font-weight:600; font-size:1.2rem; }
-        .video-container { position:relative; width:100%; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:12px; border:1px solid #00d4ff44; margin-top:1rem; }
-        .video-container iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; }
-        .update-container { display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: .85rem; color: #8899aa; margin-top: 0.5rem; background: #111927; padding: 0.4rem 1rem; border-radius: 20px; border: 1px solid #1a2a3a; width: fit-content; margin: 0 auto 1.5rem auto; }
-        .dot { height: 8px; width: 8px; background-color: #00ff88; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #00ff88; }
-        .api-search-container { margin-bottom: 1.5rem; background: #0d1520; padding: 1.2rem; border-radius: 12px; border: 1px solid #1a2a3a; }
-        .api-search-flex { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
-        .foro-input { background: #0d1520; border: 1px solid #1a2a3a; border-radius: 8px; padding: 0.8rem; color: #fff; font-size: 0.95rem; outline: none; }
-        .foro-input:focus { border-color: #00d4ff; }
-        .foro-boton { background: linear-gradient(90deg, #00d4ff, #7b2ffc); color: #fff; border: none; border-radius: 8px; padding: 0.8rem 1.5rem; font-weight: 700; cursor: pointer; transition: 0.3s; }
-        .foro-boton:hover { transform: scale(1.02); }
-        .lista-jugadores-api { max-height: 250px; overflow-y: auto; margin-top: 1rem; border-radius: 8px; border: 1px solid #1a2a3a; padding: 0.5rem; background: #070b12; }
-        .jugador-item { padding: 0.6rem; border-bottom: 1px solid #1a2a3a; display: flex; flex-direction: column; gap: 0.2rem; }
-        .jugador-item:last-child { border-bottom: none; }
-        .jugador-nombre { color: #00d4ff; font-weight: bold; }
-        .jugador-meta { color: #8899aa; font-size: 0.85rem; }
-        .sedes-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; }
-        .sede-item { background:#0d1b2a; padding:1.2rem; border-radius:12px; text-align:center; border:1px solid #1a2a3a; transition:.3s; }
-        .sede-item:hover { border-color:#00d4ff; }
-        footer { background:#0d1520; text-align:center; padding:2rem; border-top:1px solid #1a2a3a; color:#667788; }
-        footer span { color:#00d4ff; }
-        @media(max-width:768px){header h1{font-size:2rem;} h2{font-size:1.5rem;}}
-        @media(max-width:480px){header h1{font-size:1.5rem;}}
+        body { background:#0a0e17; color:#e0e0e0; font-family: sans-serif; padding:2rem; }
+        .card { background:#111927; padding:1.5rem; border-radius:16px; margin-bottom:1.5rem; border:1px solid #1a2a3a; }
+        h1 { color:#00d4ff; }
+        .vivo { color:#00d4ff; font-weight:600; }
     </style>
 </head>
 <body>
-    <header>
-        <h1>🏟️ SPORTMAX 360</h1>
-        <p>⚡ El deporte en tu pantalla — Datos en tiempo real</p>
-    </header>
-    <nav>
-        <a href="#mundial">🌍 Mundial 2026</a>
-        <a href="#foro">💬 Foro y Comunidad</a>
-        <a href="#sedes">📍 Sedes</a>
-    </nav>
-    <main>
-        <div class="update-container">
-            <span class="dot"></span>
-            <p id="reloj-api">Conectando...</p>
-        </div>
-
-        <section id="mundial">
-            <h2>🌍 Mundial FIFA 2026 — México · EE.UU. · Canadá</h2>
-            <div class="card">
-                <h3>📌 Datos generales</h3>
-                <p>📅 11 de junio – 19 de julio 2026</p>
-                <p>🏟️ 16 sedes · 3 países</p>
-                <p>👥 48 selecciones · 104 partidos</p>
-                <p>🏆 Campeón actual: <strong>Argentina</strong></p>
-            </div>
-            <div class="card">
-                <h3>🔴 <span class="live-badge">En Vivo</span> Partido destacado</h3>
-                <p id="partido-en-vivo" class="vivo-texto">Cargando datos...</p>
-            </div>
-            <div class="card">
-                <h3>📋 Últimos partidos (ejemplo)</h3>
-                <div id="partidos-lista-simulada">Cargando...</div>
-            </div>
-        </section>
-
-        <section id="foro">
-            <h2>💬 Buscador de Jugadores</h2>
-            <div class="api-search-container">
-                <h3>🔍 Buscar futbolista</h3>
-                <p style="font-size:0.85rem; color:#8899aa;">Escribe nombre o inicial (ej: m, messi)</p>
-                <div class="api-search-flex">
-                    <input type="text" id="api-input-buscar" class="foro-input" style="flex:1;" placeholder="Ej: m" value="m">
-                    <button id="api-btn-buscar" class="foro-boton">Buscar</button>
-                </div>
-                <div class="lista-jugadores-api" id="listaJugadoresContainer">
-                    <p style="color:#8899aa; text-align:center;">Escribe y presiona buscar</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="sedes">
-            <h2>📍 Sedes del Mundial</h2>
-            <div class="sedes-grid">
-                <div class="sede-item"><strong>🏟️ Azteca</strong><span class="pais"> México</span></div>
-                <div class="sede-item"><strong>🏟️ MetLife</strong><span class="pais"> EE.UU.</span></div>
-                <div class="sede-item"><strong>🏟️ SoFi</strong><span class="pais"> EE.UU.</span></div>
-                <div class="sede-item"><strong>🏟️ BMO</strong><span class="pais"> Canadá</span></div>
-            </div>
-        </section>
-    </main>
-    <footer>
-        <p>© 2025 SPORTMAX 360 — Datos vía <span>API Sports</span></p>
-    </footer>
-
-    <script>
-        // ============================================================
-        //  TU CLAVE API (YA INCLUIDA)
-        // ============================================================
-        const API_KEY = 'f019ce89dfmsh54169a00fd80f9bp1c5aadjsn50be5f785083';
-        const API_HOST = 'free-api-live-football-data.p.rapidapi.com';
-        const BASE_URL = 'https://' + API_HOST;
-
-        // ---------- RELOJ ----------
-        function actualizarReloj() {
-            const ahora = new Date();
-            document.getElementById('reloj-api').textContent = '🟢 Conectado · ' + ahora.toLocaleTimeString('es-ES', { hour12: false });
-        }
-        setInterval(actualizarReloj, 1000);
-        actualizarReloj();
-
-        // ---------- OBTENER DATOS DE LA API (CADA 10s) ----------
-        async function obtenerDatos() {
-            try {
-                // Usamos un endpoint que SABEMOS que funciona: /football-leagues
-                const url = `${BASE_URL}/football-leagues`;
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'x-rapidapi-key': API_KEY,
-                        'x-rapidapi-host': API_HOST,
-                        'Content-Type': 'application/json'
-                    }
-                });
-                if (!response.ok) throw new Error('HTTP ' + response.status);
-                const data = await response.json();
-                console.log('Datos recibidos (ligas):', data);
-
-                // Extraer array (puede estar en response, data, etc.)
-                let ligas = data.response || data.data || data;
-                if (!Array.isArray(ligas)) ligas = [];
-
-                // Mostrar las primeras 5 ligas como ejemplo en "partido destacado"
-                const destacado = document.getElementById('partido-en-vivo');
-                if (ligas.length > 0) {
-                    const primeras = ligas.slice(0, 5).map(l => l.name || l.league?.name || 'Liga').join(', ');
-                    destacado.innerHTML = `⚽ Ligas activas: ${primeras}`;
-                } else {
-                    destacado.textContent = '⏳ No se encontraron ligas.';
-                }
-
-                // Mostrar lista de ligas
-                const contenedor = document.getElementById('partidos-lista-simulada');
-                if (ligas.length > 0) {
-                    let html = '<ul>';
-                    ligas.slice(0, 10).forEach(l => {
-                        const nombre = l.name || l.league?.name || 'Sin nombre';
-                        const pais = l.country || l.league?.country || '?';
-                        html += `<li>🏆 ${nombre} (${pais})</li>`;
-                    });
-                    html += '</ul>';
-                    contenedor.innerHTML = html;
-                } else {
-                    contenedor.textContent = '📭 No hay datos.';
-                }
-
-            } catch (error) {
-                console.error('Error en API:', error);
-                document.getElementById('partido-en-vivo').textContent = '⚠️ Error de conexión. Revisa consola.';
-                document.getElementById('partidos-lista-simulada').textContent = '⚠️ No se pudo cargar.';
-            }
-        }
-
-        obtenerDatos();
-        setInterval(obtenerDatos, 10000); // cada 10 segundos
-
-        // ---------- BUSCADOR DE JUGADORES (FUNCIONAL) ----------
-        document.getElementById('api-btn-buscar').addEventListener('click', buscarJugadores);
-        document.getElementById('api-input-buscar').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') buscarJugadores();
-        });
-
-        async function buscarJugadores() {
-            const nombre = document.getElementById('api-input-buscar').value.trim();
-            if (!nombre) { alert('Escribe un nombre.'); return; }
-
-            try {
-                const url = `${BASE_URL}/football-players-search?search=${encodeURIComponent(nombre)}`;
-                const response = await fetch(url, {
-                    headers: {
-                        'x-rapidapi-key': API_KEY,
-                        'x-rapidapi-host': API_HOST
-                    }
-                });
-                if (!response.ok) throw new Error('HTTP ' + response.status);
-                const data = await response.json();
-                console.log('Jugadores:', data);
-
-                let jugadores = data.response || data.data || data;
-                if (!Array.isArray(jugadores)) jugadores = [];
-
-                const contenedor = document.getElementById('listaJugadoresContainer');
-                if (jugadores.length === 0) {
-                    contenedor.innerHTML = '<p style="color:#8899aa;">❌ No se encontraron jugadores.</p>';
-                    return;
-                }
-
-                let html = '';
-                jugadores.slice(0, 15).forEach(j => {
-                    const nombreJug = j.player?.name || j.name || 'Sin nombre';
-                    const edad = j.player?.age || j.age || '?';
-                    const equipo = j.team?.name || j.currentTeam || 'Sin equipo';
-                    const posicion = j.position || j.statistics?.[0]?.games?.position || '?';
-                    html += `
-                        <div class="jugador-item">
-                            <span class="jugador-nombre">${nombreJug}</span>
-                            <span class="jugador-meta">${equipo} · ${posicion} · ${edad} años</span>
-                        </div>
-                    `;
-                });
-                contenedor.innerHTML = html;
-
-            } catch (error) {
-                console.error('Error en búsqueda:', error);
-                alert('Error al consultar la API. Mira la consola (F12).');
-            }
-        }
-
-        // Búsqueda inicial con "m"
-        window.addEventListener('load', () => {
-            buscarJugadores();
-        });
-    </script>
+    <h1>🏟️ SPORTMAX 360 - TEST</h1>
+    <div class="card">
+        <h2>🔴 En Vivo</h2>
+        <p class="vivo">🔥 México 1‑0 Argentina (Minuto 67)</p>
+    </div>
+    <div class="card">
+        <h2>📋 Últimos Resultados</h2>
+        <ul>
+            <li>Brasil 2‑1 Alemania</li>
+            <li>Francia 0‑0 Inglaterra</li>
+            <li>España 3‑2 Holanda</li>
+            <li>Portugal 1‑1 Uruguay</li>
+        </ul>
+    </div>
+    <div class="card">
+        <h2>📅 Próximos Partidos</h2>
+        <ul>
+            <li>Argentina vs Brasil — 15/06 20:00</li>
+            <li>Alemania vs Francia — 16/06 18:00</li>
+            <li>Inglaterra vs España — 17/06 21:00</li>
+        </ul>
+    </div>
+    <div class="card">
+        <h2>🏀 NBA</h2>
+        <ul>
+            <li>Lakers @ Warriors — 15/06 22:00</li>
+            <li>Celtics @ Heat — 16/06 20:30</li>
+        </ul>
+    </div>
+    <div class="card">
+        <h2>⚾ MLB</h2>
+        <ul>
+            <li>Yankees @ Red Sox — 15/06 19:00</li>
+            <li>Dodgers @ Padres — 15/06 21:00</li>
+        </ul>
+    </div>
+    <p style="color:#667788;">✅ Si ves esto, el HTML y CSS funcionan correctamente.</p>
 </body>
 </html>
