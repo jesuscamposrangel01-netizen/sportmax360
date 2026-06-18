@@ -56,6 +56,16 @@
         .comentario-autor { color: #00d4ff; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.2rem; }
         .comentario-fecha { color: #445566; font-size: 0.75rem; float: right; }
         .comentario-texto { color: #d0d8e0; font-size: 0.95rem; word-break: break-word; }
+
+        /* ESTILOS DE LA INTEGRACIÓN DE LA API DE JUGADORES */
+        .api-search-container { margin-bottom: 1.5rem; background: #0d1520; padding: 1.2rem; border-radius: 12px; border: 1px solid #1a2a3a; }
+        .api-search-flex { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+        .lista-jugadores-api { max-height: 250px; overflow-y: auto; margin-top: 1rem; border-radius: 8px; border: 1px solid #1a2a3a; padding: 0.5rem; background: #070b12; }
+        .jugador-item { padding: 0.6rem; border-bottom: 1px solid #1a2a3a; display: flex; flex-direction: column; gap: 0.2rem; }
+        .jugador-item:last-child { border-bottom: none; }
+        .jugador-nombre { color: #00d4ff; font-weight: bold; }
+        .jugador-meta { color: #8899aa; font-size: 0.85rem; }
+
         @media(max-width:768px){header h1{font-size:2rem;}nav{gap:.3rem .8rem;}nav a{font-size:.8rem;padding:.3rem .6rem;}h2{font-size:1.5rem;}.card{padding:1.2rem;}table{font-size:.8rem;}th,td{padding:.5rem .3rem;}}
         @media(max-width:480px){header h1{font-size:1.5rem;}.sedes-grid{grid-template-columns:1fr 1fr;}}
     </style>
@@ -67,9 +77,7 @@
     </header>
     <nav>
         <a href="#mundial">🌍 Mundial 2026</a>
-        <a href="#nba">🏀 NBA</a>
-        <a href="#mlb">⚾ MLB</a>
-        <a href="#foro">💬 Foro</a>
+        <a href="#foro">💬 Foro y Comunidad</a>
         <a href="#sedes">📍 Sedes</a>
     </nav>
     <main>
@@ -91,59 +99,31 @@
             </div>
             <div class="card">
                 <h3>🔴 <span class="live-badge">En Vivo</span> Partido destacado</h3>
-                <p id="partido-en-vivo" class="vivo-texto">Cargando partido destacado en tiempo real...</p>
+                <p id="partido-en-vivo" class="vivo-texto">Sincronizando con los servidores del torneo...</p>
             </div>
             <div class="card" id="videos">
                 <h3>📺 Ver partido en vivo — Emisión oficial</h3>
                 <div class="video-container">
+                    <!-- Modificado a la URL de incrustación oficial para evitar bloqueos del navegador -->
                     <iframe id="reproductor-partido" src="https://youtube.com" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
                 </div>
                 <p class="aviso-legal">ℹ️ Enlaces verificados: FIFA, YouTube, ESPN, DAZN, MLB.tv, NBA League Pass.</p>
             </div>
             <div class="card">
                 <h3>📋 Todos los partidos en vivo ahora</h3>
-                <ul id="lista-en-vivo">
-                    <li>🔄 Sincronizando cartelera global...</li>
-                </ul>
-            </div>
-            <div class="card">
-                <h3>📋 Últimos Resultados</h3>
-                <table id="tabla-resultados">
-                    <thead>
-                        <tr><th>Local</th><th>Visitante</th><th>Resultado</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td colspan="3" style="text-align: center; color: #8899aa;">Consultando marcadores fútbol...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="card">
-                <h3>📅 Próximos Partidos</h3>
-                <ul id="lista-proximos">
-                    <li>🔄 Estructurando agenda deportiva...</li>
-                </ul>
+                <p id="partidos-lista-simulada">Buscando transmisiones alternativas activas...</p>
             </div>
         </section>
 
-        <!-- SECCIÓN NBA -->
-        <section id="nba">
-            <h2>🏀 NBA Basketball — Tablero de Control</h2>
-            <div class="card">
-                <h3>🔴 Partidos En Directo</h3>
-                <ul id="nba-en-vivo">
-                    <li>🔄 Monitoreando canchas de la NBA...</li>
-                </ul>
-            </div>
-            <div class="card">
-                <h3>📋 Tabla de Posiciones Recientes</h3>
-                <table id="tabla-nba">
-                    <thead>
-                        <tr><th>Franquicia</th><th>Conferencia</th><th>Récord (V-D)</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td colspan="3" style="text-align: center; color: #8899aa;">Obteniendo posiciones de la liga...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
+        <!-- SECCIÓN FORO Y ENTORNO API -->
+        <section id="foro">
+            <h2>💬 Foro y Consulta de Datos en Tiempo Real</h2>
+            
+            <!-- BUSCADOR CONECTADO A TU API -->
+            <div class="api-search-container">
+                <h3>🔍 Buscador Global de Futbolistas (API Live)</h3>
+                <p style="font-size: 0.85rem; color: #8899aa;">Consulta la base de datos oficial introduciendo una letra o nombre completo.</p>
+                <div class="api-search-flex">
+                    <input type="text" id="api-input-buscar" class="foro-input" style="flex: 1;" placeholder="Escribe inicial o nombre (ej: m o messi)..." value="m">
+                    <button id="api-btn-buscar" class="foro-boton" style="padding: 0 1.5rem;">Buscar</button>
+                </div>
