@@ -42,7 +42,20 @@
         .sede-item .pais { color:#8899aa; font-size:.85rem; }
         footer { background:#0d1520; text-align:center; padding:2rem; border-top:1px solid #1a2a3a; color:#667788; font-size:.95rem; }
         footer span { color:#00d4ff; }
-        .update-time { font-size:.8rem; color:#445566; margin-top:.3rem; }
+        .update-container { display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: .85rem; color: #8899aa; margin-top: 0.5rem; background: #111927; padding: 0.4rem 1rem; border-radius: 20px; border: 1px solid #1a2a3a; width: fit-content; margin: 0 auto 1.5rem auto; }
+        .dot { height: 8px; width: 8px; background-color: #00ff88; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #00ff88; }
+        
+        /* ESTILOS ESPECÍFICOS DEL FORO PERMANENTE */
+        .foro-formulario { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; }
+        .foro-input { background: #0d1520; border: 1px solid #1a2a3a; border-radius: 8px; padding: 0.8rem; color: #fff; font-size: 0.95rem; outline: none; transition: 0.3s; }
+        .foro-input:focus { border-color: #00d4ff; box-shadow: 0 0 10px rgba(0,212,255,0.1); }
+        .foro-textarea { resize: vertical; min-height: 80px; }
+        .foro-boton { background: linear-gradient(90deg, #00d4ff, #7b2ffc); color: #fff; border: none; border-radius: 8px; padding: 0.8rem; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.95rem; }
+        .foro-boton:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,212,255,0.3); }
+        .comentario-caja { background: #0d1520; padding: 1rem; border-radius: 10px; border-left: 4px solid #7b2ffc; margin-bottom: 0.8rem; position: relative; }
+        .comentario-autor { color: #00d4ff; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.2rem; }
+        .comentario-fecha { color: #445566; font-size: 0.75rem; float: right; }
+        .comentario-texto { color: #d0d8e0; font-size: 0.95rem; word-break: break-word; }
         @media(max-width:768px){header h1{font-size:2rem;}nav{gap:.3rem .8rem;}nav a{font-size:.8rem;padding:.3rem .6rem;}h2{font-size:1.5rem;}.card{padding:1.2rem;}table{font-size:.8rem;}th,td{padding:.5rem .3rem;}}
         @media(max-width:480px){header h1{font-size:1.5rem;}.sedes-grid{grid-template-columns:1fr 1fr;}}
     </style>
@@ -56,14 +69,17 @@
         <a href="#mundial">🌍 Mundial 2026</a>
         <a href="#nba">🏀 NBA</a>
         <a href="#mlb">⚾ MLB</a>
-        <a href="#sedes">📍 Sedes</a>
-        <a href="#noticias">📰 Noticias</a>
-        <a href="#galeria">📸 Galería</a>
-        <a href="#videos">🎥 Videos</a>
         <a href="#foro">💬 Foro</a>
-        <a href="#contacto">📞 Contacto</a>
+        <a href="#sedes">📍 Sedes</a>
     </nav>
     <main>
+        <!-- MONITOR DE TIEMPO REAL -->
+        <div class="update-container">
+            <span class="dot"></span>
+            <p id="reloj-api">Sincronizando flujo de datos...</p>
+        </div>
+
+        <!-- SECCIÓN MUNDIAL -->
         <section id="mundial">
             <h2>🌍 Mundial FIFA 2026 — México · EE.UU. · Canadá</h2>
             <div class="card">
@@ -82,7 +98,7 @@
                 <div class="video-container">
                     <iframe id="reproductor-partido" src="https://youtube.com" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
                 </div>
-                <p class="aviso-legal">ℹ️ Solo enlaces oficiales: FIFA, YouTube, ESPN, DAZN, MLB.tv, NBA League Pass.</p>
+                <p class="aviso-legal">ℹ️ Enlaces verificados: FIFA, YouTube, ESPN, DAZN, MLB.tv, NBA League Pass.</p>
             </div>
             <div class="card">
                 <h3>📋 Todos los partidos en vivo ahora</h3>
@@ -94,16 +110,10 @@
                 <h3>📋 Últimos Resultados</h3>
                 <table id="tabla-resultados">
                     <thead>
-                        <tr>
-                            <th>Local</th>
-                            <th>Visitante</th>
-                            <th>Resultado</th>
-                        </tr>
+                        <tr><th>Local</th><th>Visitante</th><th>Resultado</th></tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td colspan="3" style="text-align: center; color: #8899aa;">Consultando base de datos de marcadores...</td>
-                        </tr>
+                        <tr><td colspan="3" style="text-align: center; color: #8899aa;">Consultando marcadores fútbol...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -113,47 +123,27 @@
                     <li>🔄 Estructurando agenda deportiva...</li>
                 </ul>
             </div>
-            <div id="contenedor-posiciones"></div>
+        </section>
+
+        <!-- SECCIÓN NBA -->
+        <section id="nba">
+            <h2>🏀 NBA Basketball — Tablero de Control</h2>
             <div class="card">
-                <h3>📊 Fases del torneo</h3>
-                <p><span class="fase-etapa">Fase grupos:</span> 11 jun – 27 jun | 12×4 equipos</p>
-                <p><span class="fase-etapa">Octavos:</span> 30 jun – 3 jul</p>
-                <p><span class="fase-etapa">Cuartos:</span> 4 jul – 7 jul</p>
-                <p><span class="fase-etapa">Semifinales:</span> 8 jul – 11 jul</p>
-                <p><span class="fase-etapa">3.º puesto:</span> 18 jul</p>
-                <p><span class="fase-etapa">Final:</span> 19 jul 📍 MetLife Stadium</p>
+                <h3>🔴 Partidos En Directo</h3>
+                <ul id="nba-en-vivo">
+                    <li>🔄 Monitoreando canchas de la NBA...</li>
+                </ul>
             </div>
             <div class="card">
-                <h3>⚽ Máximos goleadores</h3>
-                <table>
+                <h3>📋 Tabla de Posiciones Recientes</h3>
+                <table id="tabla-nba">
                     <thead>
-                        <tr>
-                            <th>Jugador</th>
-                            <th>Selección</th>
-                            <th>Goles</th>
-                        </tr>
+                        <tr><th>Franquicia</th><th>Conferencia</th><th>Récord (V-D)</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td>Lionel Messi</td><td>🇦🇷 Argentina</td><td>6</td></tr>
-                        <tr><td>Kylian Mbappé</td><td>🇫🇷 Francia</td><td>5</td></tr>
-                        <tr><td>Harry Kane</td><td>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</td><td>4</td></tr>
-                        <tr><td>Vinícius Jr.</td><td>🇧🇷 Brasil</td><td>4</td></tr>
+                        <tr><td colspan="3" style="text-align: center; color: #8899aa;">Obteniendo posiciones de la liga...</td></tr>
                     </tbody>
                 </table>
             </div>
         </section>
-        
-        <section id="sedes">
-            <h2>📍 Sedes Oficiales</h2>
-            <div class="sedes-grid">
-                <div class="sede-item"><h4>Ciudad de México</h4><p class="pais">🇲🇽 México</p></div>
-                <div class="sede-item"><h4>Guadalajara</h4><p class="pais">🇲🇽 México</p></div>
-                <div class="sede-item"><h4>Monterrey</h4><p class="pais">🇲🇽 México</p></div>
-                <div class="sede-item"><h4>Nueva York</h4><p class="pais">🇺🇸 EE.UU.</p></div>
-                <div class="sede-item"><h4>Los Ángeles</h4><p class="pais">🇺🇸 EE.UU.</p></div>
-                <div class="sede-item"><h4>Miami</h4><p class="pais">🇺🇸 EE.UU.</p></div>
-                <div class="sede-item"><h4>Vancouver</h4><p class="pais">🇨🇦 Canadá</p></div>
-                <div class="sede-item"><h4>Toronto</h4><p class="pais">🇨🇦 Canadá</p></div>
-            </div>
-        </section>
-    </main>
+
