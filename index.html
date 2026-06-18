@@ -45,7 +45,6 @@
         .update-container { display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: .85rem; color: #8899aa; margin-top: 0.5rem; background: #111927; padding: 0.4rem 1rem; border-radius: 20px; border: 1px solid #1a2a3a; width: fit-content; margin: 0 auto 1.5rem auto; }
         .dot { height: 8px; width: 8px; background-color: #00ff88; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #00ff88; }
         
-        /* ESTILOS ESPECÍFICOS DEL FORO PERMANENTE */
         .foro-formulario { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; }
         .foro-input { background: #0d1520; border: 1px solid #1a2a3a; border-radius: 8px; padding: 0.8rem; color: #fff; font-size: 0.95rem; outline: none; transition: 0.3s; }
         .foro-input:focus { border-color: #00d4ff; box-shadow: 0 0 10px rgba(0,212,255,0.1); }
@@ -57,7 +56,6 @@
         .comentario-fecha { color: #445566; font-size: 0.75rem; float: right; }
         .comentario-texto { color: #d0d8e0; font-size: 0.95rem; word-break: break-word; }
 
-        /* ESTILOS DE LA INTEGRACIÓN DE LA API DE JUGADORES */
         .api-search-container { margin-bottom: 1.5rem; background: #0d1520; padding: 1.2rem; border-radius: 12px; border: 1px solid #1a2a3a; }
         .api-search-flex { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
         .lista-jugadores-api { max-height: 250px; overflow-y: auto; margin-top: 1rem; border-radius: 8px; border: 1px solid #1a2a3a; padding: 0.5rem; background: #070b12; }
@@ -81,13 +79,11 @@
         <a href="#sedes">📍 Sedes</a>
     </nav>
     <main>
-        <!-- MONITOR DE TIEMPO REAL -->
         <div class="update-container">
             <span class="dot"></span>
             <p id="reloj-api">Sincronizando flujo de datos...</p>
         </div>
 
-        <!-- SECCIÓN MUNDIAL -->
         <section id="mundial">
             <h2>🌍 Mundial FIFA 2026 — México · EE.UU. · Canadá</h2>
             <div class="card">
@@ -104,22 +100,19 @@
             <div class="card" id="videos">
                 <h3>📺 Ver partido en vivo — Emisión oficial</h3>
                 <div class="video-container">
-                    <!-- Modificado a la URL de incrustación oficial para evitar bloqueos del navegador -->
                     <iframe id="reproductor-partido" src="https://youtube.com" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
                 </div>
                 <p class="aviso-legal">ℹ️ Enlaces verificados: FIFA, YouTube, ESPN, DAZN, MLB.tv, NBA League Pass.</p>
             </div>
             <div class="card">
                 <h3>📋 Todos los partidos en vivo ahora</h3>
-                <p id="partidos-lista-simulada">Buscando transmisiones alternativas activas...</p>
+                <div id="partidos-lista-simulada">Buscando transmisiones alternativas activas...</div>
             </div>
         </section>
 
-        <!-- SECCIÓN FORO Y ENTORNO API -->
         <section id="foro">
             <h2>💬 Foro y Consulta de Datos en Tiempo Real</h2>
             
-            <!-- BUSCADOR CONECTADO A TU API -->
             <div class="api-search-container">
                 <h3>🔍 Buscador Global de Futbolistas (API Live)</h3>
                 <p style="font-size: 0.85rem; color: #8899aa;">Consulta la base de datos oficial introduciendo una letra o nombre completo.</p>
@@ -127,3 +120,170 @@
                     <input type="text" id="api-input-buscar" class="foro-input" style="flex: 1;" placeholder="Escribe inicial o nombre (ej: m o messi)..." value="m">
                     <button id="api-btn-buscar" class="foro-boton" style="padding: 0 1.5rem;">Buscar</button>
                 </div>
+                <div class="lista-jugadores-api" id="listaJugadoresContainer">
+                    <p style="color:#8899aa; text-align:center;">Escribe un nombre y presiona buscar</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="sedes">
+            <h2>📍 Sedes del Mundial 2026</h2>
+            <div class="sedes-grid">
+                <div class="sede-item"><strong>🏟️ Azteca</strong><span class="pais"> México</span></div>
+                <div class="sede-item"><strong>🏟️ MetLife</strong><span class="pais"> EE.UU.</span></div>
+                <div class="sede-item"><strong>🏟️ SoFi</strong><span class="pais"> EE.UU.</span></div>
+                <div class="sede-item"><strong>🏟️ BMO</strong><span class="pais"> Canadá</span></div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>© 2025 SPORTMAX 360 — Datos en tiempo real vía <span>API Sports</span></p>
+    </footer>
+
+    <script>
+    // ================================================================
+    //  CÓDIGO COMPLETO CON TU CLAVE Y ACTUALIZACIÓN CADA 10 SEGUNDOS
+    // ================================================================
+    const API_KEY = 'f019ce89dfmsh54169a00fd80f9bp1c5aadjsn50be5f785083';
+    const API_HOST = 'free-api-live-football-data.p.rapidapi.com';
+    const BASE_URL = 'https://' + API_HOST;
+
+    // ---------- RELOJ ----------
+    function actualizarReloj() {
+        const ahora = new Date();
+        const horaStr = ahora.toLocaleTimeString('es-ES', { hour12: false });
+        document.getElementById('reloj-api').textContent = `🟢 Conectado · ${horaStr}`;
+    }
+    setInterval(actualizarReloj, 1000);
+    actualizarReloj();
+
+    // ---------- PARTIDOS EN VIVO (CADA 10s) ----------
+    async function obtenerPartidosEnVivo() {
+        try {
+            // PRUEBA 1: Endpoint para resultados en vivo
+            let url = `${BASE_URL}/football-live-scores`;
+            // Si no funciona, descomenta la línea de abajo y comenta la de arriba:
+            // url = `${BASE_URL}/football-fixtures?live=all`;
+
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'x-rapidapi-key': API_KEY,
+                    'x-rapidapi-host': API_HOST,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            console.log('📊 Estructura de partidos:', data);
+
+            let partidos = data.response || data.data || data;
+            if (!Array.isArray(partidos)) partidos = [];
+
+            const destacado = document.getElementById('partido-en-vivo');
+            if (partidos.length > 0) {
+                const p = partidos[0];
+                // Intenta adivinar los nombres de los campos (ajústalos según lo que veas en consola)
+                const local = p.home_team?.name || p.localTeam?.name || p.teams?.home?.name || p.team1?.name || 'Local';
+                const visitante = p.away_team?.name || p.visitanteTeam?.name || p.teams?.away?.name || p.team2?.name || 'Visitante';
+                const gL = p.home_score ?? p.localScore ?? p.goals?.home ?? p.score?.home ?? 0;
+                const gV = p.away_score ?? p.visitanteScore ?? p.goals?.away ?? p.score?.away ?? 0;
+                const min = p.elapsed ?? p.minute ?? p.fixture?.status?.elapsed ?? '?';
+                destacado.innerHTML = `⚽ ${local} ${gL} - ${gV} ${visitante} · Minuto ${min}`;
+            } else {
+                destacado.textContent = '⏳ No hay partidos en vivo ahora mismo.';
+            }
+
+            const contenedor = document.getElementById('partidos-lista-simulada');
+            if (partidos.length > 0) {
+                let html = '<ul>';
+                partidos.slice(0, 10).forEach(p => {
+                    const local = p.home_team?.name || p.localTeam?.name || p.teams?.home?.name || p.team1?.name || 'Local';
+                    const visitante = p.away_team?.name || p.visitanteTeam?.name || p.teams?.away?.name || p.team2?.name || 'Visitante';
+                    const gL = p.home_score ?? p.localScore ?? p.goals?.home ?? p.score?.home ?? 0;
+                    const gV = p.away_score ?? p.visitanteScore ?? p.goals?.away ?? p.score?.away ?? 0;
+                    const min = p.elapsed ?? p.minute ?? p.fixture?.status?.elapsed ?? '?';
+                    html += `<li>${local} ${gL} - ${gV} ${visitante} (${min}')</li>`;
+                });
+                html += '</ul>';
+                contenedor.innerHTML = html;
+            } else {
+                contenedor.textContent = '📭 No hay partidos en vivo.';
+            }
+
+        } catch (error) {
+            console.error('❌ Error en partidos:', error);
+            document.getElementById('partido-en-vivo').textContent = '⚠️ Error de conexión. Revisa consola (F12).';
+            document.getElementById('partidos-lista-simulada').textContent = '⚠️ No se pudieron cargar los partidos.';
+        }
+    }
+
+    obtenerPartidosEnVivo();
+    setInterval(obtenerPartidosEnVivo, 10000); // <--- CADA 10 SEGUNDOS
+
+    // ---------- BUSCADOR DE JUGADORES ----------
+    document.getElementById('api-btn-buscar').addEventListener('click', buscarJugadores);
+    document.getElementById('api-input-buscar').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') buscarJugadores();
+    });
+
+    async function buscarJugadores() {
+        const nombre = document.getElementById('api-input-buscar').value.trim();
+        if (!nombre) {
+            alert('Escribe al menos una letra.');
+            return;
+        }
+
+        try {
+            const url = `${BASE_URL}/football-players-search?search=${encodeURIComponent(nombre)}`;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'x-rapidapi-key': API_KEY,
+                    'x-rapidapi-host': API_HOST,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+            console.log('👤 Estructura de jugadores:', data);
+
+            let jugadores = data.response || data.data || data;
+            if (!Array.isArray(jugadores)) jugadores = [];
+
+            const contenedor = document.getElementById('listaJugadoresContainer');
+            if (jugadores.length === 0) {
+                contenedor.innerHTML = '<p style="color:#8899aa;">❌ No se encontraron jugadores.</p>';
+                return;
+            }
+
+            let html = '';
+            jugadores.slice(0, 15).forEach(j => {
+                const nombreJug = j.player?.name || j.name || j.fullName || 'Sin nombre';
+                const edad = j.player?.age || j.age || '?';
+                const equipo = j.team?.name || j.currentTeam || j.statistics?.[0]?.team?.name || 'Sin equipo';
+                const posicion = j.position || j.statistics?.[0]?.games?.position || '?';
+                html += `
+                    <div class="jugador-item">
+                        <span class="jugador-nombre">${nombreJug}</span>
+                        <span class="jugador-meta">${equipo} · ${posicion} · ${edad} años</span>
+                    </div>
+                `;
+            });
+            contenedor.innerHTML = html;
+
+        } catch (error) {
+            console.error('❌ Error en búsqueda:', error);
+            alert('⚠️ Error al consultar la API. Mira la consola (F12).');
+        }
+    }
+
+    // Búsqueda inicial con "m"
+    window.addEventListener('load', () => {
+        buscarJugadores();
+    });
+    </script>
+</body>
+</html>
