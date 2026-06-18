@@ -232,6 +232,14 @@
         }
         footer span { color:#00d4ff; }
         .update-time { font-size:0.8rem; color:#445566; margin-top:0.3rem; }
+        /* ===== SHOTMAP CANVAS ===== */
+        #shotmapCanvas {
+            width: 100%;
+            height: auto;
+            background: #0d1b2a;
+            border-radius: 12px;
+            border: 1px solid #1a2a3a;
+        }
         @media (max-width:768px) {
             header h1 { font-size:2rem; }
             nav { gap:0.3rem 0.8rem; }
@@ -284,6 +292,12 @@
                 <ul id="lista-proximos"></ul>
             </div>
             <div id="contenedor-posiciones"></div>
+            <!-- 🎯 SHOTMAP -->
+            <div class="card">
+                <h3>🎯 Mapa de Tiros</h3>
+                <canvas id="shotmapCanvas" width="700" height="450"></canvas>
+                <p id="shotmap-info" style="color:#667788; font-size:0.85rem; margin-top:0.5rem; text-align:center;">Cargando mapa de tiros...</p>
+            </div>
         </section>
 
         <!-- 🏀 NBA -->
@@ -365,16 +379,18 @@
         // ================================================================
         // 1. CONFIGURACIÓN DE APIS
         // ================================================================
-        // 🔑 Clave de football-data.org (Mundial 2026 y ligas)
+        // 🔑 Clave de RapidAPI (fútbol, NBA, videos, shotmap)
+        const RAPIDAPI_KEY = 'f019ce89dfmhsh54169a00fd80f9b1c5aadjsn50be5f785083';
+        const RAPIDAPI_HOST_FOOTBALL = 'api-football-v1.p.rapidapi.com';
+        const RAPIDAPI_HOST_NBA = 'api-nba-v1.p.rapidapi.com';
+        const RAPIDAPI_HOST_SHOTMAP = 'footapi7.p.rapidapi.com';
+
+        // 🔑 Clave de football-data.org (respaldo)
         const FOOTBALL_API_KEY = 'd0134d9dafae4349b1748ddfc02fab16';
         const FOOTBALL_HEADERS = {
             'X-Auth-Token': FOOTBALL_API_KEY,
             'Accept': 'application/json'
         };
-
-        // 🔑 Clave de RapidAPI (NBA, videos, etc.)
-        const RAPIDAPI_KEY = 'f019ce89dfmhsh54169a00fd80f9b1c5aadjsn50be5f785083';
-        const RAPIDAPI_HOST_NBA = 'api-nba-v1.p.rapidapi.com';
 
         // ================================================================
         // 2. DATOS DE PRUEBA (MOCK) - SIEMPRE VISIBLES
@@ -529,134 +545,191 @@
         // 4. FUNCIONES PARA CONSUMIR APIS
         // ================================================================
 
-        // ⚽ FÚTBOL — football-data.org (NUEVA API, MÁS ESTABLE)
-        async function cargarFutbolDataOrg() {
+        // ⚽ FÚTBOL — RapidAPI (API-Football)
+        async function cargarFutbolRapid() {
             try {
-                // Partidos en vivo
-                const resLive = await fetch('https://api.football-data.org/v4/matches?status=LIVE', {
-                    headers: FOOTBALL_HEADERS
+                const hoy = new Date().toISOString().split('T')[0];
+                const resLive = await fetch('https://api-football-v1.p.rapidapi.com/v3/fixtures?live=all', {
+                    headers: { 'X-RapidAPI-Key': RAPIDAPI_KEY, 'X-RapidAPI-Host': RAPIDAPI_HOST_FOOTBALL }
                 });
                 if (!resLive.ok) throw new Error('HTTP ' + resLive.status);
                 const dataLive = await resLive.json();
-                if (dataLive.matches?.length > 0) {
-                    const vivo = dataLive.matches[0];
-                    mostrarEnVivo(`🔥 ${vivo.homeTeam.name} ${vivo.score.fullTime.home ?? '-'}‑${vivo.score.fullTime.away ?? '-'} ${vivo.awayTeam.name}`);
+                if (Array.isArray(dataLive?.response) && dataLive.response.length > 0) {
+                    const v = dataLive.response[0];
+                    mostrarEnVivo(`🔥 ${v.teams.home.name} ${v.goals.home}‑${v.goals.away} ${v.teams.away.name}`);
+                    // Si hay partido en vivo, obtener su ID para el shotmap
+                    const matchId = v.fixture.id;
+                    if (matchId) cargarShotmap(matchId);
+                } else {
+                    // Si no hay partido en vivo, mostrar un mensaje en el shotmap
+                    document.getElementById('shotmap-info').textContent = '⏳ Sin partido en vivo. El mapa se actualizará cuando empiece un partido.';
                 }
 
-                // Resultados (últimos 4 finalizados)
-                const resFin = await fetch('https://api.football-data.org/v4/matches?status=FINISHED', {
-                    headers: FOOTBALL_HEADERS
+                const resFin = await fetch(`https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${hoy}&status=FT`, {
+                    headers: { 'X-RapidAPI-Key': RAPIDAPI_KEY, 'X-RapidAPI-Host': RAPIDAPI_HOST_FOOTBALL }
                 });
                 if (resFin.ok) {
                     const dataFin = await resFin.json();
-                    const finalizados = dataFin.matches?.slice(0, 4) || [];
+                    const finalizados = dataFin.response?.slice(0, 4) || [];
                     if (finalizados.length) {
-                        const resultados = finalizados.map(m => ({
-                            local: m.homeTeam.name,
-                            visitante: m.awayTeam.name,
-                            resultado: `${m.score.fullTime.home ?? '-'}‑${m.score.fullTime.away ?? '-'}`
-                        }));
+                        const resultados = finalizados.map(f => ({ local: f.teams.home.name, visitante: f.teams.away.name, resultado: `${f.goals.home}‑${f.goals.away}` }));
                         mostrarResultados(resultados);
                     }
                 }
 
-                // Próximos (hasta 5)
-                const resProx = await fetch('https://api.football-data.org/v4/matches?status=SCHEDULED', {
-                    headers: FOOTBALL_HEADERS
+                const resProx = await fetch(`https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${hoy}&status=NS`, {
+                    headers: { 'X-RapidAPI-Key': RAPIDAPI_KEY, 'X-RapidAPI-Host': RAPIDAPI_HOST_FOOTBALL }
                 });
                 if (resProx.ok) {
                     const dataProx = await resProx.json();
-                    const proximos = dataProx.matches?.slice(0, 5) || [];
+                    const proximos = dataProx.response?.slice(0, 5) || [];
                     if (proximos.length) {
-                        const proxData = proximos.map(m => ({
-                            local: m.homeTeam.name,
-                            visitante: m.awayTeam.name,
-                            fecha: new Date(m.utcDate).toLocaleString('es-ES', ZONA_LIMA)
-                        }));
+                        const proxData = proximos.map(f => ({ local: f.teams.home.name, visitante: f.teams.away.name, fecha: new Date(f.fixture.date).toLocaleString('es-ES', ZONA_LIMA) }));
                         mostrarProximos(proxData);
                     }
                 }
 
-                // Clasificaciones (Mundial 2026)
-                const resStand = await fetch('https://api.football-data.org/v4/competitions/WC/standings', {
-                    headers: FOOTBALL_HEADERS
+                const resStand = await fetch('https://api-football-v1.p.rapidapi.com/v3/standings?league=1&season=2026', {
+                    headers: { 'X-RapidAPI-Key': RAPIDAPI_KEY, 'X-RapidAPI-Host': RAPIDAPI_HOST_FOOTBALL }
                 });
                 if (resStand.ok) {
                     const dataStand = await resStand.json();
-                    if (dataStand.standings?.length) {
-                        const posiciones = dataStand.standings.map(s => ({
-                            grupo: s.group,
-                            equipos: s.table?.map(t => ({
-                                pos: t.position,
-                                nombre: t.team.name,
-                                pts: t.points,
-                                pj: t.playedGames,
-                                pg: t.won,
-                                pe: t.draw,
-                                pp: t.lost
-                            })) || []
-                        }));
+                    if (dataStand.response?.length) {
+                        const liga = dataStand.response[0];
+                        const equipos = liga.league.standings[0]?.slice(0, 5) || [];
+                        const posiciones = [{
+                            grupo: liga.league.name,
+                            equipos: equipos.map((eq, i) => ({ pos: i+1, nombre: eq.team.name, pts: eq.points, pj: eq.all.played, pg: eq.all.win, pe: eq.all.draw, pp: eq.all.lose }))
+                        }];
                         mostrarPosiciones(posiciones);
                     }
                 }
-
             } catch (e) {
-                console.log('ℹ️ football-data.org no disponible, usando MOCK');
+                console.log('ℹ️ RapidAPI Fútbol no disponible, usando MOCK');
             }
         }
 
-        // 🎥 VIDEOS DE FÚTBOL — RapidAPI
-        async function cargarVideosFutbol() {
+        // 🎯 SHOTMAP — RapidAPI (footapi7)
+        async function cargarShotmap(matchId) {
             try {
-                const res = await fetch('https://free-football-soccer-videos.p.rapidapi.com/', {
+                const url = `https://footapi7.p.rapidapi.com/api/match/${matchId}/shotmap`;
+                const res = await fetch(url, {
                     headers: {
                         'x-rapidapi-key': RAPIDAPI_KEY,
-                        'x-rapidapi-host': 'free-football-soccer-videos.p.rapidapi.com'
+                        'x-rapidapi-host': RAPIDAPI_HOST_SHOTMAP
                     }
                 });
                 if (!res.ok) throw new Error('HTTP ' + res.status);
                 const data = await res.json();
-                if (Array.isArray(data) && data.length > 0) {
-                    const contenedor = document.getElementById('contenedor-videos');
-                    contenedor.innerHTML = '';
-                    data.slice(0, 6).forEach(video => {
-                        const titulo = video.title || 'Video destacado';
-                        const thumbnail = video.thumbnail || 'https://via.placeholder.com/300x150/0d1b2a/00d4ff?text=SPORTMAX';
-                        const url = video.url || '#';
-                        contenedor.innerHTML += `
-                            <div class="video-item">
-                                <img src="${thumbnail}" alt="${titulo}" loading="lazy">
-                                <div class="info">
-                                    <h4>${titulo}</h4>
-                                    <a href="${url}" target="_blank">Ver video →</a>
-                                </div>
-                            </div>
-                        `;
-                    });
+                console.log('🎯 Shotmap cargado:', data);
+                if (data.shotmap && data.shotmap.length > 0) {
+                    dibujarShotmap(data.shotmap);
+                    document.getElementById('shotmap-info').textContent = `✅ ${data.shotmap.length} tiros registrados en el partido.`;
                 } else {
-                    throw new Error('Sin videos');
+                    document.getElementById('shotmap-info').textContent = 'ℹ️ No hay tiros registrados para este partido.';
                 }
             } catch (e) {
-                console.log('ℹ️ API de videos no disponible, mostrando MOCK');
-                const contenedor = document.getElementById('contenedor-videos');
-                contenedor.innerHTML = `
-                    <div class="video-item">
-                        <img src="https://via.placeholder.com/300x150/0d1b2a/00d4ff?text=SPORTMAX" alt="Video ejemplo">
-                        <div class="info"><h4>⚽ Gol de Messi vs México</h4><a href="#">Ver video →</a></div>
-                    </div>
-                    <div class="video-item">
-                        <img src="https://via.placeholder.com/300x150/0d1b2a/00d4ff?text=SPORTMAX" alt="Video ejemplo">
-                        <div class="info"><h4>🏆 Resumen Final Mundial 2026</h4><a href="#">Ver video →</a></div>
-                    </div>
-                    <div class="video-item">
-                        <img src="https://via.placeholder.com/300x150/0d1b2a/00d4ff?text=SPORTMAX" alt="Video ejemplo">
-                        <div class="info"><h4>🌟 Mejores jugadas de la jornada</h4><a href="#">Ver video →</a></div>
-                    </div>
-                `;
+                console.log('ℹ️ Shotmap no disponible:', e.message);
+                document.getElementById('shotmap-info').textContent = '⚠️ No se pudo cargar el mapa de tiros.';
             }
         }
 
-        // 🏀 NBA — RapidAPI (PENDIENTE DE SUSCRIPCIÓN)
+        // 🖌️ DIBUJAR SHOTMAP
+        function dibujarShotmap(shotmap) {
+            const canvas = document.getElementById('shotmapCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+
+            // Fondo
+            ctx.fillStyle = '#0d1b2a';
+            ctx.fillRect(0, 0, w, h);
+
+            // Líneas del campo
+            ctx.strokeStyle = '#1a3a4a';
+            ctx.lineWidth = 1.5;
+            // Rectángulo
+            ctx.strokeRect(50, 50, w - 100, h - 100);
+            // Círculo central
+            ctx.beginPath();
+            ctx.arc(w/2, h/2, 40, 0, Math.PI * 2);
+            ctx.stroke();
+            // Línea de medio
+            ctx.beginPath();
+            ctx.moveTo(w/2, 50);
+            ctx.lineTo(w/2, h - 50);
+            ctx.stroke();
+            // Áreas
+            ctx.strokeRect(50, h/2 - 60, 80, 120);
+            ctx.strokeRect(w - 130, h/2 - 60, 80, 120);
+
+            // Dibujar tiros
+            shotmap.forEach(shot => {
+                const x = (shot.playerCoordinates.x / 100) * (w - 100) + 50;
+                const y = h - ((shot.playerCoordinates.y / 100) * (h - 100) + 50);
+
+                let color, label;
+                if (shot.shotType === 'goal') {
+                    color = '#00ff88';
+                    label = '⚽';
+                } else if (shot.shotType === 'save') {
+                    color = '#ffaa00';
+                    label = '🧤';
+                } else if (shot.shotType === 'block') {
+                    color = '#ff4444';
+                    label = '🛡️';
+                } else if (shot.shotType === 'post') {
+                    color = '#ff66ff';
+                    label = '📯';
+                } else {
+                    color = '#8888ff';
+                    label = '❌';
+                }
+
+                // Círculo
+                ctx.beginPath();
+                ctx.arc(x, y, 6, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                // Minuto
+                ctx.fillStyle = '#fff';
+                ctx.font = '9px Arial';
+                ctx.fillText(shot.time + "'", x + 10, y - 5);
+
+                // Flecha si es gol
+                if (shot.shotType === 'goal' && shot.goalMouthCoordinates) {
+                    ctx.strokeStyle = '#00ff88';
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([4, 4]);
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                    const gx = w - 70;
+                    const gy = h/2 + (shot.goalMouthCoordinates.z || 0) / 100 * 60 - 30;
+                    ctx.lineTo(gx, gy);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                }
+            });
+
+            // Leyenda
+            ctx.fillStyle = '#8899aa';
+            ctx.font = '10px Arial';
+            ctx.fillText('⚽ Gol', 20, 25);
+            ctx.fillStyle = '#ffaa00';
+            ctx.fillText('🧤 Parada', 90, 25);
+            ctx.fillStyle = '#ff4444';
+            ctx.fillText('🛡️ Bloqueado', 170, 25);
+            ctx.fillStyle = '#8888ff';
+            ctx.fillText('❌ Fallado', 260, 25);
+            ctx.fillStyle = '#ff66ff';
+            ctx.fillText('📯 Palo', 340, 25);
+        }
+
+        // 🏀 NBA — RapidAPI (API-NBA)
         async function cargarNBARapid() {
             try {
                 const hoy = new Date().toISOString().split('T')[0];
@@ -755,6 +828,57 @@
             }
         }
 
+        // 🎥 VIDEOS — RapidAPI
+        async function cargarVideosFutbol() {
+            try {
+                const res = await fetch('https://free-football-soccer-videos.p.rapidapi.com/', {
+                    headers: {
+                        'x-rapidapi-key': RAPIDAPI_KEY,
+                        'x-rapidapi-host': 'free-football-soccer-videos.p.rapidapi.com'
+                    }
+                });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const data = await res.json();
+                if (Array.isArray(data) && data.length > 0) {
+                    const contenedor = document.getElementById('contenedor-videos');
+                    contenedor.innerHTML = '';
+                    data.slice(0, 6).forEach(video => {
+                        const titulo = video.title || 'Video destacado';
+                        const thumbnail = video.thumbnail || 'https://via.placeholder.com/300x150/0d1b2a/00d4ff?text=SPORTMAX';
+                        const url = video.url || '#';
+                        contenedor.innerHTML += `
+                            <div class="video-item">
+                                <img src="${thumbnail}" alt="${titulo}" loading="lazy">
+                                <div class="info">
+                                    <h4>${titulo}</h4>
+                                    <a href="${url}" target="_blank">Ver video →</a>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    throw new Error('Sin videos');
+                }
+            } catch (e) {
+                console.log('ℹ️ API de videos no disponible, mostrando MOCK');
+                const contenedor = document.getElementById('contenedor-videos');
+                contenedor.innerHTML = `
+                    <div class="video-item">
+                        <img src="https://via.placeholder.com/300x150/0d1b2a/00d4ff?text=SPORTMAX" alt="Video ejemplo">
+                        <div class="info"><h4>⚽ Gol de Messi vs México</h4><a href="#">Ver video →</a></div>
+                    </div>
+                    <div class="video-item">
+                        <img src="https://via.placeholder.com/300x150/0d1b2a/00d4ff?text=SPORTMAX" alt="Video ejemplo">
+                        <div class="info"><h4>🏆 Resumen Final Mundial 2026</h4><a href="#">Ver video →</a></div>
+                    </div>
+                    <div class="video-item">
+                        <img src="https://via.placeholder.com/300x150/0d1b2a/00d4ff?text=SPORTMAX" alt="Video ejemplo">
+                        <div class="info"><h4>🌟 Mejores jugadas de la jornada</h4><a href="#">Ver video →</a></div>
+                    </div>
+                `;
+            }
+        }
+
         // ================================================================
         // 5. CARGA PRINCIPAL
         // ================================================================
@@ -776,11 +900,11 @@
 
             // Intentar APIs en segundo plano
             setTimeout(() => {
-                cargarFutbolDataOrg();  // ✅ NUEVA API (football-data.org)
-                cargarNBARapid();       // ⚠️ Necesita suscripción en RapidAPI
-                cargarMLBGratis();      // ✅ Gratis sin clave
+                cargarFutbolRapid();   // ✅ Fútbol + shotmap
+                cargarNBARapid();      // ⚠️ Necesita suscripción
+                cargarMLBGratis();     // ✅ Gratis
                 cargarNoticiasGratis(); // ✅ Gratis
-                cargarVideosFutbol();   // ⚠️ Puede requerir suscripción
+                cargarVideosFutbol();   // ⚠️ Puede fallar
             }, 500);
         }
 
