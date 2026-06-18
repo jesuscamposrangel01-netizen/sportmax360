@@ -92,6 +92,19 @@
             color: #fff;
             text-shadow: 0 0 30px rgba(0, 212, 255, 0.1);
         }
+        h3 {
+            color: #00d4ff;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        h4 {
+            color: #b0c4de;
+            font-size: 1.1rem;
+            margin: 0.8rem 0 0.5rem 0;
+        }
         /* ===== TARJETAS ===== */
         .card {
             background: linear-gradient(145deg, #111927, #0d1520);
@@ -106,19 +119,6 @@
             transform: translateY(-3px);
             box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
             border-color: #00d4ff44;
-        }
-        .card h3 {
-            color: #00d4ff;
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .card h4 {
-            color: #b0c4de;
-            font-size: 1.1rem;
-            margin: 0.8rem 0 0.5rem 0;
         }
         /* ===== TABLAS ===== */
         table {
@@ -173,6 +173,26 @@
             50% { opacity:0.5; transform:scale(0.95); }
         }
         .vivo-texto { color:#00d4ff; font-weight:600; font-size:1.2rem; }
+        .fase-etapa { color:#ffce56; font-weight:600; }
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            border: 1px solid #00d4ff44;
+            margin-top: 1rem;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .aviso-legal { font-size:0.85rem; color:#8899aa; margin-top:0.5rem; }
         /* ===== SEDES ===== */
         .sedes-grid {
             display: grid;
@@ -238,11 +258,37 @@
     </nav>
     <main>
         <section id="mundial">
-            <h2>🌍 Mundial 2026 — México · EE.UU. · Canadá</h2>
+            <h2>🌍 Mundial FIFA 2026 — México · EE.UU. · Canadá</h2>
+
+            <div class="card">
+                <h3>📌 Datos generales del torneo</h3>
+                <p>📅 Fechas: 11 de junio – 19 de julio 2026</p>
+                <p>🏟️ 16 sedes en 3 países</p>
+                <p>👥 48 selecciones participantes — 104 partidos en total</p>
+                <p>🏆 Actual campeón: <strong>Argentina</strong></p>
+            </div>
+
             <div class="card">
                 <h3>🔴 <span class="live-badge">En Vivo</span> Partido destacado</h3>
                 <p id="partido-en-vivo" class="vivo-texto">Cargando partido...</p>
             </div>
+
+            <!-- ✅ NUEVA SECCIÓN: VER PARTIDO EN VIDEO -->
+            <div class="card" id="videos">
+                <h3>📺 Ver partido en vivo — Emisión oficial</h3>
+                <div class="video-container">
+                    <!-- ⚠️ Cambia "ID_DEL_VIDEO" por el código real de YouTube / canal oficial -->
+                    <iframe id="reproductor-partido" src="https://www.youtube.com/embed/?autoplay=0&rel=0" 
+                            allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
+                </div>
+                <p class="aviso-legal">ℹ️ Solo enlaces a canales oficiales: FIFA, YouTube, ESPN, TyC, Telemundo, DAZN, MLB.tv, NBA League Pass. No alojamos contenido.</p>
+            </div>
+
+            <div class="card">
+                <h3>📋 Todos los partidos en vivo ahora</h3>
+                <ul id="lista-en-vivo"><li>🔄 Comprobando encuentros...</li></ul>
+            </div>
+
             <div class="card">
                 <h3>📋 Últimos Resultados</h3>
                 <table id="tabla-resultados">
@@ -250,12 +296,38 @@
                     <tbody></tbody>
                 </table>
             </div>
+
             <div class="card">
                 <h3>📅 Próximos Partidos</h3>
                 <ul id="lista-proximos"></ul>
             </div>
+
             <div id="contenedor-posiciones"></div>
+
+            <div class="card">
+                <h3>📊 Fases del torneo</h3>
+                <p><span class="fase-etapa">Fase de grupos:</span> 11 jun – 27 jun | 12 grupos × 4 equipos</p>
+                <p><span class="fase-etapa">Octavos:</span> 30 jun – 3 jul</p>
+                <p><span class="fase-etapa">Cuartos:</span> 4 jul – 7 jul</p>
+                <p><span class="fase-etapa">Semifinales:</span> 8 jul – 11 jul</p>
+                <p><span class="fase-etapa">3.º puesto:</span> 18 jul</p>
+                <p><span class="fase-etapa">Gran Final:</span> 19 jul 📍 MetLife Stadium</p>
+            </div>
+
+            <div class="card">
+                <h3>⚽ Máximos goleadores — Previa / Amistosos</h3>
+                <table>
+                    <thead><tr><th>Jugador</th><th>Selección</th><th>Goles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Lionel Messi</td><td>🇦🇷 Argentina</td><td>6</td></tr>
+                        <tr><td>Kylian Mbappé</td><td>🇫🇷 Francia</td><td>5</td></tr>
+                        <tr><td>Harry Kane</td><td>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra</td><td>4</td></tr>
+                        <tr><td>Vinícius Jr.</td><td>🇧🇷 Brasil</td><td>4</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
+
         <section id="nba">
             <h2>🏀 NBA — Temporada 2025‑2026</h2>
             <div class="card">
@@ -271,6 +343,7 @@
             </div>
             <div id="contenedor-nba-posiciones"></div>
         </section>
+
         <section id="mlb">
             <h2>⚾ MLB — Temporada 2026</h2>
             <div class="card">
@@ -286,19 +359,23 @@
             </div>
             <div id="contenedor-mlb-posiciones"></div>
         </section>
+
         <section id="sedes">
             <h2>📍 Sedes del Mundial 2026</h2>
             <div class="card">
                 <div class="sedes-grid">
-                    <div class="sede-item">🏟️ Estadio Azteca <div class="pais">🇲🇽 México</div></div>
-                    <div class="sede-item">🏟️ MetLife Stadium <div class="pais">🇺🇸 Nueva York</div></div>
+                    <div class="sede-item">🏟️ Estadio Azteca <div class="pais">🇲🇽 Ciudad de México</div></div>
+                    <div class="sede-item">🏟️ MetLife Stadium <div class="pais">🇺🇸 Nueva Jersey / NY</div></div>
                     <div class="sede-item">🏟️ BC Place <div class="pais">🇨🇦 Vancouver</div></div>
-                    <div class="sede-item">🏟️ AT&T Stadium <div class="pais">🇺🇸 Dallas</div></div>
+                    <div class="sede-item">🏟️ AT&T Stadium <div class="pais">🇺🇸 Arlington / Dallas</div></div>
                     <div class="sede-item">🏟️ Estadio BBVA <div class="pais">🇲🇽 Monterrey</div></div>
                     <div class="sede-item">🏟️ SoFi Stadium <div class="pais">🇺🇸 Los Ángeles</div></div>
+                    <div class="sede-item">🏟️ Lincoln Financial <div class="pais">🇺🇸 Filadelfia</div></div>
+                    <div class="sede-item">🏟️ NRG Stadium <div class="pais">🇺🇸 Houston</div></div>
                 </div>
             </div>
         </section>
+
         <section id="noticias">
             <h2>📰 Noticias Deportivas</h2>
             <div class="card" id="contenedor-noticias"><p>Cargando noticias...</p></div>
@@ -314,16 +391,10 @@
     </footer>
 
     <script>
-        // ═══════════════════════════════════════════════════════════════════
-        // 1. CONFIGURACIÓN RAPIDAPI — TU CLAVE YA ESTÁ AQUÍ
-        // ═══════════════════════════════════════════════════════════════════
         const RAPIDAPI_KEY = 'f019ce89dfmhsh54169a00fd80f9b1c5aadjsn50be5f785083';
         const RAPIDAPI_HOST_FOOTBALL = 'api-football-v1.p.rapidapi.com';
         const RAPIDAPI_HOST_NBA = 'api-nba-v1.p.rapidapi.com';
 
-        // ═══════════════════════════════════════════════════════════════════
-        // 2. DATOS DE PRUEBA (MOCK) — SIEMPRE VISIBLES
-        // ═══════════════════════════════════════════════════════════════════
         const MOCK = {
             futbol: {
                 enVivo: '🔥 México 1‑0 Argentina (Minuto 67)',
@@ -343,14 +414,24 @@
                     equipos: [
                         { pos: 1, nombre: 'México', pts: 6, pj: 2, pg: 2, pe: 0, pp: 0 },
                         { pos: 2, nombre: 'Argentina', pts: 4, pj: 2, pg: 1, pe: 1, pp: 0 },
-                        { pos: 3, nombre: 'Polonia', pts: 1, pj: 2, pg: 0, pe: 1, pp: 1 }
+                        { pos: 3, nombre: 'Polonia', pts: 1, pj: 2, pg: 0, pe: 1, pp: 1 },
+                        { pos: 4, nombre: 'Arabia Saudita', pts: 0, pj: 2, pg: 0, pe: 0, pp: 2 }
                     ]
                 }, {
                     grupo: 'Grupo B',
                     equipos: [
                         { pos: 1, nombre: 'Brasil', pts: 6, pj: 2, pg: 2, pe: 0, pp: 0 },
                         { pos: 2, nombre: 'Alemania', pts: 3, pj: 2, pg: 1, pe: 0, pp: 1 },
-                        { pos: 3, nombre: 'Japón', pts: 0, pj: 2, pg: 0, pe: 0, pp: 2 }
+                        { pos: 3, nombre: 'Japón', pts: 1, pj: 2, pg: 0, pe: 1, pp: 1 },
+                        { pos: 4, nombre: 'Costa Rica', pts: 0, pj: 2, pg: 0, pe: 0, pp: 2 }
+                    ]
+                }, {
+                    grupo: 'Grupo C',
+                    equipos: [
+                        { pos: 1, nombre: 'España', pts: 6, pj: 2, pg: 2, pe: 0, pp: 0 },
+                        { pos: 2, nombre: 'Inglaterra', pts: 4, pj: 2, pg: 1, pe: 1, pp: 0 },
+                        { pos: 3, nombre: 'Uruguay', pts: 1, pj: 2, pg: 0, pe: 1, pp: 1 },
+                        { pos: 4, nombre: 'Túnez', pts: 0, pj: 2, pg: 0, pe: 0, pp: 2 }
                     ]
                 }]
             },
@@ -409,74 +490,6 @@
             ]
         };
 
-        // ═══════════════════════════════════════════════════════════════════
-        // 3. FUNCIONES DE RENDERIZADO
-        // ═══════════════════════════════════════════════════════════════════
-
         const ZONA_LIMA = { timeZone: 'America/Lima', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' };
         function actualizarHora() {
-            document.getElementById('hora-actualizacion').textContent = new Date().toLocaleString('es-ES', ZONA_LIMA);
-        }
-
-        function mostrarEnVivo(d) {
-            document.getElementById('partido-en-vivo').textContent = d || MOCK.futbol.enVivo;
-        }
-
-        function mostrarResultados(d) {
-            const b = document.querySelector('#tabla-resultados tbody');
-            const r = d || MOCK.futbol.resultados;
-            b.innerHTML = '';
-            r.forEach(p => b.innerHTML += `<tr><td>${p.local}</td><td>${p.visitante}</td><td><strong>${p.resultado}</strong></td></tr>`);
-        }
-
-        function mostrarProximos(d) {
-            const u = document.getElementById('lista-proximos');
-            const p = d || MOCK.futbol.proximos;
-            u.innerHTML = '';
-            p.forEach(x => u.innerHTML += `<li>⚽ ${x.local} vs ${x.visitante} — 📅 ${x.fecha}</li>`);
-        }
-
-        function mostrarPosiciones(d) {
-            const c = document.getElementById('contenedor-posiciones');
-            const p = d || MOCK.futbol.posiciones;
-            c.innerHTML = `<div class="card"><h3>📊 Posiciones por Grupo</h3></div>`;
-            p.forEach(g => {
-                let h = `<div class="card"><h4>${g.grupo}</h4><table><thead><tr><th>#</th><th>Equipo</th><th>Pts</th><th>PJ</th><th>PG</th><th>PE</th><th>PP</th></tr></thead><tbody>`;
-                g.equipos.forEach(e => h += `<tr><td>${e.pos}</td><td>${e.nombre}</td><td>${e.pts}</td><td>${e.pj}</td><td>${e.pg}</td><td>${e.pe}</td><td>${e.pp}</td></tr>`);
-                c.innerHTML += h + '</tbody></table></div>';
-            });
-        }
-
-        function mostrarNBAProximos(d) {
-            const u = document.getElementById('lista-nba');
-            u.innerHTML = '';
-            (d || MOCK.nba.proximos).forEach(x => u.innerHTML += `<li>${x}</li>`);
-        }
-
-        function mostrarNBAResultados(d) {
-            const b = document.querySelector('#tabla-nba-resultados tbody');
-            b.innerHTML = '';
-            (d || MOCK.nba.resultados).forEach(x => b.innerHTML += `<tr><td>${x.visitante}</td><td>${x.local}</td><td><strong>${x.resultado}</strong></td></tr>`);
-        }
-
-        function mostrarNBAPosiciones(d) {
-            const c = document.getElementById('contenedor-nba-posiciones');
-            const p = d || MOCK.nba.posiciones;
-            let h = `<div class="card"><h3>📊 Clasificaciones NBA</h3></div>`;
-            h += `<div class="card"><h4>🏆 Conferencia Este</h4><table><thead><tr><th>#</th><th>Equipo</th><th>G</th><th>P</th><th>%</th></tr></thead><tbody>`;
-            p.este.forEach(x => h += `<tr><td>${x.pos}</td><td>${x.equipo}</td><td>${x.g}</td><td>${x.p}</td><td>${x.pct}</td></tr>`);
-            h += `</tbody></table></div><div class="card"><h4>🏆 Conferencia Oeste</h4><table><thead><tr><th>#</th><th>Equipo</th><th>G</th><th>P</th><th>%</th></tr></thead><tbody>`;
-            p.oeste.forEach(x => h += `<tr><td>${x.pos}</td><td>${x.equipo}</td><td>${x.g}</td><td>${x.p}</td><td>${x.pct}</td></tr>`);
-            c.innerHTML = h + '</tbody></table></div>';
-        }
-
-        function mostrarMLBProximos(d) {
-            const u = document.getElementById('lista-mlb');
-            u.innerHTML = '';
-            (d || MOCK.mlb.proximos).forEach(x => u.innerHTML += `<li>${x}</li>`);
-        }
-
-        function mostrarMLBResultados(d) {
-            const b = document.querySelector('#tabla-mlb-resultados tbody');
-            b.innerHTML = '';
-            (d
+  
