@@ -184,6 +184,44 @@
             box-shadow: 0 0 30px rgba(0,212,255,0.05);
         }
         .sede-item .pais { color:#8899aa; font-size:0.85rem; }
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .video-item {
+            background: #0d1b2a;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #1a2a3a;
+            transition: all 0.3s;
+        }
+        .video-item:hover {
+            border-color: #00d4ff;
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(0,212,255,0.05);
+        }
+        .video-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .video-item .info {
+            padding: 1rem;
+        }
+        .video-item .info h4 {
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .video-item .info a {
+            color: #00d4ff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .video-item .info a:hover {
+            text-decoration: underline;
+        }
         footer {
             background: #0d1520;
             text-align: center;
@@ -206,6 +244,7 @@
         @media (max-width:480px) {
             header h1 { font-size:1.5rem; }
             .sedes-grid { grid-template-columns:1fr 1fr; }
+            .videos-grid { grid-template-columns:1fr; }
         }
     </style>
 </head>
@@ -226,6 +265,7 @@
         <a href="#contacto">📞 Contacto</a>
     </nav>
     <main>
+        <!-- 🌍 MUNDIAL 2026 -->
         <section id="mundial">
             <h2>🌍 Mundial 2026 — México · EE.UU. · Canadá</h2>
             <div class="card">
@@ -245,6 +285,8 @@
             </div>
             <div id="contenedor-posiciones"></div>
         </section>
+
+        <!-- 🏀 NBA -->
         <section id="nba">
             <h2>🏀 NBA — Temporada 2025‑2026</h2>
             <div class="card">
@@ -260,6 +302,8 @@
             </div>
             <div id="contenedor-nba-posiciones"></div>
         </section>
+
+        <!-- ⚾ MLB -->
         <section id="mlb">
             <h2>⚾ MLB — Temporada 2026</h2>
             <div class="card">
@@ -275,6 +319,8 @@
             </div>
             <div id="contenedor-mlb-posiciones"></div>
         </section>
+
+        <!-- 📍 SEDES -->
         <section id="sedes">
             <h2>📍 Sedes del Mundial 2026</h2>
             <div class="card">
@@ -288,12 +334,25 @@
                 </div>
             </div>
         </section>
+
+        <!-- 📰 NOTICIAS -->
         <section id="noticias">
             <h2>📰 Noticias Deportivas</h2>
             <div class="card" id="contenedor-noticias"><p>Cargando noticias...</p></div>
         </section>
+
+        <!-- 🎥 VIDEOS (NUEVA SECCIÓN) -->
+        <section id="videos">
+            <h2>🎥 Videos Destacados</h2>
+            <div class="card">
+                <div id="contenedor-videos" class="videos-grid">
+                    <p style="color:#667788; grid-column:1/-1; text-align:center;">Cargando videos...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- GALERÍA, FORO, CONTACTO -->
         <section id="galeria"><h2>📸 Galería</h2><div class="card">Próximamente...</div></section>
-        <section id="videos"><h2>🎥 Videos</h2><div class="card">Próximamente...</div></section>
         <section id="foro"><h2>💬 Foro</h2><div class="card">Próximamente...</div></section>
         <section id="contacto"><h2>📞 Contacto</h2><div class="card">Próximamente...</div></section>
     </main>
@@ -427,217 +486,4 @@
             p.este.forEach(x => h += `<tr><td>${x.pos}</td><td>${x.equipo}</td><td>${x.g}</td><td>${x.p}</td><td>${x.pct}</td></tr>`);
             h += `</tbody></table></div><div class="card"><h4>🏆 Conferencia Oeste</h4><table><thead><tr><th>#</th><th>Equipo</th><th>G</th><th>P</th><th>%</th></tr></thead><tbody>`;
             p.oeste.forEach(x => h += `<tr><td>${x.pos}</td><td>${x.equipo}</td><td>${x.g}</td><td>${x.p}</td><td>${x.pct}</td></tr>`);
-            c.innerHTML = h + '</tbody></table></div>';
-        }
-
-        function mostrarMLBProximos(d) {
-            const u = document.getElementById('lista-mlb');
-            u.innerHTML = '';
-            (d || MOCK.mlb.proximos).forEach(x => u.innerHTML += `<li>${x}</li>`);
-        }
-
-        function mostrarMLBResultados(d) {
-            const b = document.querySelector('#tabla-mlb-resultados tbody');
-            b.innerHTML = '';
-            (d || MOCK.mlb.resultados).forEach(x => b.innerHTML += `<tr><td>${x.visitante}</td><td>${x.local}</td><td><strong>${x.resultado}</strong></td></tr>`);
-        }
-
-        function mostrarMLBPosiciones(d) {
-            const c = document.getElementById('contenedor-mlb-posiciones');
-            const p = d || MOCK.mlb.posiciones;
-            let h = `<div class="card"><h3>📊 MLB 2026</h3></div>`;
-            p.forEach(l => {
-                h += `<div class="card"><h4>${l.liga}</h4><table><thead><tr><th>#</th><th>Equipo</th><th>G</th><th>P</th><th>%</th><th>Dif</th></tr></thead><tbody>`;
-                l.equipos.forEach(x => h += `<tr><td>${x.pos}</td><td>${x.equipo}</td><td>${x.g}</td><td>${x.p}</td><td>${x.pct}</td><td>${x.dif}</td></tr>`);
-                c.innerHTML = h + '</tbody></table></div>';
-            });
-        }
-
-        function mostrarNoticias(d) {
-            const c = document.getElementById('contenedor-noticias');
-            c.innerHTML = '';
-            (d || MOCK.noticias).forEach(n => c.innerHTML += `<div style="padding:.6rem 0;border-bottom:1px solid #1a2a3a;"><strong style="color:#fff;">${n.titulo}</strong><br><small style="color:#667788;">📅 ${n.fecha}</small></div>`);
-        }
-
-        // ================================================================
-        // 4. FUNCIONES PARA CONSUMIR APIS (CON FALLBACK A MOCK)
-        // ================================================================
-        async function cargarFutbolRapid() {
-            try {
-                const hoy = new Date().toISOString().split('T')[0];
-                const resLive = await fetch('https://api-football-v1.p.rapidapi.com/v3/fixtures?live=all', {
-                    headers: { 'X-RapidAPI-Key': RAPIDAPI_KEY, 'X-RapidAPI-Host': RAPIDAPI_HOST_FOOTBALL }
-                });
-                if (!resLive.ok) throw new Error('HTTP ' + resLive.status);
-                const dataLive = await resLive.json();
-                if (Array.isArray(dataLive?.response) && dataLive.response.length > 0) {
-                    const v = dataLive.response[0];
-                    mostrarEnVivo(`🔥 ${v.teams.home.name} ${v.goals.home}‑${v.goals.away} ${v.teams.away.name}`);
-                }
-
-                const resFin = await fetch(`https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${hoy}&status=FT`, {
-                    headers: { 'X-RapidAPI-Key': RAPIDAPI_KEY, 'X-RapidAPI-Host': RAPIDAPI_HOST_FOOTBALL }
-                });
-                if (resFin.ok) {
-                    const dataFin = await resFin.json();
-                    const finalizados = dataFin.response?.slice(0, 4) || [];
-                    if (finalizados.length) {
-                        const resultados = finalizados.map(f => ({ local: f.teams.home.name, visitante: f.teams.away.name, resultado: `${f.goals.home}‑${f.goals.away}` }));
-                        mostrarResultados(resultados);
-                    }
-                }
-
-                const resProx = await fetch(`https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${hoy}&status=NS`, {
-                    headers: { 'X-RapidAPI-Key': RAPIDAPI_KEY, 'X-RapidAPI-Host': RAPIDAPI_HOST_FOOTBALL }
-                });
-                if (resProx.ok) {
-                    const dataProx = await resProx.json();
-                    const proximos = dataProx.response?.slice(0, 5) || [];
-                    if (proximos.length) {
-                        const proxData = proximos.map(f => ({ local: f.teams.home.name, visitante: f.teams.away.name, fecha: new Date(f.fixture.date).toLocaleString('es-ES', ZONA_LIMA) }));
-                        mostrarProximos(proxData);
-                    }
-                }
-
-                const resStand = await fetch('https://api-football-v1.p.rapidapi.com/v3/standings?league=1&season=2026', {
-                    headers: { 'X-RapidAPI-Key': RAPIDAPI_KEY, 'X-RapidAPI-Host': RAPIDAPI_HOST_FOOTBALL }
-                });
-                if (resStand.ok) {
-                    const dataStand = await resStand.json();
-                    if (dataStand.response?.length) {
-                        const liga = dataStand.response[0];
-                        const equipos = liga.league.standings[0]?.slice(0, 5) || [];
-                        const posiciones = [{
-                            grupo: liga.league.name,
-                            equipos: equipos.map((eq, i) => ({ pos: i+1, nombre: eq.team.name, pts: eq.points, pj: eq.all.played, pg: eq.all.win, pe: eq.all.draw, pp: eq.all.lose }))
-                        }];
-                        mostrarPosiciones(posiciones);
-                    }
-                }
-            } catch (e) {
-                console.log('ℹ️ RapidAPI Fútbol no disponible, usando MOCK');
-            }
-        }
-
-        async function cargarNBARapid() {
-            try {
-                const hoy = new Date().toISOString().split('T')[0];
-                const res = await fetch(`https://api-nba-v1.p.rapidapi.com/games?date=${hoy}`, {
-                    headers: { 'X-RapidAPI-Key': RAPIDAPI_KEY, 'X-RapidAPI-Host': RAPIDAPI_HOST_NBA }
-                });
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                const data = await res.json();
-                if (data.response?.length) {
-                    const juegos = data.response;
-                    const proximos = juegos.slice(0, 5).map(g => {
-                        const fecha = new Date(g.date.start).toLocaleString('es-ES', ZONA_LIMA);
-                        return `🏀 ${g.teams.visitors.name} @ ${g.teams.home.name} — ${fecha}`;
-                    });
-                    mostrarNBAProximos(proximos);
-                    const finalizados = juegos.filter(g => g.status.long === 'Finalizado').slice(0, 4);
-                    if (finalizados.length) {
-                        const resultados = finalizados.map(g => ({ visitante: g.teams.visitors.name, local: g.teams.home.name, resultado: `${g.scores.visitors}‑${g.scores.home}` }));
-                        mostrarNBAResultados(resultados);
-                    }
-                }
-                const resStand = await fetch('https://api-nba-v1.p.rapidapi.com/standings?league=standard&season=2025', {
-                    headers: { 'X-RapidAPI-Key': RAPIDAPI_KEY, 'X-RapidAPI-Host': RAPIDAPI_HOST_NBA }
-                });
-                if (resStand.ok) {
-                    const dataStand = await resStand.json();
-                    if (dataStand.response?.length) {
-                        const este = dataStand.response.filter(t => t.conference.name === 'East').slice(0, 5);
-                        const oeste = dataStand.response.filter(t => t.conference.name === 'West').slice(0, 5);
-                        mostrarNBAPosiciones({
-                            este: este.map((t, i) => ({ pos: i+1, equipo: t.team.name, g: t.win.total, p: t.loss.total, pct: t.win.percentage })),
-                            oeste: oeste.map((t, i) => ({ pos: i+1, equipo: t.team.name, g: t.win.total, p: t.loss.total, pct: t.win.percentage }))
-                        });
-                    }
-                }
-            } catch (e) {
-                console.log('ℹ️ RapidAPI NBA no disponible, usando MOCK');
-            }
-        }
-
-        async function cargarMLBGratis() {
-            try {
-                const hoy = new Date().toISOString().split('T')[0];
-                const res = await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${hoy}`);
-                if (!res.ok) throw new Error('MLB API no disponible');
-                const data = await res.json();
-                if (data.dates?.length && data.dates[0].games?.length) {
-                    const juegos = data.dates[0].games;
-                    const proximos = juegos.slice(0, 5).map(g => {
-                        const fecha = new Date(g.gameDate).toLocaleString('es-ES', ZONA_LIMA);
-                        const estado = g.status?.abstractGameState === 'Live' ? '🔴' : '⏰';
-                        return `⚾ ${estado} ${g.teams.away.team.name} @ ${g.teams.home.team.name} — ${fecha}`;
-                    });
-                    mostrarMLBProximos(proximos);
-                    const finalizados = juegos.filter(g => g.status?.abstractGameState === 'Final').slice(0, 4);
-                    if (finalizados.length) {
-                        const resultados = finalizados.map(g => ({ visitante: g.teams.away.team.name, local: g.teams.home.team.name, resultado: `${g.teams.away.score ?? '-'}‑${g.teams.home.score ?? '-'}` }));
-                        mostrarMLBResultados(resultados);
-                    }
-                }
-                const resStand = await fetch('https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=2026');
-                if (resStand.ok) {
-                    const dataStand = await resStand.json();
-                    if (dataStand.records?.length) {
-                        const posiciones = dataStand.records.map(liga => ({
-                            liga: liga.league.name,
-                            equipos: liga.teamRecords.slice(0, 5).map(r => ({ pos: r.divisionRank, equipo: r.team.name, g: r.wins, p: r.losses, pct: r.winningPercentage, dif: r.divisionGamesBack ?? '-' }))
-                        }));
-                        mostrarMLBPosiciones(posiciones);
-                    }
-                }
-            } catch (e) {
-                console.log('ℹ️ MLB gratis no disponible, usando MOCK');
-            }
-        }
-
-        async function cargarNoticiasGratis() {
-            try {
-                const res = await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.marca.com/futbol/rss.xml');
-                if (!res.ok) throw new Error('RSS no disponible');
-                const data = await res.json();
-                if (data.items?.length) {
-                    const noticias = data.items.slice(0, 4).map(n => ({ titulo: n.title, fecha: new Date(n.pubDate).toLocaleDateString('es-ES') }));
-                    mostrarNoticias(noticias);
-                }
-            } catch (e) {
-                console.log('ℹ️ RSS no disponible, usando MOCK');
-            }
-        }
-
-        // ================================================================
-        // 5. CARGA PRINCIPAL
-        // ================================================================
-        function iniciarTodo() {
-            // Mostrar MOCK inmediatamente
-            mostrarEnVivo(MOCK.futbol.enVivo);
-            mostrarResultados(MOCK.futbol.resultados);
-            mostrarProximos(MOCK.futbol.proximos);
-            mostrarPosiciones(MOCK.futbol.posiciones);
-            mostrarNBAProximos(MOCK.nba.proximos);
-            mostrarNBAResultados(MOCK.nba.resultados);
-            mostrarNBAPosiciones(MOCK.nba.posiciones);
-            mostrarMLBProximos(MOCK.mlb.proximos);
-            mostrarMLBResultados(MOCK.mlb.resultados);
-            mostrarMLBPosiciones(MOCK.mlb.posiciones);
-            mostrarNoticias(MOCK.noticias);
-            actualizarHora();
-
-            // Intentar APIs en segundo plano
-            setTimeout(() => {
-                cargarFutbolRapid();
-                cargarNBARapid();
-                cargarMLBGratis();
-                cargarNoticiasGratis();
-            }, 500);
-        }
-
-        document.addEventListener('DOMContentLoaded', iniciarTodo);
-        setInterval(iniciarTodo, 300000);
-    </script>
-</body>
-</html>
+            c.innerHTML = h + 
