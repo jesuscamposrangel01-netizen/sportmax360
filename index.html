@@ -124,12 +124,13 @@
 <footer><p>© 2026 Sportmax360 — API‑Sports.io</p></footer>
 
 <script>
-// ✅ TU CLAVE EXACTA
+// ✅ TU CLAVE
 const API_KEY = "7ff8c03eef2af95a8697f7alfe5e54b0";
-const TEMP_FUT = "2024-2025"; // GUION CORREGIDO
-const TEMP_MLB = "2025-2026"; // GUION CORREGIDO
+// ✅ TEMPORADAS CORRECTAS (la API usa solo año inicio)
+const TEMP_FUT = "2024";
+const TEMP_MLB = "2025";
 
-// ✅ CABECERAS CON GUIONES ESTÁNDAR
+// ✅ CABECERAS 100% ASCII
 function cabeceras(host){
     return {
         "x-rapidapi-key": API_KEY,
@@ -137,71 +138,112 @@ function cabeceras(host){
     };
 }
 
-// Cambio de deporte
+// Cambio de vista
 function cambiarDep(tipo){
-    document.getElementById("futbol").classList.toggle("oculto", tipo!=="futbol");
-    document.getElementById("mlb").classList.toggle("oculto", tipo!=="mlb");
+    document.getElementById("futbol").classList.toggle("oculto", tipo !== "futbol");
+    document.getElementById("mlb").classList.toggle("oculto", tipo !== "mlb");
 }
 
 // --- FÚTBOL ---
 const HOST_FUT = "v3.football.api-sports.io";
+
 async function cargarPartidosFut(liga){
     const el = document.getElementById("listaFut");
     try{
-        const r = await fetch(`https://${HOST_FUT}/fixtures?league=${liga}&season=${TEMP_FUT}`, {headers:cabeceras(HOST_FUT)});
-        const d = await r.json();
-        el.innerHTML = (d.response||[]).slice(0,8).map(p=>`
+        const res = await fetch(`https://${HOST_FUT}/fixtures?league=${liga}&season=${TEMP_FUT}`, {headers: cabeceras(HOST_FUT)});
+        const json = await res.json();
+        const datos = json.response || [];
+        if(!datos.length) throw "Sin partidos en esta fecha/liga";
+
+        el.innerHTML = datos.slice(0,8).map(p=>`
         <div class="card">
-            ${p.fixture.status.short==="LIVE"?"<span class='etiqueta-vivo'>EN VIVO</span>":""}
+            ${p.fixture.status.short === "LIVE" || p.fixture.status.short === "IN_PLAY" ? '<span class="etiqueta-vivo">EN VIVO</span>' : ""}
             <p style="font-weight:bold">${p.teams.home.name}</p>
-            <p style="color:var(--verde-fut);font-weight:bold;font-size:1.2rem">${p.goals.home??"-"} : ${p.goals.away??"-"}</p>
+            <p style="color:var(--verde-fut);font-weight:bold;font-size:1.2rem">${p.goals.home ?? "-"} : ${p.goals.away ?? "-"}</p>
             <p style="font-weight:bold">${p.teams.away.name}</p>
             <p style="font-size:.9rem">📅 ${p.fixture.date.split("T")[0]}</p>
         </div>`).join("");
-    }catch(e){el.innerHTML=`<p class='aviso'>${e}</p>`;}
+    }catch(err){
+        el.innerHTML = `<p class="aviso">⚠️ ${err}</p>`;
+    }
 }
+
 async function cargarTablaFut(liga){
     const el = document.getElementById("cuerpoFut");
     try{
-        const r = await fetch(`https://${HOST_FUT}/standings?league=${liga}&season=${TEMP_FUT}`, {headers:cabeceras(HOST_FUT)});
-        const d = await r.json();
-        const filas = d.response?.[0]?.league?.standings?.flat()||[];
+        const res = await fetch(`https://${HOST_FUT}/standings?league=${liga}&season=${TEMP_FUT}`, {headers: cabeceras(HOST_FUT)});
+        const json = await res.json();
+        const grupos = json.response?.[0]?.league?.standings || [];
+        const filas = grupos.flat(); // junta grupos si hay varios
+
+        if(!filas.length) throw "Sin clasificación";
         el.innerHTML = filas.map((f,i)=>`
-        <tr><td>${i+1}</td><td>${f.team.name}</td><td>${f.all.played}</td><td>${f.all.win}</td><td>${f.all.draw}</td><td>${f.all.lose}</td><td><strong>${f.points}</strong></td></tr>`).join("");
-    }catch(e){el.innerHTML=`<tr><td colspan='7' class='aviso'>${e}</td></tr>`;}
+        <tr>
+            <td>${i+1}</td>
+            <td>${f.team.name}</td>
+            <td>${f.all.played}</td>
+            <td>${f.all.win}</td>
+            <td>${f.all.draw}</td>
+            <td>${f.all.lose}</td>
+            <td><strong>${f.points}</strong></td>
+        </tr>`).join("");
+    }catch(err){
+        el.innerHTML = `<tr><td colspan="7" class="aviso">⚠️ ${err}</td></tr>`;
+    }
 }
-document.getElementById("ligaFut").addEventListener("change",e=>{cargarPartidosFut(e.target.value);cargarTablaFut(e.target.value);});
+
+document.getElementById("ligaFut").addEventListener("change", e=>{
+    cargarPartidosFut(e.target.value);
+    cargarTablaFut(e.target.value);
+});
 
 // --- MLB ---
 const HOST_MLB = "v3.baseball.api-sports.io";
 const LIGA_MLB = "1";
+
 async function cargarPartidosMLB(){
     const el = document.getElementById("listaMLB");
     try{
-        const r = await fetch(`https://${HOST_MLB}/games?league=${LIGA_MLB}&season=${TEMP_MLB}`, {headers:cabeceras(HOST_MLB)});
-        const d = await r.json();
-        el.innerHTML = (d.response||[]).slice(0,8).map(p=>`
+        const res = await fetch(`https://${HOST_MLB}/games?league=${LIGA_MLB}&season=${TEMP_MLB}`, {headers: cabeceras(HOST_MLB)});
+        const json = await res.json();
+        const datos = json.response || [];
+        if(!datos.length) throw "Sin partidos MLB";
+
+        el.innerHTML = datos.slice(0,8).map(p=>`
         <div class="card">
-            ${p.status.short==="LIVE"?"<span class='etiqueta-vivo'>EN VIVO</span>":""}
+            ${p.status.short === "LIVE" || p.status.short === "IN_PLAY" ? '<span class="etiqueta-vivo">EN VIVO</span>' : ""}
             <p style="font-weight:bold">${p.teams.away.name}</p>
-            <p style="color:var(--azul-mlb);font-weight:bold;font-size:1.2rem">${p.scores.away.total??"-"} : ${p.scores.home.total??"-"}</p>
+            <p style="color:var(--azul-mlb);font-weight:bold;font-size:1.2rem">${p.scores.away.total ?? "-"} : ${p.scores.home.total ?? "-"}</p>
             <p style="font-weight:bold">${p.teams.home.name}</p>
             <p style="font-size:.9rem">📅 ${p.date}</p>
         </div>`).join("");
-    }catch(e){el.innerHTML=`<p class='aviso'>${e}</p>`;}
+    }catch(err){
+        el.innerHTML = `<p class="aviso">⚠️ ${err}</p>`;
+    }
 }
+
 async function cargarTablaMLB(){
     const el = document.getElementById("cuerpoMLB");
     try{
-        const r = await fetch(`https://${HOST_MLB}/standings?league=${LIGA_MLB}&season=${TEMP_MLB}`, {headers:cabeceras(HOST_MLB)});
-        const d = await r.json();
-        const filas = d.response?.[0]?.standings||[];
+        const res = await fetch(`https://${HOST_MLB}/standings?league=${LIGA_MLB}&season=${TEMP_MLB}`, {headers: cabeceras(HOST_MLB)});
+        const json = await res.json();
+        const filas = json.response?.[0]?.standings || [];
+        if(!filas.length) throw "Sin tabla MLB";
+
         el.innerHTML = filas.map((f,i)=>`
-        <tr><td>${i+1}</td><td>${f.team.name}</td><td>${f.games.win}</td><td>${f.games.lose}</td><td>${f.percentage}</td></tr>`).join("");
-    }catch(e){el.innerHTML=`<tr><td colspan='5' class='aviso'>${e}</td></tr>`;}
+        <tr>
+            <td>${i+1}</td>
+            <td>${f.team.name}</td>
+            <td>${f.games.win}</td>
+            <td>${f.games.lose}</td>
+            <td>${f.percentage}</td>
+        </tr>`).join("");
+    }catch(err){
+        el.innerHTML = `<tr><td colspan="5" class="aviso">⚠️ ${err}</td></tr>`;
+    }
 }
 
-// Carga inicial
+// ✅ CARGA INICIAL
 cargarPartidosFut("39");
 cargarTablaFut("39");
 cargarPartidosMLB();
