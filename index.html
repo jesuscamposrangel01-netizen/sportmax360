@@ -17,6 +17,9 @@
         .grid-equipos, .grid-partidos { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.2rem; }
         .grid-partidos { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
         .card { background: #fff; padding: 1.2rem; border-radius: 8px; box-shadow: 0 3px 8px rgba(0,0,0,0.08); }
+        .tabla-posiciones { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 3px 8px rgba(0,0,0,0.08); }
+        .tabla-posiciones th, .tabla-posiciones td { padding: 0.8rem; text-align: center; border-bottom: 1px solid #eee; }
+        .tabla-posiciones th { background: #165DFF; color: #fff; }
         footer { background: #1f2937; color: #ccc; text-align: center; padding: 2rem; margin-top: 3rem; }
         .aviso { color: #e63946; font-weight: 500; }
     </style>
@@ -31,6 +34,7 @@
 <nav>
     <a href="#inicio">Inicio</a>
     <a href="#equipos">Equipos</a>
+    <a href="#posiciones">Tabla</a>
     <a href="#partidos">Partidos</a>
     <a href="#contacto">Contacto</a>
 </nav>
@@ -41,7 +45,6 @@
         <p>Plataforma deportiva con datos reales de fútbol y más competiciones. Datos traídos desde API oficial — RapidAPI.</p>
     </section>
 
-    <!-- Equipos -->
     <section id="equipos">
         <h2>📋 Equipos del torneo</h2>
         <div id="lista-equipos" class="grid-equipos">
@@ -49,7 +52,29 @@
         </div>
     </section>
 
-    <!-- Partidos -->
+    <!-- ✅ NUEVA SECCIÓN: TABLA DE POSICIONES -->
+    <section id="posiciones">
+        <h2>🏆 Tabla de posiciones</h2>
+        <div style="overflow-x:auto;">
+            <table id="tabla-posiciones" class="tabla-posiciones">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Equipo</th>
+                        <th>PJ</th>
+                        <th>PG</th>
+                        <th>PE</th>
+                        <th>PP</th>
+                        <th>Pts</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td colspan="7" class="aviso">Cargando clasificación…</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
     <section id="partidos">
         <h2>📅 Partidos y resultados</h2>
         <div id="lista-partidos" class="grid-partidos">
@@ -73,6 +98,7 @@ const RAPIDAPI_KEY = "f019ce89dfmsh54169a00fd80f9bp1c5aadjsn50be5f785083";
 const RAPIDAPI_HOST = "allsportsapi2.p.rapidapi.com";
 const URL_ESTAD = "https://allsportsapi2.p.rapidapi.com/api/tournament/17/season/76986/statistics/info";
 const URL_PART = "https://allsportsapi2.p.rapidapi.com/api/tournament/17/season/76986/matches";
+const URL_TABLE = "https://allsportsapi2.p.rapidapi.com/api/tournament/17/season/76986/standings"; // ✅ Ruta tabla
 
 // 🚀 Cargar equipos
 async function cargarEquipos() {
@@ -99,6 +125,37 @@ async function cargarEquipos() {
     } catch (err) {
         console.error("❌ Equipos:", err);
         cont.innerHTML = "<p class='aviso'>Error al cargar equipos</p>";
+    }
+}
+
+// 📊 Cargar tabla de posiciones
+async function cargarTablaPosiciones() {
+    const cuerpo = document.querySelector("#tabla-posiciones tbody");
+    try {
+        const res = await fetch(URL_TABLE, {
+            method: "GET",
+            headers: { "x-rapidapi-host": RAPIDAPI_HOST, "x-rapidapi-key": RAPIDAPI_KEY },
+            signal: AbortSignal.timeout(10000)
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const datos = await res.json();
+        const filas = datos.standings || datos.table || [];
+
+        if (!filas.length) { cuerpo.innerHTML = "<tr><td colspan='7' class='aviso'>Sin datos de clasificación</td></tr>"; return; }
+        cuerpo.innerHTML = filas.map(f => `
+            <tr>
+                <td>${f.position || f.rank || "-"}</td>
+                <td>${f.team?.name || f.teamName || "—"}</td>
+                <td>${f.playedMatches || f.pj || 0}</td>
+                <td>${f.wins || f.pg || 0}</td>
+                <td>${f.draws || f.pe || 0}</td>
+                <td>${f.losses || f.pp || 0}</td>
+                <td><strong>${f.points || f.pts || 0}</strong></td>
+            </tr>
+        `).join("");
+    } catch (err) {
+        console.error("❌ Tabla:", err);
+        cuerpo.innerHTML = "<tr><td colspan='7' class='aviso'>Error al cargar clasificación</td></tr>";
     }
 }
 
@@ -134,6 +191,7 @@ async function cargarPartidos() {
 
 // ▶️ Ejecutar todo
 cargarEquipos();
+cargarTablaPosiciones();
 cargarPartidos();
 </script>
 </body>
