@@ -3,280 +3,321 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sportmax360 | API‑Sports</title>
+    <title>SPORTMAX 360 - Deportes en Vivo</title>
     <style>
         :root{
             --azul-mlb:#00468B;
-            --verde-fut:#2F855A;
-            --gris-fondo:#f8fafc;
-            --gris-texto:#2d3748;
-            --gris-claro:#e2e8f0;
-            --sombra:0 4px 12px rgba(0,0,0,.07);
             --verde-vivo:#16a34a;
             --rojo:#dc2626;
         }
-        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Roboto,Arial,sans-serif;}
-        body{background:var(--gris-fondo);color:var(--gris-texto);line-height:1.6;}
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo LT', tahoma, sans-serif; }
+        body { background: #0a0e17; color: #e0e0e0; line-height: 1.6; min-height: 100vh; }
+        header { background: linear-gradient(135deg, #0d1b2a, #1b3a4b); padding: 2rem 1.5rem; text-align: center; border-bottom: 3px solid #00d4ff; box-shadow: 0 4px 30px rgba(0,212,255,0.15); }
+        header h1 { font-size: 2.8rem; font-weight: 800; background: linear-gradient(90deg,#00d4ff,#7b2ffc); -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:2px; }
+        header p { color:#8899aa; font-size:1.1rem; margin-top:.3rem; -webkit-text-fill-color:#8899aa; }
+        nav { background:#111927; padding:.8rem 1.5rem; display:flex; flex-wrap:wrap; justify-content:center; gap:.5rem 1.2rem; border-bottom:1px solid #1a2a3a; position:sticky; top:0; z-index:100; backdrop-filter:blur(10px); }
+        nav a { color:#b0c4de; text-decoration:none; font-weight:500; font-size:.95rem; padding:.4rem .8rem; border-radius:20px; transition:.3s; }
+        nav a:hover,.activo { color:#fff; background:rgba(0,212,255,.15); box-shadow:0 0 20px rgba(0,212,255,.1); }
+        main { max-width:1300px; margin:2rem auto; padding:0 1.5rem; }
+        section { margin-bottom:3.5rem; animation:fadeInUp .6s ease forwards; }
+        @keyframes fadeInUp { from{opacity:0;transform:translateY(30px);} to{opacity:1;transform:translateY(0);} }
+        h2 { font-size:2rem; font-weight:700; margin-bottom:1.5rem; padding-left:1rem; border-left:5px solid #00d4ff; color:#fff; }
+        h3 { color:#00d4ff; font-size:1.3rem; margin-bottom:1rem; display:flex; align-items:center; gap:.5rem; }
+        h4 { color:#b0c4de; font-size:1.1rem; margin:.8rem 0 .5rem 0; }
+        .card { background:linear-gradient(145deg,#111927,#0d1520); border-radius:16px; padding:1.8rem; margin-bottom:1.8rem; border:1px solid #1a2a3a; box-shadow:0 8px 32px rgba(0,0,0,.4); transition:.2s; }
+        .card:hover { transform:translateY(-3px); box-shadow:0 12px 48px rgba(0,0,0,.6); border-color:#00d4ff44; }
+        table { width:100%; border-collapse:collapse; margin-top:.5rem; font-size:.95rem; }
+        th { background:#0d1b2a; color:#00d4ff; padding:.8rem .6rem; text-align:left; border-bottom:2px solid #00d4ff44; }
+        td { padding:.7rem .6rem; border-bottom:1px solid #1a2a3a; color:#d0d8e0; }
+        tr:hover td { background:#0d1b2a55; }
+        ul { list-style:none; padding:0; }
+        li { padding:.6rem .8rem; border-bottom:1px solid #1a2a3a; color:#d0d8e0; display:flex; align-items:center; gap:.5rem; transition:.2s; }
+        li:hover { background:#0d1b2a55; border-radius:8px; }
+        li:last-child { border-bottom:none; }
+        .live-badge { background:#ff0040; color:#fff; font-size:.7rem; font-weight:700; padding:.2rem .6rem; border-radius:20px; animation:pulse 1.5s infinite; text-transform:uppercase; letter-spacing:1px; }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.5;transform:scale(.95);} }
+        .vivo-texto { color:#00d4ff; font-weight:600; font-size:1.2rem; }
+        .fase-etapa { color:#ffce56; font-weight:600; }
+        .video-container { position:relative; width:100%; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:12px; border:1px solid #00d4ff44; margin-top:1rem; }
+        .video-container iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; }
+        .aviso-legal { font-size:.85rem; color:#8899aa; margin-top:.5rem; }
+        .sedes-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; }
+        .sede-item { background:#0d1b2a; padding:1.2rem; border-radius:12px; text-align:center; border:1px solid #1a2a3a; transition:.3s; }
+        .sede-item:hover { border-color:#00d4ff; transform:scale(1.02); }
+        .sede-item .pais { color:#8899aa; font-size:.85rem; }
+        footer { background:#0d1520; text-align:center; padding:2rem; border-top:1px solid #1a2a3a; color:#667788; font-size:.95rem; }
+        footer span { color:#00d4ff; }
+        .update-container { display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: .85rem; color: #8899aa; margin-top: 0.5rem; background: #111927; padding: 0.4rem 1rem; border-radius: 20px; border: 1px solid #1a2a3a; width: fit-content; margin: 0 auto 1.5rem auto; }
+        .dot { height: 8px; width: 8px; background-color: #00ff88; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #00ff88; }
+        
+        /* ESTILOS DEL FORO */
+        .foro-formulario { display: flex; flex-direction: column; gap: 0.8rem; margin-bottom: 1.5rem; }
+        .foro-input { background: #0d1520; border: 1px solid #1a2a3a; border-radius: 8px; padding: 0.8rem; color: #fff; font-size: 0.95rem; outline: none; transition: 0.3s; }
+        .foro-input:focus { border-color: #00d4ff; box-shadow: 0 0 10px rgba(0,212,255,0.1); }
+        .foro-textarea { resize: vertical; min-height: 80px; }
+        .foro-boton { background: linear-gradient(90deg, #00d4ff, #7b2ffc); color: #fff; border: none; border-radius: 8px; padding: 0.8rem; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 0.95rem; }
+        .foro-boton:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,212,255,0.3); }
+        .comentario-caja { background: #0d1520; padding: 1rem; border-radius: 10px; border-left: 4px solid #7b2ffc; margin-bottom: 0.8rem; position: relative; }
+        .comentario-autor { color: #00d4ff; font-weight: 700; font-size: 0.95rem; margin-bottom: 0.2rem; }
+        .comentario-fecha { color: #445566; font-size: 0.75rem; float: right; }
+        .comentario-texto { color: #d0d8e0; font-size: 0.95rem; word-break: break-word; }
 
-        header{background:linear-gradient(135deg,#333,#555);color:#fff;padding:2rem 1rem;text-align:center;}
-        .selector{margin-top:1rem;}
-        .selector button{padding:.6rem 1.2rem;border:none;border-radius:6px;margin:0 .4rem;font-weight:bold;cursor:pointer;}
-        .btn-fut{background:var(--verde-fut);color:#fff;}
-        .btn-mlb{background:var(--azul-mlb);color:#fff;}
-        .selector button.activo{box-shadow:inset 0 0 0 2px #fff;}
-
-        nav{background:#fff;padding:1rem;border-bottom:1px solid var(--gris-claro);position:sticky;top:0;z-index:20;box-shadow:var(--sombra);}
-        nav ul{list-style:none;display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;}
-        nav a{color:var(--gris-texto);text-decoration:none;font-weight:600;padding:.4rem .7rem;border-radius:6px;transition:.3s;}
-        nav a:hover,.nav-activo{background:rgba(0,0,0,.05);color:var(--verde-fut);}
-
-        main{max-width:1100px;margin:2rem auto;padding:0 1rem;}
-        section{margin-bottom:3rem;}
-        h2{color:#1e293b;margin-bottom:1.2rem;border-left:4px solid;padding-left:.8rem;}
-        .futbol h2{border-color:var(--verde-fut);}
-        .mlb h2{border-color:var(--azul-mlb);}
-        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.3rem;}
-        .card{background:#fff;padding:1.3rem;border-radius:10px;box-shadow:var(--sombra);text-align:center;}
-        .logo-equipo{width:45px;height:45px;object-fit:contain;margin:0 auto .4rem;}
-        .etiqueta-vivo{background:var(--verde-vivo);color:#fff;font-size:.8rem;padding:.2rem .5rem;border-radius:12px;animation:parpadeo 1.2s infinite;display:inline-block;margin-bottom:.4rem;}
-        @keyframes parpadeo{0%,100%{opacity:1;}50%{opacity:.6;}}
-        .aviso{color:var(--rojo);font-weight:500;text-align:center;padding:1rem;}
-        .tabla-wrap{overflow-x:auto;border-radius:10px;box-shadow:var(--sombra);margin-top:1rem;}
-        .tabla{width:100%;border-collapse:collapse;background:#fff;}
-        .tabla th,.tabla td{padding:.8rem .6rem;text-align:center;border-bottom:1px solid var(--gris-claro);font-size:.9rem;}
-        .tabla.fut th{background:var(--verde-fut);color:#fff;}
-        .tabla.mlb th{background:var(--azul-mlb);color:#fff;}
-        .tabla tr:nth-child(even){background:#f8fafc;}
-        .tabla-logo{width:22px;height:22px;vertical-align:middle;margin-right:.4rem;}
+        /* NUEVOS ESTILOS DE LAS APIS */
+        .deporte-tabs{display:flex;gap:.8rem;margin-bottom:1.5rem;}
+        .tab-btn{padding:.6rem 1.2rem;border:1px solid #1a2a3a;background:#111927;color:#b0c4de;border-radius:8px;cursor:pointer;transition:.3s;}
+        .tab-btn.activo{background:#00d4ff22;color:#00d4ff;border-color:#00d4ff;}
         .oculto{display:none;}
-        footer{background:#1e293b;color:#cbd5e1;text-align:center;padding:2rem;margin-top:4rem;}
+        .grid-partidos{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.2rem;margin-top:1rem;}
+        .card-partido{background:#0d1520;border-radius:10px;padding:1rem;border:1px solid #1a2a3a;text-align:center;}
+        .logo-equipo{width:40px;height:40px;object-fit:contain;margin:0 auto .3rem;}
+        .etiqueta-vivo{background:var(--verde-vivo);color:#fff;font-size:.75rem;padding:.2rem .5rem;border-radius:12px;animation:pulse 1.5s infinite;display:inline-block;margin-bottom:.4rem;}
+        .aviso{color:var(--rojo);text-align:center;padding:1rem;}
+        .tabla-api{width:100%;margin-top:1rem;}
+        .tabla-api th{background:#1b3a4b;}
+        .tabla-api td{color:#d0d8e0;}
+        .select-liga{background:#0d1520;border:1px solid #1a2a3a;color:#fff;padding:.6rem;border-radius:8px;width:100%;max-width:320px;}
+        .grid-equipos{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem;margin-top:1rem;}
+        .card-equipo{background:#0d1520;padding:1rem;border-radius:10px;border:1px solid #1a2a3a;text-align:center;}
+
+        @media(max-width:768px){header h1{font-size:2rem;}nav{gap:.3rem .8rem;}nav a{font-size:.8rem;padding:.3rem .6rem;}h2{font-size:1.5rem;}.card{padding:1.2rem;}table{font-size:.8rem;}th,td{padding:.5rem .3rem;}}
+        @media(max-width:480px){header h1{font-size:1.5rem;}.sedes-grid{grid-template-columns:1fr 1fr;}}
     </style>
 </head>
 <body>
+    <header>
+        <h1>🏟️ SPORTMAX 360</h1>
+        <p>⚡ El deporte en tu pantalla — Datos en tiempo real</p>
+    </header>
+    <nav>
+        <a href="#deportes" class="activo">📊 Datos API</a>
+        <a href="#mundial">🌍 Mundial 2026</a>
+        <a href="#foro">💬 Foro y Comunidad</a>
+        <a href="#sedes">📍 Sedes</a>
+    </nav>
+    <main>
+        <div class="update-container">
+            <span class="dot"></span>
+            <p id="reloj-api">Sincronizando flujo de datos...</p>
+        </div>
 
-<header>
-    <h1>🏟️ Sportmax360</h1>
-    <p>Datos desde API‑Sports | Hora: 🇵🇪 Perú (UTC‑5)</p>
-    <div class="selector">
-        <button id="btnFut" class="btn-fut activo" onclick="cambiarDep('futbol')">⚽ Fútbol</button>
-        <button id="btnMlb" class="btn-mlb" onclick="cambiarDep('mlb')">⚾ MLB</button>
-    </div>
-</header>
+        <!-- SECCIÓN: MLB + FÚTBOL CON TUS APIS -->
+        <section id="deportes">
+            <h2>📊 Datos en vivo — MLB ⚾ | Fútbol ⚽</h2>
+            <div class="deporte-tabs">
+                <button class="tab-btn activo" onclick="cambiarDep('mlb')">⚾ MLB</button>
+                <button class="tab-btn" onclick="cambiarDep('futbol')">⚽ Fútbol</button>
+            </div>
 
-<nav>
-    <ul>
-        <li><a href="#inicio" class="nav-activo">Inicio</a></li>
-        <li><a href="#partidos">Partidos</a></li>
-        <li><a href="#tabla">Clasificación</a></li>
-        <li><a href="#contacto">Contacto</a></li>
-    </ul>
-</nav>
+            <!-- MLB - statsapi.mlb.com -->
+            <div id="sect-mlb">
+                <div class="card">
+                    <h3>📅 Partidos de hoy</h3>
+                    <div id="lista-partidos-mlb" class="grid-partidos"><p class="aviso">Cargando…</p></div>
+                </div>
+                <div class="card">
+                    <h3>🏆 Tabla 2026</h3>
+                    <table class="tabla tabla-api">
+                        <thead><tr><th>#</th><th>Equipo</th><th>G</th><th>P</th><th>%</th><th>Dif</th></tr></thead>
+                        <tbody id="cuerpo-tabla-mlb"><tr><td colspan="6" class="aviso">Cargando…</td></tbody>
+                    </table>
+                </div>
+                <div class="card">
+                    <h3>🏟️ Equipos MLB</h3>
+                    <div id="lista-equipos-mlb" class="grid-equipos"><p class="aviso">Cargando…</p></div>
+                </div>
+            </div>
 
-<main>
-    <!-- SECCIÓN FÚTBOL -->
-    <div id="futbol" class="futbol">
-        <section>
-            <h2>📌 Selecciona liga</h2>
-            <select id="ligaFut" style="padding:.6rem; border-radius:6px; border:1px solid #ddd;">
-                <option value="39">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
-                <option value="140">🇪🇸 La Liga</option>
-                <option value="78">🇩🇪 Bundesliga</option>
-                <option value="135">🇮🇹 Serie A</option>
-                <option value="61">🇫🇷 Ligue 1</option>
-                <option value="1">🌎 Mundial FIFA</option>
-            </select>
-        </section>
-        <section id="partidosFut">
-            <h2>📅 Partidos</h2>
-            <div id="listaFut" class="grid"><p class="aviso">Cargando…</p></div>
-        </section>
-        <section id="tablaFut">
-            <h2>🏆 Tabla</h2>
-            <div class="tabla-wrap">
-                <table class="tabla fut">
-                    <thead><tr><th>#</th><th>Equipo</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>Pts</th></tr></thead>
-                    <tbody id="cuerpoFut"><tr><td colspan="7" class="aviso">Cargando…</td></tr>
-                </table>
+            <!-- FÚTBOL - TheSportsDB -->
+            <div id="sect-futbol" class="oculto">
+                <div class="card">
+                    <h3>📌 Selecciona competición</h3>
+                    <select id="ligaSelect" class="select-liga">
+                        <option value="4328">🏴 Premier League</option>
+                        <option value="4335">🇪🇸 La Liga</option>
+                        <option value="4391">🇮🇹 Serie A</option>
+                        <option value="4346">🇩🇪 Bundesliga</option>
+                        <option value="4423">🌎 Copa América</option>
+                    </select>
+                </div>
+                <div class="card">
+                    <h3>📋 Tabla posiciones 2024‑2025</h3>
+                    <table class="tabla tabla-api">
+                        <thead><tr><th>#</th><th>Equipo</th><th>PJ</th><th>PG</th><th>PE</th><th>PP</th><th>Pts</th></tr></thead>
+                        <tbody id="cuerpo-tabla-fut"><tr><td colspan="7" class="aviso">Cargando…</td></tbody>
+                    </table>
+                </div>
+                <div class="card">
+                    <h3>📅 Últimos resultados</h3>
+                    <div id="lista-partidos-fut" class="grid-partidos"><p class="aviso">Cargando…</p></div>
+                </div>
             </div>
         </section>
-    </div>
 
-    <!-- SECCIÓN MLB -->
-    <div id="mlb" class="mlb oculto">
-        <section id="partidosMLB">
-            <h2>📅 Partidos MLB</h2>
-            <div id="listaMLB" class="grid"><p class="aviso">Cargando…</p></div>
-        </section>
-        <section id="tablaMLB">
-            <h2>🏆 Tabla MLB</h2>
-            <div class="tabla-wrap">
-                <table class="tabla mlb">
-                    <thead><tr><th>#</th><th>Equipo</th><th>G</th><th>P</th><th>%</th></tr></thead>
-                    <tbody id="cuerpoMLB"><tr><td colspan="5" class="aviso">Cargando…</td></tr>
-                </table>
+        <!-- RESTO SECCIONES ORIGINALES -->
+        <section id="mundial">
+            <h2>🌍 Mundial FIFA 2026 — México · EE.UU. · Canadá</h2>
+            <div class="card">
+                <h3>📌 Datos generales del torneo</h3>
+                <p>📅 Fechas: 11 de junio – 19 de julio 2026</p>
+                <p>🏟️ 16 sedes en 3 países</p>
+                <p>👥 48 selecciones — 104 partidos en total</p>
+                <p>🏆 Actual campeón: <strong>Argentina</strong></p>
+            </div>
+            <div class="card">
+                <h3>🔴 <span class="live-badge">En Vivo</span> Partido destacado</h3>
+                <p id="partido-en-vivo" class="vivo-texto">Sincronizando con los servidores del torneo...</p>
+            </div>
+            <div class="card" id="videos">
+                <h3>📺 Ver partido en vivo — Emisión oficial</h3>
+                <div class="video-container">
+                    <iframe id="reproductor-partido" src="https://youtube.com" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
+                </div>
+                <p class="aviso-legal">ℹ️ Enlaces verificados: FIFA, YouTube, ESPN, DAZN, MLB.tv, NBA League Pass.</p>
             </div>
         </section>
-    </div>
 
-    <section id="contacto">
-        <h2>📬 Contacto</h2>
-        <p>Proyecto deportivo — Lima, Perú</p>
-    </section>
-</main>
+        <section id="foro">
+            <h2>💬 Foro y Consulta de Datos en Tiempo Real</h2>
+            <div class="api-search-container">
+                <h3>🔍 Buscador Global de Futbolistas</h3>
+                <p style="font-size: 0.85rem; color: #8899aa;">Consulta la base de datos introduciendo una letra o nombre completo.</p>
+                <div class="api-search-flex">
+                    <input type="text" class="foro-input" style="flex: 1;" placeholder="Ej: Messi, Guerrero...">
+                    <button class="foro-boton" style="padding: 0 1.5rem;">Buscar</button>
+                </div>
+            </div>
+        </section>
 
-<footer><p>© 2026 Sportmax360 — API‑Sports.io</p></footer>
+        <section id="sedes">
+            <h2>📍 Sedes Mundial 2026</h2>
+            <div class="sedes-grid">
+                <div class="sede-item"><h4>Estadio Azteca</h4><p class="pais">Ciudad de México 🇲🇽</p></div>
+                <div class="sede-item"><h4>AT&T Stadium</h4><p class="pais">Arlington 🇺🇸</p></div>
+                <div class="sede-item"><h4>BC Place</h4><p class="pais">Vancouver 🇨🇦</p></div>
+                <div class="sede-item"><h4>Hard Rock Stadium</h4><p class="pais">Miami 🇺🇸</p></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 <span>SPORTMAX 360</span> — MLB Stats API • TheSportsDB</p>
+    </footer>
 
 <script>
-// ✅ Tu clave
-const API_KEY = "7ff8c03eef2af95a8697f7alfe5e54b0";
-const TEMP_FUT = "2025";
-const TEMP_MLB = "2025";
-
-// 🕒 Convertir UTC → Hora Perú (UTC‑5)
-function aHoraPeru(fechaISO){
-    if(!fechaISO) return "-";
-    const f = new Date(fechaISO);
-    f.setHours(f.getHours() - 5);
-    const fecha = f.toLocaleDateString("es-PE");
-    const hora = f.toTimeString().slice(0,5);
-    return `${fecha} ${hora}`;
-}
-
-// Rango fechas: últimos 30 días
-const hoy = new Date();
-const hace30 = new Date(hoy.getTime() - 30*24*60*60*1000);
-const FECHA_HASTA = hoy.toISOString().split('T')[0];
-const FECHA_DESDE = hace30.toISOString().split('T')[0];
-
-// ✅ CABECERAS 100% ASCII — SIN CARACTERES OCULTOS
-function cabeceras(host){
-    return {
-        "x-rapidapi-key": API_KEY,
-        "x-rapidapi-host": host
-    };
-}
+// --- DATOS GENERALES ---
+const HOY = new Date().toISOString().split('T')[0];
+const API_KEY_TSD = "3";
+const TEMP_FUT = "2024-2025";
 
 // Cambio vista
 function cambiarDep(tipo){
-    document.getElementById("futbol").classList.toggle("oculto", tipo !== "futbol");
-    document.getElementById("mlb").classList.toggle("oculto", tipo !== "mlb");
-    document.getElementById("btnFut").classList.toggle("activo", tipo === "futbol");
-    document.getElementById("btnMlb").classList.toggle("activo", tipo === "mlb");
+    document.getElementById("sect-mlb").classList.toggle("oculto", tipo !== "mlb");
+    document.getElementById("sect-futbol").classList.toggle("oculto", tipo !== "futbol");
+    document.querySelectorAll(".tab-btn").forEach(b=>b.classList.remove("activo"));
+    event.target.classList.add("activo");
 }
 
-// --- FÚTBOL ---
-const HOST_FUT = "v3.football.api-sports.io";
+// 🕒 UTC → Hora Perú UTC‑5
+function aHoraPeru(fechaISO){
+    if(!fechaISO) return "-";
+    const f = new Date(fechaISO);
+    f.setHours(f.getHours()-5);
+    return f.toLocaleDateString("es-PE",{day:'2-digit',month:'2-digit',year:'numeric'}) + " " + f.toTimeString().slice(0,5);
+}
 
-async function cargarPartidosFut(liga){
-    const el = document.getElementById("listaFut");
+// --- MLB - statsapi.mlb.com ---
+const URL_MLB_EQ = "https://statsapi.mlb.com/api/v1/teams?sportId=1";
+const URL_MLB_TB = "https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=2026";
+const URL_MLB_PT = `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${HOY}&language=es&hydrate=linescore,probablePitchers`;
+
+async function cargarMLB(){
+    // Equipos
     try{
-        const res = await fetch(`https://${HOST_FUT}/fixtures?league=${liga}&season=${TEMP_FUT}&dateFrom=${FECHA_DESDE}&dateTo=${FECHA_HASTA}`, {headers: cabeceras(HOST_FUT)});
-        const json = await res.json();
-        const datos = json.response || [];
-        if(!datos.length) throw "Sin partidos recientes en esta liga/temporada";
+        const resEq = await fetch(URL_MLB_EQ);
+        const dEq = await resEq.json();
+        document.getElementById("lista-equipos-mlb").innerHTML=(dEq.teams||[]).map(e=>`<div class="card-equipo"><h4>${e.name}</h4></div>`).join("");
+    }catch(e){document.getElementById("lista-equipos-mlb").innerHTML=`<p class="aviso">Sin equipos</p>`;}
 
-        el.innerHTML = datos.slice(0,10).map(p=>`
-        <div class="card">
-            ${["LIVE","IN_PLAY"].includes(p.fixture.status.short) ? '<span class="etiqueta-vivo">EN VIVO</span>' : ""}
-            <img class="logo-equipo" src="${p.teams.home.logo}" alt="${p.teams.home.name}">
-            <p style="font-weight:bold">${p.teams.home.name}</p>
-            <p style="color:var(--verde-fut);font-weight:bold;font-size:1.2rem">${p.goals.home ?? "-"} : ${p.goals.away ?? "-"}</p>
-            <p style="font-weight:bold">${p.teams.away.name}</p>
-            <img class="logo-equipo" src="${p.teams.away.logo}" alt="${p.teams.away.name}">
-            <p style="font-size:.9rem">🕒 ${aHoraPeru(p.fixture.date)}</p>
+    // Tabla
+    try{
+        const resTb = await fetch(URL_MLB_TB);
+        const dTb = await resTb.json();
+        let filas=[];
+        dTb.records?.forEach(r=>r.teamRecords?.forEach(t=>{
+            filas.push({n:t.team.name,g:t.wins,p:t.losses,porc:+t.winningPercentage,dif:t.gamesBack||"—"});
+        }));
+        filas.sort((a,b)=>b.porc-a.porc);
+        document.getElementById("cuerpo-tabla-mlb").innerHTML=filas.map((f,i)=>
+            `<tr><td>${i+1}</td><td>${f.n}</td><td>${f.g}</td><td>${f.p}</td><td>${f.porc.toFixed(3)}</td><td>${f.dif}</td></tr>`
+        ).join("");
+    }catch(e){document.getElementById("cuerpo-tabla-mlb").innerHTML=`<tr><td colspan='6' class='aviso'>Sin tabla</td></tr>`;}
+
+    // Partidos
+    try{
+        const resPt = await fetch(URL_MLB_PT);
+        const dPt = await resPt.json();
+        const juegos=dPt.dates?.[0]?.games||[];
+        document.getElementById("lista-partidos-mlb").innerHTML=juegos.map(p=>`
+        <div class="card-partido">
+            ${p.status.abstractGameCode==='L'?'<span class="etiqueta-vivo">EN VIVO</span>':''}
+            <p style="font-weight:bold">${p.teams.away.team.name}</p>
+            <p style="color:#00d4ff;font-weight:bold;font-size:1.2rem">${p.teams.away.score??"-"} : ${p.teams.home.score??"-"}</p>
+            <p style="font-weight:bold">${p.teams.home.team.name}</p>
+            <p style="font-size:.85rem;color:#8899aa">📍 ${p.venue?.name||"—"}</p>
         </div>`).join("");
-    }catch(err){
-        el.innerHTML = `<p class="aviso">⚠️ ${err}</p>`;
-    }
+    }catch(e){document.getElementById("lista-partidos-mlb").innerHTML=`<p class="aviso">Sin partidos MLB</p>`;}
 }
 
-async function cargarTablaFut(liga){
-    const el = document.getElementById("cuerpoFut");
+// --- FÚTBOL - TheSportsDB ---
+async function cargarTablaFut(id){
+    const tb=document.getElementById("cuerpo-tabla-fut");
     try{
-        const res = await fetch(`https://${HOST_FUT}/standings?league=${liga}&season=${TEMP_FUT}`, {headers: cabeceras(HOST_FUT)});
-        const json = await res.json();
-        const todos = json.response || [];
-        if(!todos.length) throw "Sin clasificación para esta temporada";
-
-        let filas = [];
-        todos.forEach(div => {
-            if(div.league?.standings) filas.push(...div.league.standings.flat());
-        });
-        if(!filas.length) throw "Sin datos de tabla";
-
-        el.innerHTML = filas.map((f,i)=>`
-        <tr>
-            <td>${f.position ?? i+1}</td>
-            <td><img class="tabla-logo" src="${f.team.logo}" alt="">${f.team.name}</td>
-            <td>${f.all.played}</td>
-            <td>${f.all.win}</td>
-            <td>${f.all.draw}</td>
-            <td>${f.all.lose}</td>
-            <td><strong>${f.points}</strong></td>
-        </tr>`).join("");
-    }catch(err){
-        el.innerHTML = `<tr><td colspan="7" class="aviso">⚠️ ${err}</td></tr>`;
-    }
+        const res=await fetch(`https://www.thesportsdb.com/api/v1/json/${API_KEY_TSD}/lookuptable.php?l=${id}&s=${TEMP_FUT}`);
+        const txt=await res.text();
+        if(!txt.trim()) throw 1;
+        const d=JSON.parse(txt);
+        tb.innerHTML=(d.table||[]).map((f,i)=>`
+        <tr><td>${i+1}</td><td>${f.strTeam}</td><td>${f.intPlayed||0}</td><td>${f.intWin||0}</td><td>${f.intDraw||0}</td><td>${f.intLoss||0}</td><td><strong>${f.intPoints||0}</strong></td></tr>`).join("");
+    }catch{tb.innerHTML=`<tr><td colspan="7" class="aviso">Sin datos</td></tr>`;}
 }
 
-document.getElementById("ligaFut").addEventListener("change", e=>{
-    cargarPartidosFut(e.target.value);
+async function cargarPartidosFut(id){
+    const c=document.getElementById("lista-partidos-fut");
+    try{
+        const [r1,r2]=await Promise.all([
+            fetch(`https://www.thesportsdb.com/api/v1/json/${API_KEY_TSD}/eventspastleague.php?id=${id}`),
+            fetch(`https://www.thesportsdb.com/api/v1/json/${API_KEY_TSD}/eventsday.php?d=${HOY}&l=${id}`)
+        ]);
+        const d1=await r1.json(),d2=await r2.json();
+        let p=d1.events||[];
+        if(d2.events)p.push(...d2.events);
+        const ids=new Set();
+        p=p.filter(x=>ids.has(x.idEvent)?false:ids.add(x.idEvent)).sort((a,b)=>new Date(b.dateEvent)-new Date(a.dateEvent));
+        c.innerHTML=p.slice(0,8).map(x=>`
+        <div class="card-partido">
+            <p style="font-weight:bold">${x.strHomeTeam}</p>
+            <p style="font-size:1.2rem;color:#00d4ff">${x.intHomeScore??"-"} : ${x.intAwayScore??"-"}</p>
+            <p style="font-weight:bold">${x.strAwayTeam}</p>
+            <p style="font-size:.85rem;color:#8899aa">📅 ${x.dateEvent}</p>
+        </div>`).join("");
+    }catch{c.innerHTML=`<p class="aviso">Sin partidos</p>`;}
+}
+
+document.getElementById("ligaSelect").addEventListener("change",e=>{
     cargarTablaFut(e.target.value);
+    cargarPartidosFut(e.target.value);
 });
 
-// --- MLB ---
-const HOST_MLB = "v3.baseball.api-sports.io";
-const LIGA_MLB = "1";
-
-async function cargarPartidosMLB(){
-    const el = document.getElementById("listaMLB");
-    try{
-        const res = await fetch(`https://${HOST_MLB}/games?league=${LIGA_MLB}&season=${TEMP_MLB}&dateFrom=${FECHA_DESDE}&dateTo=${FECHA_HASTA}`, {headers: cabeceras(HOST_MLB)});
-        const json = await res.json();
-        const datos = json.response || [];
-        if(!datos.length) throw "Sin partidos MLB recientes";
-
-        el.innerHTML = datos.slice(0,10).map(p=>`
-        <div class="card">
-            ${["LIVE","IN_PLAY"].includes(p.status.short) ? '<span class="etiqueta-vivo">EN VIVO</span>' : ""}
-            <img class="logo-equipo" src="${p.teams.away.logo}" alt="${p.teams.away.name}">
-            <p style="font-weight:bold">${p.teams.away.name}</p>
-            <p style="color:var(--azul-mlb);font-weight:bold;font-size:1.2rem">${p.scores.away.total ?? "-"} : ${p.scores.home.total ?? "-"}</p>
-            <p style="font-weight:bold">${p.teams.home.name}</p>
-            <img class="logo-equipo" src="${p.teams.home.logo}" alt="${p.teams.home.name}">
-            <p style="font-size:.9rem">🕒 ${aHoraPeru(p.date)}</p>
-        </div>`).join("");
-    }catch(err){
-        el.innerHTML = `<p class="aviso">⚠️ ${err}</p>`;
-    }
-}
-
-async function cargarTablaMLB(){
-    const el = document.getElementById("cuerpoMLB");
-    try{
-        const res = await fetch(`https://${HOST_MLB}/standings?league=${LIGA_MLB}&season=${TEMP_MLB}`, {headers: cabeceras(HOST_MLB)});
-        const json = await res.json();
-        const filas = json.response?.[0]?.standings || [];
-        if(!filas.length) throw "Sin tabla MLB";
-
-        el.innerHTML = filas.map((f,i)=>`
-        <tr>
-            <td>${i+1}</td>
-            <td><img class="tabla-logo" src="${f.team.logo}" alt="">${f.team.name}</td>
-            <td>${f.games.win}</td>
-            <td>${f.games.lose}</td>
-            <td>${f.percentage}</td>
-        </tr>`).join("");
-    }catch(err){
-        el.innerHTML = `<tr><td colspan="5" class="aviso">⚠️ ${err}</td></tr>`;
-    }
-}
-
 // Carga inicial
-cargarPartidosFut("39");
-cargarTablaFut("39");
-cargarPartidosMLB();
-cargarTablaMLB();
+cargarMLB();
+cargarTablaFut("4328");
+cargarPartidosFut("4328");
+
+// Reloj
+setInterval(()=>{
+    const ahora=new Date().toLocaleTimeString("es-PE");
+    document.getElementById("reloj-api").textContent="Última sincronización: "+ahora;
+},1000);
 </script>
 </body>
 </html>
