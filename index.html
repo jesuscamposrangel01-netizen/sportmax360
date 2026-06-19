@@ -8,22 +8,155 @@
     <script>eruda.init();</script>
     <style>
         /* ===== RESET Y ESTILOS GLOBALES ===== */
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Cairo LT', tahoma, sans-serif; transition: background 0.3s, color 0.3s; }
-        [data-theme="dark"] { --bg-body:#0a0e17; --bg-card:#111927; --bg-header:#0d1b2a; --text-primary:#e0e0e0; --text-secondary:#8899aa; --border-color:#1a2a3a; --shadow:rgba(0,212,255,0.15); --input-bg:#0d1b2a; }
-        [data-theme="light"] { --bg-body:#f0f4f8; --bg-card:#ffffff; --bg-header:#e2e8f0; --text-primary:#1a202c; --text-secondary:#4a5568; --border-color:#cbd5e0; --shadow:rgba(0,0,0,0.1); --input-bg:#edf2f7; }
-        body { background:var(--bg-body); color:var(--text-primary); line-height:1.6; min-height:100vh; }
-        header { background:var(--bg-header); padding:2rem 1.5rem; text-align:center; border-bottom:3px solid #00d4ff; box-shadow:0 4px 30px var(--shadow); position:relative; }
-        header h1 { font-size:2.8rem; font-weight:800; background:linear-gradient(90deg,#00d4ff,#7b2ffc); -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:2px; }
-        header p { color:var(--text-secondary); font-size:1.1rem; margin-top:0.3rem; }
-        .theme-toggle { position:absolute; top:1rem; right:1.5rem; background:none; border:none; font-size:1.5rem; cursor:pointer; color:var(--text-primary); padding:0.3rem 0.6rem; border-radius:20px; background:var(--bg-card); border:1px solid var(--border-color); }
-        .theme-toggle:hover { background:#00d4ff22; }
-        nav { background:var(--bg-card); padding:0.8rem 1.5rem; display:flex; flex-wrap:wrap; justify-content:center; gap:0.5rem 1.2rem; border-bottom:1px solid var(--border-color); position:sticky; top:0; z-index:100; backdrop-filter:blur(10px); }
-        nav a { color:var(--text-secondary); text-decoration:none; font-weight:500; font-size:0.95rem; padding:0.4rem 0.8rem; border-radius:20px; transition:all 0.3s ease; }
-        nav a:hover { color:#fff; background:rgba(0,212,255,0.15); }
-        main { max-width:1300px; margin:2rem auto; padding:0 1.5rem; }
-        section { margin-bottom:3.5rem; animation:fadeInUp 0.6s ease forwards; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo LT', tahoma, sans-serif;
+            transition: background 0.3s, color 0.3s;
+        }
+        [data-theme="dark"] {
+            --bg-body: #0a0e17;
+            --bg-card: #111927;
+            --bg-sidebar: #0d1520;
+            --text-primary: #e0e0e0;
+            --text-secondary: #8899aa;
+            --border-color: #1a2a3a;
+            --shadow: rgba(0,212,255,0.15);
+            --input-bg: #0d1b2a;
+        }
+        [data-theme="light"] {
+            --bg-body: #f0f4f8;
+            --bg-card: #ffffff;
+            --bg-sidebar: #e2e8f0;
+            --text-primary: #1a202c;
+            --text-secondary: #4a5568;
+            --border-color: #cbd5e0;
+            --shadow: rgba(0,0,0,0.1);
+            --input-bg: #edf2f7;
+        }
+        body {
+            background: var(--bg-body);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* ===== SIDEBAR (MENÚ LATERAL) ===== */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 240px;
+            height: 100vh;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            padding: 1.5rem 0;
+            overflow-y: auto;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar .logo {
+            text-align: center;
+            padding: 0 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+        .sidebar .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #00d4ff, #7b2ffc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .sidebar .logo p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            -webkit-text-fill-color: var(--text-secondary);
+        }
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            padding: 0 0.8rem;
+        }
+        .sidebar nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.6rem 1rem;
+            border-radius: 10px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .sidebar nav a:hover,
+        .sidebar nav a.active {
+            background: #00d4ff22;
+            color: #00d4ff;
+        }
+        .sidebar .theme-toggle {
+            margin-top: auto;
+            padding: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* ===== BOTÓN PARA ABRIR/CERRAR SIDEBAR (móvil) ===== */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 0.8rem;
+            left: 0.8rem;
+            z-index: 1001;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.4rem 0.8rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-primary);
+        }
+        .sidebar-toggle:hover {
+            background: #00d4ff22;
+        }
+
+        /* ===== CONTENIDO PRINCIPAL ===== */
+        .main-content {
+            margin-left: 240px;
+            padding: 2rem 1.5rem;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* ===== RESTO DE ESTILOS ===== */
+        header {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 3px solid #00d4ff;
+            box-shadow: 0 4px 30px var(--shadow);
+            margin-bottom: 2rem;
+            border-radius: 12px;
+        }
+        header h1 { font-size: 2.2rem; font-weight: 800; background: linear-gradient(90deg,#00d4ff,#7b2ffc); -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:1px; }
+        header p { color:var(--text-secondary); font-size:1rem; margin-top:0.3rem; }
+
+        section { margin-bottom: 3.5rem; animation: fadeInUp 0.6s ease forwards; }
         @keyframes fadeInUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
-        h2 { font-size:2rem; font-weight:700; margin-bottom:1.5rem; padding-left:1rem; border-left:5px solid #00d4ff; color:var(--text-primary); }
+        h2 { font-size: 2rem; font-weight:700; margin-bottom:1.5rem; padding-left:1rem; border-left:5px solid #00d4ff; color:var(--text-primary); }
         .card { background:var(--bg-card); border-radius:16px; padding:1.8rem; margin-bottom:1.8rem; border:1px solid var(--border-color); box-shadow:0 8px 32px rgba(0,0,0,0.4); transition:transform 0.2s ease, box-shadow 0.3s ease; }
         .card:hover { transform:translateY(-3px); box-shadow:0 12px 48px rgba(0,0,0,0.6); border-color:#00d4ff44; }
         .card h3 { color:#00d4ff; font-size:1.3rem; margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem; }
@@ -51,7 +184,7 @@
         .video-item .info h4 { color:var(--text-primary); font-size:1rem; margin-bottom:0.5rem; }
         .video-item .info a { color:#00d4ff; text-decoration:none; font-weight:600; }
         #shotmapCanvas { width:100%; height:auto; background:var(--bg-body); border-radius:12px; border:1px solid var(--border-color); }
-        footer { background:var(--bg-card); text-align:center; padding:2rem; border-top:1px solid var(--border-color); color:var(--text-secondary); font-size:0.95rem; }
+        footer { background:var(--bg-card); text-align:center; padding:1.5rem; border-top:1px solid var(--border-color); color:var(--text-secondary); font-size:0.9rem; border-radius:12px; margin-top:2rem; }
         footer span { color:#00d4ff; }
         .update-time { font-size:0.8rem; color:var(--text-secondary); margin-top:0.3rem; }
         #loader { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); display:none; justify-content:center; align-items:center; z-index:9999; backdrop-filter:blur(4px); }
@@ -65,92 +198,145 @@
         .fav-btn.active { color:#ffcc00; }
         .equipo-card { border-radius:12px; padding:1rem; text-align:center; border:1px solid var(--border-color); transition:0.3s; cursor:pointer; }
         .equipo-card:hover { transform:scale(1.05); border-color:#00d4ff; }
-        @media (max-width:1024px) { .sedes-grid{grid-template-columns:repeat(2,1fr)} .videos-grid{grid-template-columns:repeat(2,1fr)} }
-        @media (max-width:768px) { header h1{font-size:2rem} nav{gap:0.3rem 0.8rem} nav a{font-size:0.8rem;padding:0.3rem 0.6rem} h2{font-size:1.5rem} .card{padding:1.2rem} table{font-size:0.8rem} th,td{padding:0.5rem 0.3rem} .theme-toggle{top:0.5rem;right:0.5rem;font-size:1.2rem} }
-        @media (max-width:640px) { header h1{font-size:1.5rem;letter-spacing:1px} nav{flex-direction:column;align-items:center} nav a{width:100%;text-align:center} table{font-size:0.7rem} #shotmapCanvas{height:250px} .sedes-grid{grid-template-columns:1fr} .videos-grid{grid-template-columns:1fr} }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .sedes-grid { grid-template-columns:repeat(2,1fr); }
+            .videos-grid { grid-template-columns:repeat(2,1fr); }
+        }
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-toggle { display: block; }
+            .main-content { margin-left: 0; padding: 1rem; }
+            header h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.5rem; }
+            .card { padding: 1.2rem; }
+            table { font-size: 0.8rem; }
+            th, td { padding: 0.5rem 0.3rem; }
+        }
+        @media (max-width: 640px) {
+            header h1 { font-size: 1.4rem; }
+            .videos-grid { grid-template-columns:1fr; }
+            .sedes-grid { grid-template-columns:1fr; }
+            #shotmapCanvas { height: 200px; }
+        }
     </style>
 </head>
 <body>
-    <div id="loader"><div class="spinner"></div></div>
-    <header>
-        <h1>🏟️ SPORTMAX 360</h1>
-        <p>⚡ El deporte en tu pantalla — Datos en tiempo real</p>
-        <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">🌙</button>
-    </header>
-    <nav>
-        <a href="#mundial">🌍 Mundial 2026</a>
-        <a href="#nba">🏀 NBA</a>
-        <a href="#mlb">⚾ MLB</a>
-        <a href="#sedes">📍 Sedes</a>
-        <a href="#noticias">📰 Noticias</a>
-        <a href="#galeria">📸 Galería</a>
-        <a href="#videos">🎥 Videos</a>
-        <a href="#equipos">🏆 Equipos</a>
-        <a href="#foro">💬 Foro</a>
-        <a href="#contacto">📞 Contacto</a>
-    </nav>
-    <main>
-        <section id="mundial">
-            <h2>🌍 Mundial 2026 — México · EE.UU. · Canadá</h2>
-            <div class="card">
-                <h3>🔴 <span class="live-badge">En Vivo</span> Partido destacado</h3>
-                <p id="partido-en-vivo" class="vivo-texto">Cargando partido...</p>
-            </div>
-            <div class="card">
-                <h3>📋 Últimos Resultados</h3>
-                <input type="text" id="buscador" placeholder="🔍 Buscar equipo...">
-                <table id="tabla-resultados">
-                    <thead><tr><th>Local</th><th>Visitante</th><th>Resultado</th></tr></thead>
-                    <tbody id="tabla-body"></tbody>
-                </table>
-            </div>
-            <div class="card">
-                <h3>📅 Próximos Partidos</h3>
-                <ul id="lista-proximos"></ul>
-            </div>
-            <div id="contenedor-posiciones"></div>
-            <div class="card">
-                <h3>🎯 Mapa de Tiros</h3>
-                <canvas id="shotmapCanvas" width="700" height="450"></canvas>
-                <p id="shotmap-info" style="color:var(--text-secondary);font-size:0.85rem;margin-top:0.5rem;text-align:center;">Cargando mapa de tiros...</p>
-            </div>
-        </section>
-        <section id="nba"><h2>🏀 NBA — Temporada 2025‑2026</h2>
-            <div class="card"><h3>📅 Hoy / Próximos</h3><ul id="lista-nba"></ul></div>
-            <div class="card"><h3>📋 Últimos Resultados</h3><table id="tabla-nba-resultados"><thead><tr><th>Visitante</th><th>Local</th><th>Resultado</th></tr></thead><tbody id="nba-body"></tbody></table></div>
-            <div id="contenedor-nba-posiciones"></div>
-        </section>
-        <section id="mlb"><h2>⚾ MLB — Temporada 2026</h2>
-            <div class="card"><h3>📅 Hoy / Próximos</h3><ul id="lista-mlb"></ul></div>
-            <div class="card"><h3>📋 Últimos Resultados</h3><table id="tabla-mlb-resultados"><thead><tr><th>Visitante</th><th>Local</th><th>Resultado</th></tr></thead><tbody id="mlb-body"></tbody></table></div>
-            <div id="contenedor-mlb-posiciones"></div>
-        </section>
-        <section id="sedes"><h2>📍 Sedes del Mundial 2026</h2>
-            <div class="card"><div class="sedes-grid">
-                <div class="sede-item">🏟️ Estadio Azteca <div class="pais">🇲🇽 México</div></div>
-                <div class="sede-item">🏟️ MetLife Stadium <div class="pais">🇺🇸 Nueva York</div></div>
-                <div class="sede-item">🏟️ BC Place <div class="pais">🇨🇦 Vancouver</div></div>
-                <div class="sede-item">🏟️ AT&T Stadium <div class="pais">🇺🇸 Dallas</div></div>
-                <div class="sede-item">🏟️ Estadio BBVA <div class="pais">🇲🇽 Monterrey</div></div>
-                <div class="sede-item">🏟️ SoFi Stadium <div class="pais">🇺🇸 Los Ángeles</div></div>
-            </div></div>
-        </section>
-        <section id="noticias"><h2>📰 Noticias Deportivas</h2><div class="card" id="contenedor-noticias"><p>Cargando noticias...</p></div></section>
-        <section id="videos"><h2>🎥 Videos Destacados</h2>
-            <div class="card"><div id="contenedor-videos" class="videos-grid"><p style="color:var(--text-secondary);grid-column:1/-1;text-align:center;">Cargando videos...</p></div></div>
-        </section>
-        <section id="equipos"><h2>🏆 Equipos Destacados</h2>
-            <div class="card"><div id="contenedor-equipos" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;"><p style="color:var(--text-secondary);grid-column:1/-1;text-align:center;">Cargando equipos...</p></div></div>
-        </section>
-        <section id="galeria"><h2>📸 Galería</h2><div class="card">Próximamente...</div></section>
-        <section id="foro"><h2>💬 Foro</h2><div class="card">Próximamente...</div></section>
-        <section id="contacto"><h2>📞 Contacto</h2><div class="card">Próximamente...</div></section>
-    </main>
-    <footer>
-        <p>© 2026 <span>SPORTMAX 360</span> — Todos los derechos reservados ⚡</p>
-        <p class="update-time">📡 Datos actualizados: <span id="hora-actualizacion">--:--</span></p>
-    </footer>
 
+    <!-- ===== SIDEBAR (MENÚ LATERAL) ===== -->
+    <div class="sidebar" id="sidebar">
+        <div class="logo">
+            <h1>🏟️ SPORTMAX</h1>
+            <p>360° Deportes</p>
+        </div>
+        <nav>
+            <a href="#mundial" class="active">🌍 Mundial 2026</a>
+            <a href="#nba">🏀 NBA</a>
+            <a href="#mlb">⚾ MLB</a>
+            <a href="#sedes">📍 Sedes</a>
+            <a href="#noticias">📰 Noticias</a>
+            <a href="#videos">🎥 Videos</a>
+            <a href="#equipos">🏆 Equipos</a>
+            <a href="#galeria">📸 Galería</a>
+            <a href="#foro">💬 Foro</a>
+            <a href="#contacto">📞 Contacto</a>
+        </nav>
+        <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+            <span id="themeIcon">🌙</span> <span id="themeLabel">Oscuro</span>
+        </button>
+    </div>
+
+    <!-- ===== BOTÓN PARA ABRIR SIDEBAR (móvil) ===== -->
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Abrir menú">☰</button>
+
+    <!-- ===== CONTENIDO PRINCIPAL ===== -->
+    <div class="main-content">
+
+        <header>
+            <h1>🏟️ SPORTMAX 360</h1>
+            <p>⚡ El deporte en tu pantalla — Datos en tiempo real</p>
+        </header>
+
+        <main>
+            <section id="mundial">
+                <h2>🌍 Mundial 2026 — México · EE.UU. · Canadá</h2>
+                <div class="card">
+                    <h3>🔴 <span class="live-badge">En Vivo</span> Partido destacado</h3>
+                    <p id="partido-en-vivo" class="vivo-texto">Cargando partido...</p>
+                </div>
+                <div class="card">
+                    <h3>📋 Últimos Resultados</h3>
+                    <input type="text" id="buscador" placeholder="🔍 Buscar equipo...">
+                    <table id="tabla-resultados">
+                        <thead><tr><th>Local</th><th>Visitante</th><th>Resultado</th></tr></thead>
+                        <tbody id="tabla-body"></tbody>
+                    </table>
+                </div>
+                <div class="card">
+                    <h3>📅 Próximos Partidos</h3>
+                    <ul id="lista-proximos"></ul>
+                </div>
+                <div id="contenedor-posiciones"></div>
+                <div class="card">
+                    <h3>🎯 Mapa de Tiros</h3>
+                    <canvas id="shotmapCanvas" width="700" height="450"></canvas>
+                    <p id="shotmap-info" style="color:var(--text-secondary);font-size:0.85rem;margin-top:0.5rem;text-align:center;">Cargando mapa de tiros...</p>
+                </div>
+            </section>
+
+            <section id="nba"><h2>🏀 NBA — Temporada 2025‑2026</h2>
+                <div class="card"><h3>📅 Hoy / Próximos</h3><ul id="lista-nba"></ul></div>
+                <div class="card"><h3>📋 Últimos Resultados</h3><table id="tabla-nba-resultados"><thead><tr><th>Visitante</th><th>Local</th><th>Resultado</th></tr></thead><tbody id="nba-body"></tbody></table></div>
+                <div id="contenedor-nba-posiciones"></div>
+            </section>
+
+            <section id="mlb"><h2>⚾ MLB — Temporada 2026</h2>
+                <div class="card"><h3>📅 Hoy / Próximos</h3><ul id="lista-mlb"></ul></div>
+                <div class="card"><h3>📋 Últimos Resultados</h3><table id="tabla-mlb-resultados"><thead><tr><th>Visitante</th><th>Local</th><th>Resultado</th></tr></thead><tbody id="mlb-body"></tbody></table></div>
+                <div id="contenedor-mlb-posiciones"></div>
+            </section>
+
+            <section id="sedes"><h2>📍 Sedes del Mundial 2026</h2>
+                <div class="card"><div class="sedes-grid">
+                    <div class="sede-item">🏟️ Estadio Azteca <div class="pais">🇲🇽 México</div></div>
+                    <div class="sede-item">🏟️ MetLife Stadium <div class="pais">🇺🇸 Nueva York</div></div>
+                    <div class="sede-item">🏟️ BC Place <div class="pais">🇨🇦 Vancouver</div></div>
+                    <div class="sede-item">🏟️ AT&T Stadium <div class="pais">🇺🇸 Dallas</div></div>
+                    <div class="sede-item">🏟️ Estadio BBVA <div class="pais">🇲🇽 Monterrey</div></div>
+                    <div class="sede-item">🏟️ SoFi Stadium <div class="pais">🇺🇸 Los Ángeles</div></div>
+                </div></div>
+            </section>
+
+            <section id="noticias"><h2>📰 Noticias Deportivas</h2><div class="card" id="contenedor-noticias"><p>Cargando noticias...</p></div></section>
+
+            <section id="videos"><h2>🎥 Videos Destacados</h2>
+                <div class="card"><div id="contenedor-videos" class="videos-grid"><p style="color:var(--text-secondary);grid-column:1/-1;text-align:center;">Cargando videos...</p></div></div>
+            </section>
+
+            <section id="equipos"><h2>🏆 Equipos Destacados</h2>
+                <div class="card"><div id="contenedor-equipos" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;"><p style="color:var(--text-secondary);grid-column:1/-1;text-align:center;">Cargando equipos...</p></div></div>
+            </section>
+
+            <section id="galeria"><h2>📸 Galería</h2><div class="card">Próximamente...</div></section>
+            <section id="foro"><h2>💬 Foro</h2><div class="card">Próximamente...</div></section>
+            <section id="contacto"><h2>📞 Contacto</h2><div class="card">Próximamente...</div></section>
+        </main>
+
+        <footer>
+            <p>© 2026 <span>SPORTMAX 360</span> — Todos los derechos reservados ⚡</p>
+            <p class="update-time">📡 Datos actualizados: <span id="hora-actualizacion">--:--</span></p>
+        </footer>
+
+    </div> <!-- fin main-content -->
+
+    <!-- ===== LOADER ===== -->
+    <div id="loader"><div class="spinner"></div></div>
+
+    <!-- ================================================================ -->
+    <!-- ===== JAVASCRIPT COMPLETO ===== -->
+    <!-- ================================================================ -->
     <script>
         // ================================================================
         // 1. CONFIGURACIÓN Y PROXY
@@ -186,7 +372,7 @@
         }
 
         // ================================================================
-        // 3. FAVORITOS (Local Storage)
+        // 3. FAVORITOS
         // ================================================================
         const favoritos = {
             agregar(equipo) { let favs = JSON.parse(localStorage.getItem('favs') || '[]'); if (!favs.includes(equipo)) { favs.push(equipo); localStorage.setItem('favs', JSON.stringify(favs)); } },
@@ -196,7 +382,7 @@
         };
 
         // ================================================================
-        // 4. MOCK (datos de respaldo)
+        // 4. MOCK
         // ================================================================
         const MOCK = {
             futbol: {
@@ -284,16 +470,15 @@
         }
 
         // ================================================================
-        // 6. ALLSPORTSAPI2 - FÚTBOL (PARTIDOS, RESULTADOS, POSICIONES)
+        // 6. ALLSPORTSAPI2 - FÚTBOL
         // ================================================================
         async function cargarFutbolAllSports() {
             try {
                 mostrarLoader(true);
-                // IDs: Premier League (17) y temporada 2025 (76986) – puedes cambiarlos
                 const tournamentId = 17;
                 const seasonId = 76986;
 
-                // 1. Partidos en vivo (endpoint de live matches)
+                // 1. Partidos en vivo
                 const liveRes = await fetchWithProxy(
                     `https://allsportsapi2.p.rapidapi.com/api/tournament/${tournamentId}/season/${seasonId}/matches/live`,
                     { headers: { 'x-rapidapi-key': RAPIDAPI_KEY, 'x-rapidapi-host': RAPIDAPI_HOST_ALLSPORTS } }
@@ -303,14 +488,13 @@
                 if (liveData.matches && liveData.matches.length > 0) {
                     const match = liveData.matches[0];
                     mostrarEnVivo(`🔥 ${match.homeTeam.name} ${match.homeScore}‑${match.awayScore} ${match.awayTeam.name}`);
-                    // Shotmap (si existe endpoint)
                     if (match.id) cargarShotmap(match.id);
                 } else {
                     mostrarEnVivo('⏳ Esperando partido en vivo...');
                     cargarShotmapDemo();
                 }
 
-                // 2. Resultados (últimos 6 partidos finalizados)
+                // 2. Resultados
                 const finishedRes = await fetchWithProxy(
                     `https://allsportsapi2.p.rapidapi.com/api/tournament/${tournamentId}/season/${seasonId}/matches/finished`,
                     { headers: { 'x-rapidapi-key': RAPIDAPI_KEY, 'x-rapidapi-host': RAPIDAPI_HOST_ALLSPORTS } }
@@ -324,7 +508,7 @@
                     } else { mostrarResultados(); }
                 } else { mostrarResultados(); }
 
-                // 3. Próximos partidos
+                // 3. Próximos
                 const upcomingRes = await fetchWithProxy(
                     `https://allsportsapi2.p.rapidapi.com/api/tournament/${tournamentId}/season/${seasonId}/matches/upcoming`,
                     { headers: { 'x-rapidapi-key': RAPIDAPI_KEY, 'x-rapidapi-host': RAPIDAPI_HOST_ALLSPORTS } }
@@ -338,7 +522,7 @@
                     } else { mostrarProximos(); }
                 } else { mostrarProximos(); }
 
-                // 4. Clasificación (standings)
+                // 4. Clasificación
                 const standingsRes = await fetchWithProxy(
                     `https://allsportsapi2.p.rapidapi.com/api/tournament/${tournamentId}/season/${seasonId}/standings`,
                     { headers: { 'x-rapidapi-key': RAPIDAPI_KEY, 'x-rapidapi-host': RAPIDAPI_HOST_ALLSPORTS } }
@@ -346,7 +530,6 @@
                 if (standingsRes.ok) {
                     const standingsData = await standingsRes.json();
                     if (standingsData.standings && standingsData.standings.length) {
-                        // Asumimos que el primer grupo es la tabla general
                         const tabla = standingsData.standings[0];
                         const posiciones = [{
                             grupo: tabla.groupName || 'Clasificación',
@@ -365,7 +548,7 @@
                 } else { mostrarPosiciones(); }
 
             } catch (e) {
-                console.error('Error en AllSportsAPI2 fútbol:', e);
+                console.error('Error en fútbol:', e);
                 mostrarError('Error al cargar fútbol', 'Usando datos de respaldo');
                 mostrarEnVivo();
                 mostrarResultados();
@@ -376,7 +559,7 @@
         }
 
         // ================================================================
-        // 7. SHOTMAP (con demo)
+        // 7. SHOTMAP
         // ================================================================
         async function cargarShotmap(matchId) {
             try {
@@ -475,13 +658,12 @@
         }
 
         // ================================================================
-        // 8. NBA, MLB, NOTICIAS, VIDEOS (igual que antes)
+        // 8. NBA, MLB, NOTICIAS, VIDEOS, EQUIPOS
         // ================================================================
-        // NBA (usando AllSportsAPI2 también)
         async function cargarNBAAllSports() {
             try {
-                const tournamentId = 12; // NBA
-                const seasonId = 76992; // 2024-2025
+                const tournamentId = 12;
+                const seasonId = 76992;
                 const res = await fetchWithProxy(
                     `https://allsportsapi2.p.rapidapi.com/api/tournament/${tournamentId}/season/${seasonId}/matches/upcoming`,
                     { headers: { 'x-rapidapi-key': RAPIDAPI_KEY, 'x-rapidapi-host': RAPIDAPI_HOST_ALLSPORTS } }
@@ -495,7 +677,6 @@
                     });
                     mostrarNBAProximos(proximos);
                 } else { mostrarNBAProximos(); }
-                // Resultados (usamos finished)
                 const finRes = await fetchWithProxy(
                     `https://allsportsapi2.p.rapidapi.com/api/tournament/${tournamentId}/season/${seasonId}/matches/finished`,
                     { headers: { 'x-rapidapi-key': RAPIDAPI_KEY, 'x-rapidapi-host': RAPIDAPI_HOST_ALLSPORTS } }
@@ -507,7 +688,6 @@
                         mostrarNBAResultados(resultados);
                     } else { mostrarNBAResultados(); }
                 } else { mostrarNBAResultados(); }
-                // Clasificaciones (standings)
                 const standRes = await fetchWithProxy(
                     `https://allsportsapi2.p.rapidapi.com/api/tournament/${tournamentId}/season/${seasonId}/standings`,
                     { headers: { 'x-rapidapi-key': RAPIDAPI_KEY, 'x-rapidapi-host': RAPIDAPI_HOST_ALLSPORTS } }
@@ -517,20 +697,18 @@
                     if (standData.standings && standData.standings.length) {
                         const tabla = standData.standings[0];
                         const equipos = tabla.rows?.slice(0, 5).map(row => ({ pos: row.position, equipo: row.teamName, g: row.won, p: row.lost, pct: row.winPercentage || '-' })) || [];
-                        // Intentar separar conferencias (si la API las devuelve)
                         const este = equipos.filter((_,i) => i%2===0);
                         const oeste = equipos.filter((_,i) => i%2===1);
                         mostrarNBAPosiciones({ este: este.length?este:equipos, oeste: oeste.length?oeste:equipos });
                     } else { mostrarNBAPosiciones(); }
                 } else { mostrarNBAPosiciones(); }
             } catch (e) {
-                console.error('Error NBA AllSports:', e);
+                console.error('Error NBA:', e);
                 mostrarError('Error en NBA', 'Usando MOCK');
                 mostrarNBAProximos(); mostrarNBAResultados(); mostrarNBAPosiciones();
             }
         }
 
-        // MLB (usamos statsapi.mlb.com porque AllSportsAPI2 no tiene MLB en plan gratuito)
         async function cargarMLBGratis() {
             try {
                 const hoy = new Date().toISOString().split('T')[0];
@@ -569,7 +747,6 @@
             }
         }
 
-        // Noticias
         async function cargarNoticiasGratis() {
             try {
                 const res = await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.marca.com/futbol/rss.xml');
@@ -586,7 +763,6 @@
             }
         }
 
-        // Videos (usando RapidAPI free-football-soccer-videos)
         async function cargarVideosFutbol() {
             try {
                 const res = await fetchWithProxy(
@@ -606,12 +782,9 @@
             }
         }
 
-        // ================================================================
-        // 9. EQUIPOS (con AllSportsAPI2 y colores)
-        // ================================================================
         async function cargarEquipos() {
             try {
-                const tournamentId = 17; // Premier League
+                const tournamentId = 17;
                 const seasonId = 76986;
                 const res = await fetchWithProxy(
                     `https://allsportsapi2.p.rapidapi.com/api/tournament/${tournamentId}/season/${seasonId}/teams`,
@@ -643,21 +816,45 @@
         }
 
         // ================================================================
-        // 10. TEMA OSCURO/CLARO, BUSCADOR, NOTIFICACIONES
+        // 9. TEMA OSCURO/CLARO, SIDEBAR, BUSCADOR
         // ================================================================
         function toggleTheme() {
             const html = document.documentElement;
             const current = html.getAttribute('data-theme');
             const next = current === 'dark' ? 'light' : 'dark';
             html.setAttribute('data-theme', next);
-            document.getElementById('themeToggle').textContent = next === 'dark' ? '🌙' : '☀️';
+            document.getElementById('themeIcon').textContent = next === 'dark' ? '🌙' : '☀️';
+            document.getElementById('themeLabel').textContent = next === 'dark' ? 'Oscuro' : 'Claro';
             localStorage.setItem('theme', next);
         }
         function cargarTheme() {
             const saved = localStorage.getItem('theme') || 'dark';
             document.documentElement.setAttribute('data-theme', saved);
-            document.getElementById('themeToggle').textContent = saved === 'dark' ? '🌙' : '☀️';
+            document.getElementById('themeIcon').textContent = saved === 'dark' ? '🌙' : '☀️';
+            document.getElementById('themeLabel').textContent = saved === 'dark' ? 'Oscuro' : 'Claro';
         }
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+        function cerrarSidebar() {
+            if (window.innerWidth <= 768) {
+                document.getElementById('sidebar').classList.remove('open');
+            }
+        }
+
+        // Al hacer clic en un enlace del menú, cerrar sidebar en móvil
+        document.querySelectorAll('.sidebar nav a').forEach(link => {
+            link.addEventListener('click', cerrarSidebar);
+        });
+        // Al hacer clic fuera del sidebar, cerrar
+        document.addEventListener('click', function(e) {
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.getElementById('sidebarToggle');
+            if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !toggle.contains(e.target)) {
+                sidebar.classList.remove('open');
+            }
+        });
+
         function inicializarBuscador() {
             document.getElementById('buscador').addEventListener('input', function(e) {
                 const query = e.target.value.toLowerCase().trim();
@@ -666,14 +863,9 @@
                 });
             });
         }
-        function habilitarNotificaciones() {
-            if (!('Notification' in window)) return;
-            if (Notification.permission === 'granted') return;
-            Notification.requestPermission();
-        }
 
         // ================================================================
-        // 11. CARGA PRINCIPAL
+        // 10. CARGA PRINCIPAL
         // ================================================================
         async function iniciarTodo() {
             cargarTheme();
@@ -692,9 +884,11 @@
             cargarShotmapDemo();
             actualizarHora();
             inicializarBuscador();
-            habilitarNotificaciones();
-            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
 
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+            document.getElementById('sidebarToggle').addEventListener('click', toggleSidebar);
+
+            // Cargar datos reales
             setTimeout(async () => {
                 await cargarFutbolAllSports();
                 await cargarNBAAllSports();
@@ -705,6 +899,7 @@
                 actualizarHora();
             }, 500);
 
+            // Actualizar cada 5 minutos
             setInterval(async () => {
                 await cargarFutbolAllSports();
                 await cargarNBAAllSports();
