@@ -1,142 +1,1225 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SPORTMAX 360</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
-    body { background: #0b0e14; color: #eef2f7; padding: 20px; }
-    .container { max-width: 1280px; margin: 0 auto; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPORTMAX 360 - Deportes en Vivo</title>
+    <style>
+        /* ===== RESET Y ESTILOS GLOBALES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo LT', tahoma, sans-serif;
+        }
+        body {
+            background: #0a0e17;
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+        /* ===== TEMA OSCURO / CLARO (toggle) ===== */
+        body.dark {
+            background: #0a0e17;
+            color: #e0e0e0;
+        }
+        body.light {
+            background: #f0f4f8;
+            color: #1a1a2e;
+        }
+        body.light header {
+            background: linear-gradient(135deg, #d4e4f7, #b0c4de);
+            border-bottom-color: #1b3a4b;
+        }
+        body.light nav {
+            background: #e8edf3;
+            border-bottom-color: #b0c4de;
+        }
+        body.light .card {
+            background: #ffffff;
+            border-color: #d0d8e0;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+        }
+        body.light .card h3 { color: #0d1b2a; }
+        body.light .card h4 { color: #2c3e50; }
+        body.light th { background: #d4e4f7; color: #0d1b2a; }
+        body.light td { color: #1a1a2e; border-bottom-color: #d0d8e0; }
+        body.light li { color: #1a1a2e; border-bottom-color: #d0d8e0; }
+        body.light .sede-item { background: #f0f4f8; border-color: #d0d8e0; }
+        body.light .video-item { background: #f0f4f8; border-color: #d0d8e0; }
+        body.light footer { background: #d4e4f7; border-top-color: #b0c4de; color: #1a1a2e; }
+        body.light #buscar { background: #fff; color: #1a1a2e; border-color: #b0c4de; }
+        body.light nav a { color: #1a1a2e; }
+        body.light nav a:hover { background: rgba(0,0,0,0.05); color: #0d1b2a; }
 
-    /* Header */
-    .header { text-align: center; padding: 30px 0 20px; border-bottom: 1px solid #2a303a; }
-    .header h1 { font-size: 2.5rem; background: linear-gradient(135deg, #facc15, #ef4444); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .header p { color: #9ca3af; margin-top: 6px; }
+        /* ===== LOADER ===== */
+        #loader {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+        #loader.active {
+            display: flex;
+        }
+        #loader .spinner {
+            background: #0d1b2a;
+            padding: 2rem 3rem;
+            border-radius: 16px;
+            border: 1px solid #00d4ff44;
+            text-align: center;
+            box-shadow: 0 0 60px rgba(0,212,255,0.2);
+        }
+        #loader .spinner .spin {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #1a2a3a;
+            border-top-color: #00d4ff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        #loader .spinner p {
+            color: #b0c4de;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
 
-    /* Grid */
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; margin: 30px 0; }
+        /* ===== TOAST DE ERROR ===== */
+        .toast-error {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #ff4444;
+            color: #fff;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            z-index: 1001;
+            max-width: 300px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            font-family: sans-serif;
+            animation: fadeInUp 0.3s ease;
+        }
+        .toast-error strong { display: block; margin-bottom: 4px; }
 
-    /* Cards */
-    .card { background: #151b23; border-radius: 16px; padding: 20px; border: 1px solid #2a303a; transition: 0.2s; }
-    .card:hover { border-color: #facc15; }
-    .card h2 { font-size: 1.25rem; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-    .card h2 span { background: #facc15; color: #0b0e14; font-size: 0.7rem; padding: 2px 10px; border-radius: 20px; font-weight: 700; }
+        /* ===== HEADER ===== */
+        header {
+            background: linear-gradient(135deg, #0d1b2a, #1b3a4b);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border-bottom: 3px solid #00d4ff;
+            box-shadow: 0 4px 30px rgba(0, 212, 255, 0.15);
+            transition: background 0.3s, border-color 0.3s;
+        }
+        header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #00d4ff, #7b2ffc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(0, 212, 255, 0.2);
+            letter-spacing: 2px;
+        }
+        header p {
+            color: #8899aa;
+            font-size: 1.1rem;
+            margin-top: 0.3rem;
+        }
 
-    .match, .game, .venue, .news-item, .video-item {
-      background: #1e2630; padding: 10px 14px; border-radius: 10px; margin-bottom: 8px;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .vs { color: #facc15; font-weight: bold; margin: 0 6px; }
-    .badge { background: #ef4444; color: #fff; font-size: 0.65rem; padding: 2px 10px; border-radius: 20px; }
+        /* ===== NAV ===== */
+        nav {
+            background: #111927;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem 1.2rem;
+            border-bottom: 1px solid #1a2a3a;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            transition: background 0.3s;
+        }
+        nav a {
+            color: #b0c4de;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        nav a:hover {
+            color: #fff;
+            background: rgba(0, 212, 255, 0.15);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+        }
+        #buscar {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            border: 1px solid #1a2a3a;
+            background: #0d1b2a;
+            color: #e0e0e0;
+            width: 180px;
+            transition: background 0.3s, color 0.3s, border-color 0.3s;
+        }
+        #theme-toggle {
+            background: none;
+            border: none;
+            color: #b0c4de;
+            font-size: 1.4rem;
+            cursor: pointer;
+            padding: 0 0.5rem;
+        }
 
-    .status-placeholder { color: #6b7280; font-style: italic; padding: 10px 0; }
+        /* ===== MAIN ===== */
+        main {
+            max-width: 1300px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        section {
+            margin-bottom: 3.5rem;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-left: 1rem;
+            border-left: 5px solid #00d4ff;
+            color: #fff;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.1);
+        }
+        body.light h2 { color: #0d1b2a; }
 
-    .footer { text-align: center; border-top: 1px solid #2a303a; padding: 25px 0 10px; margin-top: 30px; color: #6b7280; font-size: 0.9rem; }
-    .footer strong { color: #facc15; }
+        .card {
+            background: linear-gradient(145deg, #111927, #0d1520);
+            border-radius: 16px;
+            padding: 1.8rem;
+            margin-bottom: 1.8rem;
+            border: 1px solid #1a2a3a;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s, border-color 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+            border-color: #00d4ff44;
+        }
+        .card h3 {
+            color: #00d4ff;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .card h4 {
+            color: #b0c4de;
+            font-size: 1.1rem;
+            margin: 0.8rem 0 0.5rem 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+        }
+        th {
+            background: #0d1b2a;
+            color: #00d4ff;
+            padding: 0.8rem 0.6rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #00d4ff44;
+        }
+        td {
+            padding: 0.7rem 0.6rem;
+            border-bottom: 1px solid #1a2a3a;
+            color: #d0d8e0;
+        }
+        tr:hover td { background: #0d1b2a55; }
+        ul { list-style: none; padding: 0; }
+        li {
+            padding: 0.6rem 0.8rem;
+            border-bottom: 1px solid #1a2a3a;
+            color: #d0d8e0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.2s;
+        }
+        li:hover { background: #0d1b2a55; border-radius: 8px; }
+        li:last-child { border-bottom: none; }
 
-    @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
-  </style>
+        /* ===== BADGES ===== */
+        .live-badge {
+            background: #ff0040;
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            animation: pulse 1.5s infinite;
+            display: inline-block;
+            margin-right: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        @keyframes pulse {
+            0%,100% { opacity:1; transform:scale(1); }
+            50% { opacity:0.5; transform:scale(0.95); }
+        }
+        .vivo-texto { color:#00d4ff; font-weight:600; font-size:1.2rem; }
+
+        /* ===== SEDES ===== */
+        .sedes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        .sede-item {
+            background: #0d1b2a;
+            padding: 1.2rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #1a2a3a;
+            transition: all 0.3s;
+        }
+        .sede-item:hover {
+            border-color: #00d4ff;
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(0,212,255,0.05);
+        }
+        .sede-item .pais { color:#8899aa; font-size:0.85rem; }
+
+        /* ===== VIDEOS ===== */
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .video-item {
+            background: #0d1b2a;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #1a2a3a;
+            transition: all 0.3s;
+        }
+        .video-item:hover {
+            border-color: #00d4ff;
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(0,212,255,0.05);
+        }
+        .video-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .video-item .info {
+            padding: 1rem;
+        }
+        .video-item .info h4 {
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .video-item .info a {
+            color: #00d4ff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .video-item .info a:hover { text-decoration: underline; }
+
+        /* ===== SHOTMAP ===== */
+        #shotmapCanvas {
+            width: 100%;
+            height: auto;
+            background: #0d1b2a;
+            border-radius: 12px;
+            border: 1px solid #1a2a3a;
+        }
+
+        /* ===== FAVORITOS ===== */
+        .fav-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #ffd700;
+            transition: transform 0.2s;
+            margin-left: 0.5rem;
+        }
+        .fav-btn:hover { transform: scale(1.2); }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: #0d1520;
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid #1a2a3a;
+            color: #667788;
+            font-size: 0.95rem;
+            transition: background 0.3s;
+        }
+        footer span { color:#00d4ff; }
+        .update-time { font-size:0.8rem; color:#445566; margin-top:0.3rem; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .sedes-grid { grid-template-columns: repeat(2, 1fr); }
+            .videos-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 640px) {
+            header h1 { font-size: 1.5rem; letter-spacing: 0; }
+            nav {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.3rem;
+            }
+            nav a {
+                width: 100%;
+                text-align: center;
+                padding: 0.5rem 0;
+            }
+            #buscar { width: 100% !important; }
+            #theme-toggle { align-self: center; }
+            table { font-size: 0.7rem; }
+            th, td { padding: 0.4rem 0.2rem; }
+            #shotmapCanvas { height: 300px; width: 100%; }
+            .card { padding: 1rem; }
+            .sedes-grid { grid-template-columns: 1fr 1fr; }
+            .videos-grid { grid-template-columns: 1fr; }
+            h2 { font-size: 1.3rem; padding-left: 0.5rem; }
+            .vivo-texto { font-size: 1rem; }
+        }
+        @media (max-width: 400px) {
+            .sedes-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-
-  <!-- HEADER -->
-  <header class="header">
-    <h1>🏟️ SPORTMAX 360</h1>
-    <p>⚡ El deporte en tu pantalla — Datos en tiempo real</p>
-  </header>
-
-  <!-- GRID DE SECCIONES -->
-  <div class="grid">
-
-    <!-- MUNDIAL 2026 -->
-    <div class="card">
-      <h2>🌍 Mundial 2026 <span>En Vivo</span></h2>
-      <div class="match"><span>🔴 Partido destacado</span><span class="badge">Cargando...</span></div>
-      <p style="margin:12px 0 6px; font-weight:600;">📋 Últimos Resultados</p>
-      <div class="match"><span>México</span><span class="vs">2-1</span><span>Argentina</span></div>
-      <div class="match"><span>Canadá</span><span class="vs">0-3</span><span>Brasil</span></div>
-      <div class="match"><span>EE.UU.</span><span class="vs">1-1</span><span>Alemania</span></div>
-      <p style="margin:12px 0 6px; font-weight:600;">📅 Próximos</p>
-      <div class="match"><span>España vs Francia</span><span>20/06</span></div>
-      <div class="match"><span>Inglaterra vs Países Bajos</span><span>21/06</span></div>
-      <div class="status-placeholder">🎯 Mapa de tiros — Cargando...</div>
+    <!-- ===== LOADER ===== -->
+    <div id="loader">
+        <div class="spinner">
+            <div class="spin"></div>
+            <p>Cargando datos...</p>
+        </div>
     </div>
 
-    <!-- NBA -->
-    <div class="card">
-      <h2>🏀 NBA 2025‑26</h2>
-      <p style="margin-bottom:6px; font-weight:600;">📅 Hoy</p>
-      <div class="game"><span>Lakers @ Celtics</span><span>20:30 ET</span></div>
-      <div class="game"><span>Warriors @ Nuggets</span><span>22:00 ET</span></div>
-      <p style="margin:12px 0 6px; font-weight:600;">📋 Últimos resultados</p>
-      <div class="game"><span>Heat 98 - 105 Bucks</span><span>Final</span></div>
-      <div class="game"><span>Suns 112 - 110 Clippers</span><span>Final</span></div>
-    </div>
+    <!-- ===== HEADER ===== -->
+    <header>
+        <h1>🏟️ SPORTMAX 360</h1>
+        <p>⚡ El deporte en tu pantalla — Datos en tiempo real</p>
+    </header>
 
-    <!-- MLB -->
-    <div class="card">
-      <h2>⚾ MLB 2026</h2>
-      <p style="margin-bottom:6px; font-weight:600;">📅 Hoy</p>
-      <div class="game"><span>Yankees @ Red Sox</span><span>19:00 ET</span></div>
-      <p style="margin:12px 0 6px; font-weight:600;">📋 Últimos resultados</p>
-      <div class="game"><span>Dodgers 5 - 3 Padres</span><span>Final</span></div>
-      <div class="game"><span>Astros 2 - 4 Rangers</span><span>Final</span></div>
-    </div>
+    <!-- ===== NAV ===== -->
+    <nav>
+        <a href="#mundial">🌍 Mundial 2026</a>
+        <a href="#nba">🏀 NBA</a>
+        <a href="#mlb">⚾ MLB</a>
+        <a href="#tenis">🎾 Tenis</a>
+        <a href="#pronosticos">🔮 Pronósticos</a>
+        <a href="#sedes">📍 Sedes</a>
+        <a href="#noticias">📰 Noticias</a>
+        <a href="#videos">🎥 Videos</a>
+        <input type="text" id="buscar" placeholder="🔍 Buscar equipo...">
+        <button id="theme-toggle">🌙</button>
+    </nav>
 
-    <!-- SEDES -->
-    <div class="card">
-      <h2>📍 Sedes Mundial 2026</h2>
-      <div class="venue">🏟️ Estadio Azteca <span>🇲🇽 México</span></div>
-      <div class="venue">🏟️ MetLife Stadium <span>🇺🇸 Nueva York</span></div>
-      <div class="venue">🏟️ BC Place <span>🇨🇦 Vancouver</span></div>
-      <div class="venue">🏟️ AT&T Stadium <span>🇺🇸 Dallas</span></div>
-      <div class="venue">🏟️ Estadio BBVA <span>🇲🇽 Monterrey</span></div>
-      <div class="venue">🏟️ SoFi Stadium <span>🇺🇸 Los Ángeles</span></div>
-    </div>
+    <!-- ===== MAIN ===== -->
+    <main>
+        <!-- 🌍 MUNDIAL 2026 -->
+        <section id="mundial">
+            <h2>🌍 Mundial 2026 — México · EE.UU. · Canadá</h2>
+            <div class="card">
+                <h3>🔴 <span class="live-badge">En Vivo</span> Partido destacado</h3>
+                <p id="partido-en-vivo" class="vivo-texto">Cargando partido...</p>
+            </div>
+            <div class="card">
+                <h3>📋 Últimos Resultados</h3>
+                <table id="tabla-resultados">
+                    <thead><tr><th>Local</th><th>Visitante</th><th>Resultado</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="card">
+                <h3>📅 Próximos Partidos</h3>
+                <ul id="lista-proximos"></ul>
+            </div>
+            <div id="contenedor-posiciones"></div>
+            <!-- 🎯 SHOTMAP -->
+            <div class="card">
+                <h3>🎯 Mapa de Tiros</h3>
+                <canvas id="shotmapCanvas" width="700" height="450"></canvas>
+                <p id="shotmap-info" style="color:#667788; font-size:0.85rem; margin-top:0.5rem; text-align:center;">Cargando mapa de tiros...</p>
+            </div>
+        </section>
 
-    <!-- NOTICIAS -->
-    <div class="card">
-      <h2>📰 Noticias</h2>
-      <div class="news-item">🇲🇽 México lidera su grupo <span>hace 2h</span></div>
-      <div class="news-item">🏀 LeBron anuncia su retiro <span>hace 5h</span></div>
-      <div class="news-item">⚾ Nuevo formato de playoffs <span>hace 1d</span></div>
-    </div>
+        <!-- 🏀 NBA -->
+        <section id="nba">
+            <h2>🏀 NBA — Temporada 2025‑2026</h2>
+            <div class="card">
+                <h3>📅 Hoy / Próximos</h3>
+                <ul id="lista-nba"></ul>
+            </div>
+            <div class="card">
+                <h3>📋 Últimos Resultados</h3>
+                <table id="tabla-nba-resultados">
+                    <thead><tr><th>Visitante</th><th>Local</th><th>Resultado</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div id="contenedor-nba-posiciones"></div>
+        </section>
 
-    <!-- VIDEOS + GALERIA + FORO + CONTACTO (resumido) -->
-    <div class="card">
-      <h2>🎥 Videos destacados</h2>
-      <div class="video-item">🎬 Resumen México vs Argentina <span>4:32</span></div>
-      <div class="video-item">🎬 Mejores jugadas NBA <span>8:15</span></div>
-      <hr style="border-color:#2a303a; margin:14px 0;">
-      <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
-        <span>📸 Galería <span style="color:#6b7280;">Próximamente</span></span>
-        <span>💬 Foro <span style="color:#6b7280;">Próximamente</span></span>
-        <span>📞 Contacto <span style="color:#6b7280;">Próximamente</span></span>
-      </div>
-    </div>
+        <!-- ⚾ MLB -->
+        <section id="mlb">
+            <h2>⚾ MLB — Temporada 2026</h2>
+            <div class="card">
+                <h3>📅 Hoy / Próximos</h3>
+                <ul id="lista-mlb"></ul>
+            </div>
+            <div class="card">
+                <h3>📋 Últimos Resultados</h3>
+                <table id="tabla-mlb-resultados">
+                    <thead><tr><th>Visitante</th><th>Local</th><th>Resultado</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div id="contenedor-mlb-posiciones"></div>
+        </section>
 
-  </div>
+        <!-- 🎾 TENIS -->
+        <section id="tenis">
+            <h2>🎾 Tenis — ATP / WTA</h2>
+            <div class="card">
+                <h3>📅 Partidos de hoy</h3>
+                <ul id="lista-tenis"></ul>
+            </div>
+            <div class="card">
+                <h3>📋 Resultados recientes</h3>
+                <table id="tabla-tenis-resultados">
+                    <thead><tr><th>Jugador 1</th><th>Jugador 2</th><th>Resultado</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    © 2026 <strong>SPORTMAX 360</strong> — Todos los derechos reservados ⚡<br>
-    📡 Datos actualizados: <span id="clock">--:--</span>
-  </footer>
+        <!-- 🔮 PRONÓSTICOS -->
+        <section id="pronosticos">
+            <h2>🔮 Pronósticos de Fútbol</h2>
+            <div class="card">
+                <h3>⚽ Predicciones para hoy</h3>
+                <ul id="lista-pronosticos"></ul>
+            </div>
+        </section>
 
-</div>
+        <!-- 📍 SEDES -->
+        <section id="sedes">
+            <h2>📍 Sedes del Mundial 2026</h2>
+            <div class="card">
+                <div class="sedes-grid">
+                    <div class="sede-item">🏟️ Estadio Azteca <div class="pais">🇲🇽 México</div></div>
+                    <div class="sede-item">🏟️ MetLife Stadium <div class="pais">🇺🇸 Nueva York</div></div>
+                    <div class="sede-item">🏟️ BC Place <div class="pais">🇨🇦 Vancouver</div></div>
+                    <div class="sede-item">🏟️ AT&T Stadium <div class="pais">🇺🇸 Dallas</div></div>
+                    <div class="sede-item">🏟️ Estadio BBVA <div class="pais">🇲🇽 Monterrey</div></div>
+                    <div class="sede-item">🏟️ SoFi Stadium <div class="pais">🇺🇸 Los Ángeles</div></div>
+                </div>
+            </div>
+        </section>
 
-<script>
-  // Reloj en tiempo real para el footer
-  function updateClock() {
-    const now = new Date();
-    const time = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-    document.getElementById('clock').textContent = time;
-  }
-  updateClock();
-  setInterval(updateClock, 10000);
-</script>
+        <!-- 📰 NOTICIAS -->
+        <section id="noticias">
+            <h2>📰 Noticias Deportivas</h2>
+            <div class="card" id="contenedor-noticias"><p>Cargando noticias...</p></div>
+        </section>
 
+        <!-- 🎥 VIDEOS -->
+        <section id="videos">
+            <h2>🎥 Videos Destacados</h2>
+            <div class="card">
+                <div id="contenedor-videos" class="videos-grid">
+                    <p style="color:#667788; grid-column:1/-1; text-align:center;">Cargando videos...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <p>© 2026 <span>SPORTMAX 360</span> — Todos los derechos reservados ⚡</p>
+        <p class="update-time">📡 Datos actualizados: <span id="hora-actualizacion">--:--</span></p>
+    </footer>
+
+    <script>
+        // ================================================================
+        // 1. CONFIGURACIÓN DE APIS (RapidAPI)
+        // ================================================================
+        const RAPIDAPI_KEY = 'f019ce89dfmhsh54169a00fd80f9b1c5aadjsn50be5f785083';
+        const RAPIDAPI_HOST_FOOTBALL = 'api-football-v1.p.rapidapi.com';
+        const RAPIDAPI_HOST_NBA = 'api-nba-v1.p.rapidapi.com';
+        const RAPIDAPI_HOST_TENIS = 'tennisapi.p.rapidapi.com'; // Ejemplo
+        const RAPIDAPI_HOST_PRONOSTICOS = 'football-prediction-api.p.rapidapi.com'; // Ejemplo
+
+        // ================================================================
+        // 2. DATOS MOCK (respaldo)
+        // ================================================================
+        const MOCK = {
+            futbol: {
+                enVivo: '🔥 México 1‑0 Argentina (Minuto 67)',
+                resultados: [
+                    { local: 'Brasil', visitante: 'Alemania', resultado: '2‑1' },
+                    { local: 'Francia', visitante: 'Inglaterra', resultado: '0‑0' },
+                    { local: 'España', visitante: 'Holanda', resultado: '3‑2' },
+                    { local: 'Portugal', visitante: 'Uruguay', resultado: '1‑1' }
+                ],
+                proximos: [
+                    { local: 'Argentina', visitante: 'Brasil', fecha: '15/06/2026 20:00' },
+                    { local: 'Alemania', visitante: 'Francia', fecha: '16/06/2026 18:00' },
+                    { local: 'Inglaterra', visitante: 'España', fecha: '17/06/2026 21:00' }
+                ],
+                posiciones: [{
+                    grupo: 'Grupo A',
+                    equipos: [
+                        { pos:1, nombre:'México', pts:6, pj:2, pg:2, pe:0, pp:0 },
+                        { pos:2, nombre:'Argentina', pts:4, pj:2, pg:1, pe:1, pp:0 },
+                        { pos:3, nombre:'Polonia', pts:1, pj:2, pg:0, pe:1, pp:1 }
+                    ]
+                },{
+                    grupo: 'Grupo B',
+                    equipos: [
+                        { pos:1, nombre:'Brasil', pts:6, pj:2, pg:2, pe:0, pp:0 },
+                        { pos:2, nombre:'Alemania', pts:3, pj:2, pg:1, pe:0, pp:1 },
+                        { pos:3, nombre:'Japón', pts:0, pj:2, pg:0, pe:0, pp:2 }
+                    ]
+                }]
+            },
+            nba: {
+                proximos: ['🏀 Lakers @ Warriors — 15/06 22:00', '🏀 Celtics @ Heat — 16/06 20:30', '🏀 Nuggets @ Suns — 16/06 23:00'],
+                resultados: [
+                    { visitante: 'Timberwolves', local: 'Mavericks', resultado: '112‑108' },
+                    { visitante: 'Knicks', local: '76ers', resultado: '95‑99' }
+                ],
+                posiciones: {
+                    este: [ {pos:1, equipo:'Celtics', g:45, p:20, pct:'.692'}, {pos:2, equipo:'Bucks', g:43, p:22, pct:'.662'}, {pos:3, equipo:'76ers', g:40, p:25, pct:'.615'} ],
+                    oeste: [ {pos:1, equipo:'Nuggets', g:48, p:17, pct:'.738'}, {pos:2, equipo:'Thunder', g:44, p:21, pct:'.677'}, {pos:3, equipo:'Lakers', g:41, p:24, pct:'.631'} ]
+                }
+            },
+            mlb: {
+                proximos: ['⚾ Yankees @ Red Sox — 15/06 19:00', '⚾ Dodgers @ Padres — 15/06 21:00', '⚾ Astros @ Rangers — 16/06 20:00'],
+                resultados: [ {visitante:'Mets', local:'Braves', resultado:'6‑4'}, {visitante:'Giants', local:'Diamondbacks', resultado:'3‑5'} ],
+                posiciones: [
+                    { liga:'Liga Nacional', equipos:[ {pos:1, equipo:'Dodgers', g:42, p:22, pct:'.656', dif:'‑'}, {pos:2, equipo:'Braves', g:38, p:26, pct:'.594', dif:'4.0'} ] },
+                    { liga:'Liga Americana', equipos:[ {pos:1, equipo:'Yankees', g:40, p:24, pct:'.625', dif:'‑'}, {pos:2, equipo:'Astros', g:37, p:27, pct:'.578', dif:'3.0'} ] }
+                ]
+            },
+            tenis: {
+                proximos: ['🎾 Nadal vs Djokovic — 15/06 18:00', '🎾 Alcaraz vs Sinner — 16/06 20:00'],
+                resultados: [ {jugador1:'Federer', jugador2:'Murray', resultado:'6‑4, 7‑6'} ]
+            },
+            pronosticos: [
+                { partido: 'Brasil vs Argentina', prediccion: 'Gana Brasil (1.85)', confianza: '75%' },
+                { partido: 'España vs Portugal', prediccion: 'Empate (3.10)', confianza: '60%' }
+            ],
+            noticias: [
+                {titulo:'🔥 Messi: "Estamos listos para el Mundial"', fecha:'14/06/2026'},
+                {titulo:'🇧🇷 Brasil golea en amistoso previo', fecha:'14/06/2026'}
+            ]
+        };
+
+        // ================================================================
+        // 3. UTILIDADES
+        // ================================================================
+        const ZONA_LIMA = { timeZone:'America/Lima', day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' };
+
+        // --- LOADER ---
+        function mostrarLoader(show) {
+            const loader = document.getElementById('loader');
+            if (loader) loader.classList.toggle('active', show);
+        }
+
+        // --- TOAST DE ERROR ---
+        function mostrarError(titulo, mensaje) {
+            const div = document.createElement('div');
+            div.className = 'toast-error';
+            div.innerHTML = `<strong>${titulo}</strong>${mensaje}`;
+            document.body.appendChild(div);
+            setTimeout(() => { div.style.opacity = '0'; setTimeout(() => div.remove(), 500); }, 5000);
+        }
+
+        // --- FAVORITOS (LocalStorage) ---
+        const favoritos = {
+            agregar(equipo) {
+                let favs = JSON.parse(localStorage.getItem('favs')) || [];
+                if (!favs.includes(equipo)) { favs.push(equipo); localStorage.setItem('favs', JSON.stringify(favs)); }
+            },
+            eliminar(equipo) {
+                let favs = JSON.parse(localStorage.getItem('favs')) || [];
+                favs = favs.filter(e => e !== equipo);
+                localStorage.setItem('favs', JSON.stringify(favs));
+            },
+            obtener() { return JSON.parse(localStorage.getItem('favs')) || []; },
+            toggle(equipo) {
+                const favs = this.obtener();
+                if (favs.includes(equipo)) { this.eliminar(equipo); return false; }
+                else { this.agregar(equipo); return true; }
+            }
+        };
+
+        // --- NOTIFICACIONES PUSH ---
+        function habilitarNotificaciones() {
+            if (!('Notification' in window)) return;
+            if (Notification.permission === 'granted') return;
+            Notification.requestPermission();
+        }
+        function notificarPartido(evento) {
+            if (Notification.permission === 'granted') {
+                new Notification('⚽ SPORTMAX 360', {
+                    body: evento,
+                    icon: 'https://img.icons8.com/color/48/000000/football2.png'
+                });
+            }
+        }
+
+        // --- ACTUALIZAR HORA ---
+        function actualizarHora() {
+            const el = document.getElementById('hora-actualizacion');
+            if (el) el.textContent = new Date().toLocaleString('es-ES', ZONA_LIMA);
+        }
+
+        // ================================================================
+        // 4. RENDERIZADO (fútbol)
+        // ================================================================
+        function mostrarEnVivo(d) {
+            document.getElementById('partido-en-vivo').textContent = d || MOCK.futbol.enVivo;
+        }
+        function mostrarResultados(d) {
+            const b = document.querySelector('#tabla-resultados tbody');
+            b.innerHTML = '';
+            (d || MOCK.futbol.resultados).forEach(p => {
+                b.innerHTML += `<tr><td>${p.local}</td><td>${p.visitante}</td><td><strong>${p.resultado}</strong></td></tr>`;
+            });
+        }
+        function mostrarProximos(d) {
+            const u = document.getElementById('lista-proximos');
+            u.innerHTML = '';
+            (d || MOCK.futbol.proximos).forEach(x => {
+                u.innerHTML += `<li>⚽ ${x.local} vs ${x.visitante} — 📅 ${x.fecha}</li>`;
+            });
+        }
+        function mostrarPosiciones(d) {
+            const c = document.getElementById('contenedor-posiciones');
+            c.innerHTML = `<div class="card"><h3>📊 Posiciones por Grupo</h3></div>`;
+            (d || MOCK.futbol.posiciones).forEach(g => {
+                let h = `<div class="card"><h4>${g.grupo}</h4><table><thead><tr><th>#</th><th>Equipo</th><th>Pts</th><th>PJ</th><th>PG</th><th>PE</th><th>PP</th></tr></thead><tbody>`;
+                g.equipos.forEach(e => h += `<tr><td>${e.pos}</td><td>${e.nombre}</td><td>${e.pts}</td><td>${e.pj}</td><td>${e.pg}</td><td>${e.pe}</td><td>${e.pp}</td></tr>`);
+                c.innerHTML += h + '</tbody></table></div>';
+            });
+        }
+
+        // ================================================================
+        // 5. RENDERIZADO (NBA, MLB, Tenis, Pronósticos)
+        // ================================================================
+        function mostrarNBAProximos(d) {
+            const u = document.getElementById('lista-nba');
+            u.innerHTML = '';
+            (d || MOCK.nba.proximos).forEach(x => u.innerHTML += `<li>${x}</li>`);
+        }
+        function mostrarNBAResultados(d) {
+            const b = document.querySelector('#tabla-nba-resultados tbody');
+            b.innerHTML = '';
+            (d || MOCK.nba.resultados).forEach(x => b.innerHTML += `<tr><td>${x.visitante}</td><td>${x.local}</td><td><strong>${x.resultado}</strong></td></tr>`);
+        }
+        function mostrarNBAPosiciones(d) {
+            const c = document.getElementById('contenedor-nba-posiciones');
+            const p = d || MOCK.nba.posiciones;
+            let h = `<div class="card"><h3>📊 Clasificaciones NBA</h3></div>`;
+            h += `<div class="card"><h4>🏆 Conferencia Este</h4><table><thead><tr><th>#</th><th>Equipo</th><th>G</th><th>P</th><th>%</th></tr></thead><tbody>`;
+            p.este.forEach(x => h += `<tr><td>${x.pos}</td><td>${x.equipo}</td><td>${x.g}</td><td>${x.p}</td><td>${x.pct}</td></tr>`);
+            h += `</tbody></table></div><div class="card"><h4>🏆 Conferencia Oeste</h4><table><thead><tr><th>#</th><th>Equipo</th><th>G</th><th>P</th><th>%</th></tr></thead><tbody>`;
+            p.oeste.forEach(x => h += `<tr><td>${x.pos}</td><td>${x.equipo}</td><td>${x.g}</td><td>${x.p}</td><td>${x.pct}</td></tr>`);
+            c.innerHTML = h + '</tbody></table></div>';
+        }
+
+        function mostrarMLBProximos(d) {
+            const u = document.getElementById('lista-mlb');
+            u.innerHTML = '';
+            (d || MOCK.mlb.proximos).forEach(x => u.innerHTML += `<li>${x}</li>`);
+        }
+        function mostrarMLBResultados(d) {
+            const b = document.querySelector('#tabla-mlb-resultados tbody');
+            b.innerHTML = '';
+            (d || MOCK.mlb.resultados).forEach(x => b.innerHTML += `<tr><td>${x.visitante}</td><td>${x.local}</td><td><strong>${x.resultado}</strong></td></tr>`);
+        }
+        function mostrarMLBPosiciones(d) {
+            const c = document.getElementById('contenedor-mlb-posiciones');
+            const p = d || MOCK.mlb.posiciones;
+            let h = `<div class="card"><h3>📊 MLB 2026</h3></div>`;
+            p.forEach(l => {
+                h += `<div class="card"><h4>${l.liga}</h4><table><thead><tr><th>#</th><th>Equipo</th><th>G</th><th>P</th><th>%</th><th>Dif</th></tr></thead><tbody>`;
+                l.equipos.forEach(x => h += `<tr><td>${x.pos}</td><td>${x.equipo}</td><td>${x.g}</td><td>${x.p}</td><td>${x.pct}</td><td>${x.dif}</td></tr>`);
+                c.innerHTML = h + '</tbody></table></div>';
+            });
+        }
+
+        function mostrarTenisProximos(d) {
+            const u = document.getElementById('lista-tenis');
+            u.innerHTML = '';
+            (d || MOCK.tenis.proximos).forEach(x => u.innerHTML += `<li>${x}</li>`);
+        }
+        function mostrarTenisResultados(d) {
+            const b = document.querySelector('#tabla-tenis-resultados tbody');
+            b.innerHTML = '';
+            (d || MOCK.tenis.resultados).forEach(x => b.innerHTML += `<tr><td>${x.jugador1}</td><td>${x.jugador2}</td><td><strong>${x.resultado}</strong></td></tr>`);
+        }
+
+        function mostrarPronosticos(d) {
+            const u = document.getElementById('lista-pronosticos');
+            u.innerHTML = '';
+            (d || MOCK.pronosticos).forEach(p => {
+                u.innerHTML += `<li>🔮 ${p.partido} → ${p.prediccion} (Confianza: ${p.confianza})</li>`;
+            });
+        }
+
+        function mostrarNoticias(d) {
+            const c = document.getElementById('contenedor-noticias');
+            c.innerHTML = '';
+            (d || MOCK.noticias).forEach(n => {
+                c.innerHTML += `<div style="padding:.6rem 0;border-bottom:1px solid #1a2a3a;"><strong style="color:#fff;">${n.titulo}</strong><br><small style="color:#667788;">📅 ${n.fecha}</small></div>`;
+            });
+        }
+
+        // ================================================================
+        // 6. SHOTMAP
+        // ================================================================
+        function dibujarShotmap(shotmap) {
+            const canvas = document.getElementById('shotmapCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+
+            ctx.fillStyle = '#0d1b2a';
+            ctx.fillRect(0, 0, w, h);
+            ctx.strokeStyle = '#1a3a4a';
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(50, 50, w - 100, h - 100);
+            ctx.beginPath();
+            ctx.arc(w/2, h/2, 40, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(w/2, 50);
+            ctx.lineTo(w/2, h - 50);
+            ctx.stroke();
+            ctx.strokeRect(50, h/2 - 60, 80, 120);
+            ctx.strokeRect(w - 130, h/2 - 60, 80, 120);
+
+            if (!shotmap || shotmap.length === 0) {
+                ctx.fillStyle = '#667788';
+                ctx.font = '20px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Sin datos de tiros', w/2, h/2);
+                document.getElementById('shotmap-info').textContent = 'ℹ️ No hay tiros registrados.';
+                return;
+            }
+
+            shotmap.forEach(shot => {
+                const x = (shot.playerCoordinates.x / 100) * (w - 100) + 50;
+                const y = h - ((shot.playerCoordinates.y / 100) * (h - 100) + 50);
+                let color, label;
+                if (shot.shotType === 'goal') { color = '#00ff88'; label = '⚽'; }
+                else if (shot.shotType === 'save') { color = '#ffaa00'; label = '🧤'; }
+                else if (shot.shotType === 'block') { color = '#ff4444'; label = '🛡️'; }
+                else if (shot.shotType === 'post') { color = '#ff66ff'; label = '📯'; }
+                else { color = '#8888ff'; label = '❌'; }
+                ctx.beginPath();
+                ctx.arc(x, y, 6, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                ctx.fillStyle = '#fff';
+                ctx.font = '9px Arial';
+                ctx.fillText(shot.time + "'", x + 10, y - 5);
+            });
+
+            document.getElementById('shotmap-info').textContent = `✅ ${shotmap.length} tiros mostrados.`;
+        }
+
+        // ================================================================
+        // 7. FUNCIONES DE CARGA DE APIS
+        // ================================================================
+
+        // ⚽ FÚTBOL
+        async function cargarFutbolRapid() {
+            try {
+                const hoy = new Date().toISOString().split('T')[0];
+                const resLive = await fetch('https://api-football-v1.p.rapidapi.com/v3/fixtures?live=all', {
+                    headers: { 'X-RapidAPI-Key': RAPIDAPI_KEY, 'X-RapidAPI-Host': RAPIDAPI_HOST_FOOTBALL }
+                });
+                if (!resLive.ok) throw new Error('HTTP ' + resLive.status);
+                const dataLive = await resLive.json();
+                if (Array.isArray(dataLive?.response) && dataLive.response.length > 0) {
+                    const v = dataLive.response[0];
+                    mostrarEnVivo(`🔥 ${v.teams.home.name} ${v.goals.home}‑${v.goals.away} ${v.teams.away.name}`);
+                    const matchId = v.fixture.id;
+                    if (matchId) cargarShotmap(matchId);
+                } else {
+                    document.getElementById('shotmap-info').textContent = '⏳ Sin partido en vivo.';
+                }
+
+                const resFin = await fetch(`https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${hoy}&status=FT`, {
+                    headers: { 'X-RapidAPI-Key': RAPIDAPI_KEY, 'X-RapidAPI-Host': RAPIDAPI_HOST_FOOTBALL }
+                });
+                if (resFin.ok) {
+                    const dataFin = await resFin.json();
+                    const finalizados = dataFin.response?.slice(0, 4) || [];
+                    if (finalizados.length) {
+                        const resultados = finalizados.map(f => ({ local: f.teams.home.name, visitante: f.teams.away.name, resultado: `${f.goals.home}‑${f.goals.away}` }));
+                        mostrarResultados(resultados);
+                    }
+                }
+
+                const resProx = await fetch(`https://api-football-v1.p.rapidapi.com/v3/fixtures?date=${hoy}&status=NS`, {
+                    headers: { 'X-RapidAPI-Key': RAPIDAPI_KEY, 'X-RapidAPI-Host': RAPIDAPI_HOST_FOOTBALL }
+                });
+                if (resProx.ok) {
+                    const dataProx = await resProx.json();
+                    const proximos = dataProx.response?.slice(0, 5) || [];
+                    if (proximos.length) {
+                        const proxData = proximos.map(f => ({ local: f.teams.home.name, visitante: f.teams.away.name, fecha: new Date(f.fixture.date).toLocaleString('es-ES', ZONA_LIMA) }));
+                        mostrarProximos(proxData);
+                    }
+                }
+
+                const resStand = await fetch('https://api-football-v1.p.rapidapi.com/v3/standings?league=1&season=2026', {
+                    headers: { 'X-RapidAPI-Key': RAPIDAPI_KEY, 'X-RapidAPI-Host': RAPIDAPI_HOST_FOOTBALL }
+                });
+                if (resStand.ok) {
+                    const dataStand = await resStand.json();
+                    if (dataStand.response?.length) {
+                        const liga = dataStand.response[0];
+                        const equipos = liga.league.standings[0]?.slice(0, 5) || [];
+                        const posiciones = [{
+                            grupo: liga.league.name,
+                            equipos: equipos.map((eq, i) => ({ pos: i+1, nombre: eq.team.name, pts: eq.points, pj: eq.all.played, pg: eq.all.win, pe: eq.all.draw, pp: eq.all.lose }))
+                        }];
+                        mostrarPosiciones(posiciones);
+                    }
+                }
+            } catch (e) {
+                console.log('ℹ️ RapidAPI Fútbol no disponible, usando MOCK');
+                mostrarError('Fútbol', 'Usando datos de prueba');
+            }
+        }
+
+        // 🎯 SHOTMAP (con fallback)
+        async function cargarShotmap(matchId) {
+            try {
+                const url = `https://footapi7.p.rapidapi.com/api/match/${matchId}/shotmap`;
+                const res = await fetch(url, {
+                    headers: { 'x-rapidapi-key': RAPIDAPI_KEY, 'x-rapidapi-host': 'footapi7.p.rapidapi.com' }
+                });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const data = await res.json();
+                if (data.shotmap && data.shotmap.length > 0) {
+                    dibujarShotmap(data.shotmap);
+                } else {
+                    throw new Error('Sin datos');
+                }
+            } catch (e) {
+                console.log('ℹ️ Shotmap no disponible, usando demo');
+                const demo = [
+                    { playerCoordinates: { x: 80, y: 40 }, shotType: 'goal', time: 12 },
+                    { playerCoordinates: { x: 75, y: 35 }, shotType: 'save', time: 23 },
+                    { playerCoordinates: { x: 85, y: 45 }, shotType: 'block', time: 34 },
+                    { playerCoordinates: { x: 60, y: 50 }, shotType: 'post', time: 45 },
+                    { playerCoordinates: { x: 70, y: 30 }, shotType: 'miss', time: 56 }
+                ];
+                dibujarShotmap(demo);
+                document.getElementById('shotmap-info').textContent = '⚠️ Datos de demostración (API no disponible)';
+            }
+        }
+
+        // 🏀 NBA
+        async function cargarNBARapid() {
+            try {
+                const hoy = new Date().toISOString().split('T')[0];
+                const res = await fetch(`https://api-nba-v1.p.rapidapi.com/games?date=${hoy}`, {
+                    headers: { 'X-RapidAPI-Key': RAPIDAPI_KEY, 'X-RapidAPI-Host': RAPIDAPI_HOST_NBA }
+                });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const data = await res.json();
+                if (data.response?.length) {
+                    const juegos = data.response;
+                    const proximos = juegos.slice(0, 5).map(g => {
+                        const fecha = new Date(g.date.start).toLocaleString('es-ES', ZONA_LIMA);
+                        return `🏀 ${g.teams.visitors.name} @ ${g.teams.home.name} — ${fecha}`;
+                    });
+                    mostrarNBAProximos(proximos);
+                    const finalizados = juegos.filter(g => g.status.long === 'Finalizado').slice(0, 4);
+                    if (finalizados.length) {
+                        const resultados = finalizados.map(g => ({ visitante: g.teams.visitors.name, local: g.teams.home.name, resultado: `${g.scores.visitors}‑${g.scores.home}` }));
+                        mostrarNBAResultados(resultados);
+                    }
+                }
+                const resStand = await fetch('https://api-nba-v1.p.rapidapi.com/standings?league=standard&season=2025', {
+                    headers: { 'X-RapidAPI-Key': RAPIDAPI_KEY, 'X-RapidAPI-Host': RAPIDAPI_HOST_NBA }
+                });
+                if (resStand.ok) {
+                    const dataStand = await resStand.json();
+                    if (dataStand.response?.length) {
+                        const este = dataStand.response.filter(t => t.conference.name === 'East').slice(0, 5);
+                        const oeste = dataStand.response.filter(t => t.conference.name === 'West').slice(0, 5);
+                        mostrarNBAPosiciones({
+                            este: este.map((t, i) => ({ pos: i+1, equipo: t.team.name, g: t.win.total, p: t.loss.total, pct: t.win.percentage })),
+                            oeste: oeste.map((t, i) => ({ pos: i+1, equipo: t.team.name, g: t.win.total, p: t.loss.total, pct: t.win.percentage }))
+                        });
+                    }
+                }
+            } catch (e) {
+                console.log('ℹ️ NBA no disponible, usando MOCK');
+                mostrarError('NBA', 'Usando datos de prueba');
+            }
+        }
+
+        // ⚾ MLB (gratis)
+        async function cargarMLBGratis() {
+            try {
+                const hoy = new Date().toISOString().split('T')[0];
+                const res = await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${hoy}`);
+                if (!res.ok) throw new Error('MLB API no disponible');
+                const data = await res.json();
+                if (data.dates?.length && data.dates[0].games?.length) {
+                    const juegos = data.dates[0].games;
+                    const proximos = juegos.slice(0, 5).map(g => {
+                        const fecha = new Date(g.gameDate).toLocaleString('es-ES', ZONA_LIMA);
+                        const estado = g.status?.abstractGameState === 'Live' ? '🔴' : '⏰';
+                        return `⚾ ${estado} ${g.teams.away.team.name} @ ${g.teams.home.team.name} — ${fecha}`;
+                    });
+                    mostrarMLBProximos(proximos);
+                    const finalizados = juegos.filter(g => g.status?.abstractGameState === 'Final').slice(0, 4);
+                    if (finalizados.length) {
+                        const resultados = finalizados.map(g => ({ visitante: g.teams.away.team.name, local: g.teams.home.team.name, resultado: `${g.teams.away.score ?? '-'}‑${g.teams.home.score ?? '-'}` }));
+                        mostrarMLBResultados(resultados);
+                    }
+                }
+                const resStand = await fetch('https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=2026');
+                if (resStand.ok) {
+                    const dataStand = await resStand.json();
+                    if (dataStand.records?.length) {
+                        const posiciones = dataStand.records.map(liga => ({
+                            liga: liga.league.name,
+                            equipos: liga.teamRecords.slice(0, 5).map(r => ({ pos: r.divisionRank, equipo: r.team.name, g: r.wins, p: r.losses, pct: r.winningPercentage, dif: r.divisionGamesBack ?? '-' }))
+                        }));
+                        mostrarMLBPosiciones(posiciones);
+                    }
+                }
+            } catch (e) {
+                console.log('ℹ️ MLB no disponible, usando MOCK');
+                mostrarError('MLB', 'Usando datos de prueba');
+            }
+        }
+
+        // 🎾 TENIS
+        async function cargarTenisRapid() {
+            try {
+                const hoy = new Date().toISOString().split('T')[0];
+                const res = await fetch(`https://tennisapi.p.rapidapi.com/api/tennis/events?date=${hoy}`, {
+                    headers: { 'X-RapidAPI-Key': RAPIDAPI_KEY, 'X-RapidAPI-Host': RAPIDAPI_HOST_TENIS }
+                });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const data = await res.json();
+                if (data.events?.length) {
+                    const events = data.events;
+                    const proximos = events.slice(0, 5).map(e => {
+                        const fecha = new Date(e.startTime).toLocaleString('es-ES', ZONA_LIMA);
+                        return `🎾 ${e.player1} vs ${e.player2} — ${fecha}`;
+                    });
+                    mostrarTenisProximos(proximos);
+                    const finalizados = events.filter(e => e.status === 'finished').slice(0, 4);
+                    if (finalizados.length) {
+                        const resultados = finalizados.map(e => ({ jugador1: e.player1, jugador2: e.player2, resultado: e.score || '-' }));
+                        mostrarTenisResultados(resultados);
+                    }
+                }
+            } catch (e) {
+                console.log('ℹ️ Tenis no disponible, usando MOCK');
+                mostrarError('Tenis', 'Usando datos de prueba');
+            }
+        }
+
+        // 🔮 PRONÓSTICOS
+        async function cargarPronosticosRapid() {
+            try {
+                const res = await fetch('https://football-prediction-api.p.rapidapi.com/predictions?market=classic&date=today', {
+                    headers: { 'X-RapidAPI-Key': RAPIDAPI_KEY, 'X-RapidAPI-Host': RAPIDAPI_HOST_PRONOSTICOS }
+                });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const data = await res.json();
+                if (data.predictions?.length) {
+                    const preds = data.predictions.slice(0, 5).map(p => ({
+                        partido: `${p.home_team} vs ${p.away_team}`,
+                        prediccion: p.prediction || 'Sin predicción',
+                        confianza: p.confidence ? p.confidence + '%' : 'N/A'
+                    }));
+                    mostrarPronosticos(preds);
+                }
+            } catch (e) {
+                console.log('ℹ️ Pronósticos no disponibles, usando MOCK');
+                mostrarError('Pronósticos', 'Usando datos de prueba');
+            }
+        }
+
+        // 📰 NOTICIAS (RSS)
+        async function cargarNoticiasGratis() {
+            try {
+                const res = await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://www.marca.com/futbol/rss.xml');
+                if (!res.ok) throw new Error('RSS no disponible');
+                const data = await res.json();
+                if (data.items?.length) {
+                    const noticias = data.items.slice(0, 4).map(n => ({ titulo: n.title, fecha: new Date(n.pubDate).toLocaleDateString('es-ES') }));
+                    mostrarNoticias(noticias);
+                }
+            } catch (e) {
+                console.log('ℹ️ RSS no disponible, usando MOCK');
+                mostrarError('Noticias', 'Usando datos de prueba');
+            }
+        }
+
+        // 🎥 VIDEOS (mock)
+        function cargarVideosMock() {
+            const contenedor = document.getElementById('contenedor-videos');
+            contenedor.innerHTML = `
+                <div class="video-item">
+                    <img src="https://via.placeholder.com/300x150/0d1b2a/00d4ff?text=SPORTMAX" alt="Video ejemplo">
+                    <div class="info"><h4>⚽ Gol de Messi vs México</h4><a href="#">Ver video →</a></div>
+                </div>
+                <div class="video-item">
+                    <img src="https://via.placeholder.com/300x150/0d1b2a/00d4ff?text=SPORTMAX" alt="Video ejemplo">
+                    <div class="info"><h4>🏆 Resumen Final Mundial 2026</h4><a href="#">Ver video →</a></div>
+                </div>
+                <div class="video-item">
+                    <img src="https://via.placeholder.com/300x150/0d1b2a/00d4ff?text=SPORTMAX" alt="Video ejemplo">
+                    <div class="info"><h4>🌟 Mejores jugadas de la jornada</h4><a href="#">Ver video →</a></div>
+                </div>
+            `;
+        }
+
+        // ================================================================
+        // 8. CONFIGURACIÓN DE BÚSQUEDA, TEMA, FAVORITOS Y NOTIFICACIONES
+        // ================================================================
+        function configurarBusqueda() {
+            const input = document.getElementById('buscar');
+            if (!input) return;
+            input.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                // Filtrar tarjetas de partidos (fútbol, NBA, MLB, tenis)
+                document.querySelectorAll('#partidos-container .card, #tabla-resultados tbody tr, #lista-proximos li, #lista-nba li, #lista-mlb li, #lista-tenis li').forEach(el => {
+                    const texto = el.textContent.toLowerCase();
+                    el.style.display = texto.includes(query) ? '' : 'none';
+                });
+            });
+        }
+
+        function configurarTema() {
+            const btn = document.getElementById('theme-toggle');
+            if (!btn) return;
+            const temaGuardado = localStorage.getItem('theme') || 'dark';
+            document.body.classList.add(temaGuardado);
+            btn.textContent = temaGuardado === 'dark' ? '🌙' : '☀️';
+            btn.addEventListener('click', () => {
+                const isDark = document.body.classList.toggle('dark');
+                document.body.classList.toggle('light', !isDark);
+                const nuevoTema = isDark ? 'dark' : 'light';
+                localStorage.setItem('theme', nuevoTema);
+                btn.textContent = isDark ? '🌙' : '☀️';
+            });
+        }
+
+        function configurarFavoritos() {
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('fav-btn')) {
+                    const equipo = e.target.dataset.equipo;
+                    if (!equipo) return;
+                    const esFav = favoritos.toggle(equipo);
+                    e.target.textContent = esFav ? '⭐' : '☆';
+                    if (esFav) notificarPartido(`⭐ ${equipo} añadido a favoritos`);
+                }
+            });
+        }
+
+        // ================================================================
+        // 9. INICIO PRINCIPAL
+        // ================================================================
+        async function iniciarTodo() {
+            mostrarLoader(true);
+
+            // Mostrar MOCK inmediatamente
+            mostrarEnVivo(MOCK.futbol.enVivo);
+            mostrarResultados(MOCK.futbol.resultados);
+            mostrarProximos(MOCK.futbol.proximos);
+            mostrarPosiciones(MOCK.futbol.posiciones);
+            mostrarNBAProximos(MOCK.nba.proximos);
+            mostrarNBAResultados(MOCK.nba.resultados);
+            mostrarNBAPosiciones(MOCK.nba.posiciones);
+            mostrarMLBProximos(MOCK.mlb.proximos);
+            mostrarMLBResultados(MOCK.mlb.resultados);
+            mostrarMLBPosiciones(MOCK.mlb.posiciones);
+            mostrarTenisProximos(MOCK.tenis.proximos);
+            mostrarTenisResultados(MOCK.tenis.resultados);
+            mostrarPronosticos(MOCK.pronosticos);
+            mostrarNoticias(MOCK.noticias);
+            cargarVideosMock();
+            actualizarHora();
+
+            // Intentar APIs en segundo plano
+            setTimeout(async () => {
+                try {
+                    await Promise.all([
+                        cargarFutbolRapid(),
+                        cargarNBARapid(),
+                        cargarMLBGratis(),
+                        cargarTenisRapid(),
+                        cargarPronosticosRapid(),
+                        cargarNoticiasGratis()
+                    ]);
+                } catch (e) {
+                    console.warn('Alguna API falló:', e);
+                } finally {
+                    mostrarLoader(false);
+                }
+            }, 500);
+
+            // Configurar interactividad
+            configurarBusqueda();
+            configurarTema();
+            configurarFavoritos();
+            habilitarNotificaciones();
+
+            // Actualizar hora cada minuto
+            setInterval(actualizarHora, 60000);
+        }
+
+        document.addEventListener('DOMContentLoaded', iniciarTodo);
+    </script>
 </body>
 </html>
