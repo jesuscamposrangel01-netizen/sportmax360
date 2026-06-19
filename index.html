@@ -81,9 +81,8 @@
                 <p class="text-center text-gris py-6 text-sm">Cargando encuentros…</p>
             </div>
 
-            <!-- TABLA DE POSICIONES COMPLETA -->
+            <!-- TABLA COMPLETA -->
             <div class="space-y-6">
-                <!-- Liga Americana → 15 equipos -->
                 <div class="bg-tarjeta rounded-lg border border-[#1b293b] p-4">
                     <h3 class="text-base text-azul font-semibold mb-3">🏆 Liga Americana</h3>
                     <div class="overflow-x-auto">
@@ -98,14 +97,11 @@
                                     <th class="py-2 text-center">Dif</th>
                                 </tr>
                             </thead>
-                            <tbody id="tabla-americana">
-                                <tr><td colspan="6" class="py-4 text-center text-gris">Cargando…</td></tr>
+                            <tbody id="tabla-americana"><tr><td colspan="6" class="py-4 text-center text-gris">Cargando…</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-
-                <!-- Liga Nacional → 15 equipos -->
                 <div class="bg-tarjeta rounded-lg border border-[#1b293b] p-4">
                     <h3 class="text-base text-azul font-semibold mb-3">🏆 Liga Nacional</h3>
                     <div class="overflow-x-auto">
@@ -120,8 +116,7 @@
                                     <th class="py-2 text-center">Dif</th>
                                 </tr>
                             </thead>
-                            <tbody id="tabla-nacional">
-                                <tr><td colspan="6" class="py-4 text-center text-gris">Cargando…</td></tr>
+                            <tbody id="tabla-nacional"><tr><td colspan="6" class="py-4 text-center text-gris">Cargando…</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -163,7 +158,6 @@ document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click
     document.getElementById('sect-futbol').classList.toggle('hidden', btn.dataset.tab !== 'futbol');
 }));
 
-// Utilidades
 function fechaISO(d){ return d.toISOString().split('T')[0]; }
 function formatearHoraET(fechaISO){
     if(!fechaISO) return "";
@@ -176,7 +170,6 @@ function formatearHoraET(fechaISO){
 function nombreDiaCorto(d){return ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'][d.getDay()];}
 function numMesCorto(d){return d.getDate() + " " + ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][d.getMonth()];}
 
-// Fechas
 function cambiarFecha(paso){fechaActual.setDate(fechaActual.getDate()+paso);renderFechas();cargarPartidos(fechaISO(fechaActual));}
 function irFecha(iso){fechaActual=new Date(iso+"T00:00:00");renderFechas();cargarPartidos(iso);}
 function renderFechas(){
@@ -187,9 +180,9 @@ function renderFechas(){
     cont.innerHTML=html;
 }
 
-// ✅ Cargar partidos → Lanzadores CORREGIDOS
+// ✅ LECTURA CORRECTA DE LANZADORES
 async function cargarPartidos(fecha){
-    const URL=`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${fecha}&language=es&hydrate=linescore,probablePitchers,team,venue`;
+    const URL=`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${fecha}&language=es&hydrate=linescore,probablePitchers,venue`;
     try{
         const res=await fetch(URL);if(!res.ok) throw 1;
         const datos=await res.json();const juegos=datos.dates?.[0]?.games||[];
@@ -199,9 +192,10 @@ async function cargarPartidos(fecha){
         caja.innerHTML=juegos.map(p=>{
             const away=p.teams?.away||{};
             const home=p.teams?.home||{};
-            // ✅ Lectura correcta de lanzadores
-            const lanzA = p.probablePitchers?.away || {};
-            const lanzH = p.probablePitchers?.home || {};
+            // ✅ Si no existe o está vacío → mensaje igual que tu captura
+            const lanzA = p.probablePitchers?.away?.fullName ? p.probablePitchers.away.fullName : "Sin lanzador definido";
+            const lanzH = p.probablePitchers?.home?.fullName ? p.probablePitchers.home.fullName : "Sin lanzador definido";
+
             const idA=away.team?.id||"";const idH=home.team?.id||"";
             const nomA=away.team?.name||"Visitante";const nomH=home.team?.name||"Local";
             const regA=away.leagueRecord?`${away.leagueRecord.wins} - ${away.leagueRecord.losses}`:"";
@@ -246,10 +240,10 @@ async function cargarPartidos(fecha){
                     <span>Local: C ${marcH} • H ${hitsH} • E ${errH}</span>
                 </div>
 
-                <!-- ✅ Lanzadores visibles siempre -->
+                <!-- ✅ IGUAL QUE TU IMAGEN -->
                 <div class="mt-2 flex justify-between text-[0.65rem] text-gris">
-                    <span>🧢 ${lanzA.fullName || "Sin lanzador definido"} ${lanzA.pitchHand?.code || ""}</span>
-                    <span>🧢 ${lanzH.fullName || "Sin lanzador definido"} ${lanzH.pitchHand?.code || ""}</span>
+                    <span>🗣️ ${lanzA}</span>
+                    <span>🗣️ ${lanzH}</span>
                 </div>
 
                 <p class="text-center text-[0.65rem] text-gris mt-2">📍 ${estadio}</p>
@@ -264,57 +258,31 @@ async function cargarPartidos(fecha){
     }catch(e){document.getElementById("lista-partidos-mlb").innerHTML=`<p class="text-center text-red-400 py-6 text-sm">Error al cargar datos</p>`;}
 }
 
-// ✅ Tablas COMPLETAS: une todas las divisiones → 15 + 15 = 30 equipos
 async function cargarTablasMLB(){
     try{
-        const res=await fetch(`https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=${ANIO_MLB}&hydrate=division`);
+        const res=await fetch(`https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=${ANIO_MLB}`);
         if(!res.ok) throw 1;
         const datos=await res.json();
-
-        let todosAmericana = [];
-        let todosNacional = [];
-
-        // Recorre todas las divisiones y junta equipos
-        datos.records?.forEach(div => {
-            if(div.league?.id === 103) todosAmericana.push(...div.teamRecords);
-            if(div.league?.id === 104) todosNacional.push(...div.teamRecords);
+        let todosAmericana=[], todosNacional=[];
+        datos.records?.forEach(d=>{
+            if(d.league.id===103) todosAmericana.push(...d.teamRecords);
+            if(d.league.id===104) todosNacional.push(...d.teamRecords);
         });
+        todosAmericana.sort((a,b)=>b.winningPercentage-a.winningPercentage);
+        todosNacional.sort((a,b)=>b.winningPercentage-a.winningPercentage);
 
-        // Ordena por % victorias
-        todosAmericana.sort((a,b) => b.winningPercentage - a.winningPercentage);
-        todosNacional.sort((a,b) => b.winningPercentage - a.winningPercentage);
-
-        // Pinta tabla Americana
-        document.getElementById("tabla-americana").innerHTML = todosAmericana.map((t,i)=>
-            `<tr class="border-b border-gray-700/40">
-                <td class="py-1.5">${i+1}</td>
-                <td class="py-1.5">${t.team.name}</td>
-                <td class="py-1.5 text-center">${t.wins}</td>
-                <td class="py-1.5 text-center">${t.losses}</td>
-                <td class="py-1.5 text-center">${Number(t.winningPercentage).toFixed(3)}</td>
-                <td class="py-1.5 text-center">${t.gamesBack || "—"}</td>
-            </tr>`
+        document.getElementById("tabla-americana").innerHTML=todosAmericana.map((t,i)=>
+            `<tr class="border-b border-gray-700/40"><td class="py-1.5">${i+1}</td><td class="py-1.5">${t.team.name}</td><td class="py-1.5 text-center">${t.wins}</td><td class="py-1.5 text-center">${t.losses}</td><td class="py-1.5 text-center">${Number(t.winningPercentage).toFixed(3)}</td><td class="py-1.5 text-center">${t.gamesBack||"—"}</td></tr>`
         ).join("");
-
-        // Pinta tabla Nacional
-        document.getElementById("tabla-nacional").innerHTML = todosNacional.map((t,i)=>
-            `<tr class="border-b border-gray-700/40">
-                <td class="py-1.5">${i+1}</td>
-                <td class="py-1.5">${t.team.name}</td>
-                <td class="py-1.5 text-center">${t.wins}</td>
-                <td class="py-1.5 text-center">${t.losses}</td>
-                <td class="py-1.5 text-center">${Number(t.winningPercentage).toFixed(3)}</td>
-                <td class="py-1.5 text-center">${t.gamesBack || "—"}</td>
-            </tr>`
+        document.getElementById("tabla-nacional").innerHTML=todosNacional.map((t,i)=>
+            `<tr class="border-b border-gray-700/40"><td class="py-1.5">${i+1}</td><td class="py-1.5">${t.team.name}</td><td class="py-1.5 text-center">${t.wins}</td><td class="py-1.5 text-center">${t.losses}</td><td class="py-1.5 text-center">${Number(t.winningPercentage).toFixed(3)}</td><td class="py-1.5 text-center">${t.gamesBack||"—"}</td></tr>`
         ).join("");
-
     }catch(e){
         document.getElementById("tabla-americana").innerHTML=`<tr><td colspan="6" class="py-4 text-center text-gris">Sin datos</td></tr>`;
         document.getElementById("tabla-nacional").innerHTML=`<tr><td colspan="6" class="py-4 text-center text-gris">Sin datos</td></tr>`;
     }
 }
 
-// Fútbol
 async function cargarTablaFut(id){const tb=document.getElementById("cuerpo-tabla-fut");try{const res=await fetch(`https://www.thesportsdb.com/api/v1/json/${API_KEY_TSD}/lookuptable.php?l=${id}&s=${TEMP_FUT}`);const d=await res.json();tb.innerHTML=(d.table||[]).map((f,i)=>`<tr class="border-b border-gray-700/40"><td class="py-1.5">${i+1}</td><td class="py-1.5">${f.strTeam}</td><td class="py-1.5 text-center">${f.intPlayed||0}</td><td class="py-1.5 text-center">${f.intWin||0}</td><td class="py-1.5 text-center">${f.intDraw||0}</td><td class="py-1.5 text-center">${f.intLoss||0}</td><td class="py-1.5 text-center font-semibold">${f.intPoints||0}</td></tr>`).join("");}catch{tb.innerHTML=`<tr><td colspan="7" class="py-4 text-center text-gris">Sin datos</td></tr>`;}}
 async function cargarPartidosFut(id){const c=document.getElementById("lista-partidos-fut");try{const [r1,r2]=await Promise.all([fetch(`https://www.thesportsdb.com/api/v1/json/${API_KEY_TSD}/eventspastleague.php?id=${id}`),fetch(`https://www.thesportsdb.com/api/v1/json/${API_KEY_TSD}/eventsday.php?d=${fechaISO(new Date())}&l=${id}`)]);const d1=await r1.json(),d2=await r2.json();let p=d1.events||[];if(d2.events)p.push(...d2.events);const ids=new Set();p=p.filter(x=>!ids.has(x.idEvent)&&ids.add(x.idEvent)).sort((a,b)=>new Date(b.dateEvent)-new Date(a.dateEvent));c.innerHTML=p.slice(0,6).map(x=>`<div class="bg-[#141e2d] rounded-lg border border-[#1b293b] p-3 text-center"><h4 class="font-medium text-xs">${x.strHomeTeam}</h4><p class="text-lg font-bold text-azul my-1">${x.intHomeScore??"-"} : ${x.intAwayScore??"-"}</p><h4 class="font-medium text-xs">${x.strAwayTeam}</h4><p class="text-[0.65rem] text-gris mt-1">📅 ${x.dateEvent}</p></div>`).join("");}catch{c.innerHTML=`<p class="col-span-full text-center text-gris py-6 text-sm">Sin datos</p>`;}}
 document.getElementById("ligaSelect").addEventListener("change",e=>{cargarTablaFut(e.target.value);cargarPartidosFut(e.target.value);});
