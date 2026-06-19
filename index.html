@@ -42,7 +42,7 @@
 <main>
     <section id="inicio">
         <h2>Bienvenido a Sportmax360</h2>
-        <p>Plataforma deportiva con datos reales de fútbol y más competiciones. Datos traídos desde API oficial — RapidAPI.</p>
+        <p>Plataforma deportiva con datos reales de fútbol y más competiciones.</p>
     </section>
 
     <section id="equipos">
@@ -52,7 +52,6 @@
         </div>
     </section>
 
-    <!-- ✅ NUEVA SECCIÓN: TABLA DE POSICIONES -->
     <section id="posiciones">
         <h2>🏆 Tabla de posiciones</h2>
         <div style="overflow-x:auto;">
@@ -93,27 +92,22 @@
 </footer>
 
 <script>
-// 🔑 Configuración API
 const RAPIDAPI_KEY = "f019ce89dfmsh54169a00fd80f9bp1c5aadjsn50be5f785083";
 const RAPIDAPI_HOST = "allsportsapi2.p.rapidapi.com";
 const URL_ESTAD = "https://allsportsapi2.p.rapidapi.com/api/tournament/17/season/76986/statistics/info";
+const URL_TABLE = "https://allsportsapi2.p.rapidapi.com/api/tournament/17/season/76986/standings";
 const URL_PART = "https://allsportsapi2.p.rapidapi.com/api/tournament/17/season/76986/matches";
-const URL_TABLE = "https://allsportsapi2.p.rapidapi.com/api/tournament/17/season/76986/standings"; // ✅ Ruta tabla
 
-// 🚀 Cargar equipos
 async function cargarEquipos() {
     const cont = document.getElementById("lista-equipos");
     try {
         const res = await fetch(URL_ESTAD, {
-            method: "GET",
             headers: { "x-rapidapi-host": RAPIDAPI_HOST, "x-rapidapi-key": RAPIDAPI_KEY },
             signal: AbortSignal.timeout(10000)
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const datos = await res.json();
         const equipos = datos.teams || [];
-
-        if (!equipos.length) { cont.innerHTML = "<p class='aviso'>Sin equipos disponibles</p>"; return; }
         cont.innerHTML = equipos.map(eq => `
             <div class="card">
                 <h4>${eq.name}</h4>
@@ -122,26 +116,19 @@ async function cargarEquipos() {
                 <div style="width:32px;height:32px;border-radius:50%;background:${eq.teamColors?.primary||'#ccc'};margin-top:.5rem"></div>
             </div>
         `).join("");
-    } catch (err) {
-        console.error("❌ Equipos:", err);
-        cont.innerHTML = "<p class='aviso'>Error al cargar equipos</p>";
-    }
+    } catch (e) { cont.innerHTML = `<p class='aviso'>Error equipos: ${e.message}</p>`; }
 }
 
-// 📊 Cargar tabla de posiciones
 async function cargarTablaPosiciones() {
     const cuerpo = document.querySelector("#tabla-posiciones tbody");
     try {
         const res = await fetch(URL_TABLE, {
-            method: "GET",
             headers: { "x-rapidapi-host": RAPIDAPI_HOST, "x-rapidapi-key": RAPIDAPI_KEY },
             signal: AbortSignal.timeout(10000)
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const datos = await res.json();
         const filas = datos.standings || datos.table || [];
-
-        if (!filas.length) { cuerpo.innerHTML = "<tr><td colspan='7' class='aviso'>Sin datos de clasificación</td></tr>"; return; }
         cuerpo.innerHTML = filas.map(f => `
             <tr>
                 <td>${f.position || f.rank || "-"}</td>
@@ -153,43 +140,43 @@ async function cargarTablaPosiciones() {
                 <td><strong>${f.points || f.pts || 0}</strong></td>
             </tr>
         `).join("");
-    } catch (err) {
-        console.error("❌ Tabla:", err);
-        cuerpo.innerHTML = "<tr><td colspan='7' class='aviso'>Error al cargar clasificación</td></tr>";
-    }
+    } catch (e) { cuerpo.innerHTML = `<tr><td colspan='7' class='aviso'>Tabla: ${e.message}</td></tr>`; }
 }
 
-// ⚽ Cargar partidos
 async function cargarPartidos() {
     const cont = document.getElementById("lista-partidos");
     try {
         const res = await fetch(URL_PART, {
-            method: "GET",
             headers: { "x-rapidapi-host": RAPIDAPI_HOST, "x-rapidapi-key": RAPIDAPI_KEY },
-            signal: AbortSignal.timeout(10000)
+            signal: AbortSignal.timeout(12000)
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const datos = await res.json();
-        const partidos = datos.matches || datos.events || [];
+        console.log("📌 Respuesta partidos:", datos);
+        const partidos = datos.matches || datos.events || datos.data || datos.results || [];
 
-        if (!partidos.length) { cont.innerHTML = "<p class='aviso'>Sin partidos disponibles</p>"; return; }
+        if (!partidos.length) {
+            cont.innerHTML = "<p class='aviso'>La API respondió pero no trae partidos</p>";
+            return;
+        }
         cont.innerHTML = partidos.map(p => `
             <div class="card" style="text-align:center">
-                <p style="font-weight:bold">${p.homeTeam?.name || "Local"}</p>
+                <p style="font-weight:bold">${p.homeTeam?.name || p.home?.name || p.local || "Local"}</p>
                 <p style="font-size:1.2rem;color:#165DFF;font-weight:bold;margin:.3rem 0">
-                    ${p.homeScore?.display ?? "-"} : ${p.awayScore?.display ?? "-"}
+                    ${p.homeScore?.display ?? p.home?.score ?? p.score?.home ?? "-"}
+                    :
+                    ${p.awayScore?.display ?? p.away?.score ?? p.score?.away ?? "-"}
                 </p>
-                <p style="font-weight:bold">${p.awayTeam?.name || "Visitante"}</p>
-                <p style="font-size:.9rem;color:#666;margin-top:.6rem">${p.startDate || p.status?.description || "Fecha por definir"}</p>
+                <p style="font-weight:bold">${p.awayTeam?.name || p.away?.name || p.visitante || "Visitante"}</p>
+                <p style="font-size:.9rem;color:#666;margin-top:.6rem">${p.startDate || p.date || p.fecha || "Fecha sin definir"}</p>
             </div>
         `).join("");
     } catch (err) {
         console.error("❌ Partidos:", err);
-        cont.innerHTML = "<p class='aviso'>Error al cargar partidos</p>";
+        cont.innerHTML = `<p class='aviso'>Partidos: ${err.message}</p>`;
     }
 }
 
-// ▶️ Ejecutar todo
 cargarEquipos();
 cargarTablaPosiciones();
 cargarPartidos();
