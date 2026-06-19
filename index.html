@@ -126,14 +126,14 @@
 <script>
 // ✅ TU CLAVE EXACTA
 const API_KEY = "7ff8c03eef2af95a8697f7alfe5e54b0";
-const TEMP_FUT = "2024‑2025";
-const TEMP_MLB = "2025‑2026";
+const TEMP_FUT = "2024-2025"; // GUION CORREGIDO
+const TEMP_MLB = "2025-2026"; // GUION CORREGIDO
 
-// Cabeceras comunes
+// ✅ CABECERAS CON GUIONES ESTÁNDAR
 function cabeceras(host){
     return {
-        "x‑rapidapi‑key": API_KEY,
-        "x‑rapidapi‑host": host
+        "x-rapidapi-key": API_KEY,
+        "x-rapidapi-host": host
     };
 }
 
@@ -144,7 +144,7 @@ function cambiarDep(tipo){
 }
 
 // --- FÚTBOL ---
-const HOST_FUT = "v3.football.api‑sports.io";
+const HOST_FUT = "v3.football.api-sports.io";
 async function cargarPartidosFut(liga){
     const el = document.getElementById("listaFut");
     try{
@@ -152,11 +152,11 @@ async function cargarPartidosFut(liga){
         const d = await r.json();
         el.innerHTML = (d.response||[]).slice(0,8).map(p=>`
         <div class="card">
-            ${p.fixture.status.short==="LIVE"?"<span class='etiqueta‑vivo'>EN VIVO</span>":""}
-            <p style="font‑weight:bold">${p.teams.home.name}</p>
-            <p style="color:var(--verde‑fut);font‑weight:bold;font‑size:1.2rem">${p.goals.home??"‑"} : ${p.goals.away??"‑"}</p>
-            <p style="font‑weight:bold">${p.teams.away.name}</p>
-            <p style="font‑size:.9rem">📅 ${p.fixture.date.split("T")[0]}</p>
+            ${p.fixture.status.short==="LIVE"?"<span class='etiqueta-vivo'>EN VIVO</span>":""}
+            <p style="font-weight:bold">${p.teams.home.name}</p>
+            <p style="color:var(--verde-fut);font-weight:bold;font-size:1.2rem">${p.goals.home??"-"} : ${p.goals.away??"-"}</p>
+            <p style="font-weight:bold">${p.teams.away.name}</p>
+            <p style="font-size:.9rem">📅 ${p.fixture.date.split("T")[0]}</p>
         </div>`).join("");
     }catch(e){el.innerHTML=`<p class='aviso'>${e}</p>`;}
 }
@@ -173,7 +173,7 @@ async function cargarTablaFut(liga){
 document.getElementById("ligaFut").addEventListener("change",e=>{cargarPartidosFut(e.target.value);cargarTablaFut(e.target.value);});
 
 // --- MLB ---
-const HOST_MLB = "v3.baseball.api‑sports.io";
+const HOST_MLB = "v3.baseball.api-sports.io";
 const LIGA_MLB = "1";
 async function cargarPartidosMLB(){
     const el = document.getElementById("listaMLB");
@@ -182,11 +182,11 @@ async function cargarPartidosMLB(){
         const d = await r.json();
         el.innerHTML = (d.response||[]).slice(0,8).map(p=>`
         <div class="card">
-            ${p.status.short==="LIVE"?"<span class='etiqueta‑vivo'>EN VIVO</span>":""}
-            <p style="font‑weight:bold">${p.teams.away.name}</p>
-            <p style="color:var(--azul‑mlb);font‑weight:bold;font‑size:1.2rem">${p.scores.away.total??"‑"} : ${p.scores.home.total??"‑"}</p>
-            <p style="font‑weight:bold">${p.teams.home.name}</p>
-            <p style="font‑size:.9rem">📅 ${p.date}</p>
+            ${p.status.short==="LIVE"?"<span class='etiqueta-vivo'>EN VIVO</span>":""}
+            <p style="font-weight:bold">${p.teams.away.name}</p>
+            <p style="color:var(--azul-mlb);font-weight:bold;font-size:1.2rem">${p.scores.away.total??"-"} : ${p.scores.home.total??"-"}</p>
+            <p style="font-weight:bold">${p.teams.home.name}</p>
+            <p style="font-size:.9rem">📅 ${p.date}</p>
         </div>`).join("");
     }catch(e){el.innerHTML=`<p class='aviso'>${e}</p>`;}
 }
