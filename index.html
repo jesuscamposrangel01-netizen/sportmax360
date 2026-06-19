@@ -3,70 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sportmax360 | MLB Béisbol</title>
+    <title>Sportmax360 | Fútbol — Prueba</title>
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
-        body { background:#f5f7fa; color:#333; line-height:1.6; }
-        header { background:#00468B; color:#fff; padding:2rem; text-align:center; }
-        header h1 { font-size:2rem; margin-bottom:.3rem; }
-        nav { background:#fff; padding:1rem; border-bottom:1px solid #ddd; position:sticky; top:0; z-index:10; }
-        nav a { margin:0 .8rem; color:#333; text-decoration:none; font-weight:bold; }
-        nav a:hover,.activo { color:#00468B; }
-        main { max-width:1100px; margin:2rem auto; padding:0 1rem; }
-        h2 { color:#222; margin:2rem 0 1rem; border-left:4px solid #00468B; padding-left:.8rem; }
-        .grid-equipos { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1.2rem; }
-        .grid-partidos { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.2rem; }
-        .card { background:#fff; padding:1.2rem; border-radius:8px; box-shadow:0 3px 8px rgba(0,0,0,.08); text-align:center; }
-        .tabla-posiciones { width:100%; border-collapse:collapse; background:#fff; border-radius:8px; overflow:hidden; box-shadow:0 3px 8px rgba(0,0,0,.08); margin-top:1rem; }
-        .tabla-posiciones th,.tabla-posiciones td { padding:.8rem; text-align:center; border-bottom:1px solid #eee; font-size:.9rem; }
-        .tabla-posiciones th { background:#00468B; color:#fff; }
-        .aviso { color:#e63946; font-weight:500; }
-        .info-ok { color:#2f855a; font-weight:500; }
-        footer { background:#1f2937; color:#ccc; text-align:center; padding:2rem; margin-top:3rem; }
+        :root{
+            --verde-futbol:#2F855A;
+            --gris-fondo:#f8fafc;
+            --gris-texto:#2d3748;
+            --gris-claro:#e2e8f0;
+            --sombra:0 4px 12px rgba(0,0,0,.07);
+        }
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Roboto,Arial,sans-serif;}
+        body{background:var(--gris-fondo);color:var(--gris-texto);line-height:1.6;}
+
+        header{background:linear-gradient(135deg,var(--verde-futbol),#246c48);color:#fff;padding:2rem 1rem;text-align:center;}
+        header h1{font-size:clamp(1.7rem,3vw,2.2rem);margin-bottom:.3rem;}
+
+        nav{background:#fff;padding:1rem;border-bottom:1px solid var(--gris-claro);position:sticky;top:0;z-index:20;box-shadow:var(--sombra);}
+        nav ul{list-style:none;display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;}
+        nav a{color:var(--gris-texto);text-decoration:none;font-weight:600;padding:.4rem .7rem;border-radius:6px;transition:.3s;}
+        nav a:hover,.activo{color:var(--verde-futbol);background:rgba(47,133,90,.08);}
+
+        main{max-width:1100px;margin:2rem auto;padding:0 1rem;}
+        section{margin-bottom:3rem;}
+        h2{color:#1e293b;margin-bottom:1.2rem;border-left:4px solid var(--verde-futbol);padding-left:.8rem;}
+
+        .grid-partidos{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.3rem;}
+        .card{background:#fff;padding:1.3rem;border-radius:10px;box-shadow:var(--sombra);text-align:center;}
+        .card h4{margin:.5rem 0;}
+        .aviso{color:#dc2626;font-weight:500;text-align:center;padding:1rem;}
+        footer{background:#1e293b;color:#cbd5e1;text-align:center;padding:2rem;margin-top:4rem;}
     </style>
 </head>
 <body>
 
 <header>
-    <h1>⚾ Sportmax360 — MLB</h1>
-    <p>Liga Mayor de Béisbol — Datos oficiales MLB Stats API</p>
+    <h1>⚽ Sportmax360 — Fútbol</h1>
+    <p>Prueba con datos: openfootball/worldcup.json</p>
 </header>
 
 <nav>
-    <a href="#inicio" class="activo">Inicio</a>
-    <a href="#equipos">Equipos</a>
-    <a href="#tabla">Tabla</a>
-    <a href="#resultados">Resultados</a>
-    <a href="#contacto">Contacto</a>
+    <ul>
+        <li><a href="#inicio" class="activo">Inicio</a></li>
+        <li><a href="#partidos">Partidos</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+    </ul>
 </nav>
 
 <main>
     <section id="inicio">
-        <h2>Bienvenido</h2>
-        <p>Datos oficiales gratuitos, sin límites ni bloqueos en GitHub Pages.</p>
+        <h2>Bienvenido — Fútbol</h2>
+        <p>Cargamos datos desde el archivo público <code>openfootball/worldcup.json</code> (resultados de Mundiales).</p>
     </section>
 
-    <section id="equipos">
-        <h2>🏟️ Equipos MLB</h2>
-        <div id="lista-equipos" class="grid-equipos"><p>Cargando equipos…</p></div>
-    </section>
-
-    <section id="tabla">
-        <h2>🏆 Tabla de posiciones 2026</h2>
-        <div style="overflow-x:auto;">
-            <table class="tabla-posiciones">
-                <thead>
-                    <tr><th>#</th><th>Equipo</th><th>G</th><th>P</th><th>%</th><th>Dif</th></tr>
-                </thead>
-                <tbody id="cuerpo-tabla"><tr><td colspan="6" class="aviso">Cargando…</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <section id="resultados">
-        <h2>📅 Resultados: hoy y días anteriores</h2>
-        <div id="lista-partidos" class="grid-partidos"><p>Cargando encuentros…</p></div>
+    <section id="partidos">
+        <h2>📅 Partidos del Mundial</h2>
+        <div id="lista-partidos" class="grid-partidos"><p class="aviso">Cargando datos…</p></div>
     </section>
 
     <section id="contacto">
@@ -76,98 +67,56 @@
 </main>
 
 <footer>
-    <p>© 2026 Sportmax360 — Datos: MLB Stats API</p>
+    <p>© 2026 Sportmax360 — Solo prueba fútbol</p>
 </footer>
 
 <script>
-// ✅ API OFICIAL MLB — sin claves ni CORS
-const HOY = new Date().toISOString().split('T')[0];
-const URL_EQUIPOS = "https://statsapi.mlb.com/api/v1/teams?sportId=1";
-const URL_TABLA = "https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=2026";
-const URL_PARTIDOS_HOY = `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${HOY}&language=es`;
-const URL_PARTIDOS_ANTES = `https://statsapi.mlb.com/api/v1/schedule?sportId=1&startDate=2026-01-01&endDate=${HOY}&language=es`;
+// ✅ Ruta pública del repositorio openfootball
+const URL_FUTBOL = "https://raw.githubusercontent.com/openfootball/worldcup.json/master/worldcup.json";
 
-// Equipos
-async function cargarEquipos(){
-    const c = document.getElementById("lista-equipos");
+async function cargarPartidosFutbol(){
+    const cont = document.getElementById("lista-partidos");
     try{
-        const res = await fetch(URL_EQUIPOS);
-        const d = await res.json();
-        c.innerHTML = (d.teams||[]).map(eq=>`
-            <div class="card">
-                <h4>${eq.name}</h4>
-                <p style="font-size:.85rem;color:#666;">${eq.locationName}</p>
-            </div>`).join("");
-    }catch(e){c.innerHTML=`<p class='aviso'>Equipos: ${e.message}</p>`;}
-}
+        const res = await fetch(URL_FUTBOL);
+        if(!res.ok) throw new Error(`HTTP ${res.status}`);
+        const datos = await res.json();
 
-// Tabla completa 2026
-async function cargarTabla(){
-    const tb = document.getElementById("cuerpo-tabla");
-    try{
-        const res = await fetch(URL_TABLA);
-        const d = await res.json();
-        let filas = [];
-        d.records?.forEach(div=>{
-            div.teamRecords?.forEach(r=>{
-                filas.push({
-                    nombre: r.team.name,
-                    ganados: r.wins,
-                    perdidos: r.losses,
-                    porc: Number(r.winningPercentage),
-                    dif: r.gamesBack||"—"
-                });
-            });
-        });
-        filas.sort((a,b)=>b.porc - a.porc);
-        tb.innerHTML = filas.map((f,i)=>`
-            <tr>
-                <td>${i+1}</td>
-                <td>${f.nombre}</td>
-                <td>${f.ganados}</td>
-                <td>${f.perdidos}</td>
-                <td>${f.porc.toFixed(3)}</td>
-                <td>${f.dif}</td>
-            </tr>`).join("");
-    }catch(e){tb.innerHTML=`<tr><td colspan='6' class='aviso'>Tabla: ${e.message}</td></tr>`;}
-}
-
-// Todos resultados: hoy + anteriores
-async function cargarResultados(){
-    const c = document.getElementById("lista-partidos");
-    try{
-        const [rHoy, rAntes] = await Promise.all([fetch(URL_PARTIDOS_HOY), fetch(URL_PARTIDOS_ANTES)]);
-        const dHoy = await rHoy.json();
-        const dAntes = await rAntes.json();
-
+        // Datos vienen agrupados por rondas/torneos → extraer todos los partidos
         let todos = [];
-        dHoy.dates?.forEach(d=>todos.push(...d.games));
-        dAntes.dates?.forEach(d=>todos.push(...d.games));
+        if(Array.isArray(datos)){
+            datos.forEach(torneo => {
+                if(torneo.matches) todos.push(...torneo.matches);
+            });
+        } else if(datos.matches){
+            todos = datos.matches;
+        }
 
-        const ids = new Set();
-        todos = todos.filter(p=>ids.has(p.gamePk)?false:ids.add(p.gamePk));
-        todos.sort((a,b)=>new Date(b.gameDate) - new Date(a.gameDate));
+        if(!todos.length){
+            cont.innerHTML = "<p class='aviso'>Sin partidos disponibles</p>";
+            return;
+        }
 
-        if(!todos.length){c.innerHTML="<p class='aviso'>Sin partidos disponibles</p>";return;}
-        c.innerHTML = todos.map(p=>`
+        // Mostrar primeros 12 partidos de prueba
+        cont.innerHTML = todos.slice(0,12).map(p => `
             <div class="card">
-                <p style="font-weight:bold;">${p.teams.away.team.name}</p>
-                <p style="font-size:1.2rem;color:#00468B;font-weight:bold;margin:.4rem 0;">
-                    ${p.teams.away.score ?? "-"} : ${p.teams.home.score ?? "-"}
+                <p style="font-weight:bold;">${p.home_team || p.home || "Local"}</p>
+                <p style="font-size:1.2rem;color:var(--verde-futbol);font-weight:bold;margin:.4rem 0;">
+                    ${p.home_score ?? p.score?.home ?? "-"} : ${p.away_score ?? p.score?.away ?? "-"}
                 </p>
-                <p style="font-weight:bold;">${p.teams.home.team.name}</p>
+                <p style="font-weight:bold;">${p.away_team || p.away || "Visitante"}</p>
                 <p style="font-size:.9rem;color:#666;margin-top:.6rem;">
-                    📅 ${p.gameDate?.split("T")[0]} | ⏰ ${p.gameDate?.split("T")[1].slice(0,5) || "—"}
-                    <br>Estado: ${p.status.detailedState}
+                    📅 ${p.date || p.datetime || "Sin fecha"}
                 </p>
-            </div>`).join("");
-    }catch(e){c.innerHTML=`<p class='aviso'>Resultados: ${e.message}</p>`;}
+            </div>
+        `).join("");
+
+    }catch(e){
+        cont.innerHTML = `<p class='aviso'>Error: ${e.message}</p>`;
+    }
 }
 
 // Ejecutar
-cargarEquipos();
-cargarTabla();
-cargarResultados();
+cargarPartidosFutbol();
 </script>
 </body>
 </html>
