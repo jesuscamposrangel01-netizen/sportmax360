@@ -18,18 +18,16 @@
         .grid-partidos { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.2rem; }
         .card { background:#fff; padding:1.2rem; border-radius:8px; box-shadow:0 3px 8px rgba(0,0,0,.08); text-align:center; }
         .card img { height:65px; margin:0 auto .6rem; object-fit:contain; max-width:100%; }
-        .tabla-posiciones { width:100%; border-collapse:collapse; background:#fff; border-radius:8px; overflow:hidden; box-shadow:0 3px 8px rgba(0,0,0,.08); margin-top:1rem; }
-        .tabla-posiciones th,.tabla-posiciones td { padding:.8rem; text-align:center; border-bottom:1px solid #eee; font-size:.9rem; }
-        .tabla-posiciones th { background:#00468B; color:#fff; }
-        footer { background:#1f2937; color:#ccc; text-align:center; padding:2rem; margin-top:3rem; }
         .aviso { color:#e63946; font-weight:500; }
+        .info-ok { color:#2f855a; font-weight:500; }
+        footer { background:#1f2937; color:#ccc; text-align:center; padding:2rem; margin-top:3rem; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>⚾ Sportmax360 — MLB</h1>
-    <p>Liga Mayor de Béisbol — Resultados completos y tabla</p>
+    <p>Liga Mayor de Béisbol — Datos estables</p>
 </header>
 
 <nav>
@@ -53,15 +51,7 @@
 
     <section id="tabla">
         <h2>🏆 Tabla de posiciones</h2>
-        <div style="overflow-x:auto;">
-            <table id="tabla-mlb" class="tabla-posiciones">
-                <thead>
-                    <tr><th>#</th><th>Equipo</th><th>G</th><th>P</th><th>%</th><th>Dif</th></tr>
-                </thead>
-                <tbody><tr><td colspan="6" class="aviso">Cargando…</td></tr>
-                </tbody>
-            </table>
-        </div>
+        <p class="info-ok">ℹ️ La tabla de MLB no está disponible completa en esta API pública. Se agregará cuando usemos fuente estable.</p>
     </section>
 
     <section id="resultados">
@@ -82,22 +72,23 @@
 <script>
 const API_KEY = "3";
 const ID_LIGA = "4424";
-const TEMPORADA = "2025"; // temporada segura y completa
 const HOY = new Date().toISOString().split('T')[0];
 
+// Rutas seguras
 const URL_EQUIPOS = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/lookup_all_teams.php?id=${ID_LIGA}`;
-const URL_TABLA = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/lookuptable.php?l=${ID_LIGA}&s=${TEMPORADA}`;
 const URL_HOY = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/eventsday.php?d=${HOY}&l=${ID_LIGA}`;
 const URL_HIST = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/eventspastleague.php?id=${ID_LIGA}`;
 
-// Equipos
 async function cargarEquipos(){
     const c = document.getElementById("lista-equipos");
     try{
-        const res = await fetch(URL_EQUIPOS);
+        const res = await fetch(URL_EQUIPOS, {cache:"no-store"});
         if(!res.ok) throw new Error("HTTP "+res.status);
         const d = await res.json();
-        c.innerHTML = (d.teams||[]).map(eq=>`
+        if(!d.teams || !d.teams.length){
+            c.innerHTML="<p class='aviso'>Sin equipos</p>"; return;
+        }
+        c.innerHTML = d.teams.map(eq=>`
             <div class="card">
                 <img src="${eq.strTeamBadge||''}" alt="${eq.strTeam}" loading="lazy" onerror="this.style.display='none'">
                 <h4>${eq.strTeam}</h4>
@@ -106,40 +97,19 @@ async function cargarEquipos(){
     }catch(e){c.innerHTML=`<p class='aviso'>Equipos: ${e.message}</p>`;}
 }
 
-// Tabla segura
-async function cargarTabla(){
-    const tb = document.querySelector("#tabla-mlb tbody");
-    try{
-        const res = await fetch(URL_TABLA);
-        if(!res.ok) throw new Error("HTTP "+res.status);
-        const texto = await res.text();
-        if(!texto.trim()) throw new Error("Respuesta vacía");
-        const d = JSON.parse(texto);
-        const filas = d.table||[];
-        if(!filas.length){tb.innerHTML="<tr><td colspan='6' class='aviso'>Sin datos de clasificación</td></tr>";return;}
-        tb.innerHTML = filas.map((f,i)=>`
-            <tr>
-                <td>${i+1}</td>
-                <td>${f.strTeam||'—'}</td>
-                <td>${f.intWin||0}</td>
-                <td>${f.intLoss||0}</td>
-                <td>${f.strWinPct||'—'}</td>
-                <td>${f.strGamesBehind||'—'}</td>
-            </tr>`).join("");
-    }catch(e){tb.innerHTML=`<tr><td colspan='6' class='aviso'>Tabla: ${e.message}</td></tr>`;}
-}
-
-// Todos resultados: hoy + anteriores
 async function cargarResultados(){
     const c = document.getElementById("lista-partidos");
     try{
-        const [rHoy, rHist] = await Promise.all([fetch(URL_HOY), fetch(URL_HIST)]);
-        const dHoy = await rHoy.json();
-        const dHist = await rHist.json();
+        const [rHoy, rHist] = await Promise.allSettled([fetch(URL_HOY), fetch(URL_HIST)]);
+        let dHoy={}, dHist={};
+        if(rHoy.status==="fulfilled" && rHoy.value.ok) dHoy=await rHoy.value.json();
+        if(rHist.status==="fulfilled" && rHist.value.ok) dHist=await rHist.value.json();
+
         let todos = [...(dHoy.events||[]), ...(dHist.events||[])];
-        const vistos = new Set();
-        todos = todos.filter(p=>vistos.has(p.idEvent)?false:vistos.add(p.idEvent));
+        const vistos=new Set();
+        todos=todos.filter(p=>vistos.has(p.idEvent)?false:vistos.add(p.idEvent));
         todos.sort((a,b)=>new Date(b.dateEvent)-new Date(a.dateEvent));
+
         if(!todos.length){c.innerHTML="<p class='aviso'>Sin partidos disponibles</p>";return;}
         c.innerHTML = todos.map(p=>`
             <div class="card">
@@ -154,7 +124,6 @@ async function cargarResultados(){
 }
 
 cargarEquipos();
-cargarTabla();
 cargarResultados();
 </script>
 </body>
