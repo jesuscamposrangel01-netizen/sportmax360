@@ -54,7 +54,7 @@
     <section id="tabla">
         <h2>🏆 Tabla de posiciones</h2>
         <div style="overflow-x:auto;">
-            <table id="tabla‑mlb" class="tabla‑posiciones">
+            <table id="tabla-mlb" class="tabla-posiciones">
                 <thead>
                     <tr><th>#</th><th>Equipo</th><th>G</th><th>P</th><th>%</th><th>Dif</th></tr>
                 </thead>
@@ -66,7 +66,7 @@
 
     <section id="resultados">
         <h2>📅 Resultados: hoy y días anteriores</h2>
-        <div id="lista‑partidos" class="grid‑partidos"><p>Cargando todos los encuentros…</p></div>
+        <div id="lista-partidos" class="grid-partidos"><p>Cargando todos los encuentros…</p></div>
     </section>
 
     <section id="contacto">
@@ -82,69 +82,73 @@
 <script>
 const API_KEY = "3";
 const ID_LIGA = "4424";
+const TEMPORADA = "2025"; // temporada segura y completa
+const HOY = new Date().toISOString().split('T')[0];
+
 const URL_EQUIPOS = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/lookup_all_teams.php?id=${ID_LIGA}`;
-const URL_TABLA = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/lookuptable.php?l=${ID_LIGA}&s=2026`;
-const URL_HOY = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/eventsday.php?d=${new Date().toISOString().split('T')[0]}&l=${ID_LIGA}`;
-const URL_ANTES = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/eventspastleague.php?id=${ID_LIGA}`;
+const URL_TABLA = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/lookuptable.php?l=${ID_LIGA}&s=${TEMPORADA}`;
+const URL_HOY = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/eventsday.php?d=${HOY}&l=${ID_LIGA}`;
+const URL_HIST = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/eventspastleague.php?id=${ID_LIGA}`;
 
 // Equipos
 async function cargarEquipos(){
-    const c = document.getElementById("lista‑equipos");
+    const c = document.getElementById("lista-equipos");
     try{
         const res = await fetch(URL_EQUIPOS);
+        if(!res.ok) throw new Error("HTTP "+res.status);
         const d = await res.json();
         c.innerHTML = (d.teams||[]).map(eq=>`
             <div class="card">
                 <img src="${eq.strTeamBadge||''}" alt="${eq.strTeam}" loading="lazy" onerror="this.style.display='none'">
                 <h4>${eq.strTeam}</h4>
-                <p style="font‑size:.85rem;color:#666;">${eq.strStadium||'—'}</p>
+                <p style="font-size:.85rem;color:#666;">${eq.strStadium||'—'}</p>
             </div>`).join("");
-    }catch(e){c.innerHTML=`<p class='aviso'>${e.message}</p>`;}
+    }catch(e){c.innerHTML=`<p class='aviso'>Equipos: ${e.message}</p>`;}
 }
 
-// Tabla posiciones
+// Tabla segura
 async function cargarTabla(){
-    const tb = document.querySelector("#tabla‑mlb tbody");
+    const tb = document.querySelector("#tabla-mlb tbody");
     try{
         const res = await fetch(URL_TABLA);
-        const d = await res.json();
+        if(!res.ok) throw new Error("HTTP "+res.status);
+        const texto = await res.text();
+        if(!texto.trim()) throw new Error("Respuesta vacía");
+        const d = JSON.parse(texto);
         const filas = d.table||[];
-        if(!filas.length){tb.innerHTML="<tr><td colspan='6' class='aviso'>Sin datos</td></tr>";return;}
+        if(!filas.length){tb.innerHTML="<tr><td colspan='6' class='aviso'>Sin datos de clasificación</td></tr>";return;}
         tb.innerHTML = filas.map((f,i)=>`
             <tr>
                 <td>${i+1}</td>
-                <td>${f.strTeam}</td>
-                <td>${f.intWin}</td>
-                <td>${f.intLoss}</td>
-                <td>${f.strWinPct}</td>
+                <td>${f.strTeam||'—'}</td>
+                <td>${f.intWin||0}</td>
+                <td>${f.intLoss||0}</td>
+                <td>${f.strWinPct||'—'}</td>
                 <td>${f.strGamesBehind||'—'}</td>
             </tr>`).join("");
     }catch(e){tb.innerHTML=`<tr><td colspan='6' class='aviso'>Tabla: ${e.message}</td></tr>`;}
 }
 
-// Resultados HOY + ANTERIORES
+// Todos resultados: hoy + anteriores
 async function cargarResultados(){
-    const c = document.getElementById("lista‑partidos");
+    const c = document.getElementById("lista-partidos");
     try{
-        // Traer ambos
-        const [resHoy, resAntes] = await Promise.all([fetch(URL_HOY), fetch(URL_ANTES)]);
-        const [datHoy, datAntes] = await Promise.all([resHoy.json(), resAntes.json()]);
-        let todos = [ ...(datHoy.events||[]), ...(datAntes.events||[]) ];
-        // Quitar duplicados
-        const ids = new Set();
-        todos = todos.filter(p=>ids.has(p.idEvent)?false:ids.add(p.idEvent));
-        // Ordenar fecha ↓
+        const [rHoy, rHist] = await Promise.all([fetch(URL_HOY), fetch(URL_HIST)]);
+        const dHoy = await rHoy.json();
+        const dHist = await rHist.json();
+        let todos = [...(dHoy.events||[]), ...(dHist.events||[])];
+        const vistos = new Set();
+        todos = todos.filter(p=>vistos.has(p.idEvent)?false:vistos.add(p.idEvent));
         todos.sort((a,b)=>new Date(b.dateEvent)-new Date(a.dateEvent));
-
-        if(!todos.length){c.innerHTML="<p class='aviso'>Sin partidos</p>";return;}
+        if(!todos.length){c.innerHTML="<p class='aviso'>Sin partidos disponibles</p>";return;}
         c.innerHTML = todos.map(p=>`
             <div class="card">
-                <p style="font‑weight:bold;">${p.strHomeTeam}</p>
-                <p style="font‑size:1.2rem;color:#00468B;font‑weight:bold;margin:.4rem 0;">
+                <p style="font-weight:bold;">${p.strHomeTeam}</p>
+                <p style="font-size:1.2rem;color:#00468B;font-weight:bold;margin:.4rem 0;">
                     ${p.intHomeScore??"‑"} : ${p.intAwayScore??"‑"}
                 </p>
-                <p style="font‑weight:bold;">${p.strAwayTeam}</p>
-                <p style="font‑size:.9rem;color:#666;margin‑top:.6rem;">📅 ${p.dateEvent} | ⏰ ${p.strTime||"‑"}</p>
+                <p style="font-weight:bold;">${p.strAwayTeam}</p>
+                <p style="font-size:.9rem;color:#666;margin-top:.6rem;">📅 ${p.dateEvent} | ⏰ ${p.strTime||"‑"}</p>
             </div>`).join("");
     }catch(e){c.innerHTML=`<p class='aviso'>Partidos: ${e.message}</p>`;}
 }
