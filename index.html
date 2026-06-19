@@ -18,7 +18,7 @@
         .grid-equipos { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1.2rem; }
         .grid-partidos { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.2rem; }
         .card { background:#fff; padding:1.2rem; border-radius:8px; box-shadow:0 3px 8px rgba(0,0,0,.08); text-align:center; }
-        .card img { height:65px; margin:0 auto .6rem; }
+        .card img { height:65px; margin:0 auto .6rem; object-fit:contain; max-width:100%; }
         footer { background:#1f2937; color:#ccc; text-align:center; padding:2rem; margin-top:3rem; }
         .aviso { color:#e63946; font-weight:500; }
     </style>
@@ -69,7 +69,7 @@
 
 <script>
 // ⚾ MLB — API PÚBLICA
-const API_KEY = "3"; // clave pública de prueba
+const API_KEY = "3";
 const URL_EQUIPOS = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/lookup_all_teams.php?id=4424`;
 const URL_PARTIDOS = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/eventspastleague.php?id=4424`;
 
@@ -89,7 +89,10 @@ async function cargarEquiposMLB() {
 
         cont.innerHTML = equipos.map(eq => `
             <div class="card">
-                <img src="${eq.strTeamBadge}" alt="${eq.strTeam}" loading="lazy">
+                <img src="${eq.strTeamBadge || eq.strTeamLogo || ''}" 
+                     alt="${eq.strTeam}" 
+                     loading="lazy"
+                     onerror="this.style.display='none'">
                 <h4 style="margin:.4rem 0;">${eq.strTeam}</h4>
                 <p style="font-size:.85rem; color:#666;">${eq.strStadium || "Estadio no especificado"}</p>
             </div>
@@ -114,8 +117,10 @@ async function cargarPartidosMLB() {
             return;
         }
 
-        // Mostrar últimos 8 partidos
-        cont.innerHTML = partidos.slice(0,8).map(p => `
+        // Mostrar últimos 10 partidos ordenados por fecha
+        const ordenados = partidos.sort((a,b) => new Date(b.dateEvent)-new Date(a.dateEvent)).slice(0,10);
+
+        cont.innerHTML = ordenados.map(p => `
             <div class="card">
                 <p style="font-weight:bold;">${p.strHomeTeam}</p>
                 <p style="font-size:1.2rem; color:#00468B; font-weight:bold; margin:.4rem 0;">
