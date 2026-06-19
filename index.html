@@ -32,13 +32,19 @@
         .boton-pestana.activo{background:rgba(0,212,255,.1);border-color:var(--azul-neon);color:var(--azul-neon);font-weight:600;}
         .tarjeta{background:var(--fondo-tarjeta);border:1px solid var(--borde-suave);border-radius:16px;padding:1.6rem;margin-bottom:2rem;box-shadow:0 6px 20px rgba(0,0,0,.25);}
         .titulo-seccion{display:flex;align-items:center;gap:.6rem;color:var(--azul-neon);font-size:1.6rem;margin-bottom:1.2rem;}
-        .aviso-sin-partidos{color:var(--rojo-aviso);text-align:center;padding:2rem 0;font-size:1.1rem;}
+        .aviso{color:var(--texto-suave);text-align:center;padding:2rem 0;font-size:1.1rem;}
+        .aviso-error{color:var(--rojo-aviso);}
         .boton-mas{width:100%;background:transparent;border:1px solid var(--borde-suave);color:var(--azul-neon);padding:.9rem;border-radius:10px;font-size:1.1rem;margin-top:.8rem;cursor:pointer;transition:.2s;}
         .boton-mas:hover{background:rgba(0,212,255,.08);}
         table{width:100%;border-collapse:collapse;margin-top:.8rem;}
         th,td{padding:.9rem .6rem;text-align:left;border-bottom:1px solid var(--borde-suave);}
         th{color:var(--azul-neon);font-weight:600;}
         .logo-equipo{width:34px;height:34px;object-fit:contain;}
+        .fila-partido{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;border-bottom:1px solid var(--borde-suave);}
+        .col-equipos{display:flex;flex-direction:column;gap:.8rem;}
+        .fila-equipo{display:flex;align-items:center;gap:.8rem;}
+        .col-hora{text-align:right;color:var(--texto-suave);}
+        .col-hora strong{color:#fff;display:block;}
         .oculto{display:none;}
         @media(max-width:768px){h2{font-size:1.5rem;}.titulo-seccion{font-size:1.3rem;}.tarjeta{padding:1.2rem;}}
     </style>
@@ -67,41 +73,58 @@
                 <button class="boton-pestana" onclick="cambiarDep('futbol')">⚽ Fútbol</button>
             </div>
 
-            <!-- MLB -->
+            <!-- MLB → MISMA LÓGICA QUE YA SERVÍA -->
             <div id="sect-mlb">
                 <div class="tarjeta">
                     <h3 class="titulo-seccion">📅 17 • Partidos de hoy</h3>
                     <div id="caja-partidos">
-                        <p class="aviso-sin-partidos">Sin partidos MLB</p>
+                        <p class="aviso">Cargando partidos…</p>
                     </div>
                     <button class="boton-mas" onclick="cargarMasPartidos()">Más partidos</button>
                 </div>
 
                 <div class="tarjeta">
-                    <h3 class="titulo-seccion">🏆 Tabla 2026</h3>
+                    <h3 class="titulo-seccion">🏆 Tabla</h3>
                     <table>
                         <thead>
                             <tr><th>#</th><th>Equipo</th><th>G</th><th>P</th><th>%</th><th>Dif</th></tr>
                         </thead>
                         <tbody id="cuerpo-tabla">
-                            <tr><td colspan="6" style="text-align:center;color:var(--texto-suave);padding:2rem;">Cargando…</td></tr>
+                            <tr><td colspan="6" class="aviso">Cargando datos…</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- FÚTBOL -->
+            <!-- FÚTBOL → API que usaste antes -->
             <div id="sect-futbol" class="oculto">
                 <div class="tarjeta">
-                    <h3 class="titulo-seccion">⚽ Partidos y posiciones</h3>
-                    <p style="color:var(--texto-suave);">Contenido de fútbol aquí</p>
+                    <h3 class="titulo-seccion">⚽ Competiciones</h3>
+                    <select id="ligaSelect" style="background:#0d1520;border:1px solid #1a2a3a;color:#fff;padding:.6rem;border-radius:8px;width:100%;max-width:320px;margin-bottom:1rem;">
+                        <option value="4328">🏴 Premier League</option>
+                        <option value="4335">🇪🇸 La Liga</option>
+                        <option value="4391">🇮🇹 Serie A</option>
+                        <option value="4346">🇩🇪 Bundesliga</option>
+                        <option value="4423">🌎 Copa América</option>
+                    </select>
+                    <div id="lista-partidos-fut" class="grid-partidos"><p class="aviso">Cargando…</p></div>
+                    <table class="tabla tabla-api" style="margin-top:1rem;">
+                        <thead><tr><th>#</th><th>Equipo</th><th>PJ</th><th>PG</th><th>PE</th><th>PP</th><th>Pts</th></tr></thead>
+                        <tbody id="cuerpo-tabla-fut"><tr><td colspan="7" class="aviso">Cargando…</td></tr>
+                    </table>
                 </div>
             </div>
         </section>
     </main>
 
 <script>
-// Cambio entre MLB / Fútbol
+// --- VARIABLES IGUAL QUE ANTES ---
+const HOY = new Date().toISOString().split('T')[0];
+const API_KEY_TSD = "3";
+const TEMP_FUT = "2024-2025";
+const zonaPeru = -5;
+
+// Cambio vista
 function cambiarDep(tipo){
     document.getElementById("sect-mlb").classList.toggle("oculto", tipo !== "mlb");
     document.getElementById("sect-futbol").classList.toggle("oculto", tipo !== "futbol");
@@ -109,86 +132,86 @@ function cambiarDep(tipo){
     event.target.classList.add("activo");
 }
 
-// Fecha actual y zona horaria Perú
-const hoy = new Date().toISOString().split('T')[0];
-const zonaPeru = -5;
+// Formato hora Perú
+function formatearHora(fechaISO){
+    if(!fechaISO) return "—";
+    const f=new Date(fechaISO);
+    f.setHours(f.getHours()-5);
+    return f.toLocaleTimeString("es‑PE",{hour:'numeric',minute:'2‑digit',hour12:true});
+}
 
-// Cargar partidos MLB (muestra mensaje vacío si no hay coincidencias)
-async function cargarPartidosMLB(fecha = hoy){
+// ✅ MLB → RUTAS Y LÓGICA QUE YA FUNCIONABAN
+const URL_MLB_EQ = "https://statsapi.mlb.com/api/v1/teams?sportId=1";
+const URL_MLB_TB = "https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=2025"; // año con datos reales
+const URL_MLB_PT = `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${HOY}&language=es&hydrate=linescore,probablePitchers`;
+
+async function cargarMLB(){
+    // Partidos
     try{
-        const res = await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${fecha}&language=es`);
-        const datos = await res.json();
-        const juegos = datos.dates?.[0]?.games || [];
-        const caja = document.getElementById("caja-partidos");
-
-        if(juegos.length === 0){
-            caja.innerHTML = `<p class="aviso-sin-partidos">Sin partidos MLB</p>`;
-            return;
-        }
-        // Si hay partidos → formato igual a Google
-        caja.innerHTML = juegos.map(p=>{
-            const horaLocal = new Date(p.gameDate);
-            horaLocal.setHours(horaLocal.getHours() + zonaPeru);
-            const horaStr = horaLocal.toLocaleTimeString("es‑PE",{hour:'numeric',minute:'2‑digit',hour12:true});
-            return `
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem 0;border-bottom:1px solid var(--borde-suave);">
-                <div style="display:flex;flex-direction:column;gap:.8rem;">
-                    <div style="display:flex;align-items:center;gap:.8rem;">
-                        <img class="logo-equipo" src="https://www.mlbstatic.com/team-logos/${p.teams.away.team.id}.svg">
-                        <span>${p.teams.away.team.name}</span>
-                    </div>
-                    <div style="display:flex;align-items:center;gap:.8rem;">
-                        <img class="logo-equipo" src="https://www.mlbstatic.com/team-logos/${p.teams.home.team.id}.svg">
-                        <span>${p.teams.home.team.name}</span>
-                    </div>
+        const resPt = await fetch(URL_MLB_PT);
+        const dPt = await resPt.json();
+        const juegos=dPt.dates?.[0]?.games||[];
+        document.getElementById("caja-partidos").innerHTML=juegos.length ? juegos.map(p=>`
+        <div class="fila-partido">
+            <div class="col-equipos">
+                <div class="fila-equipo">
+                    <img class="logo-equipo" src="https://www.mlbstatic.com/team-logos/${p.teams.away.team.id}.svg" alt="${p.teams.away.team.name}">
+                    <span>${p.teams.away.team.name}</span>
                 </div>
-                <div style="text-align:right;color:var(--texto-suave);">
-                    <span style="color:#fff;font-weight:bold;">Hoy</span><br>${horaStr}
+                <div class="fila-equipo">
+                    <img class="logo-equipo" src="https://www.mlbstatic.com/team-logos/${p.teams.home.team.id}.svg" alt="${p.teams.home.team.name}">
+                    <span>${p.teams.home.team.name}</span>
                 </div>
-            </div>`;
-        }).join("");
-    }catch(e){
-        document.getElementById("caja-partidos").innerHTML = `<p class="aviso-sin-partidos">Error al cargar partidos</p>`;
-    }
-}
+            </div>
+            <div class="col-hora"><strong>Hoy</strong>${formatearHora(p.gameDate)}</div>
+        </div>`).join("") : `<p class="aviso">Sin partidos MLB hoy</p>`;
+    }catch(e){document.getElementById("caja-partidos").innerHTML=`<p class="aviso aviso-error">Sin partidos MLB</p>`;}
 
-// Cargar tabla posiciones
-async function cargarTablaMLB(){
+    // Tabla
     try{
-        const res = await fetch("https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=2026");
-        const datos = await res.json();
-        let filas = [];
-        datos.records?.forEach(rec=>rec.teamRecords?.forEach(equipo=>{
-            filas.push({
-                nombre: equipo.team.name,
-                ganados: equipo.wins,
-                perdidos: equipo.losses,
-                porc: equipo.winningPercentage,
-                dif: equipo.gamesBack || "—"
-            });
-        }));
-        filas.sort((a,b)=>b.porc - a.porc);
-        document.getElementById("cuerpo-tabla").innerHTML = filas.map((f,i)=>`
-        <tr>
-            <td>${i+1}</td>
-            <td>${f.nombre}</td>
-            <td>${f.ganados}</td>
-            <td>${f.perdidos}</td>
-            <td>${f.porc.toFixed(3)}</td>
-            <td>${f.dif}</td>
-        </tr>`).join("");
-    }catch(e){
-        document.getElementById("cuerpo-tabla").innerHTML = `<tr><td colspan="6" style="color:var(--rojo-aviso);">Sin datos de tabla</td></tr>`;
-    }
+        const resTb = await fetch(URL_MLB_TB);
+        const dTb = await resTb.json();
+        let filas=[];
+        dTb.records?.forEach(r=>r.teamRecords?.forEach(t=>filas.push({n:t.team.name,g:t.wins,p:t.losses,porc:+t.winningPercentage,dif:t.gamesBack||"—"})));
+        filas.sort((a,b)=>b.porc-a.porc);
+        document.getElementById("cuerpo-tabla").innerHTML=filas.map((f,i)=>`<tr><td>${i+1}</td><td>${f.n}</td><td>${f.g}</td><td>${f.p}</td><td>${f.porc.toFixed(3)}</td><td>${f.dif}</td></tr>`).join("");
+    }catch(e){document.getElementById("cuerpo-tabla").innerHTML=`<tr><td colspan='6' class="aviso aviso-error">Sin datos de tabla</td></tr>`;}
 }
 
-function cargarMasPartidos(){
-    alert("Función para navegar a fechas anteriores/siguientes");
+// ✅ FÚTBOL → MISMA API QUE YA USAMOS
+async function cargarTablaFut(id){
+    const tb=document.getElementById("cuerpo-tabla-fut");
+    try{
+        const res=await fetch(`https://www.thesportsdb.com/api/v1/json/${API_KEY_TSD}/lookuptable.php?l=${id}&s=${TEMP_FUT}`);
+        const txt=await res.text();
+        if(!txt.trim()) throw 1;
+        const d=JSON.parse(txt);
+        tb.innerHTML=(d.table||[]).map((f,i)=>`<tr><td>${i+1}</td><td>${f.strTeam}</td><td>${f.intPlayed||0}</td><td>${f.intWin||0}</td><td>${f.intDraw||0}</td><td>${f.intLoss||0}</td><td><strong>${f.intPoints||0}</strong></td></tr>`).join("");
+    }catch{tb.innerHTML=`<tr><td colspan="7" class="aviso aviso-error">Sin datos</td></tr>`;}
 }
+async function cargarPartidosFut(id){
+    const c=document.getElementById("lista-partidos-fut");
+    try{
+        const [r1,r2]=await Promise.all([fetch(`https://www.thesportsdb.com/api/v1/json/${API_KEY_TSD}/eventspastleague.php?id=${id}`),fetch(`https://www.thesportsdb.com/api/v1/json/${API_KEY_TSD}/eventsday.php?d=${HOY}&l=${id}`)]);
+        const d1=await r1.json(),d2=await r2.json();
+        let p=d1.events||[];if(d2.events)p.push(...d2.events);
+        const ids=new Set();p=p.filter(x=>ids.has(x.idEvent)?false:ids.add(x.idEvent)).sort((a,b)=>new Date(b.dateEvent)-new Date(a.dateEvent));
+        c.innerHTML=p.slice(0,8).map(x=>`<div class="card-partido" style="background:#0d1520;border-radius:10px;padding:1rem;border:1px solid #1a2a3a;text-align:center;">
+            <p style="font-weight:bold">${x.strHomeTeam}</p>
+            <p style="font-size:1.2rem;color:#00d4ff">${x.intHomeScore??"-"} : ${x.intAwayScore??"-"}</p>
+            <p style="font-weight:bold">${x.strAwayTeam}</p>
+            <p style="font-size:.85rem;color:#8899aa">📅 ${x.dateEvent}</p>
+        </div>`).join("");
+    }catch{c.innerHTML=`<p class="aviso aviso-error">Sin partidos</p>`;}
+}
+document.getElementById("ligaSelect").addEventListener("change",e=>{cargarTablaFut(e.target.value);cargarPartidosFut(e.target.value);});
 
-// Inicio
-cargarPartidosMLB();
-cargarTablaMLB();
+function cargarMasPartidos(){alert("Navegar a otras fechas");}
+
+// ✅ CARGA INICIAL IGUAL QUE ANTES
+cargarMLB();
+cargarTablaFut("4328");
+cargarPartidosFut("4328");
 </script>
 </body>
 </html>
