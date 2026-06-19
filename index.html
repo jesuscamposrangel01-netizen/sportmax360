@@ -3,187 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sportmax360 | Fútbol</title>
+    <title>Prueba API | Sportmax360</title>
     <style>
-        :root{
-            --verde-futbol:#2F855A;
-            --gris-fondo:#f8fafc;
-            --gris-texto:#2d3748;
-            --gris-claro:#e2e8f0;
-            --sombra:0 4px 12px rgba(0,0,0,.07);
-        }
-        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Roboto,Arial,sans-serif;}
-        body{background:var(--gris-fondo);color:var(--gris-texto);line-height:1.6;}
-
-        header{background:linear-gradient(135deg,var(--verde-futbol),#246c48);color:#fff;padding:2rem 1rem;text-align:center;}
-        header h1{font-size:clamp(1.7rem,3vw,2.2rem);margin-bottom:.3rem;}
-
-        nav{background:#fff;padding:1rem;border-bottom:1px solid var(--gris-claro);position:sticky;top:0;z-index:20;box-shadow:var(--sombra);}
-        nav ul{list-style:none;display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;}
-        nav a{color:var(--gris-texto);text-decoration:none;font-weight:600;padding:.4rem .7rem;border-radius:6px;transition:.3s;}
-        nav a:hover,.activo{color:var(--verde-futbol);background:rgba(47,133,90,.08);}
-
-        main{max-width:1100px;margin:2rem auto;padding:0 1rem;}
-        section{margin-bottom:3rem;}
-        h2{color:#1e293b;margin-bottom:1.2rem;border-left:4px solid var(--verde-futbol);padding-left:.8rem;}
-        .select-liga{padding:.6rem 1rem;border-radius:6px;border:1px solid var(--gris-claro);font-size:1rem;width:100%;max-width:320px;}
-        .grid-partidos{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.3rem;margin-top:1.5rem;}
-        .card{background:#fff;padding:1.3rem;border-radius:10px;box-shadow:var(--sombra);text-align:center;}
-        .card img{height:50px;margin:0 auto .6rem;object-fit:contain;}
-        .aviso{color:#dc2626;font-weight:500;text-align:center;padding:1rem;}
-        .info{color:#2b6cb0;font-size:.9rem;margin-bottom:.8rem;}
-        .tabla-wrap{overflow-x:auto;border-radius:10px;box-shadow:var(--sombra);margin-top:1rem;}
-        .tabla-posiciones{width:100%;border-collapse:collapse;background:#fff;}
-        .tabla-posiciones th,.tabla-posiciones td{padding:.8rem .6rem;text-align:center;border-bottom:1px solid var(--gris-claro);font-size:.9rem;}
-        .tabla-posiciones th{background:var(--verde-futbol);color:#fff;}
-        .tabla-posiciones tr:nth-child(even){background:#f8fafc;}
-        footer{background:#1e293b;color:#cbd5e1;text-align:center;padding:2rem;margin-top:4rem;}
+        :root{--verde:#2F855A; --fondo:#f8fafc; --texto:#2d3748; --sombra:0 4px 12px rgba(0,0,0,.07);}
+        body{background:var(--fondo);color:var(--texto);font-family:Segoe UI,Roboto,Arial,sans-serif;max-width:900px;margin:2rem auto;padding:0 1rem;}
+        .tarjeta{background:#fff;padding:1.5rem;border-radius:10px;box-shadow:var(--sombra);margin-bottom:1.5rem;}
+        .aviso{color:#dc2626;font-weight:500;}
+        .ok{color:#166534;}
+        button{padding:.6rem 1.2rem;border:none;border-radius:6px;background:var(--verde);color:#fff;font-weight:bold;cursor:pointer;}
     </style>
 </head>
 <body>
+    <h1>⚽ Prueba: worldcup26.ir/get/games</h1>
 
-<header>
-    <h1>⚽ Sportmax360 — Fútbol</h1>
-    <p>Ligas activas, tabla de posiciones y resultados</p>
-</header>
+    <div class="tarjeta">
+        <button onclick="probarAPI()">Ejecutar prueba</button>
+        <div id="resultado" style="margin-top:1rem;"></div>
+    </div>
 
-<nav>
-    <ul>
-        <li><a href="#inicio" class="activo">Inicio</a></li>
-        <li><a href="#tabla">Tabla</a></li>
-        <li><a href="#partidos">Partidos</a></li>
-        <li><a href="#contacto">Contacto</a></li>
-    </ul>
-</nav>
-
-<main>
-    <section id="inicio">
-        <h2>Bienvenido — Fútbol</h2>
-        <p>Datos desde <strong>The‑SportsDB</strong> — gratuita, sin claves, sin bloqueos.</p>
-    </section>
-
-    <section>
-        <h2>📌 Selecciona competición</h2>
-        <select id="ligaSelect" class="select-liga">
-            <option value="4328">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
-            <option value="4335">🇪🇸 La Liga</option>
-            <option value="4423">🌎 Copa América</option>
-            <option value="4391">🇮🇹 Serie A</option>
-            <option value="4346">🇩🇪 Bundesliga</option>
-        </select>
-    </section>
-
-    <section id="tabla">
-        <h2>🏆 Tabla de posiciones — Temporada 2024‑2025</h2>
-        <div class="tabla-wrap">
-            <table class="tabla-posiciones">
-                <thead>
-                    <tr><th>#</th><th>Equipo</th><th>PJ</th><th>PG</th><th>PE</th><th>PP</th><th>Pts</th></tr>
-                </thead>
-                <tbody id="cuerpo-tabla"><tr><td colspan="7" class="aviso">Cargando…</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <section id="partidos">
-        <h2>📅 Resultados y próximos partidos</h2>
-        <div id="lista-partidos" class="grid-partidos"><p class="aviso">Cargando…</p></div>
-    </section>
-
-    <section id="contacto">
-        <h2>📬 Contacto</h2>
-        <p>Proyecto deportivo — Lima, Perú</p>
-    </section>
-</main>
-
-<footer>
-    <p>© 2026 Sportmax360 — Fútbol completo</p>
-</footer>
+    <div class="tarjeta">
+        <h3>🔄 Fuente alternativa estable (si falla)</h3>
+        <p>Usamos <strong>The‑SportsDB</strong> como antes, funciona siempre en GitHub Pages.</p>
+        <div id="alt" class="ok"></div>
+    </div>
 
 <script>
-const API_KEY = "3";
-const HOY = new Date().toISOString().split('T')[0];
-const TEMPORADA = "2024-2025"; // ✅ Año seguro con datos
+const URL_PRUEBA = "https://worldcup26.ir/get/games";
 
-// Cargar TABLA con protección de respuesta vacía
-async function cargarTabla(idLiga){
-    const tb = document.getElementById("cuerpo-tabla");
+async function probarAPI(){
+    const cont = document.getElementById("resultado");
     try{
-        const res = await fetch(`https://www.thesportsdb.com/api/v1/json/${API_KEY}/lookuptable.php?l=${idLiga}&s=${TEMPORADA}`);
+        const res = await fetch(URL_PRUEBA, {
+            headers:{"Accept":"application/json"},
+            signal:AbortSignal.timeout(8000)
+        });
         if(!res.ok) throw new Error(`HTTP ${res.status}`);
-        
         const texto = await res.text();
-        if(!texto.trim()) throw new Error("Respuesta vacía de la API");
-        
-        const datos = JSON.parse(texto);
-        const filas = datos.table || [];
-
-        if(!filas.length){
-            tb.innerHTML = "<tr><td colspan='7' class='aviso'>Sin tabla disponible para esta liga</td></tr>";
-            return;
+        try{
+            const datos = JSON.parse(texto);
+            cont.innerHTML = `<p class='ok'>✅ Respuesta recibida<br><pre style='font-size:.9rem'>${JSON.stringify(datos,null,2).slice(0,500)}…</pre></p>`;
+        }catch{
+            cont.innerHTML = `<p class='aviso'>❌ No es JSON válido<br>Respuesta: ${texto.slice(0,300)}</p>`;
         }
-
-        tb.innerHTML = filas.map((f,i)=>`
-            <tr>
-                <td>${i+1}</td>
-                <td>${f.strTeam}</td>
-                <td>${f.intPlayed||0}</td>
-                <td>${f.intWin||0}</td>
-                <td>${f.intDraw||0}</td>
-                <td>${f.intLoss||0}</td>
-                <td><strong>${f.intPoints||0}</strong></td>
-            </tr>`).join("");
     }catch(e){
-        tb.innerHTML = `<tr><td colspan='7' class='aviso'>Tabla: ${e.message}</td></tr>`;
+        cont.innerHTML = `<p class='aviso'>❌ Error: ${e.message}<br>Esta URL suele tener bloqueos CORS o no es pública.</p>`;
     }
 }
 
-// Cargar PARTIDOS
-async function cargarPartidos(idLiga){
-    const cont = document.getElementById("lista-partidos");
-    try{
-        const res = await fetch(`https://www.thesportsdb.com/api/v1/json/${API_KEY}/eventspastleague.php?id=${idLiga}`);
-        const resHoy = await fetch(`https://www.thesportsdb.com/api/v1/json/${API_KEY}/eventsday.php?d=${HOY}&l=${idLiga}`);
-        
-        const datos = await res.json();
-        const datosHoy = await resHoy.json();
-
-        let partidos = datos.events || [];
-        if(datosHoy.events) partidos.push(...datosHoy.events);
-
-        if(!partidos.length){
-            cont.innerHTML = "<p class='aviso'>Sin partidos disponibles</p>";
-            return;
-        }
-        const ids = new Set();
-        partidos = partidos.filter(p=>ids.has(p.idEvent)?false:ids.add(p.idEvent));
-        partidos.sort((a,b)=>new Date(b.dateEvent) - new Date(a.dateEvent));
-
-        cont.innerHTML = `<p class="info">Total: ${partidos.length} encuentros</p>` + partidos.map(p => `
-            <div class="card">
-                <img src="${p.strThumb || ''}" alt="Marcador" onerror="this.style.display='none'">
-                <p style="font-weight:bold;">${p.strHomeTeam}</p>
-                <p style="font-size:1.2rem;color:var(--verde-futbol);font-weight:bold;margin:.4rem 0;">
-                    ${p.intHomeScore ?? "-"} : ${p.intAwayScore ?? "-"}
-                </p>
-                <p style="font-weight:bold;">${p.strAwayTeam}</p>
-                <p style="font-size:.9rem;color:#666;margin-top:.6rem;">
-                    📅 ${p.dateEvent} | ⏰ ${p.strTime || "—"}
-                </p>
-            </div>`).join("");
-    }catch(e){
-        cont.innerHTML = `<p class='aviso'>Partidos: ${e.message}</p>`;
-    }
+// Datos seguros de respaldo
+async function cargarRespaldo(){
+    const cont = document.getElementById("alt");
+    const API = "3";
+    const res = await fetch(`https://www.thesportsdb.com/api/v1/json/${API}/eventspastleague.php?id=4423`);
+    const datos = await res.json();
+    const partidos = datos.events?.slice(0,3)||[];
+    cont.innerHTML = partidos.map(p=>`
+        <p>${p.strHomeTeam} ${p.intHomeScore??"-"} : ${p.intAwayScore??"-"} ${p.strAwayTeam}</p>`).join("");
 }
 
-document.getElementById("ligaSelect").addEventListener("change", e=>{
-    cargarTabla(e.target.value);
-    cargarPartidos(e.target.value);
-});
-
-cargarTabla("4328");
-cargarPartidos("4328");
+cargarRespaldo();
 </script>
 </body>
 </html>
