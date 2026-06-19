@@ -14,11 +14,13 @@
         nav a:hover,.activo { color:#00468B; }
         main { max-width:1100px; margin:2rem auto; padding:0 1rem; }
         h2 { color:#222; margin:2rem 0 1rem; border-left:4px solid #00468B; padding-left:.8rem; }
-        h3 { color:#444; margin:1.5rem 0 .6rem; }
         .grid-equipos { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:1.2rem; }
         .grid-partidos { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.2rem; }
         .card { background:#fff; padding:1.2rem; border-radius:8px; box-shadow:0 3px 8px rgba(0,0,0,.08); text-align:center; }
         .card img { height:65px; margin:0 auto .6rem; object-fit:contain; max-width:100%; }
+        .tabla-posiciones { width:100%; border-collapse:collapse; background:#fff; border-radius:8px; overflow:hidden; box-shadow:0 3px 8px rgba(0,0,0,.08); margin-top:1rem; }
+        .tabla-posiciones th,.tabla-posiciones td { padding:.8rem; text-align:center; border-bottom:1px solid #eee; font-size:.9rem; }
+        .tabla-posiciones th { background:#00468B; color:#fff; }
         footer { background:#1f2937; color:#ccc; text-align:center; padding:2rem; margin-top:3rem; }
         .aviso { color:#e63946; font-weight:500; }
     </style>
@@ -27,34 +29,44 @@
 
 <header>
     <h1>⚾ Sportmax360 — MLB</h1>
-    <p>Liga Mayor de Béisbol — Datos en vivo</p>
+    <p>Liga Mayor de Béisbol — Resultados completos y tabla</p>
 </header>
 
 <nav>
     <a href="#inicio" class="activo">Inicio</a>
     <a href="#equipos">Equipos</a>
+    <a href="#tabla">Tabla</a>
     <a href="#resultados">Resultados</a>
     <a href="#contacto">Contacto</a>
 </nav>
 
 <main>
     <section id="inicio">
-        <h2>Bienvenido a la sección MLB</h2>
-        <p>Usamos <strong>The‑SportsDB</strong>: API pública, sin claves ni límites estrictos.</p>
+        <h2>Bienvenido</h2>
+        <p>Datos desde <strong>The‑SportsDB</strong> — pública, sin límites, sin bloqueos.</p>
     </section>
 
     <section id="equipos">
-        <h2>🏟️ Equipos de la MLB</h2>
-        <div id="lista-equipos" class="grid-equipos">
-            <p>Cargando equipos…</p>
+        <h2>🏟️ Equipos MLB</h2>
+        <div id="lista-equipos" class="grid-equipos"><p>Cargando equipos…</p></div>
+    </section>
+
+    <section id="tabla">
+        <h2>🏆 Tabla de posiciones</h2>
+        <div style="overflow-x:auto;">
+            <table id="tabla‑mlb" class="tabla‑posiciones">
+                <thead>
+                    <tr><th>#</th><th>Equipo</th><th>G</th><th>P</th><th>%</th><th>Dif</th></tr>
+                </thead>
+                <tbody><tr><td colspan="6" class="aviso">Cargando…</td></tr>
+                </tbody>
+            </table>
         </div>
     </section>
 
     <section id="resultados">
-        <h2>📅 Últimos encuentros</h2>
-        <div id="lista-partidos" class="grid-partidos">
-            <p>Cargando resultados…</p>
-        </div>
+        <h2>📅 Resultados: hoy y días anteriores</h2>
+        <div id="lista‑partidos" class="grid‑partidos"><p>Cargando todos los encuentros…</p></div>
     </section>
 
     <section id="contacto">
@@ -68,77 +80,78 @@
 </footer>
 
 <script>
-// ⚾ MLB — API PÚBLICA
 const API_KEY = "3";
-const URL_EQUIPOS = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/lookup_all_teams.php?id=4424`;
-const URL_PARTIDOS = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/eventspastleague.php?id=4424`;
+const ID_LIGA = "4424";
+const URL_EQUIPOS = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/lookup_all_teams.php?id=${ID_LIGA}`;
+const URL_TABLA = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/lookuptable.php?l=${ID_LIGA}&s=2026`;
+const URL_HOY = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/eventsday.php?d=${new Date().toISOString().split('T')[0]}&l=${ID_LIGA}`;
+const URL_ANTES = `https://www.thesportsdb.com/api/v1/json/${API_KEY}/eventspastleague.php?id=${ID_LIGA}`;
 
-// Cargar equipos MLB
-async function cargarEquiposMLB() {
-    const cont = document.getElementById("lista-equipos");
-    try {
+// Equipos
+async function cargarEquipos(){
+    const c = document.getElementById("lista‑equipos");
+    try{
         const res = await fetch(URL_EQUIPOS);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const datos = await res.json();
-        const equipos = datos.teams || [];
-
-        if (!equipos.length) {
-            cont.innerHTML = "<p class='aviso'>Sin equipos disponibles</p>";
-            return;
-        }
-
-        cont.innerHTML = equipos.map(eq => `
+        const d = await res.json();
+        c.innerHTML = (d.teams||[]).map(eq=>`
             <div class="card">
-                <img src="${eq.strTeamBadge || eq.strTeamLogo || ''}" 
-                     alt="${eq.strTeam}" 
-                     loading="lazy"
-                     onerror="this.style.display='none'">
-                <h4 style="margin:.4rem 0;">${eq.strTeam}</h4>
-                <p style="font-size:.85rem; color:#666;">${eq.strStadium || "Estadio no especificado"}</p>
-            </div>
-        `).join("");
-    } catch (err) {
-        console.error("❌ Equipos MLB:", err);
-        cont.innerHTML = `<p class='aviso'>Error: ${err.message}</p>`;
-    }
+                <img src="${eq.strTeamBadge||''}" alt="${eq.strTeam}" loading="lazy" onerror="this.style.display='none'">
+                <h4>${eq.strTeam}</h4>
+                <p style="font‑size:.85rem;color:#666;">${eq.strStadium||'—'}</p>
+            </div>`).join("");
+    }catch(e){c.innerHTML=`<p class='aviso'>${e.message}</p>`;}
 }
 
-// Cargar resultados MLB
-async function cargarPartidosMLB() {
-    const cont = document.getElementById("lista-partidos");
-    try {
-        const res = await fetch(URL_PARTIDOS);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const datos = await res.json();
-        const partidos = datos.events || [];
+// Tabla posiciones
+async function cargarTabla(){
+    const tb = document.querySelector("#tabla‑mlb tbody");
+    try{
+        const res = await fetch(URL_TABLA);
+        const d = await res.json();
+        const filas = d.table||[];
+        if(!filas.length){tb.innerHTML="<tr><td colspan='6' class='aviso'>Sin datos</td></tr>";return;}
+        tb.innerHTML = filas.map((f,i)=>`
+            <tr>
+                <td>${i+1}</td>
+                <td>${f.strTeam}</td>
+                <td>${f.intWin}</td>
+                <td>${f.intLoss}</td>
+                <td>${f.strWinPct}</td>
+                <td>${f.strGamesBehind||'—'}</td>
+            </tr>`).join("");
+    }catch(e){tb.innerHTML=`<tr><td colspan='6' class='aviso'>Tabla: ${e.message}</td></tr>`;}
+}
 
-        if (!partidos.length) {
-            cont.innerHTML = "<p class='aviso'>Sin partidos disponibles</p>";
-            return;
-        }
+// Resultados HOY + ANTERIORES
+async function cargarResultados(){
+    const c = document.getElementById("lista‑partidos");
+    try{
+        // Traer ambos
+        const [resHoy, resAntes] = await Promise.all([fetch(URL_HOY), fetch(URL_ANTES)]);
+        const [datHoy, datAntes] = await Promise.all([resHoy.json(), resAntes.json()]);
+        let todos = [ ...(datHoy.events||[]), ...(datAntes.events||[]) ];
+        // Quitar duplicados
+        const ids = new Set();
+        todos = todos.filter(p=>ids.has(p.idEvent)?false:ids.add(p.idEvent));
+        // Ordenar fecha ↓
+        todos.sort((a,b)=>new Date(b.dateEvent)-new Date(a.dateEvent));
 
-        // Mostrar últimos 10 partidos ordenados por fecha
-        const ordenados = partidos.sort((a,b) => new Date(b.dateEvent)-new Date(a.dateEvent)).slice(0,10);
-
-        cont.innerHTML = ordenados.map(p => `
+        if(!todos.length){c.innerHTML="<p class='aviso'>Sin partidos</p>";return;}
+        c.innerHTML = todos.map(p=>`
             <div class="card">
-                <p style="font-weight:bold;">${p.strHomeTeam}</p>
-                <p style="font-size:1.2rem; color:#00468B; font-weight:bold; margin:.4rem 0;">
-                    ${p.intHomeScore ?? "-"} : ${p.intAwayScore ?? "-"}
+                <p style="font‑weight:bold;">${p.strHomeTeam}</p>
+                <p style="font‑size:1.2rem;color:#00468B;font‑weight:bold;margin:.4rem 0;">
+                    ${p.intHomeScore??"‑"} : ${p.intAwayScore??"‑"}
                 </p>
-                <p style="font-weight:bold;">${p.strAwayTeam}</p>
-                <p style="font-size:.9rem; color:#666; margin-top:.6rem;">📅 ${p.dateEvent} | ⏰ ${p.strTime || "Sin hora"}</p>
-            </div>
-        `).join("");
-    } catch (err) {
-        console.error("❌ Partidos MLB:", err);
-        cont.innerHTML = `<p class='aviso'>Error: ${err.message}</p>`;
-    }
+                <p style="font‑weight:bold;">${p.strAwayTeam}</p>
+                <p style="font‑size:.9rem;color:#666;margin‑top:.6rem;">📅 ${p.dateEvent} | ⏰ ${p.strTime||"‑"}</p>
+            </div>`).join("");
+    }catch(e){c.innerHTML=`<p class='aviso'>Partidos: ${e.message}</p>`;}
 }
 
-// Ejecutar
-cargarEquiposMLB();
-cargarPartidosMLB();
+cargarEquipos();
+cargarTabla();
+cargarResultados();
 </script>
 </body>
 </html>
