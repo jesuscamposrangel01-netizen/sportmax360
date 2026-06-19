@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sportmax360 | Fútbol — football‑data.org</title>
+    <title>Sportmax360 | Fútbol — football-data.org</title>
     <style>
         :root{
             --verde:#2F855A;
@@ -46,7 +46,7 @@
 
 <header>
     <h1>⚽ Sportmax360 — Fútbol</h1>
-    <p>Datos oficiales • football‑data.org</p>
+    <p>Datos oficiales • football-data.org</p>
 </header>
 
 <nav>
@@ -61,22 +61,23 @@
 <main>
     <section id="inicio">
         <h2>Bienvenido</h2>
-        <p>Usando tu clave API: <code style="background:#eee;padding:.2rem .4rem;border-radius:4px;">d0134d9dafae4349b1748ddfc02fab16</code></p>
+        <p>Ligas de Europa y <strong>Mundial FIFA 2022</strong> incluidos.</p>
     </section>
 
     <section>
         <h2>📌 Selecciona competición</h2>
         <select id="ligaSelect" class="select-liga">
             <option value="PL">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</option>
-            <option value="SA">🇪🇸 La Liga</option>
+            <option value="PD">🇪🇸 La Liga</option>
             <option value="BL1">🇩🇪 Bundesliga</option>
             <option value="SA">🇮🇹 Serie A</option>
             <option value="FL1">🇫🇷 Ligue 1</option>
+            <option value="WC">🌎 Mundial FIFA 2022</option>
         </select>
     </section>
 
     <section id="tabla">
-        <h2>🏆 Tabla de posiciones — Temporada actual</h2>
+        <h2>🏆 Tabla de posiciones / Grupos</h2>
         <div class="tabla-wrap">
             <table class="tabla">
                 <thead>
@@ -89,7 +90,7 @@
     </section>
 
     <section id="partidos">
-        <h2>📅 Partidos • Hoy y últimos</h2>
+        <h2>📅 Partidos • Últimos y próximos</h2>
         <div id="lista-partidos" class="grid-partidos"><p class="aviso">Cargando…</p></div>
     </section>
 
@@ -100,28 +101,29 @@
 </main>
 
 <footer>
-    <p>© 2026 Sportmax360 — Datos: football‑data.org</p>
+    <p>© 2026 Sportmax360 — Datos: football-data.org</p>
 </footer>
 
 <script>
 // ✅ Tu clave API
 const API_TOKEN = "d0134d9dafae4349b1748ddfc02fab16";
 const HOY = new Date().toISOString().split('T')[0];
+const FECHA_INICIO = "2022-11-01"; // Fecha inicial válida para Mundial
 
-// Encabezados obligatorios para esta API
+// Encabezados correctos
 const cabeceras = {
-    "X‑Auth‑Token": API_TOKEN,
+    "X-Auth-Token": API_TOKEN,
     "Accept": "application/json"
 };
 
-// Cargar TABLA
+// Cargar TABLA / GRUPOS
 async function cargarTabla(codLiga){
     const tb = document.getElementById("cuerpo-tabla");
     try{
-        const res = await fetch(`https://api.football-data.org/v4/competitions/${codLiga}/standings`, {headers:cabeceras});
+        const res = await fetch(`https://api.football-data.org/v4/competitions/${codLiga}/standings`, {headers: cabeceras});
         if(!res.ok) throw new Error(`HTTP ${res.status}`);
         const datos = await res.json();
-        const filas = datos.standings?.[0]?.table || [];
+        const filas = datos.standings?.flatMap(g=>g.table) || datos.standings?.[0]?.table || [];
 
         if(!filas.length){
             tb.innerHTML = "<tr><td colspan='7' class='aviso'>Sin clasificación disponible</td></tr>";
@@ -145,14 +147,17 @@ async function cargarTabla(codLiga){
 // Cargar PARTIDOS
 async function cargarPartidos(codLiga){
     const cont = document.getElementById("lista-partidos");
+    // Fecha distinta para Mundial (todos sus partidos están en 2022)
+    const desde = codLiga==="WC" ? "2022-11-01" : FECHA_INICIO;
+    const hasta = codLiga==="WC" ? "2022-12-31" : HOY;
     try{
-        const res = await fetch(`https://api.football-data.org/v4/matches?competitions=${codLiga}&dateFrom=2026‑06‑01&dateTo=${HOY}`, {headers:cabeceras});
+        const res = await fetch(`https://api.football-data.org/v4/matches?competitions=${codLiga}&dateFrom=${desde}&dateTo=${hasta}`, {headers: cabeceras});
         if(!res.ok) throw new Error(`HTTP ${res.status}`);
         const datos = await res.json();
         const partidos = datos.matches || [];
 
         if(!partidos.length){
-            cont.innerHTML = "<p class='aviso'>Sin partidos recientes</p>";
+            cont.innerHTML = "<p class='aviso'>Sin partidos disponibles</p>";
             return;
         }
         cont.innerHTML = partidos.map(p=>`
