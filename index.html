@@ -67,7 +67,6 @@
                 font-size: 0.65rem;
             }
         }
-        /* Estilos para las tablas de posiciones */
         .tabla-posiciones th {
             background-color: #f1f5f9;
             font-weight: 600;
@@ -125,28 +124,23 @@
         <section>
             <h2 class="text-xl font-semibold text-mlbAzul border-l-4 border-azul pl-2 mb-4">📋 Resultados & En vivo</h2>
 
-            <!-- Selector de fechas -->
             <div class="flex items-center justify-center gap-2 bg-white rounded-lg py-2 px-3 mb-6 border border-grisClaro shadow-sm">
                 <button onclick="cambiarFecha(-1)" class="text-lg px-2 hover:text-azul">‹</button>
                 <div id="selector-fechas" class="flex gap-3 text-sm"></div>
                 <button onclick="cambiarFecha(1)" class="text-lg px-2 hover:text-azul">›</button>
             </div>
 
-            <!-- Lista de partidos -->
             <div id="lista-partidos" class="space-y-5 mb-10">
                 <p class="text-center py-10">Cargando encuentros…</p>
             </div>
 
-            <!-- POSICIONES (nuevo diseño por divisiones) -->
             <div class="space-y-6">
-                <!-- Liga Americana -->
                 <div id="posiciones-americana" class="bg-white rounded-lg border border-grisClaro p-4 shadow-sm">
                     <h3 class="font-semibold text-mlbAzul mb-3">🏆 Liga Americana</h3>
                     <div id="tabla-americana" class="overflow-x-auto">
                         <p class="text-center py-4">Cargando posiciones…</p>
                     </div>
                 </div>
-                <!-- Liga Nacional -->
                 <div id="posiciones-nacional" class="bg-white rounded-lg border border-grisClaro p-4 shadow-sm">
                     <h3 class="font-semibold text-mlbAzul mb-3">🏆 Liga Nacional</h3>
                     <div id="tabla-nacional" class="overflow-x-auto">
@@ -207,18 +201,22 @@
             cont.innerHTML = html;
         }
 
-        // ========== EXTRACCIÓN DE TOTALES ==========
+        // ========== EXTRACCIÓN DE DATOS DE PARTIDOS ==========
+        // Obtener totales desde linescore o boxscore
         function obtenerTotales(linescore, boxscore, esVisitante) {
+            // 1. Desde linescore
             const equipoLS = esVisitante ? linescore?.away : linescore?.home;
             if (equipoLS && equipoLS.runs !== undefined) {
                 return { runs: equipoLS.runs, hits: equipoLS.hits || 0, errors: equipoLS.errors || 0 };
             }
+            // 2. Desde boxscore
             if (boxscore && boxscore.teams) {
                 const eqBox = esVisitante ? boxscore.teams.away : boxscore.teams.home;
                 if (eqBox && eqBox.stats) {
                     return { runs: eqBox.stats.runs || 0, hits: eqBox.stats.hits || 0, errors: eqBox.stats.errors || 0 };
                 }
             }
+            // 3. Desde linescore.teams (alternativo)
             if (linescore && linescore.teams) {
                 const eqAlt = esVisitante ? linescore.teams.away : linescore.teams.home;
                 if (eqAlt) {
@@ -228,6 +226,7 @@
             return { runs: 0, hits: 0, errors: 0 };
         }
 
+        // Leer entradas y totales
         function leerEntradas(linescore, boxscore, esVisitante) {
             const innings = linescore?.innings || [];
             const fila = [];
@@ -296,6 +295,7 @@
                     const ls = p.linescore || {};
                     const box = p.boxscore || {};
 
+                    // Extraer entradas y totales
                     const v = leerEntradas(ls, box, true);
                     const h = leerEntradas(ls, box, false);
 
@@ -306,6 +306,7 @@
                     const out = ls.outs ?? '-';
                     const tipo = p.seriesDescription || 'Temporada Regular';
 
+                    // Lanzadores
                     let lanzA = p.probablePitchers?.away || {};
                     let lanzH = p.probablePitchers?.home || {};
                     if (!lanzA.fullName && box?.teams?.away?.players) {
@@ -380,23 +381,40 @@
             }
         }
 
-        // ========== TABLAS DE POSICIONES CON DIVISIONES ==========
+        // ========== TABLAS DE POSICIONES CON DIVISIONES (robusto) ==========
         async function cargarTablas() {
             try {
                 const res = await fetch(`https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=${ANIO}`);
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const datos = await res.json();
 
-                // Agrupar por liga
+                // Mapeo de ligas
                 const ligas = {
-                    103: { nombre: 'Liga Americana', contenedor: 'tabla-americana', records: [] },
-                    104: { nombre: 'Liga Nacional', contenedor: 'tabla-nacional', records: [] }
+                    103: { contenedor: 'tabla-americana', nombre: 'Liga Americana' },
+                    104: { contenedor: 'tabla-nacional', nombre: 'Liga Nacional' }
                 };
 
-                datos.records?.forEach(record => {
-                    const leagueId = record.league?.id;
-                    if (ligas[leagueId]) {
-                        ligas[leagueId].records.push(record);
+                // Procesar cada record (que corresponde a una división)
+                const records = datos.records || [];
+                // Agrupar por liga
+                const grupos = {};
+                records.forEach(r => {
+                    const leagueId = r.league?.id;
+                    if (!leagueId || !ligas[leagueId]) return;
+                    const div = r.division;
+                    if (!div) return; // Sin división, ignoramos
+                    const key = `${leagueId}-${div.id}`;
+                    if (!grupos[key]) {
+                        grupos[key] = {
+                            leagueId,
+                            division: div,
+                            equipos: []
+                        };
+                    }
+                    if (r.teamRecords) {
+                        r.teamRecords.forEach(team => {
+                            grupos[key].equipos.push(team);
+                        });
                     }
                 });
 
@@ -406,58 +424,31 @@
                     const contenedor = document.getElementById(liga.contenedor);
                     if (!contenedor) continue;
 
-                    const records = liga.records;
-                    if (!records.length) {
-                        contenedor.innerHTML = `<p class="text-center py-4">Sin datos de posiciones</p>`;
+                    // Filtrar grupos de esta liga
+                    const gruposLiga = Object.values(grupos).filter(g => g.leagueId == leagueId);
+                    if (gruposLiga.length === 0) {
+                        contenedor.innerHTML = `<p class="text-center py-4 text-gris/70">No hay datos de posiciones</p>`;
                         continue;
                     }
 
-                    // Agrupar por división (dentro de la liga)
-                    // Cada record tiene division: { id, name }
-                    const divisiones = {};
-                    records.forEach(r => {
-                        const div = r.division;
-                        if (!div) return; // Sin división (raro)
-                        const key = div.id;
-                        if (!divisiones[key]) {
-                            divisiones[key] = {
-                                nombre: div.name,
-                                equipos: []
-                            };
-                        }
-                        // Los teamRecords están dentro de r.teamRecords
-                        if (r.teamRecords) {
-                            r.teamRecords.forEach(team => {
-                                // Añadir wildCardGamesBack y gamesBack
-                                divisiones[key].equipos.push(team);
-                            });
-                        }
-                    });
-
-                    // Ordenar divisiones por nombre (East, Central, West)
-                    const orden = ['East', 'Central', 'West'];
-                    const divKeys = Object.keys(divisiones).sort((a, b) => {
-                        const nombreA = divisiones[a].nombre;
-                        const nombreB = divisiones[b].nombre;
-                        const idxA = orden.findIndex(o => nombreA.includes(o));
-                        const idxB = orden.findIndex(o => nombreB.includes(o));
+                    // Ordenar divisiones: East, Central, West
+                    const ordenDiv = ['East', 'Central', 'West'];
+                    gruposLiga.sort((a, b) => {
+                        const idxA = ordenDiv.findIndex(o => a.division.name.includes(o));
+                        const idxB = ordenDiv.findIndex(o => b.division.name.includes(o));
                         return (idxA === -1 ? 999 : idxA) - (idxB === -1 ? 999 : idxB);
                     });
 
-                    // Construir HTML
                     let html = '';
-                    divKeys.forEach(key => {
-                        const div = divisiones[key];
-                        // Ordenar equipos por porcentaje de victorias descendente
-                        div.equipos.sort((a, b) => b.winningPercentage - a.winningPercentage);
+                    gruposLiga.forEach(g => {
+                        // Ordenar equipos por porcentaje
+                        g.equipos.sort((a, b) => b.winningPercentage - a.winningPercentage);
+                        // Nombre de división en español
+                        let divNombre = g.division.name.replace(/^.*League /, '').toUpperCase();
+                        const map = { 'EAST': 'ESTE', 'CENTRAL': 'CENTRAL', 'WEST': 'OESTE' };
+                        divNombre = map[divNombre] || divNombre;
 
-                        // Formatear nombre de división (ej: "American League East" -> "ESTE")
-                        let nombreDiv = div.nombre.replace(/^.*League /, '').toUpperCase();
-                        if (nombreDiv === 'EAST') nombreDiv = 'ESTE';
-                        else if (nombreDiv === 'CENTRAL') nombreDiv = 'CENTRAL';
-                        else if (nombreDiv === 'WEST') nombreDiv = 'OESTE';
-
-                        html += `<div class="division-titulo">${nombreDiv}</div>`;
+                        html += `<div class="division-titulo">${divNombre}</div>`;
                         html += `<table class="w-full text-xs tabla-posiciones">`;
                         html += `<thead><tr>
                             <th class="text-left">Equipo</th>
@@ -468,10 +459,9 @@
                             <th class="text-center">DIFWC</th>
                         </tr></thead><tbody>`;
 
-                        div.equipos.forEach(team => {
-                            const gb = team.gamesBack !== undefined ? team.gamesBack : '—';
-                            const wcgb = team.wildCardGamesBack !== undefined ? team.wildCardGamesBack : '—';
-                            // Formatear números
+                        g.equipos.forEach(team => {
+                            const gb = team.gamesBack !== undefined && team.gamesBack !== null ? team.gamesBack : '—';
+                            const wcgb = team.wildCardGamesBack !== undefined && team.wildCardGamesBack !== null ? team.wildCardGamesBack : '—';
                             const pct = Number(team.winningPercentage).toFixed(3);
                             html += `<tr>
                                 <td>${team.team.name}</td>
