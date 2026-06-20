@@ -67,6 +67,33 @@
                 font-size: 0.65rem;
             }
         }
+        /* Estilos para las tablas de posiciones */
+        .tabla-posiciones th {
+            background-color: #f1f5f9;
+            font-weight: 600;
+            padding: 4px 6px;
+        }
+        .tabla-posiciones td {
+            padding: 4px 6px;
+        }
+        .tabla-posiciones tr {
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .tabla-posiciones tr:last-child {
+            border-bottom: none;
+        }
+        .division-titulo {
+            background-color: #e2e8f0;
+            font-weight: 700;
+            padding: 4px 8px;
+            margin-top: 8px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .division-titulo:first-of-type {
+            margin-top: 0;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gris font-sans min-h-screen">
@@ -98,50 +125,32 @@
         <section>
             <h2 class="text-xl font-semibold text-mlbAzul border-l-4 border-azul pl-2 mb-4">📋 Resultados & En vivo</h2>
 
+            <!-- Selector de fechas -->
             <div class="flex items-center justify-center gap-2 bg-white rounded-lg py-2 px-3 mb-6 border border-grisClaro shadow-sm">
                 <button onclick="cambiarFecha(-1)" class="text-lg px-2 hover:text-azul">‹</button>
                 <div id="selector-fechas" class="flex gap-3 text-sm"></div>
                 <button onclick="cambiarFecha(1)" class="text-lg px-2 hover:text-azul">›</button>
             </div>
 
-            <!-- Contenedor con mensaje de carga inicial -->
+            <!-- Lista de partidos -->
             <div id="lista-partidos" class="space-y-5 mb-10">
                 <p class="text-center py-10">Cargando encuentros…</p>
             </div>
 
+            <!-- POSICIONES (nuevo diseño por divisiones) -->
             <div class="space-y-6">
-                <div class="bg-white rounded-lg border border-grisClaro p-4 shadow-sm">
+                <!-- Liga Americana -->
+                <div id="posiciones-americana" class="bg-white rounded-lg border border-grisClaro p-4 shadow-sm">
                     <h3 class="font-semibold text-mlbAzul mb-3">🏆 Liga Americana</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-xs">
-                            <thead><tr class="border-b border-grisClaro">
-                                <th class="py-2 text-left">#</th>
-                                <th class="py-2 text-left">Equipo</th>
-                                <th class="py-2 text-center">G</th>
-                                <th class="py-2 text-center">P</th>
-                                <th class="py-2 text-center">%</th>
-                                <th class="py-2 text-center">Dif</th>
-                            </tr></thead>
-                            <tbody id="tabla-americana"><tr><td colspan="6" class="py-4 text-center">Sin datos</td></tr>
-                            </tbody>
-                        </table>
+                    <div id="tabla-americana" class="overflow-x-auto">
+                        <p class="text-center py-4">Cargando posiciones…</p>
                     </div>
                 </div>
-                <div class="bg-white rounded-lg border border-grisClaro p-4 shadow-sm">
+                <!-- Liga Nacional -->
+                <div id="posiciones-nacional" class="bg-white rounded-lg border border-grisClaro p-4 shadow-sm">
                     <h3 class="font-semibold text-mlbAzul mb-3">🏆 Liga Nacional</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-xs">
-                            <thead><tr class="border-b border-grisClaro">
-                                <th class="py-2 text-left">#</th>
-                                <th class="py-2 text-left">Equipo</th>
-                                <th class="py-2 text-center">G</th>
-                                <th class="py-2 text-center">P</th>
-                                <th class="py-2 text-center">%</th>
-                                <th class="py-2 text-center">Dif</th>
-                            </tr></thead>
-                            <tbody id="tabla-nacional"><tr><td colspan="6" class="py-4 text-center">Sin datos</td></tr>
-                            </tbody>
-                        </table>
+                    <div id="tabla-nacional" class="overflow-x-auto">
+                        <p class="text-center py-4">Cargando posiciones…</p>
                     </div>
                 </div>
             </div>
@@ -157,10 +166,9 @@
         const ANIO = 2026;
         const ZONA_LIMA = 'America/Lima';
 
-        // Obtener la fecha actual en Lima (sin hora)
         function hoyLima() {
             const hoy = new Date();
-            const fechaStr = hoy.toLocaleDateString('en-CA', { timeZone: ZONA_LIMA }); // YYYY-MM-DD
+            const fechaStr = hoy.toLocaleDateString('en-CA', { timeZone: ZONA_LIMA });
             return new Date(fechaStr + 'T00:00:00');
         }
 
@@ -169,16 +177,9 @@
         function iso(d) { return d.toISOString().split('T')[0]; }
 
         function textoFecha(d) {
-            // Mostrar en formato local (Lima)
-            const opciones = { weekday: 'short', day: 'numeric', month: 'short', timeZone: ZONA_LIMA };
-            const partes = d.toLocaleDateString('es-ES', opciones).split(' ');
-            // Personalizar para que coincida con el formato anterior
             const dias = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
             const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-            const diaSemana = dias[d.getDay()];
-            const diaNum = d.getDate();
-            const mes = meses[d.getMonth()];
-            return `${diaSemana} ${diaNum} ${mes}`;
+            return `${dias[d.getDay()]} ${d.getDate()} ${meses[d.getMonth()]}`;
         }
 
         // ========== FECHAS ==========
@@ -259,8 +260,6 @@
         // ========== CARGAR PARTIDOS ==========
         async function cargarPartidos(fecha) {
             const cont = document.getElementById('lista-partidos');
-            // No mostramos mensaje de carga en actualizaciones para evitar parpadeo
-
             try {
                 const url =
                     `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${fecha}&language=es&hydrate=linescore,probablePitchers,status,linescore.offense,linescore.defense,boxscore,gameDate,plays`;
@@ -291,7 +290,7 @@
                     const programado = estado.abstractGameState === 'Preview';
 
                     const horaUTC = new Date(p.gameDate);
-                    const horaLocal = new Date(horaUTC.getTime() - 5 * 3600000); // Ajuste manual a UTC-5
+                    const horaLocal = new Date(horaUTC.getTime() - 5 * 3600000);
                     const horaTexto = horaLocal.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
 
                     const ls = p.linescore || {};
@@ -381,50 +380,121 @@
             }
         }
 
-        // ========== TABLAS ==========
+        // ========== TABLAS DE POSICIONES CON DIVISIONES ==========
         async function cargarTablas() {
             try {
                 const res = await fetch(`https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=${ANIO}`);
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const datos = await res.json();
 
-                let ame = [],
-                    nac = [];
-                datos.records?.forEach(r => {
-                    if (r.league.id === 103) ame.push(...r.teamRecords);
-                    if (r.league.id === 104) nac.push(...r.teamRecords);
-                });
-
-                ame.sort((a, b) => b.winningPercentage - a.winningPercentage);
-                nac.sort((a, b) => b.winningPercentage - a.winningPercentage);
-
-                const renderTabla = (records, id) => {
-                    const tbody = document.getElementById(id);
-                    if (!records.length) {
-                        tbody.innerHTML = `<tr><td colspan="6" class="py-4 text-center">Sin datos</td></tr>`;
-                        return;
-                    }
-                    tbody.innerHTML = records.map((t, i) => `
-                        <tr class="border-b border-grisClaro">
-                            <td>${i + 1}</td>
-                            <td>${t.team.name}</td>
-                            <td class="text-center">${t.wins}</td>
-                            <td class="text-center">${t.losses}</td>
-                            <td class="text-center">${Number(t.winningPercentage).toFixed(3)}</td>
-                            <td class="text-center">${t.gamesBack ?? '—'}</td>
-                        </tr>
-                    `).join('');
+                // Agrupar por liga
+                const ligas = {
+                    103: { nombre: 'Liga Americana', contenedor: 'tabla-americana', records: [] },
+                    104: { nombre: 'Liga Nacional', contenedor: 'tabla-nacional', records: [] }
                 };
 
-                renderTabla(ame, 'tabla-americana');
-                renderTabla(nac, 'tabla-nacional');
+                datos.records?.forEach(record => {
+                    const leagueId = record.league?.id;
+                    if (ligas[leagueId]) {
+                        ligas[leagueId].records.push(record);
+                    }
+                });
+
+                // Renderizar cada liga
+                for (const leagueId in ligas) {
+                    const liga = ligas[leagueId];
+                    const contenedor = document.getElementById(liga.contenedor);
+                    if (!contenedor) continue;
+
+                    const records = liga.records;
+                    if (!records.length) {
+                        contenedor.innerHTML = `<p class="text-center py-4">Sin datos de posiciones</p>`;
+                        continue;
+                    }
+
+                    // Agrupar por división (dentro de la liga)
+                    // Cada record tiene division: { id, name }
+                    const divisiones = {};
+                    records.forEach(r => {
+                        const div = r.division;
+                        if (!div) return; // Sin división (raro)
+                        const key = div.id;
+                        if (!divisiones[key]) {
+                            divisiones[key] = {
+                                nombre: div.name,
+                                equipos: []
+                            };
+                        }
+                        // Los teamRecords están dentro de r.teamRecords
+                        if (r.teamRecords) {
+                            r.teamRecords.forEach(team => {
+                                // Añadir wildCardGamesBack y gamesBack
+                                divisiones[key].equipos.push(team);
+                            });
+                        }
+                    });
+
+                    // Ordenar divisiones por nombre (East, Central, West)
+                    const orden = ['East', 'Central', 'West'];
+                    const divKeys = Object.keys(divisiones).sort((a, b) => {
+                        const nombreA = divisiones[a].nombre;
+                        const nombreB = divisiones[b].nombre;
+                        const idxA = orden.findIndex(o => nombreA.includes(o));
+                        const idxB = orden.findIndex(o => nombreB.includes(o));
+                        return (idxA === -1 ? 999 : idxA) - (idxB === -1 ? 999 : idxB);
+                    });
+
+                    // Construir HTML
+                    let html = '';
+                    divKeys.forEach(key => {
+                        const div = divisiones[key];
+                        // Ordenar equipos por porcentaje de victorias descendente
+                        div.equipos.sort((a, b) => b.winningPercentage - a.winningPercentage);
+
+                        // Formatear nombre de división (ej: "American League East" -> "ESTE")
+                        let nombreDiv = div.nombre.replace(/^.*League /, '').toUpperCase();
+                        if (nombreDiv === 'EAST') nombreDiv = 'ESTE';
+                        else if (nombreDiv === 'CENTRAL') nombreDiv = 'CENTRAL';
+                        else if (nombreDiv === 'WEST') nombreDiv = 'OESTE';
+
+                        html += `<div class="division-titulo">${nombreDiv}</div>`;
+                        html += `<table class="w-full text-xs tabla-posiciones">`;
+                        html += `<thead><tr>
+                            <th class="text-left">Equipo</th>
+                            <th class="text-center">G</th>
+                            <th class="text-center">P</th>
+                            <th class="text-center">PCT</th>
+                            <th class="text-center">DIF</th>
+                            <th class="text-center">DIFWC</th>
+                        </tr></thead><tbody>`;
+
+                        div.equipos.forEach(team => {
+                            const gb = team.gamesBack !== undefined ? team.gamesBack : '—';
+                            const wcgb = team.wildCardGamesBack !== undefined ? team.wildCardGamesBack : '—';
+                            // Formatear números
+                            const pct = Number(team.winningPercentage).toFixed(3);
+                            html += `<tr>
+                                <td>${team.team.name}</td>
+                                <td class="text-center">${team.wins}</td>
+                                <td class="text-center">${team.losses}</td>
+                                <td class="text-center">${pct}</td>
+                                <td class="text-center">${gb}</td>
+                                <td class="text-center">${wcgb}</td>
+                            </tr>`;
+                        });
+
+                        html += `</tbody></table>`;
+                    });
+
+                    contenedor.innerHTML = html;
+                }
 
             } catch (error) {
                 console.error('Error cargando tablas:', error);
                 document.getElementById('tabla-americana').innerHTML =
-                    `<tr><td colspan="6" class="py-4 text-center text-red-600">Error al cargar</td></tr>`;
+                    `<p class="text-center text-red-600 py-4">Error al cargar posiciones</p>`;
                 document.getElementById('tabla-nacional').innerHTML =
-                    `<tr><td colspan="6" class="py-4 text-center text-red-600">Error al cargar</td></tr>`;
+                    `<p class="text-center text-red-600 py-4">Error al cargar posiciones</p>`;
             }
         }
 
