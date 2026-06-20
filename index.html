@@ -52,6 +52,7 @@
             border-color: #64748b;
         }
         .grid-entradas {
+            display: grid; /* <--- IMPORTANTE: faltaba esta línea */
             grid-template-columns: repeat(9, 1.6rem) 2rem 2rem 2rem;
         }
         .grid-entradas > span {
@@ -189,17 +190,33 @@
             cont.innerHTML = html;
         }
 
-        // ========== EXTRACCIÓN DE DATOS ==========
-        function obtenerDatosLinescore(linescore, esVisitante) {
-            const equipo = esVisitante ? linescore.away : linescore.home;
-            return {
-                runs: equipo?.runs ?? 0,
-                hits: equipo?.hits ?? 0,
-                errors: equipo?.errors ?? 0,
-            };
+        // ========== EXTRACCIÓN DE TOTALES (MÁS ROBUSTA) ==========
+        function obtenerTotales(linescore, boxscore, esVisitante) {
+            // Intentamos obtener de linescore primero
+            const equipoLS = esVisitante ? linescore?.away : linescore?.home;
+            if (equipoLS && equipoLS.runs !== undefined) {
+                return { runs: equipoLS.runs, hits: equipoLS.hits || 0, errors: equipoLS.errors || 0 };
+            }
+            // Si no, de boxscore
+            if (boxscore && boxscore.teams) {
+                const eqBox = esVisitante ? boxscore.teams.away : boxscore.teams.home;
+                if (eqBox && eqBox.stats) {
+                    return { runs: eqBox.stats.runs || 0, hits: eqBox.stats.hits || 0, errors: eqBox.stats.errors || 0 };
+                }
+            }
+            // Último recurso: linescore.teams (estructura alternativa)
+            if (linescore && linescore.teams) {
+                const eqAlt = esVisitante ? linescore.teams.away : linescore.teams.home;
+                if (eqAlt) {
+                    return { runs: eqAlt.runs || 0, hits: eqAlt.hits || 0, errors: eqAlt.errors || 0 };
+                }
+            }
+            // Si nada funciona, devolvemos 0
+            return { runs: 0, hits: 0, errors: 0 };
         }
 
-        function leerEntradas(linescore, esVisitante) {
+        // ========== LEER ENTRADAS ==========
+        function leerEntradas(linescore, boxscore, esVisitante) {
             const innings = linescore?.innings || [];
             const fila = [];
             for (let i = 0; i < 9; i++) {
@@ -211,7 +228,7 @@
                 const runs = esVisitante ? inn.away?.runs : inn.home?.runs;
                 fila.push(runs !== undefined && runs !== null ? runs : '-');
             }
-            const totals = obtenerDatosLinescore(linescore, esVisitante);
+            const totals = obtenerTotales(linescore, boxscore, esVisitante);
             return { fila, C: totals.runs, H: totals.hits, E: totals.errors };
         }
 
@@ -269,8 +286,9 @@
                     const ls = p.linescore || {};
                     const box = p.boxscore || {};
 
-                    const v = leerEntradas(ls, true);
-                    const h = leerEntradas(ls, false);
+                    // Leer entradas y totales (con fallback)
+                    const v = leerEntradas(ls, box, true);
+                    const h = leerEntradas(ls, box, false);
 
                     const actInn = ls.currentInning || '';
                     const mitad = ls.inningHalf === 'Top' ? 'Arriba' : ls.inningHalf === 'Bottom' ? 'Abajo' : '';
@@ -279,6 +297,7 @@
                     const out = ls.outs ?? '-';
                     const tipo = p.seriesDescription || 'Temporada Regular';
 
+                    // Lanzadores
                     let lanzA = p.probablePitchers?.away || {};
                     let lanzH = p.probablePitchers?.home || {};
                     if (!lanzA.fullName && box?.teams?.away?.players) {
@@ -291,13 +310,12 @@
                         const pitcher = Object.values(players).find(pj => pj.position?.code === 'P');
                         if (pitcher) lanzH = { fullName: pitcher.person?.fullName, era: pitcher.stats?.era };
                     }
-
                     if (!lanzA.fullName) lanzA.fullName = vivo ? 'En vivo' : 'Por confirmar';
                     if (!lanzH.fullName) lanzH.fullName = vivo ? 'En vivo' : 'Por confirmar';
 
                     html += `
                     <div class="bg-white rounded-lg shadow-sm border border-grisClaro p-4 relative">
-                        ${vivo && actInn ? `<span class="absolute top-2 right-3 bg-rojoVivo text-white text-[0.7rem] px-2 py-0.5 rounded-full flex items-center gap-1"><span class="w-1.5 h-1.5 bg-white rounded-full parpadeo"></span>EN VIVO ${actInn}° ${mitad}</span>` : ''}
+                        ${vivo ? `<span class="absolute top-2 right-3 bg-rojoVivo text-white text-[0.7rem] px-2 py-0.5 rounded-full flex items-center gap-1"><span class="w-1.5 h-1.5 bg-white rounded-full parpadeo"></span>EN VIVO ${actInn}° ${mitad}</span>` : ''}
                         ${final ? `<span class="absolute top-2 right-3 bg-gris text-white text-[0.7rem] px-2 py-0.5 rounded-full">FINAL</span>` : ''}
                         ${programado ? `<span class="absolute top-2 right-3 bg-blue-50 text-blue-700 text-[0.7rem] px-2 py-0.5 rounded-full">${horaTexto}</span>` : ''}
                         <div class="text-center text-xs text-gris mb-3">${tipo}</div>
