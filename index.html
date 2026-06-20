@@ -27,14 +27,12 @@
         .parpadeo { animation: parpadeo 1.2s infinite ease-in-out; }
         @keyframes parpadeo { 0%,100% {opacity:1;} 50% {opacity:0.4;} }
         .diamante-base { width:10px; height:10px; transform:rotate(45deg); }
-        /* ✅ Columnas fijas → SIEMPRE alineado */
         .grid-entradas { grid-template-columns: repeat(9, 1.6rem) 2rem 2rem 2rem; }
         .grid-entradas > span { text-align: center; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body class="bg-gray-50 text-gris font-sans min-h-screen">
 
-<!-- Cabecera -->
 <header class="bg-mlbAzul text-white py-3 px-4 sticky top-0 z-40 shadow-md">
     <div class="max-w-xl mx-auto flex items-center justify-between">
         <h1 class="font-bold text-xl tracking-wide">SportVivo360 <span class="text-sm opacity-80">MLB</span></h1>
@@ -62,19 +60,16 @@
     <section>
         <h2 class="text-xl font-semibold text-mlbAzul border-l-4 border-azul pl-2 mb-4">📋 Resultados & En vivo</h2>
 
-        <!-- Fechas -->
         <div class="flex items-center justify-center gap-2 bg-white rounded-lg py-2 px-3 mb-6 border border-grisClaro shadow-sm">
             <button onclick="cambiarFecha(-1)" class="text-lg px-2 hover:text-azul">‹</button>
             <div id="selector-fechas" class="flex gap-3 text-sm"></div>
             <button onclick="cambiarFecha(1)" class="text-lg px-2 hover:text-azul">›</button>
         </div>
 
-        <!-- Lista partidos -->
         <div id="lista-partidos" class="space-y-5 mb-10">
             <p class="text-center py-10">Cargando encuentros…</p>
         </div>
 
-        <!-- Tablas -->
         <div class="space-y-6">
             <div class="bg-white rounded-lg border border-grisClaro p-4 shadow-sm">
                 <h3 class="font-semibold text-mlbAzul mb-3">🏆 Liga Americana</h3>
@@ -123,7 +118,6 @@ let fechaActual = new Date();
 const ANIO = 2026;
 const ZONA_UTC = -5;
 
-// Fechas
 function iso(d) { return d.toISOString().split('T')[0]; }
 function textoFecha(d) {
     const dias = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
@@ -142,7 +136,6 @@ function mostrarFechas() {
     document.getElementById('selector-fechas').innerHTML = html;
 }
 
-// ✅ Lectura segura y alineada de entradas
 function leerEntradas(ls, box, visitante) {
     const inn = ls?.innings || [];
     const fila = [];
@@ -151,7 +144,6 @@ function leerEntradas(ls, box, visitante) {
         const v = inn[i] ? (visitante ? inn[i].away?.runs : inn[i].home?.runs) : null;
         fila.push(v === null ? '-' : v);
     }
-    // Leer totales desde boxscore para coincidir con Google
     if(box && box.teams){
         const eq = visitante ? box.teams.away : box.teams.home;
         C = eq?.stats?.runs ?? 0;
@@ -165,7 +157,6 @@ function leerEntradas(ls, box, visitante) {
     return {fila, C, H, E};
 }
 
-// Diagrama bases
 function dibujarBases(ataque){
     const b1 = !!ataque?.first, b2 = !!ataque?.second, b3 = !!ataque?.third;
     return `
@@ -177,10 +168,10 @@ function dibujarBases(ataque){
     </div>`;
 }
 
-// ✅ URL con boxscore + lectura correcta de estado vivo
+// ✅ URL COMPLETA para traer TODO lo necesario en vivo
 async function cargarPartidos(fecha){
     try{
-        const res = await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${fecha}&language=es&hydrate=linescore,probablePitchers,status,linescore.offense,boxscore,gameDate`);
+        const res = await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${fecha}&language=es&hydrate=linescore,probablePitchers,status,linescore.offense,linescore.defense,boxscore,gameDate,plays`);
         const datos = await res.json();
         const juegos = datos.dates?.[0]?.games || [];
         const cont = document.getElementById('lista-partidos');
@@ -230,7 +221,6 @@ async function cargarPartidos(fecha){
                     </div>
                 </div>
 
-                <!-- ✅ Tabla entradas SIEMPRE alineada -->
                 <div class="overflow-x-auto">
                     <div class="grid grid-entradas gap-x-1 text-xs text-center font-medium text-gris/80">
                         ${[1,2,3,4,5,6,7,8,9].map(n=>`<span>${n}</span>`).join('')}
@@ -248,7 +238,7 @@ async function cargarPartidos(fecha){
 
                 ${vivo ? `
                 <div class="mt-3 flex items-center justify-around text-xs bg-gray-50 rounded py-2">
-                    <div class="text-center"><div class="font-medium">B ${bol} • S ${str} • O ${out}</div></div>
+                    <div class="text-center"><div class="font-medium">B ${bol} • S ${str} • O ${out}</div><div class="text-[0.65rem] text-gris/70">Bolas • Strike • Outs</div></div>
                     ${dibujarBases(ls.offense)}
                 </div>` : ''}
 
@@ -266,7 +256,6 @@ async function cargarPartidos(fecha){
     }catch(e){ console.error(e); cont.innerHTML = `<p class="text-center text-red-600 py-8">Error al cargar datos</p>`; }
 }
 
-// Tablas posiciones
 async function cargarTablas(){
     try{
         const res = await fetch(`https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=${ANIO}`);
@@ -287,11 +276,10 @@ async function cargarTablas(){
     }catch(e){ console.error(e); }
 }
 
-// Inicio + refresco rápido
 mostrarFechas();
 cargarPartidos(iso(fechaActual));
 cargarTablas();
-setInterval(()=>cargarPartidos(iso(fechaActual)),20000);
+setInterval(()=>cargarPartidos(iso(fechaActual)),15000); // Refresco cada 15s
 </script>
 </body>
 </html>
