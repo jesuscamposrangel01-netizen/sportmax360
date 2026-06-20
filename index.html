@@ -156,7 +156,7 @@
     </footer>
 
     <script>
-        // ========== CONFIG ==========
+        // ========== CONFIGURACIÓN ==========
         const ANIO = 2026;
         const ZONA_LIMA = 'America/Lima';
 
@@ -176,7 +176,7 @@
             return `${dias[d.getDay()]} ${d.getDate()} ${meses[d.getMonth()]}`;
         }
 
-        // ========== FECHAS ==========
+        // ========== SELECTOR DE FECHAS ==========
         function cambiarFecha(delta) {
             fechaActual.setDate(fechaActual.getDate() + delta);
             mostrarFechas();
@@ -202,21 +202,20 @@
         }
 
         // ========== EXTRACCIÓN DE DATOS DE PARTIDOS ==========
-        // Obtener totales desde linescore o boxscore
         function obtenerTotales(linescore, boxscore, esVisitante) {
-            // 1. Desde linescore
+            // Intenta desde linescore
             const equipoLS = esVisitante ? linescore?.away : linescore?.home;
             if (equipoLS && equipoLS.runs !== undefined) {
                 return { runs: equipoLS.runs, hits: equipoLS.hits || 0, errors: equipoLS.errors || 0 };
             }
-            // 2. Desde boxscore
+            // Desde boxscore
             if (boxscore && boxscore.teams) {
                 const eqBox = esVisitante ? boxscore.teams.away : boxscore.teams.home;
                 if (eqBox && eqBox.stats) {
                     return { runs: eqBox.stats.runs || 0, hits: eqBox.stats.hits || 0, errors: eqBox.stats.errors || 0 };
                 }
             }
-            // 3. Desde linescore.teams (alternativo)
+            // Desde linescore.teams (alternativo)
             if (linescore && linescore.teams) {
                 const eqAlt = esVisitante ? linescore.teams.away : linescore.teams.home;
                 if (eqAlt) {
@@ -226,7 +225,6 @@
             return { runs: 0, hits: 0, errors: 0 };
         }
 
-        // Leer entradas y totales
         function leerEntradas(linescore, boxscore, esVisitante) {
             const innings = linescore?.innings || [];
             const fila = [];
@@ -266,6 +264,9 @@
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const datos = await res.json();
 
+                // Log para depuración
+                console.log('Respuesta de schedule:', datos);
+
                 const juegos = datos.dates?.[0]?.games || [];
                 if (!juegos.length) {
                     cont.innerHTML = `<p class="text-center py-8">No hay partidos programados para esta fecha</p>`;
@@ -274,12 +275,13 @@
 
                 let html = '';
                 for (const p of juegos) {
+                    // Extraer equipos con validación
                     const away = p.teams?.away || {};
                     const home = p.teams?.home || {};
                     const idA = away.team?.id;
                     const idH = home.team?.id;
-                    const nomA = away.team?.name || 'Visitante';
-                    const nomH = home.team?.name || 'Local';
+                    const nomA = away.team?.name || 'Equipo desconocido';
+                    const nomH = home.team?.name || 'Equipo desconocido';
                     const regA = away.leagueRecord ? `${away.leagueRecord.wins}-${away.leagueRecord.losses}` : '';
                     const regH = home.leagueRecord ? `${home.leagueRecord.wins}-${home.leagueRecord.losses}` : '';
 
@@ -331,12 +333,12 @@
 
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center gap-2">
-                                <img src="https://www.mlbstatic.com/team-logos/${idA}.svg" alt="${nomA}" class="w-9 h-9" onerror="this.style.display='none'">
+                                ${idA ? `<img src="https://www.mlbstatic.com/team-logos/${idA}.svg" alt="${nomA}" class="w-9 h-9" onerror="this.style.display='none'">` : `<div class="w-9 h-9 bg-gray-200 rounded-full"></div>`}
                                 <div><div class="font-semibold text-sm">${nomA}</div><div class="text-xs">${regA}</div></div>
                             </div>
                             <div class="text-2xl font-bold min-w-[4rem] text-center">${v.C} - ${h.C}</div>
                             <div class="flex items-center gap-2 text-right flex-row-reverse">
-                                <img src="https://www.mlbstatic.com/team-logos/${idH}.svg" alt="${nomH}" class="w-9 h-9" onerror="this.style.display='none'">
+                                ${idH ? `<img src="https://www.mlbstatic.com/team-logos/${idH}.svg" alt="${nomH}" class="w-9 h-9" onerror="this.style.display='none'">` : `<div class="w-9 h-9 bg-gray-200 rounded-full"></div>`}
                                 <div><div class="font-semibold text-sm">${nomH}</div><div class="text-xs">${regH}</div></div>
                             </div>
                         </div>
@@ -377,16 +379,18 @@
 
             } catch (error) {
                 console.error('Error cargando partidos:', error);
-                cont.innerHTML = `<p class="text-center text-red-600 py-8">Error al cargar los partidos. Intenta de nuevo.</p>`;
+                cont.innerHTML = `<p class="text-center text-red-600 py-8">Error al cargar los partidos. Ver consola para más detalles.</p>`;
             }
         }
 
-        // ========== TABLAS DE POSICIONES CON DIVISIONES (robusto) ==========
+        // ========== TABLAS DE POSICIONES CON DIVISIONES ==========
         async function cargarTablas() {
             try {
                 const res = await fetch(`https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=${ANIO}`);
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const datos = await res.json();
+
+                console.log('Respuesta de standings:', datos); // Depuración
 
                 // Mapeo de ligas
                 const ligas = {
@@ -394,15 +398,22 @@
                     104: { contenedor: 'tabla-nacional', nombre: 'Liga Nacional' }
                 };
 
-                // Procesar cada record (que corresponde a una división)
                 const records = datos.records || [];
-                // Agrupar por liga
+                if (records.length === 0) {
+                    document.getElementById('tabla-americana').innerHTML =
+                        `<p class="text-center py-4 text-gris/70">No hay datos de posiciones disponibles</p>`;
+                    document.getElementById('tabla-nacional').innerHTML =
+                        `<p class="text-center py-4 text-gris/70">No hay datos de posiciones disponibles</p>`;
+                    return;
+                }
+
+                // Agrupar por liga y división
                 const grupos = {};
                 records.forEach(r => {
                     const leagueId = r.league?.id;
                     if (!leagueId || !ligas[leagueId]) return;
                     const div = r.division;
-                    if (!div) return; // Sin división, ignoramos
+                    if (!div) return;
                     const key = `${leagueId}-${div.id}`;
                     if (!grupos[key]) {
                         grupos[key] = {
@@ -424,7 +435,6 @@
                     const contenedor = document.getElementById(liga.contenedor);
                     if (!contenedor) continue;
 
-                    // Filtrar grupos de esta liga
                     const gruposLiga = Object.values(grupos).filter(g => g.leagueId == leagueId);
                     if (gruposLiga.length === 0) {
                         contenedor.innerHTML = `<p class="text-center py-4 text-gris/70">No hay datos de posiciones</p>`;
@@ -441,9 +451,7 @@
 
                     let html = '';
                     gruposLiga.forEach(g => {
-                        // Ordenar equipos por porcentaje
                         g.equipos.sort((a, b) => b.winningPercentage - a.winningPercentage);
-                        // Nombre de división en español
                         let divNombre = g.division.name.replace(/^.*League /, '').toUpperCase();
                         const map = { 'EAST': 'ESTE', 'CENTRAL': 'CENTRAL', 'WEST': 'OESTE' };
                         divNombre = map[divNombre] || divNombre;
@@ -488,7 +496,7 @@
             }
         }
 
-        // ========== INICIO ==========
+        // ========== INICIALIZACIÓN ==========
         mostrarFechas();
         cargarPartidos(iso(fechaActual));
         cargarTablas();
