@@ -52,7 +52,7 @@
             border-color: #64748b;
         }
         .grid-entradas {
-            display: grid; /* <--- IMPORTANTE: faltaba esta línea */
+            display: grid;
             grid-template-columns: repeat(9, 1.6rem) 2rem 2rem 2rem;
         }
         .grid-entradas > span {
@@ -104,6 +104,7 @@
                 <button onclick="cambiarFecha(1)" class="text-lg px-2 hover:text-azul">›</button>
             </div>
 
+            <!-- Contenedor con mensaje de carga inicial -->
             <div id="lista-partidos" class="space-y-5 mb-10">
                 <p class="text-center py-10">Cargando encuentros…</p>
             </div>
@@ -154,15 +155,30 @@
     <script>
         // ========== CONFIG ==========
         const ANIO = 2026;
-        const ZONA_UTC = -5;
-        let fechaActual = new Date();
+        const ZONA_LIMA = 'America/Lima';
+
+        // Obtener la fecha actual en Lima (sin hora)
+        function hoyLima() {
+            const hoy = new Date();
+            const fechaStr = hoy.toLocaleDateString('en-CA', { timeZone: ZONA_LIMA }); // YYYY-MM-DD
+            return new Date(fechaStr + 'T00:00:00');
+        }
+
+        let fechaActual = hoyLima();
 
         function iso(d) { return d.toISOString().split('T')[0]; }
 
         function textoFecha(d) {
+            // Mostrar en formato local (Lima)
+            const opciones = { weekday: 'short', day: 'numeric', month: 'short', timeZone: ZONA_LIMA };
+            const partes = d.toLocaleDateString('es-ES', opciones).split(' ');
+            // Personalizar para que coincida con el formato anterior
             const dias = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
             const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-            return `${dias[d.getDay()]} ${d.getDate()} ${meses[d.getMonth()]}`;
+            const diaSemana = dias[d.getDay()];
+            const diaNum = d.getDate();
+            const mes = meses[d.getMonth()];
+            return `${diaSemana} ${diaNum} ${mes}`;
         }
 
         // ========== FECHAS ==========
@@ -190,32 +206,27 @@
             cont.innerHTML = html;
         }
 
-        // ========== EXTRACCIÓN DE TOTALES (MÁS ROBUSTA) ==========
+        // ========== EXTRACCIÓN DE TOTALES ==========
         function obtenerTotales(linescore, boxscore, esVisitante) {
-            // Intentamos obtener de linescore primero
             const equipoLS = esVisitante ? linescore?.away : linescore?.home;
             if (equipoLS && equipoLS.runs !== undefined) {
                 return { runs: equipoLS.runs, hits: equipoLS.hits || 0, errors: equipoLS.errors || 0 };
             }
-            // Si no, de boxscore
             if (boxscore && boxscore.teams) {
                 const eqBox = esVisitante ? boxscore.teams.away : boxscore.teams.home;
                 if (eqBox && eqBox.stats) {
                     return { runs: eqBox.stats.runs || 0, hits: eqBox.stats.hits || 0, errors: eqBox.stats.errors || 0 };
                 }
             }
-            // Último recurso: linescore.teams (estructura alternativa)
             if (linescore && linescore.teams) {
                 const eqAlt = esVisitante ? linescore.teams.away : linescore.teams.home;
                 if (eqAlt) {
                     return { runs: eqAlt.runs || 0, hits: eqAlt.hits || 0, errors: eqAlt.errors || 0 };
                 }
             }
-            // Si nada funciona, devolvemos 0
             return { runs: 0, hits: 0, errors: 0 };
         }
 
-        // ========== LEER ENTRADAS ==========
         function leerEntradas(linescore, boxscore, esVisitante) {
             const innings = linescore?.innings || [];
             const fila = [];
@@ -248,7 +259,7 @@
         // ========== CARGAR PARTIDOS ==========
         async function cargarPartidos(fecha) {
             const cont = document.getElementById('lista-partidos');
-            cont.innerHTML = `<p class="text-center py-10">Cargando encuentros…</p>`;
+            // No mostramos mensaje de carga en actualizaciones para evitar parpadeo
 
             try {
                 const url =
@@ -280,13 +291,12 @@
                     const programado = estado.abstractGameState === 'Preview';
 
                     const horaUTC = new Date(p.gameDate);
-                    const horaLocal = new Date(horaUTC.getTime() + ZONA_UTC * 3600000);
+                    const horaLocal = new Date(horaUTC.getTime() - 5 * 3600000); // Ajuste manual a UTC-5
                     const horaTexto = horaLocal.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
 
                     const ls = p.linescore || {};
                     const box = p.boxscore || {};
 
-                    // Leer entradas y totales (con fallback)
                     const v = leerEntradas(ls, box, true);
                     const h = leerEntradas(ls, box, false);
 
@@ -297,7 +307,6 @@
                     const out = ls.outs ?? '-';
                     const tipo = p.seriesDescription || 'Temporada Regular';
 
-                    // Lanzadores
                     let lanzA = p.probablePitchers?.away || {};
                     let lanzH = p.probablePitchers?.home || {};
                     if (!lanzA.fullName && box?.teams?.away?.players) {
