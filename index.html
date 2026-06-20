@@ -24,7 +24,6 @@
         }
     </script>
     <style>
-        /* ===== FONDO CON GRADIENTE SUAVE ===== */
         body {
             background: linear-gradient(145deg, #f8fafc 0%, #eef2f6 100%);
             transition: background 0.3s;
@@ -32,7 +31,6 @@
         .dark body {
             background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
         }
-        /* ===== PARPADEO ===== */
         .parpadeo {
             animation: parpadeo 1.2s infinite ease-in-out;
         }
@@ -40,7 +38,6 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
         }
-        /* ===== FADE-IN ===== */
         .fade-in {
             animation: fadeIn 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
             opacity: 0;
@@ -48,7 +45,6 @@
         @keyframes fadeIn {
             to { opacity: 1; }
         }
-        /* ===== DIAMANTE ===== */
         .diamante-base {
             width: 14px;
             height: 14px;
@@ -70,7 +66,6 @@
             background-color: #94a3b8;
             border-color: #64748b;
         }
-        /* ===== GRID DE ENTRADAS ===== */
         .grid-entradas {
             display: grid;
             grid-template-columns: repeat(9, 1.6rem) 2rem 2rem 2rem;
@@ -89,7 +84,6 @@
                 font-size: 0.65rem;
             }
         }
-        /* ===== TABLAS ===== */
         .tabla-posiciones th {
             background-color: #f1f5f9;
             font-weight: 700;
@@ -126,7 +120,6 @@
         .dark .tabla-posiciones tbody tr:hover td {
             background-color: #1e293b;
         }
-        /* ===== DIVISIONES ===== */
         .division-titulo {
             background: linear-gradient(to right, #e2e8f0, #f1f5f9);
             font-weight: 700;
@@ -145,7 +138,6 @@
         .division-titulo:first-of-type {
             margin-top: 0;
         }
-        /* ===== VIDEO ===== */
         .video-wrapper {
             position: relative;
             padding-bottom: 56.25%;
@@ -161,7 +153,6 @@
             width: 100%;
             height: 100%;
         }
-        /* ===== TARJETAS GLASSMORPHISM ===== */
         .card-glass {
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(8px);
@@ -182,21 +173,6 @@
             box-shadow: 0 20px 40px -12px rgba(0,0,0,0.4);
             border-color: rgba(255, 255, 255, 0.15);
         }
-        /* ===== MODO OSCURO ===== */
-        .dark .tabla-posiciones th {
-            background-color: #1e293b;
-            color: #e2e8f0;
-        }
-        .dark .tabla-posiciones td {
-            border-color: #334155;
-        }
-        .dark .tabla-posiciones tbody tr:nth-child(even) td {
-            background-color: #1a2236;
-        }
-        .dark .tabla-posiciones tbody tr:hover td {
-            background-color: #1e293b;
-        }
-        /* ===== BADGES ===== */
         .badge-vivo {
             background: #dc2626;
             color: white;
@@ -218,7 +194,6 @@
             color: #93c5fd;
             border: 1px solid #334155;
         }
-        /* ===== MARCADOR ===== */
         .score-box {
             background: rgba(0,0,0,0.03);
             border-radius: 12px;
@@ -233,7 +208,6 @@
         .dark .score-box {
             background: rgba(255,255,255,0.05);
         }
-        /* ===== SELECTOR FECHAS ===== */
         .fecha-item {
             padding: 6px 14px;
             border-radius: 999px;
@@ -253,7 +227,6 @@
         .dark .fecha-item:not(.active):hover {
             background: #334155;
         }
-        /* ===== TABS ===== */
         .tab-button {
             padding: 8px 18px;
             border-radius: 999px;
@@ -277,7 +250,6 @@
         }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        /* ===== TOGGLE OSCURO ===== */
         .theme-toggle {
             cursor: pointer;
             display: flex;
@@ -312,13 +284,11 @@
         .dark .theme-toggle .slider::after {
             transform: translateX(20px);
         }
-        /* ===== CUENTA ATRÁS ===== */
         .countdown { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
         .countdown-item { background: rgba(0,0,0,0.04); padding: 8px 16px; border-radius: 8px; text-align: center; min-width: 60px; }
         .dark .countdown-item { background: rgba(255,255,255,0.05); }
         .countdown-number { font-size: 1.8rem; font-weight: 700; display: block; }
         .countdown-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; }
-        /* ===== PARTIDOS ===== */
         .match-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #e2e8f0; }
         .dark .match-row { border-color: #334155; }
         .match-row:last-child { border-bottom: none; }
@@ -326,7 +296,6 @@
         .match-teams .vs { font-weight: 300; opacity: 0.6; }
         .match-score { font-weight: 700; min-width: 60px; text-align: center; }
         .match-status { font-size: 0.65rem; padding: 2px 10px; border-radius: 999px; }
-        /* ===== MENSAJE DE CARGA ===== */
         .loading-msg {
             display: flex;
             align-items: center;
@@ -351,11 +320,27 @@
         }
         .dark .loading-msg { color: #94a3b8; }
         .dark .loading-msg .dot { background: #3b82f6; }
+        .logo-placeholder {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: #e2e8f0;
+            color: #475569;
+            flex-shrink: 0;
+        }
+        .dark .logo-placeholder {
+            background: #334155;
+            color: #94a3b8;
+        }
     </style>
 </head>
 <body>
 
-    <!-- ===== CABECERA ===== -->
     <header class="bg-mlbAzul text-white py-3 px-4 sticky top-0 z-50 shadow-lg transition-colors dark:bg-gray-800">
         <div class="max-w-xl mx-auto">
             <div class="flex items-center justify-between">
@@ -398,14 +383,13 @@
                 </div>
 
                 <div id="lista-partidos" class="space-y-5 mb-8">
-                    <!-- Mensaje de carga con puntos animados -->
                     <div id="cargando-msg" class="loading-msg">
                         <span>Cargando partidos</span>
                         <span class="dot"></span><span class="dot"></span><span class="dot"></span>
                     </div>
                 </div>
 
-                <!-- Posiciones manuales con glassmorphism -->
+                <!-- Posiciones manuales -->
                 <div class="space-y-6">
                     <div class="card-glass rounded-2xl p-5 shadow-lg transition-all">
                         <h3 class="font-bold text-mlbAzul dark:text-white text-lg mb-4 flex items-center gap-2">🏆 Liga Americana</h3>
@@ -414,22 +398,22 @@
                             <table class="w-full text-xs tabla-posiciones dark:text-gray-300">
                                 <thead><tr><th class="text-left">Equipo</th><th class="text-center">G</th><th class="text-center">P</th><th class="text-center">PCT</th><th class="text-center">DIF</th><th class="text-center">DIFWC</th></tr></thead>
                                 <tbody>
-                                    <tr><td>New York Yankees</td><td class="text-center">45</td><td class="text-center">28</td><td class="text-center">.616</td><td class="text-center">-</td><td class="text-center">-</td></tr>
-                                    <tr><td>Tampa Bay Rays</td><td class="text-center">42</td><td class="text-center">30</td><td class="text-center">.583</td><td class="text-center">2.5</td><td class="text-center">+1.5</td></tr>
-                                    <tr><td>Toronto Blue Jays</td><td class="text-center">34</td><td class="text-center">38</td><td class="text-center">.472</td><td class="text-center">10.5</td><td class="text-center">6.5</td></tr>
-                                    <tr><td>Baltimore Orioles</td><td class="text-center">34</td><td class="text-center">39</td><td class="text-center">.466</td><td class="text-center">11.0</td><td class="text-center">7.0</td></tr>
-                                    <tr><td>Boston Red Sox</td><td class="text-center">29</td><td class="text-center">40</td><td class="text-center">.420</td><td class="text-center">14.0</td><td class="text-center">10.0</td></tr>
+                                    <tr><td>New York Yankees</td><td class="text-center">46</td><td class="text-center">28</td><td class="text-center">.622</td><td class="text-center">-</td><td class="text-center">-</td></tr>
+                                    <tr><td>Tampa Bay Rays</td><td class="text-center">42</td><td class="text-center">30</td><td class="text-center">.583</td><td class="text-center">3.0</td><td class="text-center">+1.0</td></tr>
+                                    <tr><td>Toronto Blue Jays</td><td class="text-center">34</td><td class="text-center">38</td><td class="text-center">.472</td><td class="text-center">11.0</td><td class="text-center">7.0</td></tr>
+                                    <tr><td>Baltimore Orioles</td><td class="text-center">34</td><td class="text-center">39</td><td class="text-center">.466</td><td class="text-center">11.5</td><td class="text-center">7.5</td></tr>
+                                    <tr><td>Boston Red Sox</td><td class="text-center">29</td><td class="text-center">40</td><td class="text-center">.420</td><td class="text-center">14.5</td><td class="text-center">10.5</td></tr>
                                 </tbody>
                             </table>
                             <div class="division-titulo dark:bg-gray-700 dark:text-gray-300">CENTRAL</div>
                             <table class="w-full text-xs tabla-posiciones dark:text-gray-300">
                                 <thead><tr><th class="text-left">Equipo</th><th class="text-center">G</th><th class="text-center">P</th><th class="text-center">PCT</th><th class="text-center">DIF</th><th class="text-center">DIFWC</th></tr></thead>
                                 <tbody>
-                                    <tr><td>Chicago White Sox</td><td class="text-center">38</td><td class="text-center">32</td><td class="text-center">.543</td><td class="text-center">-</td><td class="text-center">-</td></tr>
-                                    <tr><td>Cleveland Guardians</td><td class="text-center">39</td><td class="text-center">33</td><td class="text-center">.542</td><td class="text-center">-</td><td class="text-center">-</td></tr>
-                                    <tr><td>Minnesota Twins</td><td class="text-center">34</td><td class="text-center">40</td><td class="text-center">.459</td><td class="text-center">6.0</td><td class="text-center">3.0</td></tr>
-                                    <tr><td>Detroit Tigers</td><td class="text-center">30</td><td class="text-center">42</td><td class="text-center">.417</td><td class="text-center">9.0</td><td class="text-center">6.0</td></tr>
-                                    <tr><td>Kansas City Royals</td><td class="text-center">29</td><td class="text-center">44</td><td class="text-center">.397</td><td class="text-center">10.5</td><td class="text-center">7.5</td></tr>
+                                    <tr><td>Chicago White Sox</td><td class="text-center">39</td><td class="text-center">35</td><td class="text-center">.527</td><td class="text-center">-</td><td class="text-center">-</td></tr>
+                                    <tr><td>Cleveland Guardians</td><td class="text-center">39</td><td class="text-center">33</td><td class="text-center">.542</td><td class="text-center">1.0</td><td class="text-center">+0.5</td></tr>
+                                    <tr><td>Minnesota Twins</td><td class="text-center">34</td><td class="text-center">40</td><td class="text-center">.459</td><td class="text-center">5.0</td><td class="text-center">3.5</td></tr>
+                                    <tr><td>Detroit Tigers</td><td class="text-center">31</td><td class="text-center">44</td><td class="text-center">.413</td><td class="text-center">8.5</td><td class="text-center">7.0</td></tr>
+                                    <tr><td>Kansas City Royals</td><td class="text-center">29</td><td class="text-center">44</td><td class="text-center">.397</td><td class="text-center">9.5</td><td class="text-center">8.0</td></tr>
                                 </tbody>
                             </table>
                             <div class="division-titulo dark:bg-gray-700 dark:text-gray-300">OESTE</div>
@@ -468,7 +452,7 @@
                                     <tr><td>St. Louis Cardinals</td><td class="text-center">39</td><td class="text-center">34</td><td class="text-center">.534</td><td class="text-center">6.5</td><td class="text-center">+1.5</td></tr>
                                     <tr><td>Chicago Cubs</td><td class="text-center">38</td><td class="text-center">36</td><td class="text-center">.514</td><td class="text-center">8.0</td><td class="text-center">-</td></tr>
                                     <tr><td>Pittsburgh Pirates</td><td class="text-center">38</td><td class="text-center">37</td><td class="text-center">.507</td><td class="text-center">8.5</td><td class="text-center">0.5</td></tr>
-                                    <tr><td>Cincinnati Reds</td><td class="text-center">35</td><td class="text-center">38</td><td class="text-center">.479</td><td class="text-center">10.5</td><td class="text-center">2.5</td></tr>
+                                    <tr><td>Cincinnati Reds</td><td class="text-center">35</td><td class="text-center">39</td><td class="text-center">.473</td><td class="text-center">11.0</td><td class="text-center">3.0</td></tr>
                                 </tbody>
                             </table>
                             <div class="division-titulo dark:bg-gray-700 dark:text-gray-300">OESTE</div>
@@ -508,7 +492,7 @@
         </div>
 
         <!-- ============================================================ -->
-        <!-- FÚTBOL (Mundial 2026)                                        -->
+        <!-- FÚTBOL                                                       -->
         <!-- ============================================================ -->
         <div id="tab-futbol" class="tab-content">
             <section>
@@ -582,7 +566,6 @@
         </div>
     </main>
 
-    <!-- ===== FOOTER ===== -->
     <footer class="bg-white/80 dark:bg-gray-800/90 backdrop-blur-sm border-t border-grisClaro/60 dark:border-gray-700 py-4 mt-10 text-center text-xs">
         <div class="max-w-xl mx-auto px-3 flex flex-col sm:flex-row justify-between items-center gap-2">
             <p>© 2026 <strong>SportVivo360</strong> • Multi-deportes</p>
@@ -687,18 +670,40 @@
             cont.innerHTML = html;
         }
 
-        // ========================= EXTRACCIÓN DATOS MLB =========================
+        // ========================= EXTRACCIÓN DATOS MLB (CORREGIDA) =========================
         function obtenerTotales(linescore, boxscore, esVisitante) {
+            // 1. Intentar desde linescore
             const equipoLS = esVisitante ? linescore?.away : linescore?.home;
-            if (equipoLS && equipoLS.runs !== undefined) return { runs: equipoLS.runs, hits: equipoLS.hits || 0, errors: equipoLS.errors || 0 };
+            if (equipoLS && equipoLS.runs !== undefined) {
+                return {
+                    runs: equipoLS.runs || 0,
+                    hits: equipoLS.hits || 0,
+                    errors: equipoLS.errors || 0
+                };
+            }
+            // 2. Desde boxscore
             if (boxscore && boxscore.teams) {
                 const eqBox = esVisitante ? boxscore.teams.away : boxscore.teams.home;
-                if (eqBox && eqBox.stats) return { runs: eqBox.stats.runs || 0, hits: eqBox.stats.hits || 0, errors: eqBox.stats.errors || 0 };
+                if (eqBox && eqBox.stats) {
+                    return {
+                        runs: eqBox.stats.runs || 0,
+                        hits: eqBox.stats.hits || 0,
+                        errors: eqBox.stats.errors || 0
+                    };
+                }
             }
+            // 3. Desde linescore.teams (alternativo)
             if (linescore && linescore.teams) {
                 const eqAlt = esVisitante ? linescore.teams.away : linescore.teams.home;
-                if (eqAlt) return { runs: eqAlt.runs || 0, hits: eqAlt.hits || 0, errors: eqAlt.errors || 0 };
+                if (eqAlt) {
+                    return {
+                        runs: eqAlt.runs || 0,
+                        hits: eqAlt.hits || 0,
+                        errors: eqAlt.errors || 0
+                    };
+                }
             }
+            // Si no hay datos, devolver 0
             return { runs: 0, hits: 0, errors: 0 };
         }
 
@@ -707,7 +712,10 @@
             const fila = [];
             for (let i = 0; i < 9; i++) {
                 const inn = innings[i];
-                if (!inn) { fila.push('-'); continue; }
+                if (!inn) {
+                    fila.push('-');
+                    continue;
+                }
                 const runs = esVisitante ? inn.away?.runs : inn.home?.runs;
                 fila.push(runs !== undefined && runs !== null ? runs : '-');
             }
@@ -726,7 +734,7 @@
             </div>`;
         }
 
-        // ========================= CARGAR PARTIDOS (rápido) =========================
+        // ========================= CARGAR PARTIDOS =========================
         async function cargarPartidos(fecha) {
             const cont = document.getElementById('lista-partidos');
             const msgCarga = document.getElementById('cargando-msg');
@@ -794,6 +802,10 @@
                     if (!lanzA.fullName) lanzA.fullName = vivo ? 'En vivo' : 'Por confirmar';
                     if (!lanzH.fullName) lanzH.fullName = vivo ? 'En vivo' : 'Por confirmar';
 
+                    // Iniciales para placeholder de logo
+                    const iniA = nomA.split(' ').map(p => p[0]).join('').substring(0, 2).toUpperCase();
+                    const iniH = nomH.split(' ').map(p => p[0]).join('').substring(0, 2).toUpperCase();
+
                     html += `
                     <div class="card-glass rounded-2xl p-5 shadow-lg relative fade-in">
                         <div class="absolute top-3 right-3 flex flex-col gap-1 items-end">
@@ -805,12 +817,14 @@
 
                         <div class="flex items-center justify-between mb-4">
                             <div class="flex items-center gap-3 min-w-[100px]">
-                                ${idA ? `<img src="https://www.mlbstatic.com/team-logos/${idA}.svg" alt="${nomA}" class="w-12 h-12 object-contain bg-white rounded-full p-1 shadow-sm" onerror="this.style.display='none'">` : `<div class="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-full"></div>`}
+                                ${idA ? `<img src="https://www.mlbstatic.com/team-logos/${idA}.svg" alt="${nomA}" class="w-12 h-12 object-contain bg-white rounded-full p-1 shadow-sm" onerror="this.style.display='none'">` : ''}
+                                <div class="logo-placeholder" style="${idA ? 'display:none' : ''}">${iniA}</div>
                                 <div><div class="font-bold text-base dark:text-white">${nomA}</div><div class="text-xs text-gray-500 dark:text-gray-400">${regA}</div></div>
                             </div>
                             <div class="score-box dark:bg-gray-700/30">${v.C} - ${h.C}</div>
                             <div class="flex items-center gap-3 text-right min-w-[100px] flex-row-reverse">
-                                ${idH ? `<img src="https://www.mlbstatic.com/team-logos/${idH}.svg" alt="${nomH}" class="w-12 h-12 object-contain bg-white rounded-full p-1 shadow-sm" onerror="this.style.display='none'">` : `<div class="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-full"></div>`}
+                                ${idH ? `<img src="https://www.mlbstatic.com/team-logos/${idH}.svg" alt="${nomH}" class="w-12 h-12 object-contain bg-white rounded-full p-1 shadow-sm" onerror="this.style.display='none'">` : ''}
+                                <div class="logo-placeholder" style="${idH ? 'display:none' : ''}">${iniH}</div>
                                 <div><div class="font-bold text-base dark:text-white">${nomH}</div><div class="text-xs text-gray-500 dark:text-gray-400">${regH}</div></div>
                             </div>
                         </div>
@@ -822,11 +836,15 @@
                             </div>
                             <div class="grid grid-entradas gap-x-1 text-xs text-center py-2 border-t border-grisClaro dark:border-gray-700 mt-1 dark:text-gray-300 bg-gray-50/50 dark:bg-gray-700/20 rounded-lg">
                                 ${v.fila.map(x => `<span>${x}</span>`).join('')}
-                                <span class="font-bold border-l border-grisClaro dark:border-gray-700">${v.C}</span><span class="font-bold">${v.H}</span><span class="font-bold">${v.E}</span>
+                                <span class="font-bold border-l border-grisClaro dark:border-gray-700">${v.C}</span>
+                                <span class="font-bold">${v.H}</span>
+                                <span class="font-bold">${v.E}</span>
                             </div>
                             <div class="grid grid-entradas gap-x-1 text-xs text-center py-2 dark:text-gray-300 bg-gray-50/50 dark:bg-gray-700/20 rounded-lg">
                                 ${h.fila.map(x => `<span>${x}</span>`).join('')}
-                                <span class="font-bold border-l border-grisClaro dark:border-gray-700">${h.C}</span><span class="font-bold">${h.H}</span><span class="font-bold">${h.E}</span>
+                                <span class="font-bold border-l border-grisClaro dark:border-gray-700">${h.C}</span>
+                                <span class="font-bold">${h.H}</span>
+                                <span class="font-bold">${h.E}</span>
                             </div>
                         </div>
 
