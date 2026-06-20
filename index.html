@@ -18,268 +18,409 @@
                         grisClaro: '#e2e8f0',
                         verdeBase: '#22c55e',
                     },
-                    fontFamily: { sans: ['Segoe UI','Roboto','Arial','sans-serif'] }
+                    fontFamily: { sans: ['Segoe UI', 'Roboto', 'Arial', 'sans-serif'] }
                 }
             }
         }
     </script>
     <style>
-        .parpadeo { animation: parpadeo 1.2s infinite ease-in-out; }
-        @keyframes parpadeo { 0%,100% {opacity:1;} 50% {opacity:0.4;} }
-        .diamante-base { width:10px; height:10px; transform:rotate(45deg); }
-        .grid-entradas { grid-template-columns: repeat(9, 1.6rem) 2rem 2rem 2rem; }
-        .grid-entradas > span { text-align: center; display: flex; align-items: center; justify-content: center; }
+        /* Animación de parpadeo */
+        .parpadeo {
+            animation: parpadeo 1.2s infinite ease-in-out;
+        }
+        @keyframes parpadeo {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Diamante de bases */
+        .diamante-base {
+            width: 12px;
+            height: 12px;
+            transform: rotate(45deg);
+            border: 1px solid #94a3b8;
+            box-sizing: border-box;
+        }
+        .diamante-base.ocupada {
+            background-color: #22c55e;
+            border-color: #16a34a;
+        }
+        .diamante-base.vacia {
+            background-color: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+        .diamante-base.plato {
+            background-color: #94a3b8;
+            border-color: #64748b;
+        }
+
+        /* Grid de entradas */
+        .grid-entradas {
+            grid-template-columns: repeat(9, 1.6rem) 2rem 2rem 2rem;
+        }
+        .grid-entradas > span {
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* Para móviles pequeños */
+        @media (max-width: 480px) {
+            .grid-entradas {
+                grid-template-columns: repeat(9, 1.2rem) 1.6rem 1.6rem 1.6rem;
+                font-size: 0.65rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gris font-sans min-h-screen">
 
-<header class="bg-mlbAzul text-white py-3 px-4 sticky top-0 z-40 shadow-md">
-    <div class="max-w-xl mx-auto flex items-center justify-between">
-        <h1 class="font-bold text-xl tracking-wide">SportVivo360 <span class="text-sm opacity-80">MLB</span></h1>
-        <nav class="hidden sm:flex gap-6 text-sm font-medium">
-            <a href="#" class="hover:text-white/80">RESULTADOS</a>
-            <a href="#" class="hover:text-white/80">NOTICIAS</a>
-            <a href="#" class="hover:text-white/80">POSICIONES</a>
-            <a href="#" class="hover:text-white/80">ESTADÍSTICAS</a>
-        </nav>
-    </div>
-    <div class="sm:hidden mt-2 flex justify-around text-xs border-t border-white/20 pt-2">
-        <a href="#">Resultados</a>
-        <a href="#">Noticias</a>
-        <a href="#">Posiciones</a>
-        <a href="#">Estadísticas</a>
-    </div>
-</header>
+    <header class="bg-mlbAzul text-white py-3 px-4 sticky top-0 z-40 shadow-md">
+        <div class="max-w-xl mx-auto flex items-center justify-between">
+            <h1 class="font-bold text-xl tracking-wide">SportVivo360 <span class="text-sm opacity-80">MLB</span></h1>
+            <nav class="hidden sm:flex gap-6 text-sm font-medium">
+                <a href="#" class="hover:text-white/80">RESULTADOS</a>
+                <a href="#" class="hover:text-white/80">NOTICIAS</a>
+                <a href="#" class="hover:text-white/80">POSICIONES</a>
+                <a href="#" class="hover:text-white/80">ESTADÍSTICAS</a>
+            </nav>
+        </div>
+        <div class="sm:hidden mt-2 flex justify-around text-xs border-t border-white/20 pt-2">
+            <a href="#">Resultados</a>
+            <a href="#">Noticias</a>
+            <a href="#">Posiciones</a>
+            <a href="#">Estadísticas</a>
+        </div>
+    </header>
 
-<main class="max-w-xl mx-auto px-3 py-4">
-    <div class="flex items-center justify-center gap-2 text-xs mb-4">
-        <span class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_4px_#22c55e]"></span>
-        <span>Actualizado • Lima (UTC‑5)</span>
-    </div>
-
-    <section>
-        <h2 class="text-xl font-semibold text-mlbAzul border-l-4 border-azul pl-2 mb-4">📋 Resultados & En vivo</h2>
-
-        <div class="flex items-center justify-center gap-2 bg-white rounded-lg py-2 px-3 mb-6 border border-grisClaro shadow-sm">
-            <button onclick="cambiarFecha(-1)" class="text-lg px-2 hover:text-azul">‹</button>
-            <div id="selector-fechas" class="flex gap-3 text-sm"></div>
-            <button onclick="cambiarFecha(1)" class="text-lg px-2 hover:text-azul">›</button>
+    <main class="max-w-xl mx-auto px-3 py-4">
+        <div class="flex items-center justify-center gap-2 text-xs mb-4">
+            <span class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_4px_#22c55e]"></span>
+            <span>Actualizado • Lima (UTC‑5)</span>
         </div>
 
-        <div id="lista-partidos" class="space-y-5 mb-10">
-            <p class="text-center py-10">Cargando encuentros…</p>
-        </div>
+        <section>
+            <h2 class="text-xl font-semibold text-mlbAzul border-l-4 border-azul pl-2 mb-4">📋 Resultados & En vivo</h2>
 
-        <div class="space-y-6">
-            <div class="bg-white rounded-lg border border-grisClaro p-4 shadow-sm">
-                <h3 class="font-semibold text-mlbAzul mb-3">🏆 Liga Americana</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-xs">
-                        <thead><tr class="border-b border-grisClaro">
-                            <th class="py-2 text-left">#</th>
-                            <th class="py-2 text-left">Equipo</th>
-                            <th class="py-2 text-center">G</th>
-                            <th class="py-2 text-center">P</th>
-                            <th class="py-2 text-center">%</th>
-                            <th class="py-2 text-center">Dif</th>
-                        </tr></thead>
-                        <tbody id="tabla-americana"><tr><td colspan="6" class="py-4 text-center">Sin datos</td></tr>
-                        </tbody>
-                    </table>
+            <!-- Selector de fechas -->
+            <div class="flex items-center justify-center gap-2 bg-white rounded-lg py-2 px-3 mb-6 border border-grisClaro shadow-sm">
+                <button onclick="cambiarFecha(-1)" class="text-lg px-2 hover:text-azul">‹</button>
+                <div id="selector-fechas" class="flex gap-3 text-sm"></div>
+                <button onclick="cambiarFecha(1)" class="text-lg px-2 hover:text-azul">›</button>
+            </div>
+
+            <!-- Lista de partidos -->
+            <div id="lista-partidos" class="space-y-5 mb-10">
+                <p class="text-center py-10">Cargando encuentros…</p>
+            </div>
+
+            <!-- Tablas de posiciones -->
+            <div class="space-y-6">
+                <div class="bg-white rounded-lg border border-grisClaro p-4 shadow-sm">
+                    <h3 class="font-semibold text-mlbAzul mb-3">🏆 Liga Americana</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs">
+                            <thead><tr class="border-b border-grisClaro">
+                                <th class="py-2 text-left">#</th>
+                                <th class="py-2 text-left">Equipo</th>
+                                <th class="py-2 text-center">G</th>
+                                <th class="py-2 text-center">P</th>
+                                <th class="py-2 text-center">%</th>
+                                <th class="py-2 text-center">Dif</th>
+                            </tr></thead>
+                            <tbody id="tabla-americana"><tr><td colspan="6" class="py-4 text-center">Sin datos</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg border border-grisClaro p-4 shadow-sm">
+                    <h3 class="font-semibold text-mlbAzul mb-3">🏆 Liga Nacional</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs">
+                            <thead><tr class="border-b border-grisClaro">
+                                <th class="py-2 text-left">#</th>
+                                <th class="py-2 text-left">Equipo</th>
+                                <th class="py-2 text-center">G</th>
+                                <th class="py-2 text-center">P</th>
+                                <th class="py-2 text-center">%</th>
+                                <th class="py-2 text-center">Dif</th>
+                            </tr></thead>
+                            <tbody id="tabla-nacional"><tr><td colspan="6" class="py-4 text-center">Sin datos</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <div class="bg-white rounded-lg border border-grisClaro p-4 shadow-sm">
-                <h3 class="font-semibold text-mlbAzul mb-3">🏆 Liga Nacional</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-xs">
-                        <thead><tr class="border-b border-grisClaro">
-                            <th class="py-2 text-left">#</th>
-                            <th class="py-2 text-left">Equipo</th>
-                            <th class="py-2 text-center">G</th>
-                            <th class="py-2 text-center">P</th>
-                            <th class="py-2 text-center">%</th>
-                            <th class="py-2 text-center">Dif</th>
-                        </tr></thead>
-                        <tbody id="tabla-nacional"><tr><td colspan="6" class="py-4 text-center">Sin datos</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </section>
-</main>
+        </section>
+    </main>
 
-<footer class="bg-white border-t border-grisClaro py-4 mt-12 text-center text-xs">
-    <p>© 2026 <strong>SportVivo360</strong> • Datos MLB API pública</p>
-</footer>
+    <footer class="bg-white border-t border-grisClaro py-4 mt-12 text-center text-xs">
+        <p>© 2026 <strong>SportVivo360</strong> • Datos MLB API pública</p>
+    </footer>
 
-<script>
-let fechaActual = new Date();
-const ANIO = 2026;
-const ZONA_UTC = -5;
+    <script>
+        // ==================== CONFIGURACIÓN ====================
+        const ANIO = 2026;
+        const ZONA_UTC = -5; // Lima
+        let fechaActual = new Date();
+        // Ajustar la fecha actual a la zona horaria de Lima (sin cambiar el objeto Date)
+        // Para evitar problemas, trabajamos con fechas en UTC y mostramos en hora local.
 
-function iso(d) { return d.toISOString().split('T')[0]; }
-function textoFecha(d) {
-    const dias = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-    const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-    return `${dias[d.getDay()]} ${d.getDate()} ${meses[d.getMonth()]}`;
-}
-function cambiarFecha(p) { fechaActual.setDate(fechaActual.getDate() + p); mostrarFechas(); cargarPartidos(iso(fechaActual)); }
-function irFecha(f) { fechaActual = new Date(f + 'T00:00:00'); mostrarFechas(); cargarPartidos(f); }
-function mostrarFechas() {
-    let html = '';
-    for(let i=-1; i<=1; i++){
-        let f = new Date(fechaActual); f.setDate(f.getDate() + i);
-        let activo = iso(f) === iso(fechaActual);
-        html += `<span class="px-3 py-1.5 rounded cursor-pointer ${activo?'bg-azul text-white font-semibold':'hover:bg-gray-100'}" onclick="irFecha('${iso(f)}')">${textoFecha(f)}</span>`;
-    }
-    document.getElementById('selector-fechas').innerHTML = html;
-}
+        function iso(d) {
+            return d.toISOString().split('T')[0];
+        }
 
-function leerEntradas(ls, box, visitante) {
-    const inn = ls?.innings || [];
-    const fila = [];
-    let C = 0, H = 0, E = 0;
-    for(let i=0; i<9; i++){
-        const v = inn[i] ? (visitante ? inn[i].away?.runs : inn[i].home?.runs) : null;
-        fila.push(v === null ? '-' : v);
-    }
-    if(box && box.teams){
-        const eq = visitante ? box.teams.away : box.teams.home;
-        C = eq?.stats?.runs ?? 0;
-        H = eq?.stats?.hits ?? 0;
-        E = eq?.stats?.errors ?? 0;
-    } else {
-        C = visitante ? ls.away?.runs ?? 0 : ls.home?.runs ?? 0;
-        H = visitante ? ls.away?.hits ?? 0 : ls.home?.hits ?? 0;
-        E = visitante ? ls.away?.errors ?? 0 : ls.home?.errors ?? 0;
-    }
-    return {fila, C, H, E};
-}
+        function textoFecha(d) {
+            const dias = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+            const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+            return `${dias[d.getDay()]} ${d.getDate()} ${meses[d.getMonth()]}`;
+        }
 
-function dibujarBases(ataque){
-    const b1 = !!ataque?.first, b2 = !!ataque?.second, b3 = !!ataque?.third;
-    return `
-    <div class="relative w-14 h-14 mx-auto">
-        <div class="diamante-base absolute top-0 left-1/2 -translate-x-1/2 ${b2?'bg-verdeBase':'bg-grisClaro'}"></div>
-        <div class="diamante-base absolute bottom-1/2 right-0 translate-y-1/2 ${b1?'bg-verdeBase':'bg-grisClaro'}"></div>
-        <div class="diamante-base absolute bottom-1/2 left-0 translate-y-1/2 ${b3?'bg-verdeBase':'bg-grisClaro'}"></div>
-        <div class="diamante-base absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gris"></div>
-    </div>`;
-}
+        // ==================== MANEJO DE FECHAS ====================
+        function cambiarFecha(delta) {
+            fechaActual.setDate(fechaActual.getDate() + delta);
+            mostrarFechas();
+            cargarPartidos(iso(fechaActual));
+        }
 
-// ✅ URL COMPLETA para traer TODO lo necesario en vivo
-async function cargarPartidos(fecha){
-    try{
-        const res = await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${fecha}&language=es&hydrate=linescore,probablePitchers,status,linescore.offense,linescore.defense,boxscore,gameDate,plays`);
-        const datos = await res.json();
-        const juegos = datos.dates?.[0]?.games || [];
-        const cont = document.getElementById('lista-partidos');
-        if(!juegos.length){ cont.innerHTML = `<p class="text-center py-8">Sin partidos programados</p>`; return; }
+        function irFecha(fechaStr) {
+            fechaActual = new Date(fechaStr + 'T00:00:00');
+            mostrarFechas();
+            cargarPartidos(fechaStr);
+        }
 
-        cont.innerHTML = juegos.map(p => {
-            const away = p.teams?.away || {}; const home = p.teams?.home || {};
-            const lanzA = p.probablePitchers?.away || {}; const lanzH = p.probablePitchers?.home || {};
-            const idA = away.team?.id; const idH = home.team?.id;
-            const nomA = away.team?.name || 'Visitante'; const nomH = home.team?.name || 'Local';
-            const regA = away.leagueRecord ? `${away.leagueRecord.wins}-${away.leagueRecord.losses}` : '';
-            const regH = home.leagueRecord ? `${home.leagueRecord.wins}-${home.leagueRecord.losses}` : '';
+        function mostrarFechas() {
+            const contenedor = document.getElementById('selector-fechas');
+            let html = '';
+            for (let i = -1; i <= 1; i++) {
+                let f = new Date(fechaActual);
+                f.setDate(f.getDate() + i);
+                const activo = iso(f) === iso(fechaActual);
+                html += `<span class="px-3 py-1.5 rounded cursor-pointer ${activo ? 'bg-azul text-white font-semibold' : 'hover:bg-gray-100'}" onclick="irFecha('${iso(f)}')">${textoFecha(f)}</span>`;
+            }
+            contenedor.innerHTML = html;
+        }
 
-            const estado = p.status || {};
-            const vivo = estado.abstractGameState === 'Live';
-            const final = estado.abstractGameState === 'Final';
-            const programado = estado.abstractGameState === 'Preview';
-            const horaUTC = new Date(p.gameDate);
-            const horaLocal = new Date(horaUTC.getTime() + ZONA_UTC*3600000);
-            const horaTexto = `${horaLocal.toLocaleTimeString('es-PE',{hour:'2-digit',minute:'2-digit'})}`;
+        // ==================== FUNCIONES AUXILIARES ====================
+        function leerEntradas(linescore, boxscore, esVisitante) {
+            const innings = linescore?.innings || [];
+            const fila = [];
+            for (let i = 0; i < 9; i++) {
+                const inn = innings[i];
+                if (!inn) {
+                    fila.push('-');
+                    continue;
+                }
+                const runs = esVisitante ? inn.away?.runs : inn.home?.runs;
+                fila.push(runs !== undefined && runs !== null ? runs : '-');
+            }
+            // Totales desde boxscore o desde linescore
+            let C = 0,
+                H = 0,
+                E = 0;
+            if (boxscore && boxscore.teams) {
+                const eq = esVisitante ? boxscore.teams.away : boxscore.teams.home;
+                C = eq?.stats?.runs ?? 0;
+                H = eq?.stats?.hits ?? 0;
+                E = eq?.stats?.errors ?? 0;
+            } else {
+                const eq = esVisitante ? linescore?.away : linescore?.home;
+                C = eq?.runs ?? 0;
+                H = eq?.hits ?? 0;
+                E = eq?.errors ?? 0;
+            }
+            return { fila, C, H, E };
+        }
 
-            const ls = p.linescore || {};
-            const box = p.boxscore || {};
-            const v = leerEntradas(ls, box, true);
-            const h = leerEntradas(ls, box, false);
-            const actInn = ls.currentInning || '';
-            const mitad = ls.inningHalf === 'Top' ? 'Arriba' : ls.inningHalf === 'Bottom' ? 'Abajo' : '';
-            const bol = ls.balls ?? '-'; const str = ls.strikes ?? '-'; const out = ls.outs ?? '-';
-            const tipo = p.seriesDescription || 'Temporada Regular';
-
+        function dibujarBases(offense) {
+            const b1 = !!offense?.first,
+                b2 = !!offense?.second,
+                b3 = !!offense?.third;
             return `
-            <div class="bg-white rounded-lg shadow-sm border border-grisClaro p-4 relative">
-                ${vivo ? `<span class="absolute top-2 right-3 bg-rojoVivo text-white text-[0.7rem] px-2 py-0.5 rounded-full flex items-center gap-1"><span class="w-1.5 h-1.5 bg-white rounded-full parpadeo"></span>EN VIVO ${actInn}° ${mitad}</span>` : ''}
-                ${final ? `<span class="absolute top-2 right-3 bg-gris text-white text-[0.7rem] px-2 py-0.5 rounded-full">FINAL</span>` : ''}
-                ${programado ? `<span class="absolute top-2 right-3 bg-blue-50 text-blue-700 text-[0.7rem] px-2 py-0.5 rounded-full">${horaTexto}</span>` : ''}
-                <div class="text-center text-xs text-gris mb-3">${tipo}</div>
-
-                <div class="flex items-center justify-between mb-4">
-                    <div class="flex items-center gap-2">
-                        <img src="https://www.mlbstatic.com/team-logos/${idA}.svg" alt="${nomA}" class="w-9 h-9">
-                        <div><div class="font-semibold text-sm">${nomA}</div><div class="text-xs">${regA}</div></div>
-                    </div>
-                    <div class="text-2xl font-bold min-w-[4rem] text-center">${v.C} - ${h.C}</div>
-                    <div class="flex items-center gap-2 text-right flex-row-reverse">
-                        <img src="https://www.mlbstatic.com/team-logos/${idH}.svg" alt="${nomH}" class="w-9 h-9">
-                        <div><div class="font-semibold text-sm">${nomH}</div><div class="text-xs">${regH}</div></div>
-                    </div>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <div class="grid grid-entradas gap-x-1 text-xs text-center font-medium text-gris/80">
-                        ${[1,2,3,4,5,6,7,8,9].map(n=>`<span>${n}</span>`).join('')}
-                        <span class="border-l border-grisClaro">C</span><span>H</span><span>E</span>
-                    </div>
-                    <div class="grid grid-entradas gap-x-1 text-xs text-center py-1 border-t border-grisClaro mt-1">
-                        ${v.fila.map(x=>`<span>${x}</span>`).join('')}
-                        <span class="font-semibold border-l border-grisClaro">${v.C}</span><span class="font-semibold">${v.H}</span><span class="font-semibold">${v.E}</span>
-                    </div>
-                    <div class="grid grid-entradas gap-x-1 text-xs text-center py-1">
-                        ${h.fila.map(x=>`<span>${x}</span>`).join('')}
-                        <span class="font-semibold border-l border-grisClaro">${h.C}</span><span class="font-semibold">${h.H}</span><span class="font-semibold">${h.E}</span>
-                    </div>
-                </div>
-
-                ${vivo ? `
-                <div class="mt-3 flex items-center justify-around text-xs bg-gray-50 rounded py-2">
-                    <div class="text-center"><div class="font-medium">B ${bol} • S ${str} • O ${out}</div><div class="text-[0.65rem] text-gris/70">Bolas • Strike • Outs</div></div>
-                    ${dibujarBases(ls.offense)}
-                </div>` : ''}
-
-                <div class="mt-4 grid grid-cols-2 gap-2 text-xs">
-                    <div><div class="text-gris">Lanzando</div><div class="font-medium">${lanzA.fullName || 'Por confirmar'}</div>${lanzA.era ? `<div>${lanzA.era} EFE</div>` : ''}</div>
-                    <div class="text-right"><div class="text-gris">Al bate</div><div class="font-medium">${lanzH.fullName || 'Por confirmar'}</div>${lanzH.era ? `<div>${lanzH.era} EFE</div>` : ''}</div>
-                </div>
-
-                <div class="mt-3 flex justify-around text-xs font-medium text-azul">
-                    <a href="https://www.mlb.com/es/gameday/${p.gamePk}" target="_blank" rel="noopener noreferrer" class="hover:underline">Gameday</a>
-                    <a href="#" class="hover:underline">Crónica</a>
-                </div>
+            <div class="relative w-16 h-16 mx-auto">
+                <!-- Base 2 -->
+                <div class="diamante-base absolute top-0 left-1/2 -translate-x-1/2 ${b2 ? 'ocupada' : 'vacia'}"></div>
+                <!-- Base 1 (derecha) -->
+                <div class="diamante-base absolute bottom-1/2 right-0 translate-y-1/2 ${b1 ? 'ocupada' : 'vacia'}"></div>
+                <!-- Base 3 (izquierda) -->
+                <div class="diamante-base absolute bottom-1/2 left-0 translate-y-1/2 ${b3 ? 'ocupada' : 'vacia'}"></div>
+                <!-- Home (plato) -->
+                <div class="diamante-base absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 plato"></div>
             </div>`;
-        }).join('');
-    }catch(e){ console.error(e); cont.innerHTML = `<p class="text-center text-red-600 py-8">Error al cargar datos</p>`; }
-}
+        }
 
-async function cargarTablas(){
-    try{
-        const res = await fetch(`https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=${ANIO}`);
-        const datos = await res.json();
-        let ame = [], nac = [];
-        datos.records?.forEach(r => {
-            if(r.league.id === 103) ame.push(...r.teamRecords);
-            if(r.league.id === 104) nac.push(...r.teamRecords);
-        });
-        ame.sort((a,b) => b.winningPercentage - a.winningPercentage);
-        nac.sort((a,b) => b.winningPercentage - a.winningPercentage);
-        document.getElementById('tabla-americana').innerHTML = ame.map((t,i)=>
-            `<tr class="border-b border-grisClaro"><td>${i+1}</td><td>${t.team.name}</td><td class="text-center">${t.wins}</td><td class="text-center">${t.losses}</td><td class="text-center">${Number(t.winningPercentage).toFixed(3)}</td><td class="text-center">${t.gamesBack||'—'}</td></tr>`
-        ).join('');
-        document.getElementById('tabla-nacional').innerHTML = nac.map((t,i)=>
-            `<tr class="border-b border-grisClaro"><td>${i+1}</td><td>${t.team.name}</td><td class="text-center">${t.wins}</td><td class="text-center">${t.losses}</td><td class="text-center">${Number(t.winningPercentage).toFixed(3)}</td><td class="text-center">${t.gamesBack||'—'}</td></tr>`
-        ).join('');
-    }catch(e){ console.error(e); }
-}
+        // ==================== OBTENER PARTIDOS ====================
+        async function cargarPartidos(fecha) {
+            const cont = document.getElementById('lista-partidos');
+            cont.innerHTML = `<p class="text-center py-10">Cargando encuentros…</p>`;
 
-mostrarFechas();
-cargarPartidos(iso(fechaActual));
-cargarTablas();
-setInterval(()=>cargarPartidos(iso(fechaActual)),15000); // Refresco cada 15s
-</script>
+            try {
+                const url =
+                    `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${fecha}&language=es&hydrate=linescore,probablePitchers,status,linescore.offense,linescore.defense,boxscore,gameDate,plays`;
+                const res = await fetch(url);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const datos = await res.json();
+
+                const juegos = datos.dates?.[0]?.games || [];
+                if (!juegos.length) {
+                    cont.innerHTML = `<p class="text-center py-8">No hay partidos programados para esta fecha</p>`;
+                    return;
+                }
+
+                // Renderizar cada juego
+                let html = '';
+                for (const p of juegos) {
+                    const away = p.teams?.away || {};
+                    const home = p.teams?.home || {};
+                    const idA = away.team?.id;
+                    const idH = home.team?.id;
+                    const nomA = away.team?.name || 'Visitante';
+                    const nomH = home.team?.name || 'Local';
+                    const regA = away.leagueRecord ? `${away.leagueRecord.wins}-${away.leagueRecord.losses}` : '';
+                    const regH = home.leagueRecord ? `${home.leagueRecord.wins}-${home.leagueRecord.losses}` : '';
+
+                    const estado = p.status || {};
+                    const vivo = estado.abstractGameState === 'Live';
+                    const final = estado.abstractGameState === 'Final';
+                    const programado = estado.abstractGameState === 'Preview';
+
+                    // Hora local
+                    const horaUTC = new Date(p.gameDate);
+                    const horaLocal = new Date(horaUTC.getTime() + ZONA_UTC * 3600000);
+                    const horaTexto = horaLocal.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
+
+                    const ls = p.linescore || {};
+                    const box = p.boxscore || {};
+                    const v = leerEntradas(ls, box, true);
+                    const h = leerEntradas(ls, box, false);
+
+                    const actInn = ls.currentInning || '';
+                    const mitad = ls.inningHalf === 'Top' ? 'Arriba' : ls.inningHalf === 'Bottom' ? 'Abajo' : '';
+                    const bol = ls.balls ?? '-';
+                    const str = ls.strikes ?? '-';
+                    const out = ls.outs ?? '-';
+                    const tipo = p.seriesDescription || 'Temporada Regular';
+
+                    // Lanzadores probables
+                    const lanzA = p.probablePitchers?.away || {};
+                    const lanzH = p.probablePitchers?.home || {};
+
+                    html += `
+                    <div class="bg-white rounded-lg shadow-sm border border-grisClaro p-4 relative">
+                        ${vivo ? `<span class="absolute top-2 right-3 bg-rojoVivo text-white text-[0.7rem] px-2 py-0.5 rounded-full flex items-center gap-1"><span class="w-1.5 h-1.5 bg-white rounded-full parpadeo"></span>EN VIVO ${actInn}° ${mitad}</span>` : ''}
+                        ${final ? `<span class="absolute top-2 right-3 bg-gris text-white text-[0.7rem] px-2 py-0.5 rounded-full">FINAL</span>` : ''}
+                        ${programado ? `<span class="absolute top-2 right-3 bg-blue-50 text-blue-700 text-[0.7rem] px-2 py-0.5 rounded-full">${horaTexto}</span>` : ''}
+                        <div class="text-center text-xs text-gris mb-3">${tipo}</div>
+
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-2">
+                                <img src="https://www.mlbstatic.com/team-logos/${idA}.svg" alt="${nomA}" class="w-9 h-9" onerror="this.style.display='none'">
+                                <div><div class="font-semibold text-sm">${nomA}</div><div class="text-xs">${regA}</div></div>
+                            </div>
+                            <div class="text-2xl font-bold min-w-[4rem] text-center">${v.C} - ${h.C}</div>
+                            <div class="flex items-center gap-2 text-right flex-row-reverse">
+                                <img src="https://www.mlbstatic.com/team-logos/${idH}.svg" alt="${nomH}" class="w-9 h-9" onerror="this.style.display='none'">
+                                <div><div class="font-semibold text-sm">${nomH}</div><div class="text-xs">${regH}</div></div>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <div class="grid grid-entradas gap-x-1 text-xs text-center font-medium text-gris/80">
+                                ${[1,2,3,4,5,6,7,8,9].map(n => `<span>${n}</span>`).join('')}
+                                <span class="border-l border-grisClaro">C</span><span>H</span><span>E</span>
+                            </div>
+                            <div class="grid grid-entradas gap-x-1 text-xs text-center py-1 border-t border-grisClaro mt-1">
+                                ${v.fila.map(x => `<span>${x}</span>`).join('')}
+                                <span class="font-semibold border-l border-grisClaro">${v.C}</span><span class="font-semibold">${v.H}</span><span class="font-semibold">${v.E}</span>
+                            </div>
+                            <div class="grid grid-entradas gap-x-1 text-xs text-center py-1">
+                                ${h.fila.map(x => `<span>${x}</span>`).join('')}
+                                <span class="font-semibold border-l border-grisClaro">${h.C}</span><span class="font-semibold">${h.H}</span><span class="font-semibold">${h.E}</span>
+                            </div>
+                        </div>
+
+                        ${vivo ? `
+                        <div class="mt-3 flex flex-col sm:flex-row items-center justify-around text-xs bg-gray-50 rounded py-2 gap-2">
+                            <div class="text-center"><span class="font-medium">B ${bol} • S ${str} • O ${out}</span><div class="text-[0.6rem] text-gris/70">Bolas • Strikes • Outs</div></div>
+                            ${dibujarBases(ls.offense)}
+                        </div>` : ''}
+
+                        <div class="mt-4 grid grid-cols-2 gap-2 text-xs">
+                            <div><div class="text-gris">Lanzando</div><div class="font-medium">${lanzA.fullName || 'Por confirmar'}</div>${lanzA.era ? `<div>${lanzA.era} EFE</div>` : ''}</div>
+                            <div class="text-right"><div class="text-gris">Al bate</div><div class="font-medium">${lanzH.fullName || 'Por confirmar'}</div>${lanzH.era ? `<div>${lanzH.era} EFE</div>` : ''}</div>
+                        </div>
+
+                        <div class="mt-3 flex justify-around text-xs font-medium text-azul">
+                            <a href="https://www.mlb.com/es/gameday/${p.gamePk}" target="_blank" rel="noopener noreferrer" class="hover:underline">Gameday</a>
+                            <a href="#" class="hover:underline">Crónica</a>
+                        </div>
+                    </div>`;
+                }
+                cont.innerHTML = html;
+
+            } catch (error) {
+                console.error('Error cargando partidos:', error);
+                cont.innerHTML = `<p class="text-center text-red-600 py-8">Error al cargar los partidos. Intenta de nuevo.</p>`;
+            }
+        }
+
+        // ==================== TABLAS DE POSICIONES ====================
+        async function cargarTablas() {
+            try {
+                const res = await fetch(`https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=${ANIO}`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const datos = await res.json();
+
+                let ame = [],
+                    nac = [];
+                datos.records?.forEach(r => {
+                    if (r.league.id === 103) ame.push(...r.teamRecords);
+                    if (r.league.id === 104) nac.push(...r.teamRecords);
+                });
+
+                // Ordenar por porcentaje de victorias descendente
+                ame.sort((a, b) => b.winningPercentage - a.winningPercentage);
+                nac.sort((a, b) => b.winningPercentage - a.winningPercentage);
+
+                const renderTabla = (records, id) => {
+                    const tbody = document.getElementById(id);
+                    if (!records.length) {
+                        tbody.innerHTML = `<tr><td colspan="6" class="py-4 text-center">Sin datos</td></tr>`;
+                        return;
+                    }
+                    tbody.innerHTML = records.map((t, i) => `
+                        <tr class="border-b border-grisClaro">
+                            <td>${i + 1}</td>
+                            <td>${t.team.name}</td>
+                            <td class="text-center">${t.wins}</td>
+                            <td class="text-center">${t.losses}</td>
+                            <td class="text-center">${Number(t.winningPercentage).toFixed(3)}</td>
+                            <td class="text-center">${t.gamesBack ?? '—'}</td>
+                        </tr>
+                    `).join('');
+                };
+
+                renderTabla(ame, 'tabla-americana');
+                renderTabla(nac, 'tabla-nacional');
+
+            } catch (error) {
+                console.error('Error cargando tablas:', error);
+                document.getElementById('tabla-americana').innerHTML =
+                    `<tr><td colspan="6" class="py-4 text-center text-red-600">Error al cargar</td></tr>`;
+                document.getElementById('tabla-nacional').innerHTML =
+                    `<tr><td colspan="6" class="py-4 text-center text-red-600">Error al cargar</td></tr>`;
+            }
+        }
+
+        // ==================== INICIALIZACIÓN ====================
+        mostrarFechas();
+        cargarPartidos(iso(fechaActual));
+        cargarTablas();
+
+        // Refresco automático cada 15 segundos
+        setInterval(() => {
+            cargarPartidos(iso(fechaActual));
+        }, 15000);
+    </script>
 </body>
 </html>
