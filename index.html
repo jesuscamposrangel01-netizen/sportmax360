@@ -44,10 +44,10 @@
 </head>
 <body class="bg-fondo text-gris font-sans min-h-screen">
 
-<!-- Menú principal igual al estilo MLB -->
+<!-- Menú principal con nombre correcto -->
 <header class="bg-mlbAzul text-white py-3 px-4" role="banner">
     <div class="max-w-xl mx-auto flex items-center justify-between">
-        <div class="font-bold text-xl tracking-wide">MLB <span class="text-sm">ESPAÑOL</span></div>
+        <div class="font-bold text-xl tracking-wide">SportVivo360 <span class="text-sm">• MLB</span></div>
         <nav class="hidden sm:flex gap-6 text-sm font-medium">
             <a href="#" class="hover:text-white/80">RESULTADOS</a>
             <a href="#" class="hover:text-white/80">NOTICIAS</a>
@@ -67,16 +67,16 @@
     </div>
 
     <section aria-label="Marcadores MLB completos">
-        <h2 class="text-xl texto-titulo border-l-4 border-azul pl-2 mb-4">⚾ Resultados & En vivo</h2>
+        <h2 class="text-xl texto-titulo border-l-4 border-azul pl-2 mb-4">📋 Resultados & En vivo</h2>
 
-        <!-- Selector fecha -->
+        <!-- Selector fecha igual al diseño -->
         <div class="flex items-center justify-center gap-2 bg-tarjeta rounded-lg py-2 px-3 mb-6 border border-grisClaro">
             <button onclick="cambiarFecha(-1)" class="text-lg px-2 text-gris hover:text-azul enfocable">‹</button>
             <div id="fechas-lista" class="flex gap-3 text-sm"></div>
             <button onclick="cambiarFecha(1)" class="text-lg px-2 text-gris hover:text-azul enfocable">›</button>
         </div>
 
-        <!-- Lista partidos con entradas -->
+        <!-- Lista partidos con entradas 1‑9 + C/H/E -->
         <div id="lista-partidos-mlb" class="space-y-5 mb-10">
             <p class="text-center text-gris py-8">Cargando encuentros…</p>
         </div>
@@ -128,7 +128,7 @@
 </main>
 
 <footer class="bg-tarjeta border-t border-grisClaro py-4 mt-12 text-center text-xs text-gris">
-    <p>© 2026 SportVivo360 • Datos MLB API pública</p>
+    <p>© 2026 <strong>SportVivo360</strong> • Datos MLB API pública</p>
 </footer>
 
 <script>
@@ -138,7 +138,10 @@ const ANIO_MLB = 2026;
 
 function fechaISO(d) { return d.toISOString().split('T')[0]; }
 function nombreDiaCorto(d) { return ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'][d.getDay()]; }
-function numMesCorto(d) { return d.getDate() + " " + ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][d.getMonth()]; }
+function numMesNombre(d) {
+    const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    return `${['Jue','Vie','Sáb','Dom','Lun','Mar','Mié'][d.getDay()] || nombreDiaCorto(d)} ${d.getDate()} ${meses[d.getMonth()]}`;
+}
 function cambiarFecha(paso) { fechaActual.setDate(fechaActual.getDate() + paso); renderFechas(); cargarPartidos(fechaISO(fechaActual)); }
 function irFecha(iso) { fechaActual = new Date(iso + "T00:00:00"); renderFechas(); cargarPartidos(iso); }
 function renderFechas() {
@@ -146,19 +149,17 @@ function renderFechas() {
     for(let i = -1; i <= 1; i++) {
         let f = new Date(fechaActual); f.setDate(f.getDate() + i);
         const activo = fechaISO(f) === fechaISO(fechaActual);
-        html += `<span class="px-2 py-1 rounded ${activo ? 'bg-azul text-white font-semibold' : 'text-gris'}" onclick="irFecha('${fechaISO(f)}')">${nombreDiaCorto(f)} ${numMesCorto(f)}</span>`;
+        html += `<span class="px-3 py-1.5 rounded ${activo ? 'bg-azul text-white font-semibold shadow' : 'text-gris hover:bg-gray-100'} cursor-pointer" onclick="irFecha('${fechaISO(f)}')">${numMesNombre(f)}</span>`;
     }
     cont.innerHTML = html;
 }
 
-// Genera fila de entradas vacías/completas
 function filaEntradas(lineScore, esVisitante) {
     const entradas = lineScore?.innings || [];
     const filaEnt = []; let totalC = 0, totalH = 0, totalE = 0;
     for(let i = 0; i < 9; i++) {
         const inn = entradas[i];
-        const val = inn ? (esVisitante ? inn.away?.runs : inn.home?.runs) : "";
-        filaEnt.push(val ?? "-");
+        filaEnt.push(inn ? (esVisitante ? inn.away?.runs : inn.home?.runs) : "");
     }
     totalC = esVisitante ? lineScore.away?.runs ?? 0 : lineScore.home?.runs ?? 0;
     totalH = esVisitante ? lineScore.away?.hits ?? 0 : lineScore.home?.hits ?? 0;
@@ -185,15 +186,15 @@ async function cargarPartidos(fecha) {
             const fin = estado.abstractGameState === "Final";
             const ls = p.linescore || {};
             const v = filaEntradas(ls, true); const h = filaEntradas(ls, false);
-            const tipoJuego = p.seriesDescription || "";
+            const tipoJuego = p.seriesDescription || "Temporada Regular";
             return `
             <div class="bg-white rounded-lg shadow-sm border border-grisClaro p-4 relative">
                 ${vivo ? `<span class="absolute top-2 right-3 bg-vivo text-white text-[0.7rem] px-2 py-0.5 rounded-full flex items-center gap-1"><span class="w-1.5 h-1.5 bg-white rounded-full pulse-vivo"></span>EN VIVO</span>` : ""}
                 ${fin ? `<span class="absolute top-2 right-3 bg-gris text-white text-[0.7rem] px-2 py-0.5 rounded-full">FINAL</span>` : ""}
-                ${tipoJuego ? `<div class="text-center text-xs text-gris mb-2">${tipoJuego}</div>` : ""}
+                <div class="text-center text-xs text-gris mb-3">${tipoJuego}</div>
 
-                <!-- Equipos -->
-                <div class="flex items-center justify-between mb-3">
+                <!-- Equipos y marcador -->
+                <div class="flex items-center justify-between mb-4">
                     <div class="flex items-center gap-2">
                         <img src="https://www.mlbstatic.com/team-logos/${idA}.svg" alt="${nomA}" class="w-9 h-9" loading="lazy">
                         <div><div class="font-semibold text-sm">${nomA}</div><div class="text-xs text-gris">${regA}</div></div>
@@ -205,7 +206,7 @@ async function cargarPartidos(fecha) {
                     </div>
                 </div>
 
-                <!-- Encabezado entradas -->
+                <!-- Entradas 1‑9 + C / H / E -->
                 <div class="tabla-scroll">
                     <div class="grid grid-cols-[repeat(9,1.4rem)_2rem_2rem_2rem] gap-1 text-xs text-center font-medium">
                         <span class="text-gris/80">1</span><span class="text-gris/80">2</span><span class="text-gris/80">3</span><span class="text-gris/80">4</span><span class="text-gris/80">5</span>
@@ -213,11 +214,11 @@ async function cargarPartidos(fecha) {
                         <span class="border-l border-grisClaro">C</span><span>H</span><span>E</span>
                     </div>
                     <div class="grid grid-cols-[repeat(9,1.4rem)_2rem_2rem_2rem] gap-1 text-xs text-center py-1 border-t border-grisClaro mt-1">
-                        ${v.filaEnt.map(x=>`<span>${x}</span>`).join("")}
+                        ${v.filaEnt.map(x=>`<span>${x !== "" ? x : "0"}</span>`).join("")}
                         <span class="font-semibold border-l border-grisClaro">${v.totalC}</span><span class="font-semibold">${v.totalH}</span><span class="font-semibold">${v.totalE}</span>
                     </div>
                     <div class="grid grid-cols-[repeat(9,1.4rem)_2rem_2rem_2rem] gap-1 text-xs text-center py-1">
-                        ${h.filaEnt.map(x=>`<span>${x}</span>`).join("")}
+                        ${h.filaEnt.map(x=>`<span>${x !== "" ? x : "0"}</span>`).join("")}
                         <span class="font-semibold border-l border-grisClaro">${h.totalC}</span><span class="font-semibold">${h.totalH}</span><span class="font-semibold">${h.totalE}</span>
                     </div>
                 </div>
@@ -258,9 +259,7 @@ async function cargarTablasMLB() {
         document.getElementById("tabla-nacional").innerHTML = nac.map((t,i) =>
             `<tr class="border-b border-grisClaro"><td>${i+1}</td><td>${t.team.name}</td><td class="text-center">${t.wins}</td><td class="text-center">${t.losses}</td><td class="text-center">${Number(t.winningPercentage).toFixed(3)}</td><td class="text-center">${t.gamesBack || "—"}</td></tr>`
         ).join("");
-    } catch(e) {
-        console.error(e);
-    }
+    } catch(e) { console.error(e); }
 }
 
 // Inicio
