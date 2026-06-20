@@ -24,57 +24,301 @@
         }
     </script>
     <style>
-        .parpadeo { animation: parpadeo 1.2s infinite ease-in-out; }
-        @keyframes parpadeo { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+        /* ===== FONDO CON GRADIENTE SUAVE ===== */
+        body {
+            background: linear-gradient(145deg, #f8fafc 0%, #eef2f6 100%);
+            transition: background 0.3s;
+        }
+        .dark body {
+            background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+        }
+        /* ===== PARPADEO ===== */
+        .parpadeo {
+            animation: parpadeo 1.2s infinite ease-in-out;
+        }
+        @keyframes parpadeo {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        /* ===== FADE-IN ===== */
+        .fade-in {
+            animation: fadeIn 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            opacity: 0;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        /* ===== DIAMANTE ===== */
         .diamante-base {
-            width: 14px; height: 14px; transform: rotate(45deg);
-            border: 1px solid #94a3b8; box-sizing: border-box;
+            width: 14px;
+            height: 14px;
+            transform: rotate(45deg);
+            border: 1px solid #94a3b8;
+            box-sizing: border-box;
             transition: all 0.2s;
         }
-        .diamante-base.ocupada { background-color: #22c55e; border-color: #16a34a; box-shadow: 0 0 8px rgba(34,197,94,0.4); }
-        .diamante-base.vacia { background-color: #e2e8f0; border-color: #cbd5e1; }
-        .diamante-base.plato { background-color: #94a3b8; border-color: #64748b; }
+        .diamante-base.ocupada {
+            background-color: #22c55e;
+            border-color: #16a34a;
+            box-shadow: 0 0 8px rgba(34,197,94,0.4);
+        }
+        .diamante-base.vacia {
+            background-color: #e2e8f0;
+            border-color: #cbd5e1;
+        }
+        .diamante-base.plato {
+            background-color: #94a3b8;
+            border-color: #64748b;
+        }
+        /* ===== GRID DE ENTRADAS ===== */
         .grid-entradas {
             display: grid;
             grid-template-columns: repeat(9, 1.6rem) 2rem 2rem 2rem;
         }
-        .grid-entradas > span { text-align: center; display: flex; align-items: center; justify-content: center; font-variant-numeric: tabular-nums; }
-        @media (max-width: 480px) {
-            .grid-entradas { grid-template-columns: repeat(9, 1.2rem) 1.6rem 1.6rem 1.6rem; font-size: 0.65rem; }
+        .grid-entradas > span {
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-variant-numeric: tabular-nums;
+            font-weight: 500;
         }
-        .tabla-posiciones th { background-color: #f1f5f9; font-weight: 600; padding: 6px 8px; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.5px; }
-        .tabla-posiciones td { padding: 6px 8px; border-bottom: 1px solid #e2e8f0; }
-        .tabla-posiciones tr:hover td { background-color: #f8fafc; }
-        .tabla-posiciones tr:last-child td { border-bottom: none; }
-        .division-titulo { background: #e2e8f0; font-weight: 700; padding: 6px 12px; margin-top: 12px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; border-radius: 4px; }
-        .division-titulo:first-of-type { margin-top: 0; }
-        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background: #000; }
-        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
-        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
-        .spinner { border: 4px solid rgba(0,0,0,0.1); border-left-color: #1a56db; border-radius: 50%; width: 36px; height: 36px; animation: spin 0.8s linear infinite; margin: 10px auto; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .tab-button { padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; background: transparent; border: none; }
-        .tab-button.active { background: #1a56db; color: white; box-shadow: 0 4px 12px rgba(26,86,219,0.3); }
-        .tab-button:not(.active):hover { background: rgba(26,86,219,0.1); }
-        .dark .tab-button:not(.active):hover { background: rgba(255,255,255,0.05); }
+        @media (max-width: 480px) {
+            .grid-entradas {
+                grid-template-columns: repeat(9, 1.2rem) 1.6rem 1.6rem 1.6rem;
+                font-size: 0.65rem;
+            }
+        }
+        /* ===== TABLAS ===== */
+        .tabla-posiciones th {
+            background-color: #f1f5f9;
+            font-weight: 700;
+            padding: 8px 10px;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            letter-spacing: 0.8px;
+            color: #1e293b;
+        }
+        .tabla-posiciones td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e2e8f0;
+            transition: background 0.15s;
+        }
+        .tabla-posiciones tbody tr:nth-child(even) td {
+            background-color: #fafbfc;
+        }
+        .tabla-posiciones tbody tr:hover td {
+            background-color: #eef2f6;
+        }
+        .tabla-posiciones tr:last-child td {
+            border-bottom: none;
+        }
+        .dark .tabla-posiciones th {
+            background-color: #1e293b;
+            color: #e2e8f0;
+        }
+        .dark .tabla-posiciones td {
+            border-color: #334155;
+        }
+        .dark .tabla-posiciones tbody tr:nth-child(even) td {
+            background-color: #1a2236;
+        }
+        .dark .tabla-posiciones tbody tr:hover td {
+            background-color: #1e293b;
+        }
+        /* ===== DIVISIONES ===== */
+        .division-titulo {
+            background: linear-gradient(to right, #e2e8f0, #f1f5f9);
+            font-weight: 700;
+            padding: 8px 14px;
+            margin-top: 16px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-radius: 6px;
+            color: #1e293b;
+        }
+        .dark .division-titulo {
+            background: linear-gradient(to right, #1e293b, #334155);
+            color: #e2e8f0;
+        }
+        .division-titulo:first-of-type {
+            margin-top: 0;
+        }
+        /* ===== VIDEO ===== */
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 16px;
+            background: #000;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        /* ===== TARJETAS GLASSMORPHISM ===== */
+        .card-glass {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.25s ease, box-shadow 0.3s ease, border-color 0.2s;
+        }
+        .card-glass:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.15);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+        .dark .card-glass {
+            background: rgba(30, 41, 59, 0.8);
+            border-color: rgba(255, 255, 255, 0.05);
+        }
+        .dark .card-glass:hover {
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.4);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        /* ===== MODO OSCURO ===== */
+        .dark .tabla-posiciones th {
+            background-color: #1e293b;
+            color: #e2e8f0;
+        }
+        .dark .tabla-posiciones td {
+            border-color: #334155;
+        }
+        .dark .tabla-posiciones tbody tr:nth-child(even) td {
+            background-color: #1a2236;
+        }
+        .dark .tabla-posiciones tbody tr:hover td {
+            background-color: #1e293b;
+        }
+        /* ===== BADGES ===== */
+        .badge-vivo {
+            background: #dc2626;
+            color: white;
+            box-shadow: 0 0 20px rgba(220,38,38,0.3);
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .badge-final {
+            background: #64748b;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .badge-programado {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid rgba(30,64,175,0.1);
+        }
+        .dark .badge-programado {
+            background: #1e293b;
+            color: #93c5fd;
+            border: 1px solid #334155;
+        }
+        /* ===== MARCADOR ===== */
+        .score-box {
+            background: rgba(0,0,0,0.03);
+            border-radius: 12px;
+            padding: 4px 16px;
+            font-weight: 700;
+            font-size: 2.2rem;
+            line-height: 1.2;
+            letter-spacing: 1px;
+            min-width: 80px;
+            text-align: center;
+        }
+        .dark .score-box {
+            background: rgba(255,255,255,0.05);
+        }
+        /* ===== SELECTOR FECHAS ===== */
+        .fecha-item {
+            padding: 6px 14px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .fecha-item.active {
+            background: #1a56db;
+            color: white;
+            box-shadow: 0 2px 10px rgba(26,86,219,0.25);
+        }
+        .fecha-item:not(.active):hover {
+            background: #e2e8f0;
+        }
+        .dark .fecha-item:not(.active):hover {
+            background: #334155;
+        }
+        /* ===== TABS ===== */
+        .tab-button {
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: transparent;
+            border: none;
+            font-size: 0.9rem;
+        }
+        .tab-button.active {
+            background: #1a56db;
+            color: white;
+            box-shadow: 0 4px 16px rgba(26,86,219,0.35);
+        }
+        .tab-button:not(.active):hover {
+            background: rgba(26,86,219,0.08);
+        }
+        .dark .tab-button:not(.active):hover {
+            background: rgba(255,255,255,0.06);
+        }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        .dark .tabla-posiciones th { background-color: #1e293b; color: #e2e8f0; }
-        .dark .tabla-posiciones tr:hover td { background-color: #1e293b; }
-        .dark .division-titulo { background: #1e293b; color: #e2e8f0; }
-        .dark .tab-button.active { background: #2563eb; }
-        .theme-toggle { cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem; }
+        /* ===== TOGGLE OSCURO ===== */
+        .theme-toggle {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+        }
         .theme-toggle input { display: none; }
-        .theme-toggle .slider { width: 40px; height: 22px; background: #cbd5e1; border-radius: 999px; position: relative; transition: background 0.3s; }
-        .theme-toggle .slider::after { content: ''; position: absolute; width: 18px; height: 18px; background: white; border-radius: 50%; top: 2px; left: 2px; transition: transform 0.3s; }
-        .dark .theme-toggle .slider { background: #1a56db; }
-        .dark .theme-toggle .slider::after { transform: translateX(18px); }
+        .theme-toggle .slider {
+            width: 44px;
+            height: 24px;
+            background: #cbd5e1;
+            border-radius: 999px;
+            position: relative;
+            transition: background 0.3s;
+        }
+        .theme-toggle .slider::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .dark .theme-toggle .slider {
+            background: #1a56db;
+        }
+        .dark .theme-toggle .slider::after {
+            transform: translateX(20px);
+        }
+        /* ===== CUENTA ATRÁS ===== */
         .countdown { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
         .countdown-item { background: rgba(0,0,0,0.04); padding: 8px 16px; border-radius: 8px; text-align: center; min-width: 60px; }
         .dark .countdown-item { background: rgba(255,255,255,0.05); }
         .countdown-number { font-size: 1.8rem; font-weight: 700; display: block; }
         .countdown-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; }
+        /* ===== PARTIDOS ===== */
         .match-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #e2e8f0; }
         .dark .match-row { border-color: #334155; }
         .match-row:last-child { border-bottom: none; }
@@ -82,19 +326,37 @@
         .match-teams .vs { font-weight: 300; opacity: 0.6; }
         .match-score { font-weight: 700; min-width: 60px; text-align: center; }
         .match-status { font-size: 0.65rem; padding: 2px 10px; border-radius: 999px; }
-        .badge-vivo { background: #dc2626; color: white; }
-        .badge-final { background: #64748b; color: white; }
-        .badge-programado { background: #dbeafe; color: #1e40af; }
-        .dark .badge-programado { background: #1e293b; color: #93c5fd; }
-        .max-w-xl { max-width: 36rem; }
-        .mx-auto { margin-left: auto; margin-right: auto; }
-        .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
-        .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+        /* ===== MENSAJE DE CARGA ===== */
+        .loading-msg {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+            color: #64748b;
+            font-weight: 500;
+        }
+        .loading-msg .dot {
+            width: 8px;
+            height: 8px;
+            background: #1a56db;
+            border-radius: 50%;
+            animation: bounce 1.2s infinite;
+        }
+        .loading-msg .dot:nth-child(2) { animation-delay: 0.2s; }
+        .loading-msg .dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); opacity: 0.4; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+        .dark .loading-msg { color: #94a3b8; }
+        .dark .loading-msg .dot { background: #3b82f6; }
     </style>
 </head>
-<body class="bg-gray-50 text-gris font-sans min-h-screen transition-colors duration-300 dark:bg-gray-900 dark:text-gray-200">
+<body>
 
-    <header class="bg-mlbAzul text-white py-3 px-4 sticky top-0 z-50 shadow-md transition-colors dark:bg-gray-800">
+    <!-- ===== CABECERA ===== -->
+    <header class="bg-mlbAzul text-white py-3 px-4 sticky top-0 z-50 shadow-lg transition-colors dark:bg-gray-800">
         <div class="max-w-xl mx-auto">
             <div class="flex items-center justify-between">
                 <h1 class="font-bold text-xl tracking-wide flex items-center gap-2">
@@ -122,28 +384,31 @@
             <span class="dark:text-gray-400">Actualizado • Lima (UTC‑5)</span>
         </div>
 
-        <!-- MLB -->
+        <!-- ============================================================ -->
+        <!-- MLB                                                          -->
+        <!-- ============================================================ -->
         <div id="tab-mlb" class="tab-content active">
             <section>
-                <h2 class="text-xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-4 dark:text-white">📋 Resultados & En vivo</h2>
+                <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-4 mb-6 dark:text-white">📋 Resultados & En vivo</h2>
 
-                <div class="flex items-center justify-center gap-2 bg-white dark:bg-gray-800 rounded-lg py-2 px-3 mb-6 border border-grisClaro dark:border-gray-700 shadow-sm">
-                    <button onclick="cambiarFecha(-1)" class="text-lg px-2 hover:text-azul transition">‹</button>
+                <div class="flex items-center justify-center gap-3 bg-white/70 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl py-2 px-4 mb-6 border border-grisClaro/60 dark:border-gray-700 shadow-md">
+                    <button onclick="cambiarFecha(-1)" class="text-lg px-4 py-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition font-semibold">‹</button>
                     <div id="selector-fechas" class="flex gap-2 text-sm font-medium"></div>
-                    <button onclick="cambiarFecha(1)" class="text-lg px-2 hover:text-azul transition">›</button>
+                    <button onclick="cambiarFecha(1)" class="text-lg px-4 py-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition font-semibold">›</button>
                 </div>
 
-                <div id="lista-partidos" class="space-y-4 mb-8">
-                    <!-- Mensaje de carga rápido (sin spinner grande) -->
-                    <div id="cargando-msg" class="text-center text-gray-500 dark:text-gray-400 py-6">
-                        <span class="inline-block animate-pulse">⏳ Cargando partidos...</span>
+                <div id="lista-partidos" class="space-y-5 mb-8">
+                    <!-- Mensaje de carga con puntos animados -->
+                    <div id="cargando-msg" class="loading-msg">
+                        <span>Cargando partidos</span>
+                        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
                     </div>
                 </div>
 
-                <!-- Posiciones manuales (sin cambios) -->
+                <!-- Posiciones manuales con glassmorphism -->
                 <div class="space-y-6">
-                    <div class="bg-white dark:bg-gray-800 rounded-lg border border-grisClaro dark:border-gray-700 p-4 shadow-sm card-hover">
-                        <h3 class="font-semibold text-mlbAzul dark:text-white text-lg mb-3 flex items-center gap-2">🏆 Liga Americana</h3>
+                    <div class="card-glass rounded-2xl p-5 shadow-lg transition-all">
+                        <h3 class="font-bold text-mlbAzul dark:text-white text-lg mb-4 flex items-center gap-2">🏆 Liga Americana</h3>
                         <div class="overflow-x-auto">
                             <div class="division-titulo dark:bg-gray-700 dark:text-gray-300">ESTE</div>
                             <table class="w-full text-xs tabla-posiciones dark:text-gray-300">
@@ -181,8 +446,8 @@
                         </div>
                     </div>
 
-                    <div class="bg-white dark:bg-gray-800 rounded-lg border border-grisClaro dark:border-gray-700 p-4 shadow-sm card-hover">
-                        <h3 class="font-semibold text-mlbAzul dark:text-white text-lg mb-3 flex items-center gap-2">🏆 Liga Nacional</h3>
+                    <div class="card-glass rounded-2xl p-5 shadow-lg transition-all">
+                        <h3 class="font-bold text-mlbAzul dark:text-white text-lg mb-4 flex items-center gap-2">🏆 Liga Nacional</h3>
                         <div class="overflow-x-auto">
                             <div class="division-titulo dark:bg-gray-700 dark:text-gray-300">ESTE</div>
                             <table class="w-full text-xs tabla-posiciones dark:text-gray-300">
@@ -222,31 +487,33 @@
                 </div>
 
                 <!-- Videos -->
-                <div class="mt-8">
-                    <h2 class="text-xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-4 dark:text-white">🎥 Destacados MLB</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-grisClaro dark:border-gray-700 overflow-hidden card-hover">
+                <div class="mt-10">
+                    <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-4 mb-6 dark:text-white">🎥 Destacados MLB</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="card-glass rounded-2xl shadow-lg overflow-hidden transition-all">
                             <div class="video-wrapper">
                                 <iframe src="https://www.youtube.com/embed/P5hOMfdFv8Y?si=_yl2u_0CiEAscwFq" title="MLB Highlights 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
                             </div>
-                            <div class="p-3"><p class="text-sm font-semibold dark:text-white">⚾ Resumen de la jornada</p><p class="text-xs text-gray-500 dark:text-gray-400">Las mejores jugadas del día en la MLB.</p></div>
+                            <div class="p-4"><p class="text-sm font-bold dark:text-white">⚾ Resumen de la jornada</p><p class="text-xs text-gray-500 dark:text-gray-400">Las mejores jugadas del día en la MLB.</p></div>
                         </div>
-                        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-grisClaro dark:border-gray-700 overflow-hidden card-hover">
+                        <div class="card-glass rounded-2xl shadow-lg overflow-hidden transition-all">
                             <div class="video-wrapper">
                                 <iframe src="https://www.youtube.com/embed/f5YBfDI-CnM?si=i3OMDqU2aEP7LdrM" title="MLB Highlights 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
                             </div>
-                            <div class="p-3"><p class="text-sm font-semibold dark:text-white">⚾ Mejores jugadas de la semana</p><p class="text-xs text-gray-500 dark:text-gray-400">Los momentos más espectaculares de la semana.</p></div>
+                            <div class="p-4"><p class="text-sm font-bold dark:text-white">⚾ Mejores jugadas de la semana</p><p class="text-xs text-gray-500 dark:text-gray-400">Los momentos más espectaculares de la semana.</p></div>
                         </div>
                     </div>
                 </div>
             </section>
         </div>
 
-        <!-- Fútbol (simplificado, igual que antes) -->
+        <!-- ============================================================ -->
+        <!-- FÚTBOL (Mundial 2026)                                        -->
+        <!-- ============================================================ -->
         <div id="tab-futbol" class="tab-content">
             <section>
-                <h2 class="text-xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-4 dark:text-white">⚽ Mundial 2026</h2>
-                <div class="bg-white dark:bg-gray-800 rounded-lg border border-grisClaro dark:border-gray-700 p-4 shadow-sm mb-6">
+                <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-4 mb-6 dark:text-white">⚽ Mundial 2026</h2>
+                <div class="card-glass rounded-2xl p-5 shadow-lg mb-6">
                     <p class="text-center text-sm font-semibold dark:text-white">⏳ Faltan para el inicio</p>
                     <div class="countdown mt-2" id="countdown-mundial">
                         <div class="countdown-item"><span class="countdown-number" id="dias">--</span><span class="countdown-label">Días</span></div>
@@ -256,25 +523,27 @@
                     </div>
                     <p class="text-center text-xs text-gray-500 dark:text-gray-400 mt-2">Inicio: 11 de junio de 2026</p>
                 </div>
-                <div class="bg-white dark:bg-gray-800 rounded-lg border border-grisClaro dark:border-gray-700 p-4 shadow-sm">
+                <div class="card-glass rounded-2xl p-5 shadow-lg">
                     <h3 class="font-semibold text-mlbAzul dark:text-white mb-3">🌍 Grupos</h3>
                     <div class="grid grid-cols-2 gap-3 text-center">
-                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg"><span class="font-bold">Grupo A</span><br><span class="text-xs">México, Alemania, Corea del Sur, Nigeria</span></div>
-                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg"><span class="font-bold">Grupo B</span><br><span class="text-xs">Argentina, España, Japón, Ghana</span></div>
-                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg"><span class="font-bold">Grupo C</span><br><span class="text-xs">Brasil, Francia, Uruguay, Egipto</span></div>
-                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg"><span class="font-bold">Grupo D</span><br><span class="text-xs">Inglaterra, Países Bajos, Croacia, Costa Rica</span></div>
-                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg"><span class="font-bold">Grupo E</span><br><span class="text-xs">Portugal, Bélgica, Senegal, Australia</span></div>
-                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg"><span class="font-bold">Grupo F</span><br><span class="text-xs">Italia, Dinamarca, Polonia, Ecuador</span></div>
+                        <div class="bg-gray-50/50 dark:bg-gray-700/50 p-3 rounded-lg"><span class="font-bold">Grupo A</span><br><span class="text-xs">México, Alemania, Corea del Sur, Nigeria</span></div>
+                        <div class="bg-gray-50/50 dark:bg-gray-700/50 p-3 rounded-lg"><span class="font-bold">Grupo B</span><br><span class="text-xs">Argentina, España, Japón, Ghana</span></div>
+                        <div class="bg-gray-50/50 dark:bg-gray-700/50 p-3 rounded-lg"><span class="font-bold">Grupo C</span><br><span class="text-xs">Brasil, Francia, Uruguay, Egipto</span></div>
+                        <div class="bg-gray-50/50 dark:bg-gray-700/50 p-3 rounded-lg"><span class="font-bold">Grupo D</span><br><span class="text-xs">Inglaterra, Países Bajos, Croacia, Costa Rica</span></div>
+                        <div class="bg-gray-50/50 dark:bg-gray-700/50 p-3 rounded-lg"><span class="font-bold">Grupo E</span><br><span class="text-xs">Portugal, Bélgica, Senegal, Australia</span></div>
+                        <div class="bg-gray-50/50 dark:bg-gray-700/50 p-3 rounded-lg"><span class="font-bold">Grupo F</span><br><span class="text-xs">Italia, Dinamarca, Polonia, Ecuador</span></div>
                     </div>
                 </div>
             </section>
         </div>
 
-        <!-- NBA (simplificado) -->
+        <!-- ============================================================ -->
+        <!-- NBA                                                          -->
+        <!-- ============================================================ -->
         <div id="tab-nba" class="tab-content">
             <section>
-                <h2 class="text-xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-4 dark:text-white">🏀 NBA</h2>
-                <div class="bg-white dark:bg-gray-800 rounded-lg border border-grisClaro dark:border-gray-700 p-4 shadow-sm mb-6">
+                <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-4 mb-6 dark:text-white">🏀 NBA</h2>
+                <div class="card-glass rounded-2xl p-5 shadow-lg mb-6">
                     <h3 class="font-semibold text-mlbAzul dark:text-white mb-3">📋 Partidos de hoy</h3>
                     <div class="space-y-2">
                         <div class="match-row"><div class="match-teams"><span>Boston Celtics</span> <span class="vs">vs</span> <span>Los Angeles Lakers</span></div><div class="match-score">112 - 108</div><span class="match-status badge-final">Finalizado</span></div>
@@ -283,7 +552,7 @@
                         <div class="match-row"><div class="match-teams"><span>Denver Nuggets</span> <span class="vs">vs</span> <span>Philadelphia 76ers</span></div><div class="match-score">-</div><span class="match-status badge-programado">22:00</span></div>
                     </div>
                 </div>
-                <div class="bg-white dark:bg-gray-800 rounded-lg border border-grisClaro dark:border-gray-700 p-4 shadow-sm">
+                <div class="card-glass rounded-2xl p-5 shadow-lg">
                     <h3 class="font-semibold text-mlbAzul dark:text-white mb-3">🏆 Conferencia Este</h3>
                     <table class="w-full text-xs tabla-posiciones dark:text-gray-300">
                         <thead><tr><th>Equipo</th><th>G</th><th>P</th><th>PCT</th><th>DIF</th></tr></thead>
@@ -296,7 +565,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-4 bg-white dark:bg-gray-800 rounded-lg border border-grisClaro dark:border-gray-700 p-4 shadow-sm">
+                <div class="mt-4 card-glass rounded-2xl p-5 shadow-lg">
                     <h3 class="font-semibold text-mlbAzul dark:text-white mb-3">🏆 Conferencia Oeste</h3>
                     <table class="w-full text-xs tabla-posiciones dark:text-gray-300">
                         <thead><tr><th>Equipo</th><th>G</th><th>P</th><th>PCT</th><th>DIF</th></tr></thead>
@@ -313,7 +582,8 @@
         </div>
     </main>
 
-    <footer class="bg-white dark:bg-gray-800 border-t border-grisClaro dark:border-gray-700 py-4 mt-10 text-center text-xs">
+    <!-- ===== FOOTER ===== -->
+    <footer class="bg-white/80 dark:bg-gray-800/90 backdrop-blur-sm border-t border-grisClaro/60 dark:border-gray-700 py-4 mt-10 text-center text-xs">
         <div class="max-w-xl mx-auto px-3 flex flex-col sm:flex-row justify-between items-center gap-2">
             <p>© 2026 <strong>SportVivo360</strong> • Multi-deportes</p>
             <p class="text-gray-500 dark:text-gray-400">Datos actualizados en tiempo real</p>
@@ -412,7 +682,7 @@
                 let f = new Date(fechaActual);
                 f.setDate(f.getDate() + i);
                 const activo = iso(f) === iso(fechaActual);
-                html += `<span class="px-3 py-1.5 rounded-lg cursor-pointer text-sm ${activo ? 'bg-azul text-white font-semibold' : 'hover:bg-gray-100 dark:hover:bg-gray-700 transition'}" onclick="irFecha('${iso(f)}')">${textoFecha(f)}</span>`;
+                html += `<span class="fecha-item ${activo ? 'active' : ''}" onclick="irFecha('${iso(f)}')">${textoFecha(f)}</span>`;
             }
             cont.innerHTML = html;
         }
@@ -460,8 +730,7 @@
         async function cargarPartidos(fecha) {
             const cont = document.getElementById('lista-partidos');
             const msgCarga = document.getElementById('cargando-msg');
-            // Mostrar mensaje de carga
-            msgCarga.style.display = 'block';
+            msgCarga.style.display = 'flex';
 
             try {
                 const url = `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${fecha}&language=es&hydrate=linescore,probablePitchers,status,linescore.offense,linescore.defense,boxscore,gameDate,plays`;
@@ -469,7 +738,6 @@
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const datos = await res.json();
 
-                // Ocultar mensaje de carga
                 msgCarga.style.display = 'none';
 
                 const juegos = datos.dates?.[0]?.games || [];
@@ -527,53 +795,53 @@
                     if (!lanzH.fullName) lanzH.fullName = vivo ? 'En vivo' : 'Por confirmar';
 
                     html += `
-                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-grisClaro dark:border-gray-700 p-4 relative card-hover">
-                        <div class="absolute top-2 right-2 flex flex-col gap-1 items-end">
-                            ${vivo ? `<span class="badge-vivo text-[0.65rem] px-2 py-0.5 rounded-full flex items-center gap-1"><span class="w-1.5 h-1.5 bg-white rounded-full parpadeo"></span>EN VIVO ${actInn}° ${mitad}</span>` : ''}
-                            ${final ? `<span class="badge-final text-[0.65rem] px-2 py-0.5 rounded-full">FINAL</span>` : ''}
-                            ${programado ? `<span class="badge-programado text-[0.65rem] px-2 py-0.5 rounded-full">${horaTexto}</span>` : ''}
+                    <div class="card-glass rounded-2xl p-5 shadow-lg relative fade-in">
+                        <div class="absolute top-3 right-3 flex flex-col gap-1 items-end">
+                            ${vivo ? `<span class="badge-vivo text-[0.65rem] px-3 py-1 rounded-full flex items-center gap-1 shadow"><span class="w-1.5 h-1.5 bg-white rounded-full parpadeo"></span>EN VIVO ${actInn}° ${mitad}</span>` : ''}
+                            ${final ? `<span class="badge-final text-[0.65rem] px-3 py-1 rounded-full shadow">FINAL</span>` : ''}
+                            ${programado ? `<span class="badge-programado text-[0.65rem] px-3 py-1 rounded-full shadow">${horaTexto}</span>` : ''}
                         </div>
-                        <div class="text-center text-xs text-gray-500 dark:text-gray-400 mb-2">${tipo}</div>
+                        <div class="text-center text-xs text-gray-500 dark:text-gray-400 mb-3">${tipo}</div>
 
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center gap-2 min-w-[80px]">
-                                ${idA ? `<img src="https://www.mlbstatic.com/team-logos/${idA}.svg" alt="${nomA}" class="w-8 h-8 object-contain" onerror="this.style.display='none'">` : `<div class="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full"></div>`}
-                                <div><div class="font-bold text-sm dark:text-white">${nomA}</div><div class="text-xs text-gray-500 dark:text-gray-400">${regA}</div></div>
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center gap-3 min-w-[100px]">
+                                ${idA ? `<img src="https://www.mlbstatic.com/team-logos/${idA}.svg" alt="${nomA}" class="w-12 h-12 object-contain bg-white rounded-full p-1 shadow-sm" onerror="this.style.display='none'">` : `<div class="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-full"></div>`}
+                                <div><div class="font-bold text-base dark:text-white">${nomA}</div><div class="text-xs text-gray-500 dark:text-gray-400">${regA}</div></div>
                             </div>
-                            <div class="text-2xl font-bold dark:text-white">${v.C} - ${h.C}</div>
-                            <div class="flex items-center gap-2 text-right min-w-[80px] flex-row-reverse">
-                                ${idH ? `<img src="https://www.mlbstatic.com/team-logos/${idH}.svg" alt="${nomH}" class="w-8 h-8 object-contain" onerror="this.style.display='none'">` : `<div class="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full"></div>`}
-                                <div><div class="font-bold text-sm dark:text-white">${nomH}</div><div class="text-xs text-gray-500 dark:text-gray-400">${regH}</div></div>
+                            <div class="score-box dark:bg-gray-700/30">${v.C} - ${h.C}</div>
+                            <div class="flex items-center gap-3 text-right min-w-[100px] flex-row-reverse">
+                                ${idH ? `<img src="https://www.mlbstatic.com/team-logos/${idH}.svg" alt="${nomH}" class="w-12 h-12 object-contain bg-white rounded-full p-1 shadow-sm" onerror="this.style.display='none'">` : `<div class="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-full"></div>`}
+                                <div><div class="font-bold text-base dark:text-white">${nomH}</div><div class="text-xs text-gray-500 dark:text-gray-400">${regH}</div></div>
                             </div>
                         </div>
 
                         <div class="overflow-x-auto">
-                            <div class="grid grid-entradas gap-x-1 text-xs text-center font-medium text-gray-500 dark:text-gray-400">
+                            <div class="grid grid-entradas gap-x-1 text-xs text-center font-semibold text-gray-500 dark:text-gray-400">
                                 ${[1,2,3,4,5,6,7,8,9].map(n => `<span>${n}</span>`).join('')}
                                 <span class="border-l border-grisClaro dark:border-gray-700">C</span><span>H</span><span>E</span>
                             </div>
-                            <div class="grid grid-entradas gap-x-1 text-xs text-center py-1 border-t border-grisClaro dark:border-gray-700 mt-1 dark:text-gray-300">
+                            <div class="grid grid-entradas gap-x-1 text-xs text-center py-2 border-t border-grisClaro dark:border-gray-700 mt-1 dark:text-gray-300 bg-gray-50/50 dark:bg-gray-700/20 rounded-lg">
                                 ${v.fila.map(x => `<span>${x}</span>`).join('')}
                                 <span class="font-bold border-l border-grisClaro dark:border-gray-700">${v.C}</span><span class="font-bold">${v.H}</span><span class="font-bold">${v.E}</span>
                             </div>
-                            <div class="grid grid-entradas gap-x-1 text-xs text-center py-1 dark:text-gray-300">
+                            <div class="grid grid-entradas gap-x-1 text-xs text-center py-2 dark:text-gray-300 bg-gray-50/50 dark:bg-gray-700/20 rounded-lg">
                                 ${h.fila.map(x => `<span>${x}</span>`).join('')}
                                 <span class="font-bold border-l border-grisClaro dark:border-gray-700">${h.C}</span><span class="font-bold">${h.H}</span><span class="font-bold">${h.E}</span>
                             </div>
                         </div>
 
                         ${vivo ? `
-                        <div class="mt-3 flex flex-col sm:flex-row items-center justify-around text-xs bg-gray-50 dark:bg-gray-700/30 rounded-lg py-2 px-3 gap-2">
-                            <div class="text-center"><span class="font-medium dark:text-white">B ${bol} • S ${str} • O ${out}</span><div class="text-[0.6rem] text-gray-500 dark:text-gray-400">Bolas • Strikes • Outs</div></div>
+                        <div class="mt-4 flex flex-col sm:flex-row items-center justify-around text-xs bg-gray-100/60 dark:bg-gray-700/40 rounded-xl py-3 px-3 gap-3">
+                            <div class="text-center"><span class="font-bold dark:text-white">B ${bol} • S ${str} • O ${out}</span><div class="text-[0.6rem] text-gray-500 dark:text-gray-400">Bolas • Strikes • Outs</div></div>
                             ${dibujarBases(ls.offense)}
                         </div>` : ''}
 
-                        <div class="mt-3 grid grid-cols-2 gap-2 text-xs">
-                            <div><div class="text-gray-500 dark:text-gray-400">Lanzando</div><div class="font-medium dark:text-white">${lanzA.fullName}</div>${lanzA.era ? `<div class="text-gray-500 dark:text-gray-400">${lanzA.era} EFE</div>` : ''}</div>
-                            <div class="text-right"><div class="text-gray-500 dark:text-gray-400">Al bate</div><div class="font-medium dark:text-white">${lanzH.fullName}</div>${lanzH.era ? `<div class="text-gray-500 dark:text-gray-400">${lanzH.era} EFE</div>` : ''}</div>
+                        <div class="mt-5 grid grid-cols-2 gap-3 text-xs">
+                            <div><div class="text-gray-500 dark:text-gray-400 font-medium">Lanzando</div><div class="font-bold dark:text-white">${lanzA.fullName}</div>${lanzA.era ? `<div class="text-gray-500 dark:text-gray-400">${lanzA.era} EFE</div>` : ''}</div>
+                            <div class="text-right"><div class="text-gray-500 dark:text-gray-400 font-medium">Al bate</div><div class="font-bold dark:text-white">${lanzH.fullName}</div>${lanzH.era ? `<div class="text-gray-500 dark:text-gray-400">${lanzH.era} EFE</div>` : ''}</div>
                         </div>
 
-                        <div class="mt-3 flex justify-around text-xs font-medium text-azul dark:text-blue-400 pt-1 border-t border-grisClaro dark:border-gray-700">
+                        <div class="mt-4 flex justify-around text-xs font-semibold text-azul dark:text-blue-400 pt-2 border-t border-grisClaro/50 dark:border-gray-700">
                             <a href="https://www.mlb.com/es/gameday/${p.gamePk}" target="_blank" rel="noopener noreferrer" class="hover:underline">Gameday</a>
                             <a href="#" class="hover:underline">Crónica</a>
                         </div>
