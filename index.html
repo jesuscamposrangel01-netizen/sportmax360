@@ -211,7 +211,6 @@
                 const runs = esVisitante ? inn.away?.runs : inn.home?.runs;
                 fila.push(runs !== undefined && runs !== null ? runs : '-');
             }
-            // Totales desde linescore (más fiable que boxscore en vivo)
             const totals = obtenerDatosLinescore(linescore, esVisitante);
             return { fila, C: totals.runs, H: totals.hits, E: totals.errors };
         }
@@ -270,7 +269,6 @@
                     const ls = p.linescore || {};
                     const box = p.boxscore || {};
 
-                    // Extraer líneas de entrada y totales (usando linescore)
                     const v = leerEntradas(ls, true);
                     const h = leerEntradas(ls, false);
 
@@ -281,13 +279,10 @@
                     const out = ls.outs ?? '-';
                     const tipo = p.seriesDescription || 'Temporada Regular';
 
-                    // Lanzadores: intentar desde probablePitchers, si no, desde boxscore o dejar "En vivo"
                     let lanzA = p.probablePitchers?.away || {};
                     let lanzH = p.probablePitchers?.home || {};
-                    // Si no hay probable, buscar en boxscore (a veces está)
                     if (!lanzA.fullName && box?.teams?.away?.players) {
                         const players = box.teams.away.players;
-                        // Buscar pitcher (puede estar en diferentes roles)
                         const pitcher = Object.values(players).find(pj => pj.position?.code === 'P');
                         if (pitcher) lanzA = { fullName: pitcher.person?.fullName, era: pitcher.stats?.era };
                     }
@@ -297,13 +292,12 @@
                         if (pitcher) lanzH = { fullName: pitcher.person?.fullName, era: pitcher.stats?.era };
                     }
 
-                    // Si aún no hay nombre, mostramos "En vivo" (o "Por confirmar" si es Preview)
                     if (!lanzA.fullName) lanzA.fullName = vivo ? 'En vivo' : 'Por confirmar';
                     if (!lanzH.fullName) lanzH.fullName = vivo ? 'En vivo' : 'Por confirmar';
 
                     html += `
                     <div class="bg-white rounded-lg shadow-sm border border-grisClaro p-4 relative">
-                        ${vivo ? `<span class="absolute top-2 right-3 bg-rojoVivo text-white text-[0.7rem] px-2 py-0.5 rounded-full flex items-center gap-1"><span class="w-1.5 h-1.5 bg-white rounded-full parpadeo"></span>EN VIVO ${actInn}° ${mitad}</span>` : ''}
+                        ${vivo && actInn ? `<span class="absolute top-2 right-3 bg-rojoVivo text-white text-[0.7rem] px-2 py-0.5 rounded-full flex items-center gap-1"><span class="w-1.5 h-1.5 bg-white rounded-full parpadeo"></span>EN VIVO ${actInn}° ${mitad}</span>` : ''}
                         ${final ? `<span class="absolute top-2 right-3 bg-gris text-white text-[0.7rem] px-2 py-0.5 rounded-full">FINAL</span>` : ''}
                         ${programado ? `<span class="absolute top-2 right-3 bg-blue-50 text-blue-700 text-[0.7rem] px-2 py-0.5 rounded-full">${horaTexto}</span>` : ''}
                         <div class="text-center text-xs text-gris mb-3">${tipo}</div>
