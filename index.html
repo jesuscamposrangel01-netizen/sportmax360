@@ -24,7 +24,6 @@
         }
     </script>
     <style>
-        /* Animación de parpadeo */
         .parpadeo {
             animation: parpadeo 1.2s infinite ease-in-out;
         }
@@ -32,14 +31,13 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
         }
-
-        /* Diamante de bases */
         .diamante-base {
             width: 12px;
             height: 12px;
             transform: rotate(45deg);
             border: 1px solid #94a3b8;
             box-sizing: border-box;
+            transition: background-color 0.3s;
         }
         .diamante-base.ocupada {
             background-color: #22c55e;
@@ -53,8 +51,6 @@
             background-color: #94a3b8;
             border-color: #64748b;
         }
-
-        /* Grid de entradas */
         .grid-entradas {
             grid-template-columns: repeat(9, 1.6rem) 2rem 2rem 2rem;
         }
@@ -64,7 +60,6 @@
             align-items: center;
             justify-content: center;
         }
-        /* Para móviles pequeños */
         @media (max-width: 480px) {
             .grid-entradas {
                 grid-template-columns: repeat(9, 1.2rem) 1.6rem 1.6rem 1.6rem;
@@ -102,19 +97,16 @@
         <section>
             <h2 class="text-xl font-semibold text-mlbAzul border-l-4 border-azul pl-2 mb-4">📋 Resultados & En vivo</h2>
 
-            <!-- Selector de fechas -->
             <div class="flex items-center justify-center gap-2 bg-white rounded-lg py-2 px-3 mb-6 border border-grisClaro shadow-sm">
                 <button onclick="cambiarFecha(-1)" class="text-lg px-2 hover:text-azul">‹</button>
                 <div id="selector-fechas" class="flex gap-3 text-sm"></div>
                 <button onclick="cambiarFecha(1)" class="text-lg px-2 hover:text-azul">›</button>
             </div>
 
-            <!-- Lista de partidos -->
             <div id="lista-partidos" class="space-y-5 mb-10">
                 <p class="text-center py-10">Cargando encuentros…</p>
             </div>
 
-            <!-- Tablas de posiciones -->
             <div class="space-y-6">
                 <div class="bg-white rounded-lg border border-grisClaro p-4 shadow-sm">
                     <h3 class="font-semibold text-mlbAzul mb-3">🏆 Liga Americana</h3>
@@ -159,16 +151,12 @@
     </footer>
 
     <script>
-        // ==================== CONFIGURACIÓN ====================
+        // ========== CONFIG ==========
         const ANIO = 2026;
-        const ZONA_UTC = -5; // Lima
+        const ZONA_UTC = -5;
         let fechaActual = new Date();
-        // Ajustar la fecha actual a la zona horaria de Lima (sin cambiar el objeto Date)
-        // Para evitar problemas, trabajamos con fechas en UTC y mostramos en hora local.
 
-        function iso(d) {
-            return d.toISOString().split('T')[0];
-        }
+        function iso(d) { return d.toISOString().split('T')[0]; }
 
         function textoFecha(d) {
             const dias = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
@@ -176,7 +164,7 @@
             return `${dias[d.getDay()]} ${d.getDate()} ${meses[d.getMonth()]}`;
         }
 
-        // ==================== MANEJO DE FECHAS ====================
+        // ========== FECHAS ==========
         function cambiarFecha(delta) {
             fechaActual.setDate(fechaActual.getDate() + delta);
             mostrarFechas();
@@ -190,7 +178,7 @@
         }
 
         function mostrarFechas() {
-            const contenedor = document.getElementById('selector-fechas');
+            const cont = document.getElementById('selector-fechas');
             let html = '';
             for (let i = -1; i <= 1; i++) {
                 let f = new Date(fechaActual);
@@ -198,11 +186,20 @@
                 const activo = iso(f) === iso(fechaActual);
                 html += `<span class="px-3 py-1.5 rounded cursor-pointer ${activo ? 'bg-azul text-white font-semibold' : 'hover:bg-gray-100'}" onclick="irFecha('${iso(f)}')">${textoFecha(f)}</span>`;
             }
-            contenedor.innerHTML = html;
+            cont.innerHTML = html;
         }
 
-        // ==================== FUNCIONES AUXILIARES ====================
-        function leerEntradas(linescore, boxscore, esVisitante) {
+        // ========== EXTRACCIÓN DE DATOS ==========
+        function obtenerDatosLinescore(linescore, esVisitante) {
+            const equipo = esVisitante ? linescore.away : linescore.home;
+            return {
+                runs: equipo?.runs ?? 0,
+                hits: equipo?.hits ?? 0,
+                errors: equipo?.errors ?? 0,
+            };
+        }
+
+        function leerEntradas(linescore, esVisitante) {
             const innings = linescore?.innings || [];
             const fila = [];
             for (let i = 0; i < 9; i++) {
@@ -214,22 +211,9 @@
                 const runs = esVisitante ? inn.away?.runs : inn.home?.runs;
                 fila.push(runs !== undefined && runs !== null ? runs : '-');
             }
-            // Totales desde boxscore o desde linescore
-            let C = 0,
-                H = 0,
-                E = 0;
-            if (boxscore && boxscore.teams) {
-                const eq = esVisitante ? boxscore.teams.away : boxscore.teams.home;
-                C = eq?.stats?.runs ?? 0;
-                H = eq?.stats?.hits ?? 0;
-                E = eq?.stats?.errors ?? 0;
-            } else {
-                const eq = esVisitante ? linescore?.away : linescore?.home;
-                C = eq?.runs ?? 0;
-                H = eq?.hits ?? 0;
-                E = eq?.errors ?? 0;
-            }
-            return { fila, C, H, E };
+            // Totales desde linescore (más fiable que boxscore en vivo)
+            const totals = obtenerDatosLinescore(linescore, esVisitante);
+            return { fila, C: totals.runs, H: totals.hits, E: totals.errors };
         }
 
         function dibujarBases(offense) {
@@ -238,18 +222,14 @@
                 b3 = !!offense?.third;
             return `
             <div class="relative w-16 h-16 mx-auto">
-                <!-- Base 2 -->
                 <div class="diamante-base absolute top-0 left-1/2 -translate-x-1/2 ${b2 ? 'ocupada' : 'vacia'}"></div>
-                <!-- Base 1 (derecha) -->
                 <div class="diamante-base absolute bottom-1/2 right-0 translate-y-1/2 ${b1 ? 'ocupada' : 'vacia'}"></div>
-                <!-- Base 3 (izquierda) -->
                 <div class="diamante-base absolute bottom-1/2 left-0 translate-y-1/2 ${b3 ? 'ocupada' : 'vacia'}"></div>
-                <!-- Home (plato) -->
                 <div class="diamante-base absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 plato"></div>
             </div>`;
         }
 
-        // ==================== OBTENER PARTIDOS ====================
+        // ========== CARGAR PARTIDOS ==========
         async function cargarPartidos(fecha) {
             const cont = document.getElementById('lista-partidos');
             cont.innerHTML = `<p class="text-center py-10">Cargando encuentros…</p>`;
@@ -267,7 +247,6 @@
                     return;
                 }
 
-                // Renderizar cada juego
                 let html = '';
                 for (const p of juegos) {
                     const away = p.teams?.away || {};
@@ -284,15 +263,16 @@
                     const final = estado.abstractGameState === 'Final';
                     const programado = estado.abstractGameState === 'Preview';
 
-                    // Hora local
                     const horaUTC = new Date(p.gameDate);
                     const horaLocal = new Date(horaUTC.getTime() + ZONA_UTC * 3600000);
                     const horaTexto = horaLocal.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
 
                     const ls = p.linescore || {};
                     const box = p.boxscore || {};
-                    const v = leerEntradas(ls, box, true);
-                    const h = leerEntradas(ls, box, false);
+
+                    // Extraer líneas de entrada y totales (usando linescore)
+                    const v = leerEntradas(ls, true);
+                    const h = leerEntradas(ls, false);
 
                     const actInn = ls.currentInning || '';
                     const mitad = ls.inningHalf === 'Top' ? 'Arriba' : ls.inningHalf === 'Bottom' ? 'Abajo' : '';
@@ -301,9 +281,25 @@
                     const out = ls.outs ?? '-';
                     const tipo = p.seriesDescription || 'Temporada Regular';
 
-                    // Lanzadores probables
-                    const lanzA = p.probablePitchers?.away || {};
-                    const lanzH = p.probablePitchers?.home || {};
+                    // Lanzadores: intentar desde probablePitchers, si no, desde boxscore o dejar "En vivo"
+                    let lanzA = p.probablePitchers?.away || {};
+                    let lanzH = p.probablePitchers?.home || {};
+                    // Si no hay probable, buscar en boxscore (a veces está)
+                    if (!lanzA.fullName && box?.teams?.away?.players) {
+                        const players = box.teams.away.players;
+                        // Buscar pitcher (puede estar en diferentes roles)
+                        const pitcher = Object.values(players).find(pj => pj.position?.code === 'P');
+                        if (pitcher) lanzA = { fullName: pitcher.person?.fullName, era: pitcher.stats?.era };
+                    }
+                    if (!lanzH.fullName && box?.teams?.home?.players) {
+                        const players = box.teams.home.players;
+                        const pitcher = Object.values(players).find(pj => pj.position?.code === 'P');
+                        if (pitcher) lanzH = { fullName: pitcher.person?.fullName, era: pitcher.stats?.era };
+                    }
+
+                    // Si aún no hay nombre, mostramos "En vivo" (o "Por confirmar" si es Preview)
+                    if (!lanzA.fullName) lanzA.fullName = vivo ? 'En vivo' : 'Por confirmar';
+                    if (!lanzH.fullName) lanzH.fullName = vivo ? 'En vivo' : 'Por confirmar';
 
                     html += `
                     <div class="bg-white rounded-lg shadow-sm border border-grisClaro p-4 relative">
@@ -346,8 +342,8 @@
                         </div>` : ''}
 
                         <div class="mt-4 grid grid-cols-2 gap-2 text-xs">
-                            <div><div class="text-gris">Lanzando</div><div class="font-medium">${lanzA.fullName || 'Por confirmar'}</div>${lanzA.era ? `<div>${lanzA.era} EFE</div>` : ''}</div>
-                            <div class="text-right"><div class="text-gris">Al bate</div><div class="font-medium">${lanzH.fullName || 'Por confirmar'}</div>${lanzH.era ? `<div>${lanzH.era} EFE</div>` : ''}</div>
+                            <div><div class="text-gris">Lanzando</div><div class="font-medium">${lanzA.fullName}</div>${lanzA.era ? `<div>${lanzA.era} EFE</div>` : ''}</div>
+                            <div class="text-right"><div class="text-gris">Al bate</div><div class="font-medium">${lanzH.fullName}</div>${lanzH.era ? `<div>${lanzH.era} EFE</div>` : ''}</div>
                         </div>
 
                         <div class="mt-3 flex justify-around text-xs font-medium text-azul">
@@ -364,7 +360,7 @@
             }
         }
 
-        // ==================== TABLAS DE POSICIONES ====================
+        // ========== TABLAS ==========
         async function cargarTablas() {
             try {
                 const res = await fetch(`https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=${ANIO}`);
@@ -378,7 +374,6 @@
                     if (r.league.id === 104) nac.push(...r.teamRecords);
                 });
 
-                // Ordenar por porcentaje de victorias descendente
                 ame.sort((a, b) => b.winningPercentage - a.winningPercentage);
                 nac.sort((a, b) => b.winningPercentage - a.winningPercentage);
 
@@ -412,15 +407,11 @@
             }
         }
 
-        // ==================== INICIALIZACIÓN ====================
+        // ========== INICIO ==========
         mostrarFechas();
         cargarPartidos(iso(fechaActual));
         cargarTablas();
-
-        // Refresco automático cada 15 segundos
-        setInterval(() => {
-            cargarPartidos(iso(fechaActual));
-        }, 15000);
+        setInterval(() => cargarPartidos(iso(fechaActual)), 15000);
     </script>
 </body>
 </html>
