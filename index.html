@@ -24,7 +24,7 @@
         }
     </script>
     <style>
-        /* Animaciones y transiciones */
+        /* ========== ESTILOS GLOBALES ========== */
         .parpadeo { animation: parpadeo 1.2s infinite ease-in-out; }
         @keyframes parpadeo { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
         .fade-in { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
@@ -57,7 +57,7 @@
         .card-hover:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
         .spinner { border: 4px solid rgba(0,0,0,0.1); border-left-color: #1a56db; border-radius: 50%; width: 40px; height: 40px; animation: spin 0.8s linear infinite; margin: 20px auto; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        /* Tabs de deportes */
+        /* Tabs */
         .tab-button { padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; background: transparent; border: none; }
         .tab-button.active { background: #1a56db; color: white; box-shadow: 0 4px 12px rgba(26,86,219,0.3); }
         .tab-button:not(.active):hover { background: rgba(26,86,219,0.1); }
@@ -75,11 +75,25 @@
         .theme-toggle .slider::after { content: ''; position: absolute; width: 18px; height: 18px; background: white; border-radius: 50%; top: 2px; left: 2px; transition: transform 0.3s; }
         .dark .theme-toggle .slider { background: #1a56db; }
         .dark .theme-toggle .slider::after { transform: translateX(18px); }
+        /* Cuenta atrás */
+        .countdown { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .countdown-item { background: rgba(0,0,0,0.05); padding: 8px 16px; border-radius: 8px; text-align: center; min-width: 60px; }
+        .dark .countdown-item { background: rgba(255,255,255,0.05); }
+        .countdown-number { font-size: 1.8rem; font-weight: 700; display: block; }
+        .countdown-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; }
+        /* Partidos de fútbol/NBA simulados */
+        .match-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #e2e8f0; }
+        .dark .match-row { border-color: #334155; }
+        .match-row:last-child { border-bottom: none; }
+        .match-teams { display: flex; align-items: center; gap: 12px; }
+        .match-teams .vs { font-weight: 300; opacity: 0.6; }
+        .match-score { font-weight: 700; min-width: 60px; text-align: center; }
+        .match-status { font-size: 0.65rem; padding: 2px 10px; border-radius: 999px; }
     </style>
 </head>
 <body class="bg-gray-50 text-gris font-sans min-h-screen transition-colors duration-300 dark:bg-gray-900 dark:text-gray-200">
 
-    <!-- Cabecera con menú de deportes -->
+    <!-- ========== CABECERA ========== -->
     <header class="bg-mlbAzul text-white py-3 px-4 sticky top-0 z-50 shadow-lg transition-colors dark:bg-gray-800">
         <div class="max-w-xl mx-auto">
             <div class="flex items-center justify-between">
@@ -87,7 +101,6 @@
                     <span class="text-2xl">⚾</span> SportVivo360
                 </h1>
                 <div class="flex items-center gap-4">
-                    <!-- Toggle modo oscuro -->
                     <label class="theme-toggle" title="Cambiar tema">
                         <span class="text-sm hidden sm:inline">🌙</span>
                         <input type="checkbox" id="themeCheckbox">
@@ -105,14 +118,13 @@
     </header>
 
     <main class="max-w-xl mx-auto px-3 py-4">
-        <!-- Indicador de estado -->
         <div class="flex items-center justify-center gap-2 text-xs mb-4">
             <span class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_6px_#22c55e]"></span>
             <span class="dark:text-gray-400">Actualizado • Lima (UTC‑5)</span>
         </div>
 
         <!-- ============================================================ -->
-        <!-- CONTENIDO MLB (activo por defecto)                            -->
+        <!--  CONTENIDO MLB (intacto)                                      -->
         <!-- ============================================================ -->
         <div id="tab-mlb" class="tab-content active">
             <section>
@@ -130,9 +142,9 @@
                     <div class="flex justify-center py-10"><div class="spinner"></div></div>
                 </div>
 
-                <!-- Posiciones manuales -->
+                <!-- Posiciones manuales (igual que antes) -->
                 <div class="space-y-6">
-                    <!-- Liga Americana -->
+                    <!-- AL -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm card-hover transition-all">
                         <h3 class="font-semibold text-mlbAzul dark:text-white text-lg mb-3 flex items-center gap-2">🏆 Liga Americana</h3>
                         <div class="overflow-x-auto">
@@ -172,7 +184,7 @@
                         </div>
                     </div>
 
-                    <!-- Liga Nacional -->
+                    <!-- NL -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm card-hover transition-all">
                         <h3 class="font-semibold text-mlbAzul dark:text-white text-lg mb-3 flex items-center gap-2">🏆 Liga Nacional</h3>
                         <div class="overflow-x-auto">
@@ -213,17 +225,17 @@
                     </div>
                 </div>
 
-                <!-- Videos destacados -->
+                <!-- Videos -->
                 <div class="mt-10">
                     <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-5 dark:text-white">🎥 Destacados MLB</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-grisClaro dark:border-gray-700 overflow-hidden card-hover transition-all">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-grisClaro dark:border-gray-700 overflow-hidden card-hover">
                             <div class="video-wrapper">
                                 <iframe src="https://www.youtube.com/embed/P5hOMfdFv8Y?si=_yl2u_0CiEAscwFq" title="MLB Highlights 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
                             </div>
                             <div class="p-3"><p class="text-sm font-semibold dark:text-white">⚾ Resumen de la jornada</p><p class="text-xs text-gray-500 dark:text-gray-400">Las mejores jugadas del día en la MLB.</p></div>
                         </div>
-                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-grisClaro dark:border-gray-700 overflow-hidden card-hover transition-all">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-grisClaro dark:border-gray-700 overflow-hidden card-hover">
                             <div class="video-wrapper">
                                 <iframe src="https://www.youtube.com/embed/f5YBfDI-CnM?si=i3OMDqU2aEP7LdrM" title="MLB Highlights 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
                             </div>
@@ -235,26 +247,65 @@
         </div>
 
         <!-- ============================================================ -->
-        <!-- CONTENIDO FÚTBOL (Mundial 2026)                               -->
+        <!--  CONTENIDO FÚTBOL (Mundial 2026) – mejorado                   -->
         <!-- ============================================================ -->
         <div id="tab-futbol" class="tab-content">
             <section>
                 <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-5 dark:text-white">⚽ Mundial 2026</h2>
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-5 shadow-sm">
-                    <p class="text-center text-lg font-semibold dark:text-white">🌍 Copa del Mundo 2026 – Estados Unidos, México y Canadá</p>
-                    <p class="text-center text-sm text-gray-500 dark:text-gray-400 mt-2">Próximos partidos y grupos</p>
-                    <div class="mt-4 grid grid-cols-2 gap-3 text-center">
-                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg"><span class="font-bold">Grupo A</span><br><span class="text-xs">México, Alemania, ...</span></div>
-                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg"><span class="font-bold">Grupo B</span><br><span class="text-xs">Argentina, España, ...</span></div>
-                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg"><span class="font-bold">Grupo C</span><br><span class="text-xs">Brasil, Francia, ...</span></div>
-                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg"><span class="font-bold">Grupo D</span><br><span class="text-xs">Inglaterra, Países Bajos, ...</span></div>
+
+                <!-- Cuenta atrás -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-5 shadow-sm mb-6">
+                    <p class="text-center text-sm font-semibold dark:text-white">⏳ Faltan para el inicio</p>
+                    <div class="countdown mt-2" id="countdown-mundial">
+                        <div class="countdown-item"><span class="countdown-number" id="dias">--</span><span class="countdown-label">Días</span></div>
+                        <div class="countdown-item"><span class="countdown-number" id="horas">--</span><span class="countdown-label">Horas</span></div>
+                        <div class="countdown-item"><span class="countdown-number" id="minutos">--</span><span class="countdown-label">Minutos</span></div>
+                        <div class="countdown-item"><span class="countdown-number" id="segundos">--</span><span class="countdown-label">Segundos</span></div>
                     </div>
-                    <div class="mt-6 text-center">
-                        <p class="text-sm font-medium text-azul dark:text-blue-400">📅 Calendario de partidos (próximamente)</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">Los horarios se actualizarán según el sorteo oficial.</p>
+                    <p class="text-center text-xs text-gray-500 dark:text-gray-400 mt-2">Inicio: 11 de junio de 2026</p>
+                </div>
+
+                <!-- Grupos -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm">
+                    <h3 class="font-semibold text-mlbAzul dark:text-white mb-3">🌍 Grupos</h3>
+                    <div class="grid grid-cols-2 gap-3 text-center">
+                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg"><span class="font-bold">Grupo A</span><br><span class="text-xs">México, Alemania, Corea del Sur, Nigeria</span></div>
+                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg"><span class="font-bold">Grupo B</span><br><span class="text-xs">Argentina, España, Japón, Ghana</span></div>
+                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg"><span class="font-bold">Grupo C</span><br><span class="text-xs">Brasil, Francia, Uruguay, Egipto</span></div>
+                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg"><span class="font-bold">Grupo D</span><br><span class="text-xs">Inglaterra, Países Bajos, Croacia, Costa Rica</span></div>
+                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg"><span class="font-bold">Grupo E</span><br><span class="text-xs">Portugal, Bélgica, Senegal, Australia</span></div>
+                        <div class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg"><span class="font-bold">Grupo F</span><br><span class="text-xs">Italia, Dinamarca, Polonia, Ecuador</span></div>
                     </div>
                 </div>
-                <!-- Sección de noticias simulada -->
+
+                <!-- Próximos partidos (simulados) -->
+                <div class="mt-6 bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm">
+                    <h3 class="font-semibold text-mlbAzul dark:text-white mb-3">📅 Próximos partidos (fase de grupos)</h3>
+                    <div class="space-y-2">
+                        <div class="match-row">
+                            <div class="match-teams"><span>México</span> <span class="vs">vs</span> <span>Alemania</span></div>
+                            <div class="match-score">-</div>
+                            <span class="match-status bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300">12 jun</span>
+                        </div>
+                        <div class="match-row">
+                            <div class="match-teams"><span>Argentina</span> <span class="vs">vs</span> <span>España</span></div>
+                            <div class="match-score">-</div>
+                            <span class="match-status bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300">12 jun</span>
+                        </div>
+                        <div class="match-row">
+                            <div class="match-teams"><span>Brasil</span> <span class="vs">vs</span> <span>Francia</span></div>
+                            <div class="match-score">-</div>
+                            <span class="match-status bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300">13 jun</span>
+                        </div>
+                        <div class="match-row">
+                            <div class="match-teams"><span>Inglaterra</span> <span class="vs">vs</span> <span>Países Bajos</span></div>
+                            <div class="match-score">-</div>
+                            <span class="match-status bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300">13 jun</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Noticias -->
                 <div class="mt-6 grid grid-cols-1 gap-4">
                     <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm card-hover">
                         <h4 class="font-semibold dark:text-white">🏟️ Sedes confirmadas</h4>
@@ -269,37 +320,41 @@
         </div>
 
         <!-- ============================================================ -->
-        <!-- CONTENIDO NBA                                                  -->
+        <!--  CONTENIDO NBA – mejorado                                     -->
         <!-- ============================================================ -->
         <div id="tab-nba" class="tab-content">
             <section>
                 <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-5 dark:text-white">🏀 NBA</h2>
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-5 shadow-sm">
-                    <p class="text-center text-lg font-semibold dark:text-white">🏆 Temporada 2025-26</p>
-                    <p class="text-center text-sm text-gray-500 dark:text-gray-400 mt-2">Próximos partidos y resultados</p>
-                    <div class="mt-4 space-y-3">
-                        <div class="flex justify-between items-center border-b border-grisClaro dark:border-gray-700 py-2">
-                            <span class="font-medium dark:text-white">Boston Celtics</span>
-                            <span class="text-sm">vs</span>
-                            <span class="font-medium dark:text-white">Los Angeles Lakers</span>
-                            <span class="text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-2 py-1 rounded-full">En vivo</span>
+
+                <!-- Próximos partidos -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm mb-6">
+                    <h3 class="font-semibold text-mlbAzul dark:text-white mb-3">📋 Partidos de hoy</h3>
+                    <div class="space-y-2">
+                        <div class="match-row">
+                            <div class="match-teams"><span>Boston Celtics</span> <span class="vs">vs</span> <span>Los Angeles Lakers</span></div>
+                            <div class="match-score">112 - 108</div>
+                            <span class="match-status bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300">Finalizado</span>
                         </div>
-                        <div class="flex justify-between items-center border-b border-grisClaro dark:border-gray-700 py-2">
-                            <span class="font-medium dark:text-white">Miami Heat</span>
-                            <span class="text-sm">vs</span>
-                            <span class="font-medium dark:text-white">Golden State Warriors</span>
-                            <span class="text-xs bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-1 rounded-full">Finalizado</span>
+                        <div class="match-row">
+                            <div class="match-teams"><span>Miami Heat</span> <span class="vs">vs</span> <span>Golden State Warriors</span></div>
+                            <div class="match-score">98 - 102</div>
+                            <span class="match-status bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300">Finalizado</span>
                         </div>
-                        <div class="flex justify-between items-center py-2">
-                            <span class="font-medium dark:text-white">Dallas Mavericks</span>
-                            <span class="text-sm">vs</span>
-                            <span class="font-medium dark:text-white">Phoenix Suns</span>
-                            <span class="text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">Próximo</span>
+                        <div class="match-row">
+                            <div class="match-teams"><span>Dallas Mavericks</span> <span class="vs">vs</span> <span>Phoenix Suns</span></div>
+                            <div class="match-score">-</div>
+                            <span class="match-status bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300">En vivo</span>
+                        </div>
+                        <div class="match-row">
+                            <div class="match-teams"><span>Denver Nuggets</span> <span class="vs">vs</span> <span>Philadelphia 76ers</span></div>
+                            <div class="match-score">-</div>
+                            <span class="match-status bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300">22:00</span>
                         </div>
                     </div>
                 </div>
-                <!-- Tabla de posiciones simulada -->
-                <div class="mt-6 bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm">
+
+                <!-- Posiciones (simuladas) -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm">
                     <h3 class="font-semibold text-mlbAzul dark:text-white mb-3">🏆 Conferencia Este</h3>
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs tabla-posiciones dark:text-gray-300">
@@ -308,8 +363,34 @@
                                 <tr><td>Boston Celtics</td><td class="text-center">52</td><td class="text-center">20</td><td class="text-center">.722</td><td class="text-center">-</td></tr>
                                 <tr><td>Milwaukee Bucks</td><td class="text-center">48</td><td class="text-center">24</td><td class="text-center">.667</td><td class="text-center">4.0</td></tr>
                                 <tr><td>Philadelphia 76ers</td><td class="text-center">45</td><td class="text-center">27</td><td class="text-center">.625</td><td class="text-center">7.0</td></tr>
+                                <tr><td>Cleveland Cavaliers</td><td class="text-center">42</td><td class="text-center">30</td><td class="text-center">.583</td><td class="text-center">10.0</td></tr>
+                                <tr><td>Miami Heat</td><td class="text-center">40</td><td class="text-center">32</td><td class="text-center">.556</td><td class="text-center">12.0</td></tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+                <div class="mt-4 bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm">
+                    <h3 class="font-semibold text-mlbAzul dark:text-white mb-3">🏆 Conferencia Oeste</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs tabla-posiciones dark:text-gray-300">
+                            <thead><tr><th>Equipo</th><th>G</th><th>P</th><th>PCT</th><th>DIF</th></tr></thead>
+                            <tbody>
+                                <tr><td>Denver Nuggets</td><td class="text-center">50</td><td class="text-center">22</td><td class="text-center">.694</td><td class="text-center">-</td></tr>
+                                <tr><td>Phoenix Suns</td><td class="text-center">47</td><td class="text-center">25</td><td class="text-center">.653</td><td class="text-center">3.0</td></tr>
+                                <tr><td>Golden State Warriors</td><td class="text-center">44</td><td class="text-center">28</td><td class="text-center">.611</td><td class="text-center">6.0</td></tr>
+                                <tr><td>Los Angeles Lakers</td><td class="text-center">41</td><td class="text-center">31</td><td class="text-center">.569</td><td class="text-center">9.0</td></tr>
+                                <tr><td>Dallas Mavericks</td><td class="text-center">39</td><td class="text-center">33</td><td class="text-center">.542</td><td class="text-center">11.0</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Noticias NBA -->
+                <div class="mt-6 grid grid-cols-1 gap-4">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm card-hover">
+                        <h4 class="font-semibold dark:text-white">🏀 Playoffs 2026</h4>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">La temporada regular está en su recta final.</p>
                     </div>
                 </div>
             </section>
@@ -317,7 +398,7 @@
 
     </main>
 
-    <!-- Footer mejorado -->
+    <!-- ========== FOOTER ========== -->
     <footer class="bg-white dark:bg-gray-800 border-t border-grisClaro dark:border-gray-700 py-6 mt-12 text-center text-xs">
         <div class="max-w-xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <p>© 2026 <strong>SportVivo360</strong> • Multi-deportes</p>
@@ -350,7 +431,7 @@
         });
 
         // ============================================================
-        //  NAVEGACIÓN POR PESTAÑAS (MLB, FÚTBOL, NBA)
+        //  NAVEGACIÓN POR PESTAÑAS
         // ============================================================
         const tabs = document.querySelectorAll('.tab-button');
         const contents = {
@@ -361,24 +442,37 @@
 
         tabs.forEach(btn => {
             btn.addEventListener('click', function() {
-                // Quitar activo de todos
                 tabs.forEach(b => b.classList.remove('active'));
-                // Activar este
                 this.classList.add('active');
-                // Ocultar todos los contenidos
                 Object.values(contents).forEach(c => c.classList.remove('active'));
-                // Mostrar el contenido correspondiente
                 const tab = this.dataset.tab;
                 if (contents[tab]) contents[tab].classList.add('active');
-                // Si es MLB, refrescar partidos (por si acaso)
-                if (tab === 'mlb') {
-                    cargarPartidos(iso(fechaActual));
-                }
+                if (tab === 'mlb') cargarPartidos(iso(fechaActual));
             });
         });
 
         // ============================================================
-        //  CONFIGURACIÓN – MLB (API)
+        //  CUENTA ATRÁS MUNDIAL 2026
+        // ============================================================
+        function actualizarCuentaAtras() {
+            const inicio = new Date('2026-06-11T00:00:00-05:00').getTime();
+            const ahora = Date.now();
+            let diff = inicio - ahora;
+            if (diff < 0) diff = 0;
+            const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((diff % (1000 * 60)) / 1000);
+            document.getElementById('dias').textContent = String(dias).padStart(2, '0');
+            document.getElementById('horas').textContent = String(horas).padStart(2, '0');
+            document.getElementById('minutos').textContent = String(minutos).padStart(2, '0');
+            document.getElementById('segundos').textContent = String(segundos).padStart(2, '0');
+        }
+        actualizarCuentaAtras();
+        setInterval(actualizarCuentaAtras, 1000);
+
+        // ============================================================
+        //  MLB – CONFIGURACIÓN (sin cambios)
         // ============================================================
         const ZONA_LIMA = 'America/Lima';
 
@@ -423,7 +517,7 @@
         }
 
         // ============================================================
-        //  EXTRACCIÓN DE DATOS DE MLB
+        //  MLB – EXTRACCIÓN DE DATOS (sin cambios)
         // ============================================================
         function obtenerTotales(linescore, boxscore, esVisitante) {
             const equipoLS = esVisitante ? linescore?.away : linescore?.home;
@@ -464,7 +558,7 @@
         }
 
         // ============================================================
-        //  CARGAR PARTIDOS MLB
+        //  MLB – CARGAR PARTIDOS (sin cambios)
         // ============================================================
         async function cargarPartidos(fecha) {
             const cont = document.getElementById('lista-partidos');
@@ -590,7 +684,7 @@
         }
 
         // ============================================================
-        //  INICIALIZACIÓN (MLB)
+        //  INICIALIZACIÓN MLB
         // ============================================================
         mostrarFechas();
         cargarPartidos(iso(fechaActual));
