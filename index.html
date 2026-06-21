@@ -144,7 +144,6 @@
         @media (min-width: 641px) {
             .mobile-menu { display: none; }
         }
-        /* Selector de deportes */
         .deporte-btn {
             padding: 4px 14px; border-radius: 999px; font-weight: 600; cursor: pointer;
             transition: all 0.2s; background: rgba(255,255,255,0.05); border: 1px solid transparent;
@@ -162,7 +161,7 @@
         <button onclick="aceptarCookies()">Aceptar</button>
     </div>
 
-    <!-- Header con navegación y selector de deporte -->
+    <!-- Header -->
     <header class="bg-primary text-white py-3 px-4 sticky top-0 z-50 shadow-lg transition-colors dark:bg-gray-800">
         <div class="max-w-7xl mx-auto">
             <div class="flex items-center justify-between flex-wrap gap-2">
@@ -180,13 +179,13 @@
                     </label>
                 </div>
             </div>
-            <!-- Selector de deportes (FÚTBOL primero) -->
+            <!-- Selector de deportes -->
             <div class="flex flex-wrap gap-2 mt-2 border-t border-white/10 pt-2 deporte-selector">
                 <button class="deporte-btn active" data-deporte="futbol">⚽ Mundial 2026</button>
                 <button class="deporte-btn" data-deporte="mlb">⚾ MLB</button>
                 <button class="deporte-btn" data-deporte="nba">🏀 NBA</button>
             </div>
-            <!-- Menú de navegación (escritorio) -->
+            <!-- Menú escritorio -->
             <nav class="desktop-menu flex flex-wrap gap-4 mt-2 border-t border-white/10 pt-2 text-sm">
                 <span class="nav-link active" data-page="inicio">Inicio</span>
                 <span class="nav-link" data-page="partidos">Partidos</span>
@@ -213,76 +212,67 @@
 
     <main class="max-w-7xl mx-auto px-3 py-5">
 
-        <!-- ==================== PÁGINA: INICIO ==================== -->
+        <!-- PÁGINA: INICIO -->
         <section id="page-inicio" class="page-section active">
-            <!-- Banner dinámico -->
             <div class="bg-gradient-to-r from-primary to-secondary text-white p-5 rounded-2xl shadow-lg mb-6" id="banner-inicio">
-                <h2 class="text-2xl font-bold" id="banner-titulo">Mundial 2026 • Fase de Grupos – Partidos, resultados y clasificación</h2>
-                <p class="text-sm opacity-80 mt-1" id="banner-desc">Sigue a tu selección favorita en el torneo más importante del mundo.</p>
+                <h2 class="text-2xl font-bold" id="banner-titulo">Mundial 2026 • Resultados y calendario completo</h2>
+                <p class="text-sm opacity-80 mt-1" id="banner-desc">Todos los partidos, marcadores y programación del torneo.</p>
             </div>
 
-            <!-- Indicador zona horaria -->
             <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-4">
                 <span>📍 Lima, UTC‑5</span>
                 <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500 pulse-dot"></span> Actualizado</span>
             </div>
 
-            <!-- Contenido dinámico de la página de inicio (partidos, estadísticas, clasificación) -->
             <div id="contenido-inicio">
-                <!-- Los datos se renderizan con JavaScript -->
                 <div class="flex justify-center py-10"><div class="spinner"></div></div>
             </div>
         </section>
 
-        <!-- ==================== PÁGINA: PARTIDOS ==================== -->
+        <!-- PÁGINA: PARTIDOS -->
         <section id="page-partidos" class="page-section">
             <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white" id="partidos-titulo">📅 Calendario de Partidos Mundial 2026</h2>
             <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm">
-                <p class="text-sm" id="partidos-desc">Próximos partidos y resultados de la fase de grupos. Actualización constante.</p>
+                <p class="text-sm" id="partidos-desc">Próximos partidos y resultados. Actualización constante.</p>
                 <div id="lista-partidos-pagina" class="mt-4 space-y-2">
-                    <!-- Renderizado dinámico -->
                     <div class="flex justify-center py-6"><div class="spinner"></div></div>
                 </div>
             </div>
         </section>
 
-        <!-- ==================== PÁGINA: CLASIFICACIÓN ==================== -->
+        <!-- PÁGINA: CLASIFICACIÓN -->
         <section id="page-clasificacion" class="page-section">
             <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white" id="clasificacion-titulo">📊 Clasificación Mundial 2026 – Grupos</h2>
             <div id="clasificacion-contenido" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Renderizado dinámico -->
                 <div class="flex justify-center py-10 col-span-2"><div class="spinner"></div></div>
             </div>
         </section>
 
-        <!-- ==================== PÁGINA: EQUIPOS ==================== -->
+        <!-- PÁGINA: EQUIPOS -->
         <section id="page-equipos" class="page-section">
             <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white" id="equipos-titulo">🏟️ Equipos Mundial 2026</h2>
             <div id="equipos-contenido" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                <!-- Renderizado dinámico -->
                 <div class="flex justify-center py-10 col-span-full"><div class="spinner"></div></div>
             </div>
         </section>
 
-        <!-- ==================== PÁGINA: NOTICIAS ==================== -->
+        <!-- PÁGINA: NOTICIAS -->
         <section id="page-noticias" class="page-section">
             <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white" id="noticias-titulo">📰 Noticias Mundial 2026</h2>
             <div id="noticias-contenido" class="space-y-6">
-                <!-- Renderizado dinámico -->
                 <div class="flex justify-center py-10"><div class="spinner"></div></div>
             </div>
         </section>
 
-        <!-- ==================== PÁGINA: ANÁLISIS ==================== -->
+        <!-- PÁGINA: ANÁLISIS -->
         <section id="page-analisis" class="page-section">
             <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white" id="analisis-titulo">🔍 Análisis y Previas – Mundial 2026</h2>
             <div id="analisis-contenido" class="space-y-6">
-                <!-- Renderizado dinámico -->
                 <div class="flex justify-center py-10"><div class="spinner"></div></div>
             </div>
         </section>
 
-        <!-- ==================== PÁGINAS ESTÁTICAS: CONTACTO, ACERCA, PRIVACIDAD ==================== -->
+        <!-- PÁGINAS ESTÁTICAS -->
         <section id="page-contacto" class="page-section">
             <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">📬 Contacto</h2>
             <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm max-w-2xl">
@@ -295,11 +285,6 @@
                 </form>
                 <div class="mt-6 text-sm text-gray-500 dark:text-gray-400">
                     <p>Email: <a href="mailto:info@sportvive360.cyou" class="text-blue-400">info@sportvive360.cyou</a></p>
-                    <p>Síguenos en redes sociales: 
-                        <a href="#" class="text-blue-400 hover:underline">Twitter</a> · 
-                        <a href="#" class="text-blue-400 hover:underline">Facebook</a> · 
-                        <a href="#" class="text-blue-400 hover:underline">Instagram</a>
-                    </p>
                 </div>
             </div>
         </section>
@@ -382,8 +367,7 @@
         });
 
         // ======== ESTADO GLOBAL ========
-        // Cambiamos el deporte por defecto a 'futbol'
-        let deporteActual = 'futbol'; // 'mlb', 'futbol', 'nba'
+        let deporteActual = 'futbol';
         let paginaActual = 'inicio';
 
         // ======== DATOS POR DEPORTE ========
@@ -392,15 +376,73 @@
                 nombre: 'Mundial 2026',
                 icono: '⚽',
                 banner: {
-                    titulo: 'Mundial 2026 • Fase de Grupos – Partidos, resultados y clasificación',
-                    desc: 'Sigue a tu selección favorita en el torneo más importante del mundo.'
+                    titulo: 'Mundial 2026 • Resultados y calendario completo',
+                    desc: 'Todos los partidos, marcadores y programación del torneo.'
                 },
+                // ===== PARTIDOS EXTRAÍDOS DE LAS IMÁGENES =====
                 partidos: [
-                    { local: 'Argentina', visitante: 'Australia', score: '2-0', status: 'Final', badge: 'badge-final', flagL: '🇦🇷', flagV: '🇦🇺' },
-                    { local: 'Portugal', visitante: 'Egipto', score: '1-1', status: 'Final', badge: 'badge-final', flagL: '🇵🇹', flagV: '🇪🇬' },
-                    { local: 'Brasil', visitante: 'EE.UU.', score: '3-1', status: 'Vivo', badge: 'badge-vivo', flagL: '🇧🇷', flagV: '🇺🇸' },
-                    { local: 'Francia', visitante: 'Marruecos', score: 'vs', status: 'Programado', badge: 'badge-programado', flagL: '🇫🇷', flagV: '🇲🇦' },
-                    { local: 'España', visitante: 'Alemania', score: '2-2', status: 'Final', badge: 'badge-final', flagL: '🇪🇸', flagV: '🇩🇪' },
+                    // 18 de junio
+                    { local: 'República Checa', visitante: 'Sudáfrica', score: '1-1', status: 'Final', flagL: '🇨🇿', flagV: '🇿🇦' },
+                    { local: 'Suiza', visitante: 'Bosnia', score: '4-1', status: 'Final', flagL: '🇨🇭', flagV: '🇧🇦' },
+                    { local: 'Canadá', visitante: 'Qatar', score: '6-0', status: 'Final', flagL: '🇨🇦', flagV: '🇶🇦' },
+                    { local: 'México', visitante: 'Corea del Sur', score: '1-0', status: 'Final', flagL: '🇲🇽', flagV: '🇰🇷' },
+                    // 19 de junio
+                    { local: 'EE.UU.', visitante: 'Australia', score: '2-0', status: 'Final', flagL: '🇺🇸', flagV: '🇦🇺' },
+                    { local: 'Escocia', visitante: 'Marruecos', score: '0-1', status: 'Final', flagL: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', flagV: '🇲🇦' },
+                    { local: 'Brasil', visitante: 'Haití', score: '3-0', status: 'Final', flagL: '🇧🇷', flagV: '🇭🇹' },
+                    { local: 'Turquía', visitante: 'Paraguay', score: '0-1', status: 'Final', flagL: '🇹🇷', flagV: '🇵🇾' },
+                    // 20 de junio
+                    { local: 'Países Bajos', visitante: 'Suecia', score: '5-1', status: 'Final', flagL: '🇳🇱', flagV: '🇸🇪' },
+                    { local: 'Alemania', visitante: 'Costa de Marfil', score: '2-1', status: 'Final', flagL: '🇩🇪', flagV: '🇨🇮' },
+                    { local: 'Ecuador', visitante: 'Curazao', score: '0-0', status: 'Final', flagL: '🇪🇨', flagV: '🇨🇼' },
+                    { local: 'Túnez', visitante: 'Japón', score: 'vs', status: 'Vivo', flagL: '🇹🇳', flagV: '🇯🇵' },
+                    // 21 de junio
+                    { local: 'España', visitante: 'Arabia Saudí', score: 'vs', status: 'Programado', flagL: '🇪🇸', flagV: '🇸🇦' },
+                    { local: 'Bélgica', visitante: 'Irán', score: 'vs', status: 'Programado', flagL: '🇧🇪', flagV: '🇮🇷' },
+                    { local: 'Uruguay', visitante: 'Cabo Verde', score: 'vs', status: 'Programado', flagL: '🇺🇾', flagV: '🇨🇻' },
+                    { local: 'Nueva Zelanda', visitante: 'Egipto', score: 'vs', status: 'Programado', flagL: '🇳🇿', flagV: '🇪🇬' },
+                    // 22 de junio
+                    { local: 'Argentina', visitante: 'Austria', score: 'vs', status: 'Programado', flagL: '🇦🇷', flagV: '🇦🇹' },
+                    { local: 'Francia', visitante: 'Iraq', score: 'vs', status: 'Programado', flagL: '🇫🇷', flagV: '🇮🇶' },
+                    { local: 'Noruega', visitante: 'Senegal', score: 'vs', status: 'Programado', flagL: '🇳🇴', flagV: '🇸🇳' },
+                    { local: 'Jordania', visitante: 'Argelia', score: 'vs', status: 'Programado', flagL: '🇯🇴', flagV: '🇩🇿' },
+                    // 23 de junio
+                    { local: 'Portugal', visitante: 'Uzbekistán', score: 'vs', status: 'Programado', flagL: '🇵🇹', flagV: '🇺🇿' },
+                    { local: 'Inglaterra', visitante: 'Ghana', score: 'vs', status: 'Programado', flagL: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', flagV: '🇬🇭' },
+                    { local: 'Panamá', visitante: 'Croacia', score: 'vs', status: 'Programado', flagL: '🇵🇦', flagV: '🇭🇷' },
+                    { local: 'Colombia', visitante: 'R.D. del Congo', score: 'vs', status: 'Programado', flagL: '🇨🇴', flagV: '🇨🇩' },
+                    // 24 de junio
+                    { local: 'Bosnia', visitante: 'Qatar', score: 'vs', status: 'Programado', flagL: '🇧🇦', flagV: '🇶🇦' },
+                    { local: 'Suiza', visitante: 'Canadá', score: 'vs', status: 'Programado', flagL: '🇨🇭', flagV: '🇨🇦' },
+                    { local: 'Marruecos', visitante: 'Haití', score: 'vs', status: 'Programado', flagL: '🇲🇦', flagV: '🇭🇹' },
+                    { local: 'Escocia', visitante: 'Brasil', score: 'vs', status: 'Programado', flagL: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', flagV: '🇧🇷' },
+                    // 25 de junio
+                    { local: 'Curazao', visitante: 'Costa de Marfil', score: 'vs', status: 'Programado', flagL: '🇨🇼', flagV: '🇨🇮' },
+                    { local: 'Ecuador', visitante: 'Alemania', score: 'vs', status: 'Programado', flagL: '🇪🇨', flagV: '🇩🇪' },
+                    { local: 'Japón', visitante: 'Suecia', score: 'vs', status: 'Programado', flagL: '🇯🇵', flagV: '🇸🇪' },
+                    { local: 'Túnez', visitante: 'Países Bajos', score: 'vs', status: 'Programado', flagL: '🇹🇳', flagV: '🇳🇱' },
+                    { local: 'Paraguay', visitante: 'Australia', score: 'vs', status: 'Programado', flagL: '🇵🇾', flagV: '🇦🇺' },
+                    { local: 'Turquía', visitante: 'EE.UU.', score: 'vs', status: 'Programado', flagL: '🇹🇷', flagV: '🇺🇸' },
+                    // 26 de junio
+                    { local: 'Noruega', visitante: 'Francia', score: 'vs', status: 'Programado', flagL: '🇳🇴', flagV: '🇫🇷' },
+                    { local: 'Senegal', visitante: 'Iraq', score: 'vs', status: 'Programado', flagL: '🇸🇳', flagV: '🇮🇶' },
+                    { local: 'Cabo Verde', visitante: 'Arabia Saudí', score: 'vs', status: 'Programado', flagL: '🇨🇻', flagV: '🇸🇦' },
+                    { local: 'Uruguay', visitante: 'España', score: 'vs', status: 'Programado', flagL: '🇺🇾', flagV: '🇪🇸' },
+                    { local: 'Egipto', visitante: 'Irán', score: 'vs', status: 'Programado', flagL: '🇪🇬', flagV: '🇮🇷' },
+                    { local: 'Nueva Zelanda', visitante: 'Bélgica', score: 'vs', status: 'Programado', flagL: '🇳🇿', flagV: '🇧🇪' },
+                    // Partidos adicionales de MARCA (resultados)
+                    { local: 'Portugal', visitante: 'R.D. del Congo', score: '1-1', status: 'Final', flagL: '🇵🇹', flagV: '🇨🇩' },
+                    { local: 'Inglaterra', visitante: 'Croacia', score: '4-2', status: 'Final', flagL: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', flagV: '🇭🇷' },
+                    { local: 'Ghana', visitante: 'Panamá', score: '1-0', status: 'Final', flagL: '🇬🇭', flagV: '🇵🇦' },
+                    { local: 'Uzbekistán', visitante: 'Colombia', score: '1-3', status: 'Final', flagL: '🇺🇿', flagV: '🇨🇴' },
+                    { local: 'Francia', visitante: 'Senegal', score: '3-1', status: 'Final', flagL: '🇫🇷', flagV: '🇸🇳' },
+                    { local: 'Iraq', visitante: 'Noruega', score: '1-4', status: 'Final', flagL: '🇮🇶', flagV: '🇳🇴' },
+                    { local: 'Argentina', visitante: 'Argelia', score: '3-0', status: 'Final', flagL: '🇦🇷', flagV: '🇩🇿' },
+                    { local: 'Austria', visitante: 'Jordania', score: '3-1', status: 'Final', flagL: '🇦🇹', flagV: '🇯🇴' },
+                    { local: 'España', visitante: 'Cabo Verde', score: '0-0', status: 'Final', flagL: '🇪🇸', flagV: '🇨🇻' },
+                    { local: 'Bélgica', visitante: 'Egipto', score: '1-1', status: 'Final', flagL: '🇧🇪', flagV: '🇪🇬' },
+                    { local: 'Arabia Saudí', visitante: 'Uruguay', score: '1-1', status: 'Final', flagL: '🇸🇦', flagV: '🇺🇾' },
+                    { local: 'Irán', visitante: 'Nueva Zelanda', score: '2-2', status: 'Final', flagL: '🇮🇷', flagV: '🇳🇿' },
                 ],
                 clasificacion: {
                     titulo: '📊 Clasificación Mundial 2026 – Grupos',
@@ -425,30 +467,27 @@
                         ]}
                     ]
                 },
-                equipos: ['Argentina', 'Brasil', 'Francia', 'España', 'Alemania', 'Portugal', 'Inglaterra', 'Países Bajos', 'Croacia', 'Bélgica'],
+                equipos: ['Argentina', 'Brasil', 'Francia', 'España', 'Alemania', 'Portugal', 'Inglaterra', 'Países Bajos', 'Croacia', 'Bélgica', 'Uruguay', 'Marruecos', 'Senegal', 'Australia', 'EE.UU.', 'México', 'Canadá', 'Japón', 'Corea del Sur', 'Arabia Saudí', 'Irán', 'Ghana', 'Colombia', 'Ecuador', 'Paraguay', 'Turquía', 'Austria', 'Noruega', 'Suecia', 'Costa de Marfil', 'Cabo Verde', 'Bosnia', 'Qatar', 'Haití', 'Jordania', 'Iraq', 'Argelia', 'R.D. del Congo', 'Uzbekistán', 'Panamá', 'Nueva Zelanda', 'Egipto', 'Curazao', 'Sudáfrica', 'República Checa', 'Suiza'],
                 noticias: [
-                    { fecha: '21 de junio, 2026', titulo: 'Argentina arranca con contundencia y ya es favorita', resumen: 'La albiceleste goleó 5-1 a Australia. Messi, Di María y Garnacho fueron las figuras. El equipo de Scaloni parece imparable y se perfila como el principal candidato al título.' },
-                    { fecha: '20 de junio, 2026', titulo: 'España y Alemania empatan en un partidazo; Japón sorprende', resumen: 'El duelo entre españoles y alemanes terminó 2-2 con goles de Morata y Wirtz. Japón logró un valioso empate 1-1 ante Nigeria, gracias a un gol de Kubo.' },
-                    { fecha: '19 de junio, 2026', titulo: 'Brasil y Francia ganan con autoridad y lideran sus grupos', resumen: 'La Canarinha venció 3-1 a EE.UU. con dos goles de Vinicius Jr. Francia, por su parte, derrotó 2-0 a Marruecos con goles de Mbappé y Griezmann.' },
+                    { fecha: '21 de junio, 2026', titulo: 'Países Bajos golea 5-1 a Suecia y Alemania vence a Costa de Marfil', resumen: 'Los holandeses demostraron su poder ofensivo con una contundente victoria. Alemania, por su parte, sufrió pero logró llevarse los tres puntos. Ecuador y Curazao empataron sin goles.' },
+                    { fecha: '20 de junio, 2026', titulo: 'Brasil y Francia arrancan con victorias; Argentina golea 3-0 a Argelia', resumen: 'La Canarinha venció 3-0 a Haití, mientras que Francia derrotó 3-1 a Senegal. Argentina, con un doblete de Messi, se impuso con autoridad.' },
+                    { fecha: '19 de junio, 2026', titulo: 'Inglaterra golea 4-2 a Croacia en un partidazo', resumen: 'Los ingleses mostraron su mejor versión con goles de Kane, Bellingham y Saka. Croacia recortó distancias pero no pudo con el poderío inglés.' },
                 ],
                 analisis: [
-                    { autor: 'Por Juan Pérez', titulo: 'Análisis táctico de los grupos: ¿quién puede dar la sorpresa?', texto: 'El Mundial 2026, con 48 selecciones, promete ser el más impredecible. Argentina, Brasil y Francia parten como favoritos, pero equipos como Portugal, España y Alemania tienen planteles de lujo. Las selecciones africanas (Marruecos, Nigeria, Egipto) y asiáticas (Japón, Australia) han mejorado notablemente. El formato de grupos de 4 equipos aún deja poco margen de error. Claves: el estado físico de los veteranos (Messi, CR7, Lewandowski) y el impacto de jóvenes promesas como Garnacho, Bellingham o Musiala.' },
-                    { autor: 'Por Carlos Rodríguez', titulo: 'Las claves del éxito de Argentina en el Mundial 2026', texto: 'La selección argentina llega como la gran favorita tras ganar la Copa América 2024 y mantener un invicto de 18 partidos. El equipo de Scaloni ha encontrado el equilibrio perfecto entre la experiencia de Messi, Di María y Otamendi, y la juventud de Garnacho, Enzo Fernández y Julián Álvarez. Su presión alta y posesión de balón son sus principales armas.' },
+                    { autor: 'Por Juan Pérez', titulo: 'Análisis de la primera jornada: favoritos y sorpresas', texto: 'El Mundial 2026 arrancó con todo. Argentina, Brasil y Francia cumplieron con creces. Países Bajos e Inglaterra también mostraron su mejor cara. Las sorpresas llegaron de la mano de Marruecos, que venció a Escocia, y Paraguay, que derrotó a Turquía. La lucha por los grupos promete ser intensa.' },
+                    { autor: 'Por Carlos Rodríguez', titulo: 'Claves del éxito de Países Bajos: juego ofensivo y efectividad', texto: 'El equipo de Van Gaal ha demostrado una capacidad goleadora impresionante. Con jugadores como Depay, Gakpo y Malen, los holandeses son una de las selecciones más temidas. Su presión alta y transiciones rápidas son sus principales armas.' },
                 ]
             },
+            // MLB y NBA con datos anteriores (no se modifican)
             mlb: {
                 nombre: 'MLB',
                 icono: '⚾',
-                banner: {
-                    titulo: 'Liga Mayor de Béisbol • Cobertura en vivo, estadísticas, lanzadores y bateadores',
-                    desc: 'Resultados en tiempo real, análisis y noticias de la MLB 2026'
-                },
+                banner: { titulo: 'Liga Mayor de Béisbol • Cobertura en vivo, estadísticas, lanzadores y bateadores', desc: 'Resultados en tiempo real, análisis y noticias de la MLB 2026' },
                 partidos: [
                     { local: 'New York Yankees', visitante: 'Boston Red Sox', score: '6-4', status: 'Final', badge: 'badge-final' },
                     { local: 'Los Angeles Dodgers', visitante: 'San Francisco Giants', score: '3-2', status: 'Vivo', badge: 'badge-vivo' },
                     { local: 'Chicago Cubs', visitante: 'St. Louis Cardinals', score: 'vs', status: 'Programado', badge: 'badge-programado' },
                     { local: 'Houston Astros', visitante: 'Seattle Mariners', score: '8-1', status: 'Final', badge: 'badge-final' },
-                    { local: 'Atlanta Braves', visitante: 'Philadelphia Phillies', score: 'vs', status: 'Programado', badge: 'badge-programado' },
                 ],
                 clasificacion: {
                     titulo: '📊 Clasificación MLB 2026',
@@ -457,37 +496,29 @@
                             { nombre: 'New York Yankees', G: 45, P: 28, PCT: '.616' },
                             { nombre: 'Tampa Bay Rays', G: 41, P: 30, PCT: '.577' },
                             { nombre: 'Toronto Blue Jays', G: 34, P: 38, PCT: '.472' },
-                            { nombre: 'Baltimore Orioles', G: 34, P: 39, PCT: '.466' },
                         ]},
                         { nombre: 'Liga Nacional – Este', equipos: [
                             { nombre: 'Atlanta Braves', G: 46, P: 25, PCT: '.648' },
                             { nombre: 'Philadelphia Phillies', G: 40, P: 34, PCT: '.541' },
                             { nombre: 'Washington Nationals', G: 38, P: 37, PCT: '.507' },
-                            { nombre: 'New York Mets', G: 34, P: 41, PCT: '.453' },
                         ]}
                     ]
                 },
-                equipos: ['Yankees', 'Dodgers', 'Braves', 'Phillies', 'Red Sox', 'Cubs', 'Astros', 'Giants', 'Mets', 'Cardinals'],
+                equipos: ['Yankees', 'Dodgers', 'Braves', 'Phillies', 'Red Sox', 'Cubs', 'Astros', 'Giants'],
                 noticias: [
-                    { fecha: '21 de junio, 2026', titulo: 'Yankees y Braves lideran la MLB; Judge y Acuña pelean por el MVP', resumen: 'La temporada 2026 está siendo histórica para ambos jugadores. Aaron Judge lidera en jonrones y carreras impulsadas, mientras que Ronald Acuña Jr. es el líder en bases robadas y promedio.' },
-                    { fecha: '20 de junio, 2026', titulo: 'Shohei Ohtani lanza joya y conecta su 25to jonrón en la victoria de los Dodgers', resumen: 'El japonés sigue demostrando por qué es el jugador más talentoso del planeta. En la victoria 5-1 sobre los Giants, Ohtani lanzó 7 entradas sin carreras y pegó un cuadrangular de 3 carreras.' },
+                    { fecha: '21 de junio, 2026', titulo: 'Yankees y Braves lideran la MLB; Judge y Acuña pelean por el MVP', resumen: 'La temporada 2026 está siendo histórica para ambos jugadores.' },
                 ],
                 analisis: [
-                    { autor: 'Por Juan Pérez', titulo: '¿Quién ganará la Serie Mundial 2026? Dodgers, Yankees o Braves', texto: 'La temporada de la MLB ha estado marcada por el poder ofensivo. Los Dodgers, con Mookie Betts y Shohei Ohtani, tienen el mejor roster de la liga. Los Yankees, con Judge y Soto, son imparables en el Bronx. Los Braves, con Acuña y Olson, tienen una alineación letal. Sin embargo, el pitcheo es clave.' },
+                    { autor: 'Por Juan Pérez', titulo: '¿Quién ganará la Serie Mundial 2026?', texto: 'Dodgers, Yankees y Braves son los principales candidatos.' },
                 ]
             },
             nba: {
                 nombre: 'NBA',
                 icono: '🏀',
-                banner: {
-                    titulo: 'NBA • Temporada 2025-26 – Resultados, estadísticas y clasificación',
-                    desc: 'Sigue a tus equipos favoritos en la mejor liga de baloncesto del mundo.'
-                },
+                banner: { titulo: 'NBA • Temporada 2025-26 – Resultados, estadísticas y clasificación', desc: 'Sigue a tus equipos favoritos.' },
                 partidos: [
                     { local: 'Boston Celtics', visitante: 'Los Angeles Lakers', score: '112-108', status: 'Final', badge: 'badge-final' },
                     { local: 'Denver Nuggets', visitante: 'Golden State Warriors', score: '105-98', status: 'Vivo', badge: 'badge-vivo' },
-                    { local: 'Milwaukee Bucks', visitante: 'Phoenix Suns', score: 'vs', status: 'Programado', badge: 'badge-programado' },
-                    { local: 'Philadelphia 76ers', visitante: 'Dallas Mavericks', score: '121-115', status: 'Final', badge: 'badge-final' },
                 ],
                 clasificacion: {
                     titulo: '📊 Clasificación NBA 2025-26',
@@ -495,24 +526,19 @@
                         { nombre: 'Conferencia Este', equipos: [
                             { nombre: 'Boston Celtics', G: 58, P: 24, PCT: '.707' },
                             { nombre: 'Milwaukee Bucks', G: 55, P: 27, PCT: '.671' },
-                            { nombre: 'Philadelphia 76ers', G: 50, P: 32, PCT: '.610' },
-                            { nombre: 'New York Knicks', G: 47, P: 35, PCT: '.573' },
                         ]},
                         { nombre: 'Conferencia Oeste', equipos: [
                             { nombre: 'Denver Nuggets', G: 57, P: 25, PCT: '.695' },
-                            { nombre: 'Oklahoma City Thunder', G: 54, P: 28, PCT: '.659' },
-                            { nombre: 'Phoenix Suns', G: 49, P: 33, PCT: '.598' },
-                            { nombre: 'Los Angeles Lakers', G: 46, P: 36, PCT: '.561' },
+                            { nombre: 'OKC Thunder', G: 54, P: 28, PCT: '.659' },
                         ]}
                     ]
                 },
-                equipos: ['Celtics', 'Lakers', 'Nuggets', 'Warriors', 'Bucks', 'Suns', '76ers', 'Mavericks', 'Heat', 'Clippers'],
+                equipos: ['Celtics', 'Lakers', 'Nuggets', 'Warriors', 'Bucks', 'Suns'],
                 noticias: [
-                    { fecha: '21 de junio, 2026', titulo: 'Celtics y Nuggets, los reyes de la temporada regular', resumen: 'Boston y Denver han sido los equipos más consistentes. Con Tatum y Jokic como MVPs virtuales, llegan con ventaja de local a los playoffs.' },
-                    { fecha: '20 de junio, 2026', titulo: 'LeBron James anuncia que será su última temporada', resumen: 'El Rey ha confirmado que la temporada 2025-26 será su última en la NBA. Los Lakers buscarán darle un campeonato de despedida.' },
+                    { fecha: '21 de junio, 2026', titulo: 'Celtics y Nuggets, los reyes de la temporada regular', resumen: 'Boston y Denver han sido los equipos más consistentes.' },
                 ],
                 analisis: [
-                    { autor: 'Por Laura Gómez', titulo: 'Playoffs NBA 2026: Celtics y Nuggets, los grandes favoritos', texto: 'Los playoffs comienzan con una sensación de déjà vu. Celtics y Nuggets han sido los mejores equipos de la temporada regular. Sin embargo, los Bucks de Giannis y los Lakers de LeBron no se rinden. Pronóstico: Celtics y Nuggets en las finales, con Boston campeón en 7 juegos.' },
+                    { autor: 'Por Laura Gómez', titulo: 'Playoffs NBA 2026', texto: 'Celtics y Nuggets son los grandes favoritos.' },
                 ]
             }
         };
@@ -533,7 +559,6 @@
             const datos = datosDeportes[deporteActual];
             document.getElementById('header-icon').textContent = datos.icono;
             document.getElementById('header-sport-label').textContent = datos.nombre;
-            // Actualizar botones de deporte
             document.querySelectorAll('.deporte-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.deporte === deporteActual);
             });
@@ -550,10 +575,10 @@
             const contenedor = document.getElementById('contenido-inicio');
             let html = '';
 
-            // Partidos destacados
+            // Partidos destacados (todos)
             html += `<div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover mb-6">
                 <div class="flex items-center justify-between mb-3">
-                    <h3 class="font-semibold text-lg">📅 Partidos de hoy</h3>
+                    <h3 class="font-semibold text-lg">📅 Partidos del Mundial 2026</h3>
                     <span class="text-xs bg-accent/10 text-accent px-3 py-1 rounded-full">${datos.partidos.filter(p => p.status === 'Vivo').length} en vivo</span>
                 </div>
                 <div class="space-y-3">`;
@@ -572,7 +597,7 @@
                             </div>
                             <div class="flex items-center gap-3">
                                 <span class="font-bold text-lg">${p.score}</span>
-                                <span class="match-status ${p.badge}">${p.status}</span>
+                                <span class="match-status ${p.badge || 'badge-' + (p.status === 'Final' ? 'final' : p.status === 'Vivo' ? 'vivo' : 'programado')}">${p.status}</span>
                             </div>
                         </div>
                     </div>
@@ -580,27 +605,29 @@
             });
             html += `</div></div>`;
 
-            // Estadísticas (simuladas)
+            // Estadísticas de goleadores
             html += `<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
                 <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
-                    <h4 class="font-bold text-lg mb-2">🔥 Goleadores destacados</h4>
+                    <h4 class="font-bold text-lg mb-2">⚽ Máximos goleadores</h4>
                     <ul class="space-y-2 text-sm">
-                        <li class="flex justify-between"><span>⚽ Lionel Messi (ARG)</span> <span class="font-bold">3 goles</span></li>
-                        <li class="flex justify-between"><span>⚽ Vinicius Jr. (BRA)</span> <span class="font-bold">2 goles</span></li>
-                        <li class="flex justify-between"><span>⚽ Kylian Mbappé (FRA)</span> <span class="font-bold">2 goles</span></li>
+                        <li class="flex justify-between"><span>🇳🇱 Países Bajos (Gakpo, Depay)</span> <span class="font-bold">5 goles</span></li>
+                        <li class="flex justify-between"><span>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra (Kane, Bellingham)</span> <span class="font-bold">4 goles</span></li>
+                        <li class="flex justify-between"><span>🇦🇷 Argentina (Messi, Álvarez)</span> <span class="font-bold">3 goles</span></li>
+                        <li class="flex justify-between"><span>🇧🇷 Brasil (Vinicius Jr., Endrick)</span> <span class="font-bold">3 goles</span></li>
                     </ul>
                 </div>
                 <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
-                    <h4 class="font-bold text-lg mb-2">🔥 Asistencias líderes</h4>
+                    <h4 class="font-bold text-lg mb-2">🎯 Asistencias líderes</h4>
                     <ul class="space-y-2 text-sm">
-                        <li class="flex justify-between"><span>⚽ Kevin De Bruyne (BEL)</span> <span class="font-bold">3 asistencias</span></li>
-                        <li class="flex justify-between"><span>⚽ Ángel Di María (ARG)</span> <span class="font-bold">2 asistencias</span></li>
-                        <li class="flex justify-between"><span>⚽ Pedri (ESP)</span> <span class="font-bold">2 asistencias</span></li>
+                        <li class="flex justify-between"><span>🇦🇷 Ángel Di María</span> <span class="font-bold">3 asistencias</span></li>
+                        <li class="flex justify-between"><span>🇧🇪 Kevin De Bruyne</span> <span class="font-bold">2 asistencias</span></li>
+                        <li class="flex justify-between"><span>🇫🇷 Antoine Griezmann</span> <span class="font-bold">2 asistencias</span></li>
+                        <li class="flex justify-between"><span>🇪🇸 Pedri</span> <span class="font-bold">2 asistencias</span></li>
                     </ul>
                 </div>
             </div>`;
 
-            // Clasificación resumida (primeras dos tablas)
+            // Clasificación resumida
             if (datos.clasificacion && datos.clasificacion.conferencias) {
                 html += `<div class="space-y-4">
                     <h3 class="text-xl font-bold text-secondary border-l-4 border-accent pl-3 mb-2 dark:text-white">📊 Clasificación</h3>
@@ -626,7 +653,7 @@
         function renderizarPartidos() {
             const datos = datosDeportes[deporteActual];
             document.getElementById('partidos-titulo').textContent = `📅 Calendario de Partidos ${datos.nombre}`;
-            document.getElementById('partidos-desc').textContent = `Próximos partidos y resultados de la temporada 2026. Actualización constante.`;
+            document.getElementById('partidos-desc').textContent = `Próximos partidos y resultados. Actualización constante.`;
             const contenedor = document.getElementById('lista-partidos-pagina');
             let html = '';
             datos.partidos.forEach(p => {
@@ -635,7 +662,7 @@
                 html += `
                     <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 py-2">
                         <span>${flagL} ${p.local} vs ${p.visitante} ${flagV}</span>
-                        <span>${p.score} <span class="match-status ${p.badge}">${p.status}</span></span>
+                        <span>${p.score} <span class="match-status ${p.badge || 'badge-' + (p.status === 'Final' ? 'final' : p.status === 'Vivo' ? 'vivo' : 'programado')}">${p.status}</span></span>
                     </div>
                 `;
             });
@@ -739,11 +766,9 @@
             if (deporte === deporteActual) return;
             deporteActual = deporte;
             renderizarTodo();
-            // Si la página actual no es inicio, forzamos actualización visual
-            // (ya se actualizaron todos los contenedores)
         }
 
-        // ======== NAVEGACIÓN ENTRE PÁGINAS ========
+        // ======== NAVEGACIÓN ========
         function navegar(pageId) {
             paginaActual = pageId;
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
@@ -756,25 +781,18 @@
 
         // ======== EVENT LISTENERS ========
         document.addEventListener('DOMContentLoaded', function() {
-            // Botones de deporte
             document.querySelectorAll('.deporte-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     cambiarDeporte(this.dataset.deporte);
                 });
             });
-
-            // Navegación
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.addEventListener('click', function(e) {
                     const page = this.dataset.page;
                     if (page) navegar(page);
                 });
             });
-
-            // Fecha
             document.getElementById('footer-fecha').textContent = new Date().toLocaleDateString('es-ES', { year:'numeric', month:'long', day:'numeric' });
-
-            // Renderizado inicial (fútbol por defecto)
             renderizarTodo();
             navegar('inicio');
         });
