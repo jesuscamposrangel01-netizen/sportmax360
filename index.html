@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SportVive360 | Fútbol, MLB y NBA</title>
-    <meta name="description" content="SportVive360: Mundial 2026, MLB y NBA en vivo. Zona Lima UTC‑5">
+    <title>SportVive360 | Fútbol, MLB y NBA – Noticias y resultados en vivo</title>
+    <meta name="description" content="SportVive360: cobertura completa del Mundial 2026, MLB y NBA. Noticias, análisis, previas, resultados y tablas de posiciones. Lima, Perú.">
+    <meta name="keywords" content="fútbol, mundial 2026, MLB, NBA, resultados, noticias, análisis, previas, deportes">
+    <link rel="canonical" href="https://sportvive360.cyou/">
     <!-- Google AdSense -->
     <meta name="google-adsense-account" content="ca-pub-3765201153278683">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3765201153278683" crossorigin="anonymous"></script>
@@ -15,12 +17,12 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: '#0f2b3d',
+                        primary: '#0b1e2e',
                         secondary: '#1a4971',
                         accent: '#e11d48',
                         gold: '#fbbf24',
                         green: '#22c55e',
-                        darkbg: '#0b1a26',
+                        darkbg: '#0a1622',
                         cardbg: '#f8fafc',
                     },
                     fontFamily: { sans: ['Inter', 'Segoe UI', 'Roboto', 'system-ui', 'sans-serif'] }
@@ -29,18 +31,18 @@
         }
     </script>
     <style>
-        /* Animaciones y estilos base */
-        .fade-in { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+        /* Estilos adicionales */
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; opacity: 0; }
         @keyframes fadeIn { to { opacity: 1; } }
         .pulse-dot { animation: pulse 1.5s infinite; }
         @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
         .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
-        .card-hover:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.10); }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.12); }
         .tab-btn {
-            padding: 10px 20px; border-radius: 999px; font-weight: 600; cursor: pointer;
+            padding: 8px 18px; border-radius: 999px; font-weight: 600; cursor: pointer;
             transition: all 0.2s; background: transparent; border: none; color: #94a3b8;
         }
-        .tab-btn:hover { background: rgba(255,255,255,0.08); color: white; }
+        .tab-btn:hover { background: rgba(255,255,255,0.1); color: white; }
         .tab-btn.active { background: #1a56db; color: white; box-shadow: 0 4px 14px rgba(26,86,219,0.4); }
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.4s; }
@@ -72,8 +74,21 @@
         .dark .table-standings td { border-color: #334155; }
         .table-standings tr:hover td { background: #f8fafc; }
         .dark .table-standings tr:hover td { background: #1e293b; }
-        .flag-icon { width: 24px; height: 18px; object-fit: cover; border-radius: 2px; }
-        .score-big { font-size: 1.6rem; font-weight: 800; }
+        .article-card {
+            border-left: 4px solid #1a56db; padding-left: 16px; margin-bottom: 24px;
+        }
+        .article-card .meta { font-size: 0.7rem; color: #64748b; }
+        .dark .article-card .meta { color: #94a3b8; }
+        .article-card h3 { font-size: 1.1rem; font-weight: 700; margin: 4px 0; }
+        .article-card p { font-size: 0.9rem; color: #475569; }
+        .dark .article-card p { color: #cbd5e1; }
+        .nav-link {
+            cursor: pointer; transition: color 0.2s; font-weight: 500;
+        }
+        .nav-link:hover { color: #93c5fd; }
+        .nav-link.active { color: white; border-bottom: 2px solid #1a56db; }
+        .page-section { display: none; }
+        .page-section.active { display: block; animation: fadeIn 0.5s; }
         .cookie-banner {
             position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.85);
             backdrop-filter: blur(6px); color: white; padding: 12px 20px; text-align: center;
@@ -106,11 +121,16 @@
             width: 40px; height: 40px; animation: spin 0.8s linear infinite; margin: 20px auto;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
-        /* Responsive */
-        @media (max-width: 480px) {
-            .score-big { font-size: 1.2rem; }
+        @media (max-width: 640px) {
+            .tab-btn { padding: 6px 12px; font-size: 0.8rem; }
             .match-card { padding: 12px; }
-            .tab-btn { padding: 6px 14px; font-size: 0.8rem; }
+            .article-card h3 { font-size: 1rem; }
+        }
+        /* Estilo para el menú móvil */
+        .mobile-menu { display: none; }
+        @media (max-width: 768px) {
+            .desktop-menu { display: none; }
+            .mobile-menu { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
         }
     </style>
 </head>
@@ -118,17 +138,18 @@
 
     <!-- Cookie Banner -->
     <div id="cookieBanner" class="cookie-banner">
-        <span>🍪 Usamos cookies para mejorar tu experiencia. Al continuar, aceptas nuestra <a href="https://sportvive360.cyou/privacidad">política de privacidad</a>.</span>
+        <span>🍪 Usamos cookies para mejorar tu experiencia. Al continuar, aceptas nuestra <a href="#" onclick="navegar('privacidad')">política de privacidad</a>.</span>
         <button onclick="aceptarCookies()">Aceptar</button>
     </div>
 
-    <!-- Header -->
+    <!-- Header con navegación -->
     <header class="bg-primary text-white py-3 px-4 sticky top-0 z-50 shadow-lg transition-colors dark:bg-gray-800">
-        <div class="max-w-4xl mx-auto">
+        <div class="max-w-6xl mx-auto">
             <div class="flex items-center justify-between flex-wrap gap-2">
-                <h1 class="font-bold text-xl tracking-wide flex items-center gap-2">
-                    <span class="text-2xl">⚽</span> SportVive360
-                </h1>
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">⚽</span>
+                    <h1 class="font-bold text-xl tracking-wide">SportVive360</h1>
+                </div>
                 <div class="flex items-center gap-4">
                     <span class="text-xs hidden sm:inline-block bg-white/10 px-3 py-1 rounded-full">📺 En vivo</span>
                     <label class="theme-toggle" title="Cambiar tema">
@@ -138,208 +159,378 @@
                     </label>
                 </div>
             </div>
-            <!-- Tabs -->
-            <div class="flex flex-wrap gap-2 mt-3 border-t border-white/10 pt-3">
+            <!-- Menú de navegación (escritorio) -->
+            <nav class="desktop-menu flex flex-wrap gap-4 mt-3 border-t border-white/10 pt-3 text-sm">
+                <span class="nav-link active" data-page="inicio">Inicio</span>
+                <span class="nav-link" data-page="noticias">Noticias</span>
+                <span class="nav-link" data-page="analisis">Análisis</span>
+                <span class="nav-link" data-page="contacto">Contacto</span>
+                <span class="nav-link" data-page="acerca">Acerca de</span>
+                <span class="nav-link" data-page="privacidad">Privacidad</span>
+            </nav>
+            <!-- Menú móvil -->
+            <nav class="mobile-menu mt-3 border-t border-white/10 pt-3 text-xs">
+                <span class="nav-link active" data-page="inicio">Inicio</span>
+                <span class="nav-link" data-page="noticias">Noticias</span>
+                <span class="nav-link" data-page="analisis">Análisis</span>
+                <span class="nav-link" data-page="contacto">Contacto</span>
+                <span class="nav-link" data-page="acerca">Acerca</span>
+                <span class="nav-link" data-page="privacidad">Privacidad</span>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-3 py-5">
+
+        <!-- ==================== PÁGINA: INICIO ==================== -->
+        <section id="page-inicio" class="page-section active">
+            <!-- Indicador zona horaria -->
+            <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-4">
+                <span>📍 Lima, UTC‑5</span>
+                <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500 pulse-dot"></span> Actualizado</span>
+            </div>
+
+            <!-- Tabs deportivos (dentro de inicio) -->
+            <div class="flex flex-wrap gap-2 mb-6">
                 <button class="tab-btn active" data-tab="futbol">⚽ Fútbol</button>
                 <button class="tab-btn" data-tab="mlb">⚾ MLB</button>
                 <button class="tab-btn" data-tab="nba">🏀 NBA</button>
             </div>
-        </div>
-    </header>
 
-    <main class="max-w-4xl mx-auto px-3 py-5">
+            <!-- Contenido de tabs -->
+            <!-- FÚTBOL -->
+            <div id="tab-futbol" class="tab-content active">
+                <section>
+                    <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white flex items-center gap-2">
+                        ⚽ Mundial 2026 – Fase de Grupos
+                    </h2>
 
-        <!-- Indicador de zona horaria -->
-        <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-4">
-            <span>📍 Lima, UTC‑5</span>
-            <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500 pulse-dot"></span> Actualizado</span>
-        </div>
-
-        <!-- ==================== FÚTBOL (Mundial 2026) ==================== -->
-        <div id="tab-futbol" class="tab-content active">
-            <section>
-                <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white flex items-center gap-2">
-                    ⚽ Mundial 2026 – Fase de Grupos
-                </h2>
-
-                <!-- Anuncio -->
-                <div class="ad-container">
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-3765201153278683"
-                         data-ad-slot="7802021862"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-                </div>
-
-                <!-- Partidos destacados (en vivo / recientes) -->
-                <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover mb-6">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="font-semibold text-lg">📅 Partidos de hoy</h3>
-                        <span class="text-xs bg-accent/10 text-accent px-3 py-1 rounded-full">2 en vivo</span>
+                    <div class="ad-container">
+                        <ins class="adsbygoogle"
+                             style="display:block"
+                             data-ad-client="ca-pub-3765201153278683"
+                             data-ad-slot="7802021862"
+                             data-ad-format="auto"
+                             data-full-width-responsive="true"></ins>
+                        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                     </div>
-                    <div id="futbol-partidos" class="space-y-3">
-                        <!-- Cargando -->
-                        <div class="flex justify-center py-6"><div class="spinner"></div></div>
-                    </div>
-                </div>
 
-                <!-- Tabla de posiciones por grupos -->
-                <div class="space-y-6">
-                    <!-- Grupo A -->
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
-                        <div class="group-header">Grupo A</div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-xs table-standings dark:text-gray-300">
-                                <thead><tr><th class="text-left">Equipo</th><th class="text-center">PJ</th><th class="text-center">G</th><th class="text-center">E</th><th class="text-center">P</th><th class="text-center">GF</th><th class="text-center">GC</th><th class="text-center">DG</th><th class="text-center">Pts</th></tr></thead>
-                                <tbody>
-                                    <tr><td>🇦🇷 Argentina</td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">5</td><td class="text-center">1</td><td class="text-center">+4</td><td class="text-center font-bold">6</td></tr>
-                                    <tr><td>🇵🇹 Portugal</td><td class="text-center">2</td><td class="text-center">1</td><td class="text-center">1</td><td class="text-center">0</td><td class="text-center">3</td><td class="text-center">2</td><td class="text-center">+1</td><td class="text-center font-bold">4</td></tr>
-                                    <tr><td>🇪🇬 Egipto</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">1</td><td class="text-center">1</td><td class="text-center">1</td><td class="text-center">3</td><td class="text-center">-2</td><td class="text-center">1</td></tr>
-                                    <tr><td>🇦🇺 Australia</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">2</td><td class="text-center">1</td><td class="text-center">4</td><td class="text-center">-3</td><td class="text-center">0</td></tr>
-                                </tbody>
-                            </table>
+                    <!-- Partidos destacados -->
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover mb-6">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="font-semibold text-lg">📅 Partidos de hoy</h3>
+                            <span class="text-xs bg-accent/10 text-accent px-3 py-1 rounded-full">2 en vivo</span>
+                        </div>
+                        <div id="futbol-partidos" class="space-y-3">
+                            <div class="flex justify-center py-6"><div class="spinner"></div></div>
                         </div>
                     </div>
 
-                    <!-- Grupo B -->
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
-                        <div class="group-header">Grupo B</div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-xs table-standings dark:text-gray-300">
-                                <thead><tr><th class="text-left">Equipo</th><th class="text-center">PJ</th><th class="text-center">G</th><th class="text-center">E</th><th class="text-center">P</th><th class="text-center">GF</th><th class="text-center">GC</th><th class="text-center">DG</th><th class="text-center">Pts</th></tr></thead>
-                                <tbody>
-                                    <tr><td>🇧🇷 Brasil</td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">6</td><td class="text-center">2</td><td class="text-center">+4</td><td class="text-center font-bold">6</td></tr>
-                                    <tr><td>🇫🇷 Francia</td><td class="text-center">2</td><td class="text-center">1</td><td class="text-center">1</td><td class="text-center">0</td><td class="text-center">4</td><td class="text-center">3</td><td class="text-center">+1</td><td class="text-center font-bold">4</td></tr>
-                                    <tr><td>🇲🇦 Marruecos</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">1</td><td class="text-center">1</td><td class="text-center">1</td><td class="text-center">3</td><td class="text-center">-2</td><td class="text-center">1</td></tr>
-                                    <tr><td>🇺🇸 EE.UU.</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center">5</td><td class="text-center">-3</td><td class="text-center">0</td></tr>
-                                </tbody>
-                            </table>
+                    <!-- Tablas de posiciones (todos los grupos) -->
+                    <div class="space-y-6">
+                        <!-- Grupo A -->
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
+                            <div class="group-header">Grupo A</div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-xs table-standings dark:text-gray-300">
+                                    <thead><tr><th class="text-left">Equipo</th><th class="text-center">PJ</th><th class="text-center">G</th><th class="text-center">E</th><th class="text-center">P</th><th class="text-center">GF</th><th class="text-center">GC</th><th class="text-center">DG</th><th class="text-center">Pts</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>🇦🇷 Argentina</td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">5</td><td class="text-center">1</td><td class="text-center">+4</td><td class="text-center font-bold">6</td></tr>
+                                        <tr><td>🇵🇹 Portugal</td><td class="text-center">2</td><td class="text-center">1</td><td class="text-center">1</td><td class="text-center">0</td><td class="text-center">3</td><td class="text-center">2</td><td class="text-center">+1</td><td class="text-center font-bold">4</td></tr>
+                                        <tr><td>🇪🇬 Egipto</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">1</td><td class="text-center">1</td><td class="text-center">1</td><td class="text-center">3</td><td class="text-center">-2</td><td class="text-center">1</td></tr>
+                                        <tr><td>🇦🇺 Australia</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">2</td><td class="text-center">1</td><td class="text-center">4</td><td class="text-center">-3</td><td class="text-center">0</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- Grupo B -->
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
+                            <div class="group-header">Grupo B</div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-xs table-standings dark:text-gray-300">
+                                    <thead><tr><th class="text-left">Equipo</th><th class="text-center">PJ</th><th class="text-center">G</th><th class="text-center">E</th><th class="text-center">P</th><th class="text-center">GF</th><th class="text-center">GC</th><th class="text-center">DG</th><th class="text-center">Pts</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>🇧🇷 Brasil</td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">6</td><td class="text-center">2</td><td class="text-center">+4</td><td class="text-center font-bold">6</td></tr>
+                                        <tr><td>🇫🇷 Francia</td><td class="text-center">2</td><td class="text-center">1</td><td class="text-center">1</td><td class="text-center">0</td><td class="text-center">4</td><td class="text-center">3</td><td class="text-center">+1</td><td class="text-center font-bold">4</td></tr>
+                                        <tr><td>🇲🇦 Marruecos</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">1</td><td class="text-center">1</td><td class="text-center">1</td><td class="text-center">3</td><td class="text-center">-2</td><td class="text-center">1</td></tr>
+                                        <tr><td>🇺🇸 EE.UU.</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">0</td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center">5</td><td class="text-center">-3</td><td class="text-center">0</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- Grupo C -->
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
+                            <div class="group-header">Grupo C</div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-xs table-standings dark:text-gray-300">
+                                    <thead><tr><th class="text-left">Equipo</th><th class="text-center">PJ</th><th class="text-center">G</th><th class="text-center">E</th><th class="text-center">P</th><th class="text-center">GF</th><th class="text-center">GC</th><th class="text-center">DG</th><th class="text-center">Pts</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>🇪🇸 España</td><td class="text-center">2</td><td class="text-center">1</td><td class="text-center">1</td><td class="text-center">0</td><td class="text-center">4</td><td class="text-center">2</td><td class="text-center">+2</td><td class="text-center font-bold">4</td></tr>
+                                        <tr><td>🇩🇪 Alemania</td><td class="text-center">2</td><td class="text-center">1</td><td class="text-center">0</td><td class="text-center">1</td><td class="text-center">3</td><td class="text-center">3</td><td class="text-center">0</td><td class="text-center font-bold">3</td></tr>
+                                        <tr><td>🇯🇵 Japón</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">2</td></tr>
+                                        <tr><td>🇳🇬 Nigeria</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">1</td><td class="text-center">1</td><td class="text-center">1</td><td class="text-center">3</td><td class="text-center">-2</td><td class="text-center">1</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
+                </section>
+            </div>
 
-                    <!-- Grupo C -->
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
-                        <div class="group-header">Grupo C</div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-xs table-standings dark:text-gray-300">
-                                <thead><tr><th class="text-left">Equipo</th><th class="text-center">PJ</th><th class="text-center">G</th><th class="text-center">E</th><th class="text-center">P</th><th class="text-center">GF</th><th class="text-center">GC</th><th class="text-center">DG</th><th class="text-center">Pts</th></tr></thead>
-                                <tbody>
-                                    <tr><td>🇪🇸 España</td><td class="text-center">2</td><td class="text-center">1</td><td class="text-center">1</td><td class="text-center">0</td><td class="text-center">4</td><td class="text-center">2</td><td class="text-center">+2</td><td class="text-center font-bold">4</td></tr>
-                                    <tr><td>🇩🇪 Alemania</td><td class="text-center">2</td><td class="text-center">1</td><td class="text-center">0</td><td class="text-center">1</td><td class="text-center">3</td><td class="text-center">3</td><td class="text-center">0</td><td class="text-center font-bold">3</td></tr>
-                                    <tr><td>🇯🇵 Japón</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">2</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">2</td></tr>
-                                    <tr><td>🇳🇬 Nigeria</td><td class="text-center">2</td><td class="text-center">0</td><td class="text-center">1</td><td class="text-center">1</td><td class="text-center">1</td><td class="text-center">3</td><td class="text-center">-2</td><td class="text-center">1</td></tr>
-                                </tbody>
-                            </table>
+            <!-- MLB -->
+            <div id="tab-mlb" class="tab-content">
+                <section>
+                    <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">⚾ MLB – Resultados & En vivo</h2>
+                    <div class="flex items-center justify-center gap-2 bg-white dark:bg-gray-800 rounded-xl py-2 px-3 mb-6 border border-gray-200 dark:border-gray-700 shadow-sm">
+                        <button onclick="cambiarFecha(-1)" class="text-lg px-3 py-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">‹</button>
+                        <div id="selector-fechas" class="flex gap-2 text-sm font-medium"></div>
+                        <button onclick="cambiarFecha(1)" class="text-lg px-3 py-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">›</button>
+                    </div>
+
+                    <div class="ad-container">
+                        <ins class="adsbygoogle"
+                             style="display:block"
+                             data-ad-client="ca-pub-3765201153278683"
+                             data-ad-slot="7802021862"
+                             data-ad-format="auto"
+                             data-full-width-responsive="true"></ins>
+                        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+                    </div>
+
+                    <div id="lista-partidos" class="space-y-5 mb-10">
+                        <div class="flex justify-center py-10"><div class="spinner"></div></div>
+                    </div>
+
+                    <!-- Posiciones resumidas -->
+                    <div class="space-y-4">
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
+                            <h3 class="font-semibold text-lg mb-3">🏆 Liga Americana – Este</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-xs table-standings dark:text-gray-300">
+                                    <thead><tr><th class="text-left">Equipo</th><th class="text-center">G</th><th class="text-center">P</th><th class="text-center">PCT</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>New York Yankees</td><td class="text-center">45</td><td class="text-center">28</td><td class="text-center">.616</td></tr>
+                                        <tr><td>Tampa Bay Rays</td><td class="text-center">41</td><td class="text-center">30</td><td class="text-center">.577</td></tr>
+                                        <tr><td>Toronto Blue Jays</td><td class="text-center">34</td><td class="text-center">38</td><td class="text-center">.472</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
+                            <h3 class="font-semibold text-lg mb-3">🏆 Liga Nacional – Este</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-xs table-standings dark:text-gray-300">
+                                    <thead><tr><th class="text-left">Equipo</th><th class="text-center">G</th><th class="text-center">P</th><th class="text-center">PCT</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>Atlanta Braves</td><td class="text-center">46</td><td class="text-center">25</td><td class="text-center">.648</td></tr>
+                                        <tr><td>Philadelphia Phillies</td><td class="text-center">40</td><td class="text-center">34</td><td class="text-center">.541</td></tr>
+                                        <tr><td>Washington Nationals</td><td class="text-center">38</td><td class="text-center">37</td><td class="text-center">.507</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
-        </div>
+                </section>
+            </div>
 
-        <!-- ==================== MLB ==================== -->
-        <div id="tab-mlb" class="tab-content">
-            <section>
-                <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">⚾ MLB – Resultados & En vivo</h2>
-                <div class="flex items-center justify-center gap-2 bg-white dark:bg-gray-800 rounded-xl py-2 px-3 mb-6 border border-gray-200 dark:border-gray-700 shadow-sm">
-                    <button onclick="cambiarFecha(-1)" class="text-lg px-3 py-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">‹</button>
-                    <div id="selector-fechas" class="flex gap-2 text-sm font-medium"></div>
-                    <button onclick="cambiarFecha(1)" class="text-lg px-3 py-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">›</button>
-                </div>
-
-                <!-- Anuncio -->
-                <div class="ad-container">
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-3765201153278683"
-                         data-ad-slot="7802021862"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-                </div>
-
-                <div id="lista-partidos" class="space-y-5 mb-10">
-                    <div class="flex justify-center py-10"><div class="spinner"></div></div>
-                </div>
-
-                <!-- Posiciones MLB (resumido) -->
-                <div class="space-y-4">
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
-                        <h3 class="font-semibold text-lg mb-3">🏆 Liga Americana – Este</h3>
+            <!-- NBA -->
+            <div id="tab-nba" class="tab-content">
+                <section>
+                    <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">🏀 NBA – Temporada 2025-26</h2>
+                    <div class="ad-container">
+                        <ins class="adsbygoogle"
+                             style="display:block"
+                             data-ad-client="ca-pub-3765201153278683"
+                             data-ad-slot="7802021862"
+                             data-ad-format="auto"
+                             data-full-width-responsive="true"></ins>
+                        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover space-y-4">
+                        <h3 class="font-semibold text-lg">📊 Conferencia Este</h3>
                         <div class="overflow-x-auto">
                             <table class="w-full text-xs table-standings dark:text-gray-300">
                                 <thead><tr><th class="text-left">Equipo</th><th class="text-center">G</th><th class="text-center">P</th><th class="text-center">PCT</th></tr></thead>
                                 <tbody>
-                                    <tr><td>New York Yankees</td><td class="text-center">45</td><td class="text-center">28</td><td class="text-center">.616</td></tr>
-                                    <tr><td>Tampa Bay Rays</td><td class="text-center">41</td><td class="text-center">30</td><td class="text-center">.577</td></tr>
-                                    <tr><td>Toronto Blue Jays</td><td class="text-center">34</td><td class="text-center">38</td><td class="text-center">.472</td></tr>
+                                    <tr><td>Boston Celtics</td><td class="text-center">58</td><td class="text-center">24</td><td class="text-center">.707</td></tr>
+                                    <tr><td>Milwaukee Bucks</td><td class="text-center">55</td><td class="text-center">27</td><td class="text-center">.671</td></tr>
+                                    <tr><td>Philadelphia 76ers</td><td class="text-center">50</td><td class="text-center">32</td><td class="text-center">.610</td></tr>
+                                    <tr><td>New York Knicks</td><td class="text-center">47</td><td class="text-center">35</td><td class="text-center">.573</td></tr>
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
-                        <h3 class="font-semibold text-lg mb-3">🏆 Liga Nacional – Este</h3>
+                        <h3 class="font-semibold text-lg mt-4">📊 Conferencia Oeste</h3>
                         <div class="overflow-x-auto">
                             <table class="w-full text-xs table-standings dark:text-gray-300">
                                 <thead><tr><th class="text-left">Equipo</th><th class="text-center">G</th><th class="text-center">P</th><th class="text-center">PCT</th></tr></thead>
                                 <tbody>
-                                    <tr><td>Atlanta Braves</td><td class="text-center">46</td><td class="text-center">25</td><td class="text-center">.648</td></tr>
-                                    <tr><td>Philadelphia Phillies</td><td class="text-center">40</td><td class="text-center">34</td><td class="text-center">.541</td></tr>
-                                    <tr><td>Washington Nationals</td><td class="text-center">38</td><td class="text-center">37</td><td class="text-center">.507</td></tr>
+                                    <tr><td>Denver Nuggets</td><td class="text-center">57</td><td class="text-center">25</td><td class="text-center">.695</td></tr>
+                                    <tr><td>Oklahoma City Thunder</td><td class="text-center">54</td><td class="text-center">28</td><td class="text-center">.659</td></tr>
+                                    <tr><td>Phoenix Suns</td><td class="text-center">49</td><td class="text-center">33</td><td class="text-center">.598</td></tr>
+                                    <tr><td>Los Angeles Lakers</td><td class="text-center">46</td><td class="text-center">36</td><td class="text-center">.561</td></tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                </div>
-            </section>
-        </div>
+                </section>
+            </div>
+        </section>
 
-        <!-- ==================== NBA ==================== -->
-        <div id="tab-nba" class="tab-content">
-            <section>
-                <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">🏀 NBA – Temporada 2025-26</h2>
-                <div class="ad-container">
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-3765201153278683"
-                         data-ad-slot="7802021862"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-                </div>
-                <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover space-y-4">
-                    <h3 class="font-semibold text-lg">📊 Conferencia Este</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-xs table-standings dark:text-gray-300">
-                            <thead><tr><th class="text-left">Equipo</th><th class="text-center">G</th><th class="text-center">P</th><th class="text-center">PCT</th></tr></thead>
-                            <tbody>
-                                <tr><td>Boston Celtics</td><td class="text-center">58</td><td class="text-center">24</td><td class="text-center">.707</td></tr>
-                                <tr><td>Milwaukee Bucks</td><td class="text-center">55</td><td class="text-center">27</td><td class="text-center">.671</td></tr>
-                                <tr><td>Philadelphia 76ers</td><td class="text-center">50</td><td class="text-center">32</td><td class="text-center">.610</td></tr>
-                                <tr><td>New York Knicks</td><td class="text-center">47</td><td class="text-center">35</td><td class="text-center">.573</td></tr>
-                            </tbody>
-                        </table>
+        <!-- ==================== PÁGINA: NOTICIAS ==================== -->
+        <section id="page-noticias" class="page-section">
+            <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">📰 Últimas Noticias</h2>
+            <div class="space-y-6">
+                <article class="article-card">
+                    <div class="meta">15 de junio, 2026 | Por Redacción</div>
+                    <h3>Mundial 2026: Argentina arranca con contundencia y ya es favorita</h3>
+                    <p>La selección albiceleste debutó con una goleada 5-1 ante Australia, mostrando un juego colectivo brillante. Messi, Di María y el joven Garnacho fueron las figuras. El equipo de Scaloni parece imparable y se perfila como el principal candidato al título. En el otro partido del grupo, Portugal empató 1-1 con Egipto, con un gol de penal de CR7 en el último minuto.</p>
+                </article>
+                <article class="article-card">
+                    <div class="meta">14 de junio, 2026 | Por Redacción</div>
+                    <h3>MLB: Yankees y Braves dominan sus divisiones; Soto y Acuña brillan</h3>
+                    <p>La temporada regular de la MLB entra en su recta final. Los New York Yankees, liderados por Aaron Judge y el dominicano Juan Soto, tienen el mejor récord de la Liga Americana. En la Nacional, los Atlanta Braves de Ronald Acuña Jr. mantienen el primer puesto. Ambos equipos apuntan a un posible duelo en la Serie Mundial.</p>
+                </article>
+                <article class="article-card">
+                    <div class="meta">13 de junio, 2026 | Por Redacción</div>
+                    <h3>NBA: Celtics y Nuggets, los reyes de la temporada regular</h3>
+                    <p>Boston Celtics y Denver Nuggets han sido los equipos más consistentes de la temporada 2025-26. Con Jayson Tatum y Nikola Jokic como MVPs virtuales, ambos conjuntos llegan con ventaja de local a los playoffs. La primera ronda promete sorpresas con equipos como los Lakers y los Bucks buscando dar la campanada.</p>
+                </article>
+                <article class="article-card">
+                    <div class="meta">12 de junio, 2026 | Por Redacción</div>
+                    <h3>Fútbol: España y Alemania empatan en un partidazo; Japón sorprende</h3>
+                    <p>En el Grupo C, el esperado duelo entre España y Alemania terminó 2-2 con goles de Morata y Wirtz. Japón, por su parte, logró un valioso empate 1-1 ante Nigeria, gracias a un gol de Kubo. La lucha por la clasificación se mantiene abierta.</p>
+                </article>
+            </div>
+            <div class="ad-container mt-8">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-3765201153278683"
+                     data-ad-slot="7802021862"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+        </section>
+
+        <!-- ==================== PÁGINA: ANÁLISIS ==================== -->
+        <section id="page-analisis" class="page-section">
+            <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">🔍 Análisis y Previas</h2>
+            <div class="space-y-6">
+                <article class="article-card">
+                    <div class="meta">Previa Mundial 2026 | Por Juan Pérez</div>
+                    <h3>Análisis táctico de los grupos: ¿quién puede dar la sorpresa?</h3>
+                    <p>El Mundial 2026, con 48 selecciones, promete ser el más impredecible. Argentina, Brasil y Francia parten como favoritos, pero equipos como Portugal, España y Alemania tienen planteles de lujo. Las selecciones africanas (Marruecos, Nigeria, Egipto) y asiáticas (Japón, Australia) han mejorado notablemente. El formato de grupos de 4 equipos aún deja poco margen de error. Claves: el estado físico de los veteranos (Messi, CR7, Lewandowski) y el impacto de jóvenes promesas como Garnacho, Bellingham o Musiala.</p>
+                </article>
+                <article class="article-card">
+                    <div class="meta">Análisis MLB | Por Carlos Rodríguez</div>
+                    <h3>¿Quién ganará la Serie Mundial 2026? Dodgers, Yankees o Braves</h3>
+                    <p>La temporada de la MLB ha estado marcada por el poder ofensivo. Los Dodgers, con Mookie Betts y Shohei Ohtani, tienen el mejor roster de la liga. Los Yankees, con Judge y Soto, son imparables en el Bronx. Los Braves, con Acuña y Olson, tienen una alineación letal. Sin embargo, el pitcheo es clave: los equipos con mejores rotaciones (Astros, Phillies) podrían dar la sorpresa. Nuestro pronóstico: Yankees vs. Dodgers en la Serie Mundial, con los Yankees llevándose el título en 6 juegos.</p>
+                </article>
+                <article class="article-card">
+                    <div class="meta">Previa NBA Playoffs | Por Laura Gómez</div>
+                    <h3>Playoffs NBA 2026: Celtics y Nuggets, los grandes favoritos</h3>
+                    <p>Los playoffs de la NBA comienzan con una sensación de déjà vu. Celtics y Nuggets han sido los mejores equipos de la temporada regular. Sin embargo, los Bucks de Giannis y los Lakers de LeBron (quien podría estar en su última temporada) no se rinden. En el Este, los 76ers de Embiid y los Knicks de Brunson pueden ser peligrosos. En el Oeste, los Suns de Durant y Booker, y los Thunder de SGA, son serios contendientes. Pronóstico: Celtics y Nuggets en las finales, con Boston campeón en 7 juegos.</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- ==================== PÁGINA: CONTACTO ==================== -->
+        <section id="page-contacto" class="page-section">
+            <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">📬 Contacto</h2>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm max-w-2xl">
+                <p class="mb-4">¿Tienes preguntas, sugerencias o quieres colaborar con nosotros? Completa el formulario y te responderemos a la brevedad.</p>
+                <form id="formContacto" onsubmit="event.preventDefault(); alert('Mensaje enviado (simulación). Gracias por contactarnos.');">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-1" for="nombre">Nombre completo</label>
+                        <input type="text" id="nombre" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Tu nombre" required>
                     </div>
-                    <h3 class="font-semibold text-lg mt-4">📊 Conferencia Oeste</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-xs table-standings dark:text-gray-300">
-                            <thead><tr><th class="text-left">Equipo</th><th class="text-center">G</th><th class="text-center">P</th><th class="text-center">PCT</th></tr></thead>
-                            <tbody>
-                                <tr><td>Denver Nuggets</td><td class="text-center">57</td><td class="text-center">25</td><td class="text-center">.695</td></tr>
-                                <tr><td>Oklahoma City Thunder</td><td class="text-center">54</td><td class="text-center">28</td><td class="text-center">.659</td></tr>
-                                <tr><td>Phoenix Suns</td><td class="text-center">49</td><td class="text-center">33</td><td class="text-center">.598</td></tr>
-                                <tr><td>Los Angeles Lakers</td><td class="text-center">46</td><td class="text-center">36</td><td class="text-center">.561</td></tr>
-                            </tbody>
-                        </table>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-1" for="email">Correo electrónico</label>
+                        <input type="email" id="email" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="tu@email.com" required>
                     </div>
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-1" for="mensaje">Mensaje</label>
+                        <textarea id="mensaje" rows="5" class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Escribe tu mensaje..." required></textarea>
+                    </div>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition">Enviar mensaje</button>
+                </form>
+                <div class="mt-6 text-sm text-gray-500 dark:text-gray-400">
+                    <p>También puedes escribirnos a: <a href="mailto:info@sportvive360.cyou" class="text-blue-400">info@sportvive360.cyou</a></p>
+                    <p>Síguenos en redes: 
+                        <a href="#" class="text-blue-400 hover:underline">Twitter</a> · 
+                        <a href="#" class="text-blue-400 hover:underline">Facebook</a> · 
+                        <a href="#" class="text-blue-400 hover:underline">Instagram</a>
+                    </p>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
+
+        <!-- ==================== PÁGINA: ACERCA DE ==================== -->
+        <section id="page-acerca" class="page-section">
+            <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">📖 Acerca de SportVive360</h2>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm max-w-3xl space-y-4">
+                <p>SportVive360 es un portal deportivo independiente fundado en 2025 con la misión de ofrecer a los aficionados información actualizada, análisis profundos y contenido original sobre los deportes más populares del mundo: fútbol, béisbol y baloncesto.</p>
+                <p>Nos enfocamos en el Mundial de la FIFA 2026, la Major League Baseball (MLB) y la National Basketball Association (NBA), brindando resultados en vivo, tablas de posiciones, noticias de última hora y previas exclusivas.</p>
+                <p>Nuestro equipo está compuesto por periodistas deportivos y analistas apasionados, todos con amplia experiencia en la cobertura de eventos internacionales. Estamos basados en Lima, Perú, y operamos en la zona horaria UTC‑5.</p>
+                <p>Creemos en el deporte como un vehículo de unión y emoción, y trabajamos día a día para que nuestros lectores vivan cada partido como si estuvieran en la cancha.</p>
+                <p>¡Gracias por ser parte de nuestra comunidad!</p>
+                <div class="text-sm text-gray-500 dark:text-gray-400">Contacto: <a href="mailto:info@sportvive360.cyou" class="text-blue-400">info@sportvive360.cyou</a></div>
+            </div>
+        </section>
+
+        <!-- ==================== PÁGINA: PRIVACIDAD ==================== -->
+        <section id="page-privacidad" class="page-section">
+            <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">🔒 Política de Privacidad</h2>
+            <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm max-w-3xl space-y-4 text-sm">
+                <p><strong>Última actualización:</strong> 21 de junio de 2026</p>
+                <p>En SportVive360 (sportvive360.cyou), nos tomamos muy en serio la privacidad de nuestros usuarios. Esta política explica cómo recopilamos, usamos y protegemos tu información personal cuando visitas nuestro sitio web.</p>
+                
+                <h4 class="font-bold text-base mt-4">1. Información que recopilamos</h4>
+                <p>Recopilamos información que nos proporcionas voluntariamente, como tu nombre y correo electrónico cuando nos contactas a través del formulario de contacto. Además, podemos recopilar datos de navegación anónimos (dirección IP, tipo de navegador, páginas visitadas) a través de cookies y herramientas de análisis.</p>
+
+                <h4 class="font-bold text-base mt-4">2. Uso de cookies</h4>
+                <p>Utilizamos cookies propias y de terceros para mejorar la experiencia del usuario, analizar el tráfico y mostrar anuncios personalizados de Google AdSense. Las cookies son pequeños archivos que se almacenan en tu dispositivo. Puedes configurar tu navegador para rechazarlas, aunque algunas funcionalidades del sitio podrían verse afectadas.</p>
+                <p>Google AdSense utiliza cookies para mostrar anuncios basados en tus visitas previas a este y otros sitios web. Puedes desactivar la personalización de anuncios en la <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">configuración de anuncios de Google</a>.</p>
+
+                <h4 class="font-bold text-base mt-4">3. Uso de la información</h4>
+                <p>La información recopilada se utiliza para:</p>
+                <ul class="list-disc pl-6 space-y-1">
+                    <li>Responder a tus consultas y comentarios.</li>
+                    <li>Mejorar nuestro contenido y la navegación del sitio.</li>
+                    <li>Mostrar anuncios relevantes a través de Google AdSense.</li>
+                    <li>Analizar tendencias y estadísticas de uso.</li>
+                </ul>
+
+                <h4 class="font-bold text-base mt-4">4. Compartir datos</h4>
+                <p>No vendemos ni compartimos tu información personal con terceros, excepto cuando sea necesario para cumplir con la ley o proteger nuestros derechos. Los datos de navegación pueden ser compartidos con Google Analytics y AdSense para fines publicitarios y de análisis, siempre de forma agregada y anónima.</p>
+
+                <h4 class="font-bold text-base mt-4">5. Seguridad</h4>
+                <p>Implementamos medidas de seguridad razonables para proteger tu información contra accesos no autorizados, alteración o divulgación. Sin embargo, ningún método de transmisión por Internet es 100% seguro, por lo que no podemos garantizar la seguridad absoluta.</p>
+
+                <h4 class="font-bold text-base mt-4">6. Enlaces a terceros</h4>
+                <p>Nuestro sitio puede contener enlaces a otros sitios web. No nos responsabilizamos por las políticas de privacidad de estos terceros. Te recomendamos revisar sus políticas antes de proporcionarles cualquier información personal.</p>
+
+                <h4 class="font-bold text-base mt-4">7. Tus derechos</h4>
+                <p>Puedes solicitar la eliminación o modificación de tus datos personales en cualquier momento enviándonos un correo a <a href="mailto:info@sportvive360.cyou" class="text-blue-400 hover:underline">info@sportvive360.cyou</a>. También puedes optar por no recibir comunicaciones nuestras en el futuro.</p>
+
+                <h4 class="font-bold text-base mt-4">8. Cambios en esta política</h4>
+                <p>Nos reservamos el derecho de actualizar esta política de privacidad. Publicaremos cualquier cambio en esta página con la fecha de actualización.</p>
+
+                <p class="mt-4">Si tienes preguntas sobre esta política, contáctanos a través de nuestro <span class="nav-link text-blue-400 hover:underline" onclick="navegar('contacto')">formulario de contacto</span>.</p>
+            </div>
+        </section>
 
     </main>
 
     <footer class="text-center text-xs text-gray-500 dark:text-gray-400 border-t border-gray-200 dark:border-gray-700 py-6 mt-8">
+        <div class="max-w-6xl mx-auto px-3 flex flex-wrap justify-center gap-4 mb-2">
+            <span class="nav-link" onclick="navegar('inicio')">Inicio</span>
+            <span class="nav-link" onclick="navegar('noticias')">Noticias</span>
+            <span class="nav-link" onclick="navegar('analisis')">Análisis</span>
+            <span class="nav-link" onclick="navegar('contacto')">Contacto</span>
+            <span class="nav-link" onclick="navegar('acerca')">Acerca de</span>
+            <span class="nav-link" onclick="navegar('privacidad')">Privacidad</span>
+        </div>
         <p>© 2026 SportVive360 – Todos los derechos reservados. Datos en tiempo real.</p>
         <p class="mt-1">Lima, Perú · <span id="footer-fecha"></span></p>
     </footer>
@@ -370,7 +561,37 @@
             }
         });
 
-        // ======== TABS ========
+        // ======== NAVEGACIÓN ENTRE PÁGINAS ========
+        function navegar(pageId) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            // Mostrar la seleccionada
+            const target = document.getElementById('page-' + pageId);
+            if (target) target.classList.add('active');
+            // Actualizar enlaces activos
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            document.querySelectorAll(`.nav-link[data-page="${pageId}"]`).forEach(link => link.classList.add('active'));
+            // Si la página es 'inicio', asegurar que los tabs funcionen
+            if (pageId === 'inicio') {
+                // reactivar el primer tab (fútbol) por defecto
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelector('.tab-btn[data-tab="futbol"]')?.classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+                document.getElementById('tab-futbol')?.classList.add('active');
+            }
+            // Scroll al inicio
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Event listeners para nav-links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const page = this.dataset.page;
+                if (page) navegar(page);
+            });
+        });
+
+        // ======== TABS DEPORTIVOS (dentro de inicio) ========
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -413,7 +634,6 @@
         function cargarPartidosMLB(fecha) {
             const contenedor = document.getElementById('lista-partidos');
             contenedor.innerHTML = '<div class="flex justify-center py-10"><div class="spinner"></div></div>';
-            // Simular carga
             setTimeout(() => {
                 const partidos = [
                     { local: 'New York Yankees', visitante: 'Boston Red Sox', score: '6-4', status: 'Final', badge: 'badge-final' },
@@ -482,8 +702,8 @@
         actualizarFechas();
         cargarPartidosFutbol();
 
-        // Forzar que la pestaña activa sea fútbol al cargar (por si acaso)
-        document.querySelector('.tab-btn[data-tab="futbol"]')?.click();
+        // Asegurar que la página de inicio esté activa por defecto
+        navegar('inicio');
 
         // Anuncios de Google (cargar después)
         setTimeout(() => {
