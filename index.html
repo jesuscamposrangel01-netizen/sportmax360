@@ -1,865 +1,390 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SportVive360 • Portal Deportivo 2026</title>
-    <meta name="description" content="SportVive360: cobertura en vivo de MLB, Mundial 2026 y NBA con estadísticas, noticias y análisis." />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SportVive360 | Multi‑Deportes</title>
+    <meta name="description" content="SportVive360: MLB, Fútbol Mundial 2026 y NBA en vivo. Zona Lima UTC‑5">
     <!-- Google AdSense -->
-    <meta name="google-adsense-account" content="ca-pub-3765201153278683" />
+    <meta name="google-adsense-account" content="ca-pub-3765201153278683">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3765201153278683" crossorigin="anonymous"></script>
-    <!-- Tailwind + Inter font -->
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'Segoe UI', 'system-ui', 'sans-serif'] },
                     colors: {
-                        azul: '#2563eb',
-                        azulOscuro: '#0f172a',
-                        celeste: '#38bdf8',
-                        rojo: '#ef4444',
-                        verde: '#22c55e',
-                        amarillo: '#eab308',
+                        mlbAzul: '#0a1e3c',
+                        azul: '#1a56db',
+                        rojoVivo: '#dc2626',
                         gris: '#475569',
                         grisClaro: '#f1f5f9',
-                        vidrio: 'rgba(255,255,255,0.08)',
+                        verdeBase: '#22c55e',
                     },
-                    backdropBlur: { xs: '2px', sm: '4px', md: '8px', lg: '12px' },
-                    animation: {
-                        'gradient': 'gradient 6s ease infinite',
-                        'float': 'float 3s ease-in-out infinite',
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        gradient: { '0%,100%': { backgroundPosition: '0% 50%' }, '50%': { backgroundPosition: '100% 50%' } },
-                        float: { '0%,100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-10px)' } },
-                    },
-                    backgroundImage: {
-                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-                        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-                    }
+                    fontFamily: { sans: ['Inter', 'Segoe UI', 'Roboto', 'Arial', 'sans-serif'] }
                 }
             }
         }
     </script>
     <style>
-        /* Reset y base */
-        * { box-sizing: border-box; }
-        body { background: #f8fafc; transition: background 0.3s; }
-        .dark body { background: #0f172a; }
-        /* Efecto de vidrio */
-        .glass {
-            background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .dark .glass {
-            background: rgba(15,23,42,0.6);
-            border-color: rgba(255,255,255,0.05);
-        }
-        .glass-card {
-            background: rgba(255,255,255,0.6);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: all 0.3s ease;
-        }
-        .dark .glass-card {
-            background: rgba(15,23,42,0.7);
-            border-color: rgba(255,255,255,0.05);
-        }
-        .glass-card:hover {
-            transform: translateY(-4px) scale(1.01);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-        /* Gradientes animados */
-        .gradient-bg {
-            background: linear-gradient(-45deg, #0f172a, #1e3a8a, #3b82f6, #0f172a);
-            background-size: 400% 400%;
-            animation: gradient 8s ease infinite;
-        }
-        .gradient-text {
-            background: linear-gradient(135deg, #38bdf8, #2563eb, #7c3aed);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-size: 200% 200%;
-            animation: gradient 4s ease infinite;
-        }
-        /* Botones modernos */
-        .btn-primary {
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            border: none;
-            color: white;
-            padding: 0.6rem 1.5rem;
-            border-radius: 9999px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 14px rgba(37,99,235,0.3);
-        }
-        .btn-primary:hover {
-            transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 8px 25px rgba(37,99,235,0.4);
-        }
-        .btn-secondary {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            padding: 0.6rem 1.5rem;
-            border-radius: 9999px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        .btn-secondary:hover {
-            background: rgba(255,255,255,0.2);
-            transform: translateY(-2px);
-        }
-        /* Tarjetas de deporte */
-        .sport-card {
-            position: relative;
-            overflow: hidden;
-            border-radius: 1.5rem;
-            padding: 2rem 1.5rem;
-            transition: all 0.4s ease;
-            cursor: pointer;
-            background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .sport-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(37,99,235,0.2), rgba(124,58,237,0.1));
-            opacity: 0;
-            transition: opacity 0.4s;
-            border-radius: 1.5rem;
-        }
-        .sport-card:hover::before { opacity: 1; }
-        .sport-card .icon { font-size: 4rem; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2)); }
-        .sport-card .title { font-size: 1.8rem; font-weight: 800; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-        .sport-card .desc { color: rgba(255,255,255,0.7); font-size: 0.9rem; }
-        /* Ficha de partido (modal) mejorada */
-        .modal-glass {
-            background: rgba(15,23,42,0.8);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 2rem;
-            padding: 2rem;
-            max-width: 600px;
-            width: 92%;
-            max-height: 85vh;
-            overflow-y: auto;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
-        }
-        .modal-glass .close {
-            background: rgba(255,255,255,0.05);
-            border: none;
-            color: #94a3b8;
-            width: 40px;
-            height: 40px;
-            border-radius: 9999px;
-            font-size: 1.4rem;
+        .parpadeo { animation: parpadeo 1.2s infinite ease-in-out; }
+        @keyframes parpadeo { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+        .fade-in { animation: fadeIn 0.5s ease-out forwards; opacity: 0; }
+        @keyframes fadeIn { to { opacity: 1; } }
+        .diamante-base {
+            width: 14px; height: 14px; transform: rotate(45deg);
+            border: 1px solid #94a3b8; box-sizing: border-box;
             transition: all 0.2s;
         }
-        .modal-glass .close:hover { background: rgba(239,68,68,0.2); color: #ef4444; transform: rotate(90deg); }
-        /* Scoreboard */
-        .scoreboard {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 1rem;
-            background: rgba(0,0,0,0.2);
-            border-radius: 1rem;
+        .diamante-base.ocupada { background-color: #22c55e; border-color: #16a34a; box-shadow: 0 0 8px rgba(34,197,94,0.4); }
+        .diamante-base.vacia { background-color: #e2e8f0; border-color: #cbd5e1; }
+        .diamante-base.plato { background-color: #94a3b8; border-color: #64748b; }
+        .grid-entradas { display: grid; grid-template-columns: repeat(9, 1.6rem) 2rem 2rem 2rem; }
+        .grid-entradas > span {
+            text-align: center; display: flex; align-items: center; justify-content: center;
+            font-variant-numeric: tabular-nums;
         }
-        .scoreboard .team { font-weight: 700; font-size: 1.1rem; }
-        .scoreboard .score { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; }
-        .scoreboard .vs { font-size: 0.8rem; opacity: 0.5; }
-        /* Animación de entrada */
-        .fade-up {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeUp 0.6s ease forwards;
+        @media (max-width: 480px) {
+            .grid-entradas { grid-template-columns: repeat(9, 1.2rem) 1.6rem 1.6rem 1.6rem; font-size: 0.65rem; }
         }
-        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-        /* Scrollbar personalizada */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #2563eb; border-radius: 999px; }
-        /* Responsive */
-        @media (max-width: 640px) {
-            .sport-card .title { font-size: 1.4rem; }
-            .scoreboard .score { font-size: 1.6rem; }
+        .tabla-posiciones th {
+            background-color: #f1f5f9; font-weight: 600; padding: 6px 8px;
+            text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.5px;
         }
-        /* Tabs modernos */
-        .tab-modern {
-            padding: 0.5rem 1.2rem;
-            border-radius: 9999px;
-            font-weight: 600;
-            transition: all 0.3s;
-            background: transparent;
-            color: #94a3b8;
-            border: none;
-            cursor: pointer;
+        .tabla-posiciones td { padding: 6px 8px; border-bottom: 1px solid #e2e8f0; }
+        .tabla-posiciones tr:hover td { background-color: #f8fafc; }
+        .tabla-posiciones tr:last-child td { border-bottom: none; }
+        .division-titulo {
+            background: linear-gradient(to right, #e2e8f0, #f1f5f9); font-weight: 700;
+            padding: 6px 12px; margin-top: 12px; font-size: 0.8rem;
+            text-transform: uppercase; letter-spacing: 0.5px; border-radius: 4px;
         }
-        .tab-modern:hover { color: white; background: rgba(255,255,255,0.05); }
-        .tab-modern.active {
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            color: white;
-            box-shadow: 0 4px 15px rgba(37,99,235,0.3);
+        .division-titulo:first-of-type { margin-top: 0; }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background: #000; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
+        .spinner {
+            border: 4px solid rgba(0,0,0,0.1); border-left-color: #1a56db; border-radius: 50%;
+            width: 40px; height: 40px; animation: spin 0.8s linear infinite; margin: 20px auto;
         }
-        .dark .tab-modern { color: #94a3b8; }
-        .dark .tab-modern.active { color: white; }
-        /* Negocio / Partners */
-        .partner-logo {
-            filter: grayscale(1) brightness(0.8);
-            transition: all 0.3s;
-            opacity: 0.6;
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .dark .tabla-posiciones th { background-color: #1e293b; }
+        .dark .tabla-posiciones tr:hover td { background-color: #1e293b; }
+        .dark .division-titulo { background: linear-gradient(to right, #1e293b, #334155); color: #e2e8f0; }
+        .theme-toggle { cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem; }
+        .theme-toggle input { display: none; }
+        .theme-toggle .slider {
+            width: 40px; height: 22px; background: #cbd5e1; border-radius: 999px;
+            position: relative; transition: background 0.3s;
         }
-        .dark .partner-logo { filter: grayscale(1) brightness(0.5); }
-        .partner-logo:hover { filter: none; opacity: 1; }
-        /* Noticias */
-        .news-item {
-            border-left: 3px solid #2563eb;
-            padding-left: 1rem;
-            transition: all 0.2s;
+        .theme-toggle .slider::after {
+            content: ''; position: absolute; width: 18px; height: 18px; background: white;
+            border-radius: 50%; top: 2px; left: 2px; transition: transform 0.3s;
         }
-        .news-item:hover { border-left-color: #7c3aed; }
+        .dark .theme-toggle .slider { background: #1a56db; }
+        .dark .theme-toggle .slider::after { transform: translateX(18px); }
+        .tab-button {
+            padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer;
+            transition: all 0.2s; background: transparent; border: none; color: white;
+        }
+        .tab-button:hover { background: rgba(255,255,255,0.1); }
+        .tab-button.active { background: #1a56db; color: white; box-shadow: 0 4px 12px rgba(26,86,219,0.3); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .countdown { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+        .countdown-item { background: rgba(0,0,0,0.04); padding: 8px 16px; border-radius: 8px; text-align: center; min-width: 60px; }
+        .dark .countdown-item { background: rgba(255,255,255,0.05); }
+        .countdown-number { font-size: 1.8rem; font-weight: 700; display: block; }
+        .countdown-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; }
+        .match-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #e2e8f0; }
+        .dark .match-row { border-color: #334155; }
+        .match-row:last-child { border-bottom: none; }
+        .match-teams { display: flex; align-items: center; gap: 12px; }
+        .match-teams .vs { font-weight: 300; opacity: 0.6; }
+        .match-score { font-weight: 700; min-width: 60px; text-align: center; }
+        .match-status { font-size: 0.65rem; padding: 2px 10px; border-radius: 999px; }
+        .badge-vivo { background: #dc2626; color: white; }
+        .badge-final { background: #64748b; color: white; }
+        .badge-programado { background: #dbeafe; color: #1e40af; }
+        .dark .badge-programado { background: #1e293b; color: #93c5fd; }
+        .noticia-card { border-left: 4px solid #1a56db; padding-left: 12px; }
+        .noticia-card .fecha { font-size: 0.65rem; color: #64748b; }
+        .dark .noticia-card .fecha { color: #94a3b8; }
+        .noticia-card .titulo { font-weight: 600; font-size: 0.95rem; }
+        .noticia-card .resumen { font-size: 0.8rem; color: #475569; }
+        .dark .noticia-card .resumen { color: #cbd5e1; }
+        .cookie-banner {
+            position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(6px); color: white; padding: 12px 20px; text-align: center;
+            font-size: 0.85rem; z-index: 999; display: none; justify-content: center;
+            align-items: center; gap: 16px; flex-wrap: wrap;
+        }
+        .cookie-banner a { color: #93c5fd; text-decoration: underline; }
+        .cookie-banner button {
+            background: #1a56db; border: none; color: white; padding: 6px 18px;
+            border-radius: 999px; font-weight: 600; cursor: pointer; transition: background 0.2s;
+        }
+        .cookie-banner button:hover { background: #2563eb; }
+        .cookie-banner.show { display: flex; }
+        .nav-tabs {
+            display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 8px;
+            border-top: 1px solid rgba(255,255,255,0.2); padding-top: 8px;
+        }
+        @media (min-width: 640px) {
+            .nav-tabs { justify-content: flex-start; margin-top: 0; border-top: none; padding-top: 0; }
+        }
+        .ad-container { min-height: 90px; background: rgba(0,0,0,0.02); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #94a3b8; }
+        .dark .ad-container { background: rgba(255,255,255,0.02); }
     </style>
 </head>
-<body class="bg-gray-50 text-gris font-sans antialiased transition-colors duration-300 dark:bg-gray-900 dark:text-gray-200">
+<body class="bg-gray-50 text-gris font-sans min-h-screen transition-colors duration-300 dark:bg-gray-900 dark:text-gray-200">
 
-    <!-- Aviso Cookies (moderno) -->
-    <div id="cookieBanner" class="fixed bottom-0 left-0 right-0 z-[999] glass text-white p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm backdrop-blur-md border-t border-white/10" style="display:none;">
-        <span>🍪 Usamos cookies para mejorar tu experiencia. Al continuar, aceptas nuestra <a href="#" class="text-celeste underline hover:no-underline">política de privacidad</a>.</span>
-        <button onclick="aceptarCookies()" class="btn-primary text-sm py-1.5 px-6">Aceptar</button>
+    <!-- Aviso Cookies -->
+    <div id="cookieBanner" class="cookie-banner">
+        <span>🍪 Usamos cookies para mejorar tu experiencia. Al continuar, aceptas nuestra <a href="https://sportvive360.cyou/privacidad">política de privacidad</a>.</span>
+        <button onclick="aceptarCookies()">Aceptar</button>
     </div>
 
-    <!-- Cabecera con efecto vidrio -->
-    <header class="sticky top-0 z-50 glass border-b border-white/10 dark:border-gray-700/30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between flex-wrap gap-2">
-            <div class="flex items-center gap-2">
-                <span class="text-3xl">🏟️</span>
-                <h1 class="text-2xl font-extrabold tracking-tight gradient-text">SportVive360</h1>
-                <span class="hidden sm:inline text-xs bg-azul/20 text-azul px-2 py-0.5 rounded-full">2026</span>
-            </div>
-            <div class="flex items-center gap-4">
-                <nav class="hidden md:flex items-center gap-1 text-sm">
-                    <button class="tab-modern active" data-seccion="home">Inicio</button>
-                    <button class="tab-modern" data-seccion="mlb">⚾ MLB</button>
-                    <button class="tab-modern" data-seccion="futbol">⚽ Mundial</button>
-                    <button class="tab-modern" data-seccion="nba">🏀 NBA</button>
-                    <button class="tab-modern" data-seccion="envivo">🔴 En Vivo</button>
-                    <button class="tab-modern" data-seccion="noticias">📰 Noticias</button>
-                    <button class="tab-modern" data-seccion="negocio">💼 Negocio</button>
-                </nav>
-                <div class="flex items-center gap-2">
-                    <label class="theme-toggle cursor-pointer flex items-center gap-2 text-sm">
-                        <span class="hidden sm:inline">🌙</span>
-                        <input type="checkbox" id="themeCheckbox" class="hidden" />
-                        <span class="slider block w-10 h-5 bg-gray-300 dark:bg-azul rounded-full relative transition-colors duration-300">
-                            <span class="dot block w-4 h-4 bg-white rounded-full absolute top-0.5 left-0.5 transition-transform duration-300 dark:translate-x-5"></span>
-                        </span>
+    <!-- Cabecera -->
+    <header class="bg-mlbAzul text-white py-3 px-4 sticky top-0 z-50 shadow-lg transition-colors dark:bg-gray-800">
+        <div class="max-w-xl mx-auto">
+            <div class="flex items-center justify-between">
+                <h1 class="font-bold text-xl tracking-wide flex items-center gap-2">
+                    <span class="text-2xl">⚾</span> SportVive360
+                </h1>
+                <div class="flex items-center gap-4">
+                    <label class="theme-toggle" title="Cambiar tema">
+                        <span class="text-sm hidden sm:inline">🌙</span>
+                        <input type="checkbox" id="themeCheckbox">
+                        <span class="slider"></span>
                     </label>
-                    <button id="menuMobile" class="md:hidden text-2xl">☰</button>
                 </div>
             </div>
-        </div>
-        <!-- Menú móvil -->
-        <div id="mobileMenu" class="md:hidden glass border-t border-white/10 px-4 py-3 hidden flex-col gap-2 text-sm">
-            <button class="tab-modern active" data-seccion="home">Inicio</button>
-            <button class="tab-modern" data-seccion="mlb">⚾ MLB</button>
-            <button class="tab-modern" data-seccion="futbol">⚽ Mundial</button>
-            <button class="tab-modern" data-seccion="nba">🏀 NBA</button>
-            <button class="tab-modern" data-seccion="envivo">🔴 En Vivo</button>
-            <button class="tab-modern" data-seccion="noticias">📰 Noticias</button>
-            <button class="tab-modern" data-seccion="negocio">💼 Negocio</button>
+            <div class="nav-tabs">
+                <button class="tab-button active" data-tab="mlb">⚾ MLB</button>
+                <button class="tab-button" data-tab="futbol">⚽ Mundial 2026</button>
+                <button class="tab-button" data-tab="nba">🏀 NBA</button>
+            </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-        <!-- Indicador de actualización -->
-        <div class="flex flex-wrap items-center justify-between gap-2 mb-6 text-xs text-gray-500 dark:text-gray-400">
-            <div class="flex items-center gap-2">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                </span>
-                <span>Actualizado • Lima UTC‑5</span>
-                <span class="bg-white/30 dark:bg-gray-800/30 px-3 py-1 rounded-full backdrop-blur-sm">📡 En vivo: <span id="contadorVivo">0</span></span>
-            </div>
-            <span class="hidden sm:inline text-[0.6rem] uppercase tracking-wider opacity-50">⚡ Datos en tiempo real</span>
+    <main class="max-w-xl mx-auto px-3 py-4">
+        <div class="flex items-center justify-center gap-2 text-xs mb-4">
+            <span class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_6px_#22c55e]"></span>
+            <span class="dark:text-gray-400">Actualizado • Lima (UTC‑5)</span>
         </div>
 
-        <!-- ==================== HOME ==================== -->
-        <section id="seccion-home" class="tab-content active space-y-10">
-            <!-- Banner En Vivo Destacado (glass) -->
-            <div class="glass rounded-3xl p-6 md:p-8 relative overflow-hidden">
-                <div class="absolute inset-0 bg-gradient-to-br from-azul/20 to-purple-500/20 pointer-events-none"></div>
-                <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
-                            <span class="text-sm font-semibold uppercase tracking-wider text-red-400">En Vivo</span>
-                        </div>
-                        <h2 class="text-3xl font-extrabold text-white">Partidos destacados</h2>
-                        <p class="text-white/70 text-sm">Sigue la acción en tiempo real con estadísticas completas.</p>
-                    </div>
-                    <button class="btn-secondary" data-seccion="envivo">Ver todos →</button>
+        <!-- MLB -->
+        <div id="tab-mlb" class="tab-content active">
+            <section>
+                <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-5 dark:text-white">📋 Resultados & En vivo</h2>
+                <div class="flex items-center justify-center gap-2 bg-white dark:bg-gray-800 rounded-xl py-2 px-3 mb-6 border border-grisClaro dark:border-gray-700 shadow-sm">
+                    <button onclick="cambiarFecha(-1)" class="text-lg px-3 py-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">‹</button>
+                    <div id="selector-fechas" class="flex gap-2 text-sm font-medium"></div>
+                    <button onclick="cambiarFecha(1)" class="text-lg px-3 py-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">›</button>
                 </div>
-                <!-- Mini partidos en vivo (simulados con datos reales desde JS) -->
-                <div id="mini-vivo" class="relative z-10 mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div class="glass-card rounded-xl p-3 flex justify-between items-center">
-                        <div><span class="font-bold">NYY</span> <span class="text-xs opacity-50">vs</span> <span class="font-bold">BOS</span></div>
-                        <div class="text-center"><span class="text-lg font-bold">3-2</span><div class="text-xs opacity-50">7mo</div></div>
-                        <span class="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">VIVO</span>
-                    </div>
-                    <div class="glass-card rounded-xl p-3 flex justify-between items-center">
-                        <div><span class="font-bold">LAD</span> <span class="text-xs opacity-50">vs</span> <span class="font-bold">SF</span></div>
-                        <div class="text-center"><span class="text-lg font-bold">1-0</span><div class="text-xs opacity-50">4to</div></div>
-                        <span class="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">VIVO</span>
-                    </div>
-                    <div class="glass-card rounded-xl p-3 flex justify-between items-center">
-                        <div><span class="font-bold">MIA</span> <span class="text-xs opacity-50">vs</span> <span class="font-bold">ATL</span></div>
-                        <div class="text-center"><span class="text-lg font-bold">0-0</span><div class="text-xs opacity-50">1er</div></div>
-                        <span class="bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full">Próximo</span>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Accesos rápidos a deportes -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="sport-card gradient-bg" data-seccion="mlb" style="background: linear-gradient(135deg, #0f172a, #1e3a8a);">
-                    <div class="relative z-10">
-                        <div class="icon">⚾</div>
-                        <div class="title">MLB</div>
-                        <div class="desc">Resultados, posiciones y estadísticas en vivo</div>
-                        <button class="btn-secondary mt-3 text-sm">Explorar →</button>
-                    </div>
+                <!-- ==== ANUNCIO 1 ==== -->
+                <div class="my-6 ad-container">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-3765201153278683"
+                         data-ad-slot="7802021862"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-                <div class="sport-card" style="background: linear-gradient(135deg, #064e3b, #047857);">
-                    <div class="relative z-10">
-                        <div class="icon">⚽</div>
-                        <div class="title">Mundial 2026</div>
-                        <div class="desc">Calendario, grupos y resultados del torneo</div>
-                        <button class="btn-secondary mt-3 text-sm">Explorar →</button>
-                    </div>
-                </div>
-                <div class="sport-card" style="background: linear-gradient(135deg, #451a03, #92400e);">
-                    <div class="relative z-10">
-                        <div class="icon">🏀</div>
-                        <div class="title">NBA</div>
-                        <div class="desc">Temporada regular y playoffs</div>
-                        <button class="btn-secondary mt-3 text-sm">Explorar →</button>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Últimas Noticias + Negocio preview -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="lg:col-span-2 glass-card rounded-2xl p-6 space-y-4">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-xl font-bold">📰 Últimas Noticias</h3>
-                        <button class="text-sm text-azul hover:underline" data-seccion="noticias">Ver todas →</button>
-                    </div>
-                    <div class="space-y-3">
-                        <div class="news-item">
-                            <div class="text-xs text-gray-500 dark:text-gray-400">Hace 2h</div>
-                            <div class="font-semibold">Yankees aseguran serie ante Red Sox con victoria 5-3</div>
-                            <div class="text-sm text-gray-600 dark:text-gray-300">Aaron Judge conecta su 30mo jonrón de la temporada.</div>
-                        </div>
-                        <div class="news-item">
-                            <div class="text-xs text-gray-500 dark:text-gray-400">Hace 5h</div>
-                            <div class="font-semibold">Mundial 2026: Argentina y Brasil encabezan grupo de la muerte</div>
-                            <div class="text-sm text-gray-600 dark:text-gray-300">El sorteo deja enfrentamientos electrizantes.</div>
-                        </div>
-                        <div class="news-item">
-                            <div class="text-xs text-gray-500 dark:text-gray-400">Hace 8h</div>
-                            <div class="font-semibold">NBA: LeBron James anuncia su retiro al final de la temporada</div>
-                            <div class="text-sm text-gray-600 dark:text-gray-300">El legendario jugador de los Lakers se despedirá.</div>
+                <div id="lista-partidos" class="space-y-5 mb-10">
+                    <div class="flex justify-center py-10"><div class="spinner"></div></div>
+                </div>
+
+                <!-- Posiciones MLB -->
+                <div class="space-y-6">
+                    <!-- Liga Americana -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm card-hover">
+                        <h3 class="font-semibold text-mlbAzul dark:text-white text-lg mb-3 flex items-center gap-2">🏆 Liga Americana</h3>
+                        <div class="overflow-x-auto">
+                            <div class="division-titulo dark:bg-gray-700 dark:text-gray-300">ESTE</div>
+                            <table class="w-full text-xs tabla-posiciones dark:text-gray-300">
+                                <thead><tr><th class="text-left">Equipo</th><th class="text-center">G</th><th class="text-center">P</th><th class="text-center">PCT</th><th class="text-center">DIF</th><th class="text-center">DIFWC</th></tr></thead>
+                                <tbody>
+                                    <tr><td>New York Yankees</td><td class="text-center">45</td><td class="text-center">28</td><td class="text-center">.616</td><td class="text-center">-</td><td class="text-center">-</td></tr>
+                                    <tr><td>Tampa Bay Rays</td><td class="text-center">41</td><td class="text-center">30</td><td class="text-center">.577</td><td class="text-center">3.0</td><td class="text-center">+1.0</td></tr>
+                                    <tr><td>Toronto Blue Jays</td><td class="text-center">34</td><td class="text-center">38</td><td class="text-center">.472</td><td class="text-center">10.5</td><td class="text-center">6.5</td></tr>
+                                    <tr><td>Baltimore Orioles</td><td class="text-center">34</td><td class="text-center">39</td><td class="text-center">.466</td><td class="text-center">11.0</td><td class="text-center">7.0</td></tr>
+                                    <tr><td>Boston Red Sox</td><td class="text-center">29</td><td class="text-center">40</td><td class="text-center">.420</td><td class="text-center">14.0</td><td class="text-center">10.0</td></tr>
+                                </tbody>
+                            </table>
+                            <div class="division-titulo dark:bg-gray-700 dark:text-gray-300">CENTRAL</div>
+                            <table class="w-full text-xs tabla-posiciones dark:text-gray-300">
+                                <thead><tr><th class="text-left">Equipo</th><th class="text-center">G</th><th class="text-center">P</th><th class="text-center">PCT</th><th class="text-center">DIF</th><th class="text-center">DIFWC</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Chicago White Sox</td><td class="text-center">38</td><td class="text-center">32</td><td class="text-center">.543</td><td class="text-center">-</td><td class="text-center">-</td></tr>
+                                    <tr><td>Cleveland Guardians</td><td class="text-center">39</td><td class="text-center">33</td><td class="text-center">.542</td><td class="text-center">-</td><td class="text-center">-</td></tr>
+                                    <tr><td>Minnesota Twins</td><td class="text-center">34</td><td class="text-center">40</td><td class="text-center">.459</td><td class="text-center">6.0</td><td class="text-center">3.0</td></tr>
+                                    <tr><td>Detroit Tigers</td><td class="text-center">30</td><td class="text-center">42</td><td class="text-center">.417</td><td class="text-center">9.0</td><td class="text-center">6.0</td></tr>
+                                    <tr><td>Kansas City Royals</td><td class="text-center">29</td><td class="text-center">44</td><td class="text-center">.397</td><td class="text-center">10.5</td><td class="text-center">7.5</td></tr>
+                                </tbody>
+                            </table>
+                            <div class="division-titulo dark:bg-gray-700 dark:text-gray-300">OESTE</div>
+                            <table class="w-full text-xs tabla-posiciones dark:text-gray-300">
+                                <thead><tr><th class="text-left">Equipo</th><th class="text-center">G</th><th class="text-center">P</th><th class="text-center">PCT</th><th class="text-center">DIF</th><th class="text-center">DIFWC</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Seattle Mariners</td><td class="text-center">37</td><td class="text-center">36</td><td class="text-center">.507</td><td class="text-center">-</td><td class="text-center">-</td></tr>
+                                    <tr><td>Athletics</td><td class="text-center">36</td><td class="text-center">36</td><td class="text-center">.500</td><td class="text-center">0.5</td><td class="text-center">-</td></tr>
+                                    <tr><td>Texas Rangers</td><td class="text-center">35</td><td class="text-center">37</td><td class="text-center">.486</td><td class="text-center">1.5</td><td class="text-center">1.0</td></tr>
+                                    <tr><td>Houston Astros</td><td class="text-center">33</td><td class="text-center">41</td><td class="text-center">.446</td><td class="text-center">4.5</td><td class="text-center">4.0</td></tr>
+                                    <tr><td>Los Angeles Angels</td><td class="text-center">29</td><td class="text-center">44</td><td class="text-center">.397</td><td class="text-center">8.0</td><td class="text-center">7.5</td></tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
+                    <!-- Liga Nacional -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm card-hover">
+                        <h3 class="font-semibold text-mlbAzul dark:text-white text-lg mb-3 flex items-center gap-2">🏆 Liga Nacional</h3>
+                        <div class="overflow-x-auto">
+                            <div class="division-titulo dark:bg-gray-700 dark:text-gray-300">ESTE</div>
+                            <table class="w-full text-xs tabla-posiciones dark:text-gray-300">
+                                <thead><tr><th class="text-left">Equipo</th><th class="text-center">G</th><th class="text-center">P</th><th class="text-center">PCT</th><th class="text-center">DIF</th><th class="text-center">DIFWC</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Atlanta Braves</td><td class="text-center">46</td><td class="text-center">25</td><td class="text-center">.648</td><td class="text-center">-</td><td class="text-center">-</td></tr>
+                                    <tr><td>Philadelphia Phillies</td><td class="text-center">40</td><td class="text-center">34</td><td class="text-center">.541</td><td class="text-center">7.5</td><td class="text-center">+0.5</td></tr>
+                                    <tr><td>Washington Nationals</td><td class="text-center">38</td><td class="text-center">37</td><td class="text-center">.507</td><td class="text-center">10.0</td><td class="text-center">2.0</td></tr>
+                                    <tr><td>Miami Marlins</td><td class="text-center">36</td><td class="text-center">39</td><td class="text-center">.480</td><td class="text-center">12.0</td><td class="text-center">4.0</td></tr>
+                                    <tr><td>New York Mets</td><td class="text-center">34</td><td class="text-center">41</td><td class="text-center">.453</td><td class="text-center">14.0</td><td class="text-center">6.0</td></tr>
+                                </tbody>
+                            </table>
+                            <div class="division-titulo dark:bg-gray-700 dark:text-gray-300">CENTRAL</div>
+                            <table class="w-full text-xs tabla-posiciones dark:text-gray-300">
+                                <thead><tr><th class="text-left">Equipo</th><th class="text-center">G</th><th class="text-center">P</th><th class="text-center">PCT</th><th class="text-center">DIF</th><th class="text-center">DIFWC</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Milwaukee Brewers</td><td class="text-center">42</td><td class="text-center">31</td><td class="text-center">.575</td><td class="text-center">-</td><td class="text-center">-</td></tr>
+                                    <tr><td>Chicago Cubs</td><td class="text-center">36</td><td class="text-center">37</td><td class="text-center">.493</td><td class="text-center">6.0</td><td class="text-center">2.5</td></tr>
+                                    <tr><td>Cincinnati Reds</td><td class="text-center">36</td><td class="text-center">38</td><td class="text-center">.486</td><td class="text-center">6.5</td><td class="text-center">3.0</td></tr>
+                                    <tr><td>St. Louis Cardinals</td><td class="text-center">34</td><td class="text-center">40</td><td class="text-center">.459</td><td class="text-center">9.0</td><td class="text-center">5.5</td></tr>
+                                    <tr><td>Pittsburgh Pirates</td><td class="text-center">31</td><td class="text-center">43</td><td class="text-center">.419</td><td class="text-center">12.0</td><td class="text-center">8.5</td></tr>
+                                </tbody>
+                            </table>
+                            <div class="division-titulo dark:bg-gray-700 dark:text-gray-300">OESTE</div>
+                            <table class="w-full text-xs tabla-posiciones dark:text-gray-300">
+                                <thead><tr><th class="text-left">Equipo</th><th class="text-center">G</th><th class="text-center">P</th><th class="text-center">PCT</th><th class="text-center">DIF</th><th class="text-center">DIFWC</th></tr></thead>
+                                <tbody>
+                                    <tr><td>Los Angeles Dodgers</td><td class="text-center">44</td><td class="text-center">30</td><td class="text-center">.595</td><td class="text-center">-</td><td class="text-center">-</td></tr>
+                                    <tr><td>San Diego Padres</td><td class="text-center">39</td><td class="text-center">35</td><td class="text-center">.527</td><td class="text-center">5.0</td><td class="text-center">+1.0</td></tr>
+                                    <tr><td>Arizona Diamondbacks</td><td class="text-center">37</td><td class="text-center">36</td><td class="text-center">.507</td><td class="text-center">6.5</td><td class="text-center">2.5</td></tr>
+                                    <tr><td>San Francisco Giants</td><td class="text-center">33</td><td class="text-center">41</td><td class="text-center">.446</td><td class="text-center">11.0</td><td class="text-center">7.0</td></tr>
+                                    <tr><td>Colorado Rockies</td><td class="text-center">27</td><td class="text-center">47</td><td class="text-center">.365</td><td class="text-center">17.0</td><td class="text-center">13.0</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="glass-card rounded-2xl p-6 flex flex-col items-center text-center">
-                    <div class="text-4xl mb-2">💼</div>
-                    <h4 class="font-bold text-lg">¿Quieres anunciarte?</h4>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Llega a miles de aficionados al deporte cada día.</p>
-                    <button class="btn-primary mt-4 text-sm" data-seccion="negocio">Ver planes</button>
-                </div>
-            </div>
 
-            <!-- Anuncio -->
-            <div class="ad-container glass-card rounded-2xl p-4 text-center text-gray-400 text-sm">
-                <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3765201153278683" data-ad-slot="7802021862" data-ad-format="auto" data-full-width-responsive="true"></ins>
-                <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-            </div>
-        </section>
+                <!-- ==== ANUNCIO 2 ==== -->
+                <div class="my-8 ad-container">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-3765201153278683"
+                         data-ad-slot="7802021862"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+                </div>
 
-        <!-- ==================== MLB ==================== -->
-        <section id="seccion-mlb" class="tab-content space-y-6">
-            <div class="flex flex-wrap items-center justify-between gap-4">
-                <h2 class="text-3xl font-extrabold gradient-text">⚾ MLB</h2>
-                <div class="flex items-center gap-2 bg-white/30 dark:bg-gray-800/30 rounded-full p-1 backdrop-blur-sm">
-                    <button onclick="cambiarFecha(-1)" class="px-3 py-1 rounded-full hover:bg-white/20">‹</button>
-                    <div id="selector-fechas" class="flex gap-1 text-sm font-medium"></div>
-                    <button onclick="cambiarFecha(1)" class="px-3 py-1 rounded-full hover:bg-white/20">›</button>
+                <!-- VIDEOS -->
+                <div class="mt-10">
+                    <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-5 dark:text-white">🎥 Destacados MLB</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-grisClaro dark:border-gray-700 overflow-hidden card-hover">
+                            <div class="video-wrapper">
+                                <iframe src="https://www.youtube.com/embed/P5hOMfdFv8Y?si=_yl2u_0CiEAscwFq" title="MLB Highlights 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+                            </div>
+                            <div class="p-3">
+                                <p class="text-sm font-semibold dark:text-white">⚾ Resumen de la jornada</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Las mejores jugadas del día en la MLB.</p>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-grisClaro dark:border-gray-700 overflow-hidden card-hover">
+                            <div class="video-wrapper">
+                                <iframe src="https://www.youtube.com/embed/f5YBfDI-CnM?si=i3OMDqU2aEP7LdrM" title="MLB Highlights 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
+                            </div>
+                            <div class="p-3">
+                                <p class="text-sm font-semibold dark:text-white">⚾ Mejores jugadas de la semana</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Los momentos más espectaculares de la semana.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div id="lista-partidos-mlb" class="space-y-5">
-                <div class="flex justify-center py-10"><div class="spinner"></div></div>
-            </div>
-            <!-- Posiciones (simplificadas pero con estilo) -->
-            <div class="glass-card rounded-2xl p-6">
-                <h3 class="text-xl font-bold mb-4">🏆 Tabla de Posiciones</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm tabla-posiciones">
-                        <thead><tr><th class="text-left">Equipo</th><th class="text-center">G</th><th class="text-center">P</th><th class="text-center">PCT</th></tr></thead>
-                        <tbody>
-                            <tr><td>New York Yankees</td><td class="text-center">45</td><td class="text-center">28</td><td class="text-center">.616</td></tr>
-                            <tr><td>Los Angeles Dodgers</td><td class="text-center">44</td><td class="text-center">30</td><td class="text-center">.595</td></tr>
-                            <tr><td>Atlanta Braves</td><td class="text-center">46</td><td class="text-center">25</td><td class="text-center">.648</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
+            </section>
+        </div>
 
-        <!-- ==================== MUNDIAL ==================== -->
-        <section id="seccion-futbol" class="tab-content space-y-6">
-            <h2 class="text-3xl font-extrabold gradient-text">⚽ Mundial 2026</h2>
-            <div class="glass-card rounded-2xl p-6">
-                <div class="countdown flex gap-4 justify-center flex-wrap mb-4">
-                    <div class="countdown-item glass-card rounded-xl px-4 py-2 text-center"><span class="countdown-number text-3xl font-bold" id="dias">--</span><div class="text-xs opacity-50">días</div></div>
-                    <div class="countdown-item glass-card rounded-xl px-4 py-2 text-center"><span class="countdown-number text-3xl font-bold" id="horas">--</span><div class="text-xs opacity-50">horas</div></div>
-                    <div class="countdown-item glass-card rounded-xl px-4 py-2 text-center"><span class="countdown-number text-3xl font-bold" id="minutos">--</span><div class="text-xs opacity-50">min</div></div>
-                    <div class="countdown-item glass-card rounded-xl px-4 py-2 text-center"><span class="countdown-number text-3xl font-bold" id="segundos">--</span><div class="text-xs opacity-50">seg</div></div>
-                </div>
-                <p class="text-center text-sm text-gray-500 dark:text-gray-400">Inicio: 11 de junio de 2026 • EE.UU., México y Canadá</p>
-                <div id="lista-mundial" class="mt-6 space-y-3">
-                    <p class="text-center py-6">Cargando partidos…</p>
-                </div>
-            </div>
-        </section>
+        <!-- Mundial 2026 -->
+        <div id="tab-futbol" class="tab-content">
+            <section>
+                <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-5 dark:text-white">⚽ Mundial 2026 • Calendario & Resultados</h2>
 
-        <!-- ==================== NBA ==================== -->
-        <section id="seccion-nba" class="tab-content space-y-6">
-            <h2 class="text-3xl font-extrabold gradient-text">🏀 NBA</h2>
-            <div id="lista-nba" class="space-y-5">
-                <div class="flex justify-center py-10"><div class="spinner"></div></div>
-            </div>
-        </section>
+                <!-- ==== ANUNCIO 3 ==== -->
+                <div class="my-6 ad-container">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-3765201153278683"
+                         data-ad-slot="7802021862"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+                </div>
 
-        <!-- ==================== EN VIVO ==================== -->
-        <section id="seccion-envivo" class="tab-content space-y-6">
-            <h2 class="text-3xl font-extrabold gradient-text">🔴 En Vivo</h2>
-            <div id="lista-envivo" class="space-y-5">
-                <div class="flex justify-center py-10"><div class="spinner"></div></div>
-            </div>
-        </section>
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-grisClaro dark:border-gray-700">
+                    <div class="countdown mb-6">
+                        <div class="countdown-item"><span class="countdown-number" id="dias">--</span><span class="countdown-label">días</span></div>
+                        <div class="countdown-item"><span class="countdown-number" id="horas">--</span><span class="countdown-label">horas</span></div>
+                        <div class="countdown-item"><span class="countdown-number" id="minutos">--</span><span class="countdown-label">min</span></div>
+                        <div class="countdown-item"><span class="countdown-number" id="segundos">--</span><span class="countdown-label">seg</span></div>
+                    </div>
+                    <p class="text-center text-sm text-gray-600 dark:text-gray-400">Inicio: 11 de junio de 2026 • EE.UU., México y Canadá</p>
+                    <div id="lista-mundial" class="mt-6 space-y-3">
+                        <p class="text-center py-6">Cargando partidos…</p>
+                    </div>
+                </div>
+            </section>
+        </div>
 
-        <!-- ==================== NOTICIAS ==================== -->
-        <section id="seccion-noticias" class="tab-content space-y-6">
-            <h2 class="text-3xl font-extrabold gradient-text">📰 Noticias</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="glass-card rounded-2xl p-5 space-y-2">
-                    <div class="text-xs text-gray-500">15 jun 2026</div>
-                    <h3 class="font-bold text-lg">Ohtani conecta su jonrón número 40 y lidera a los Dodgers</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-300">El japonés sigue rompiendo récords y se perfila como MVP.</p>
-                    <button class="text-sm text-azul hover:underline">Leer más →</button>
-                </div>
-                <div class="glass-card rounded-2xl p-5 space-y-2">
-                    <div class="text-xs text-gray-500">14 jun 2026</div>
-                    <h3 class="font-bold text-lg">Mundial 2026: sorteo define grupos emocionantes</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-300">Argentina, Brasil, Alemania y Francia en grupos muy parejos.</p>
-                    <button class="text-sm text-azul hover:underline">Leer más →</button>
-                </div>
-                <div class="glass-card rounded-2xl p-5 space-y-2">
-                    <div class="text-xs text-gray-500">13 jun 2026</div>
-                    <h3 class="font-bold text-lg">NBA: LeBron James anuncia su retiro al final de la temporada</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-300">El legendario jugador de los Lakers se despedirá del baloncesto.</p>
-                    <button class="text-sm text-azul hover:underline">Leer más →</button>
-                </div>
-                <div class="glass-card rounded-2xl p-5 space-y-2">
-                    <div class="text-xs text-gray-500">12 jun 2026</div>
-                    <h3 class="font-bold text-lg">MLB: Yankees y Mets se enfrentan en la Serie de la Ciudad</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-300">La rivalidad neoyorquina llega a su punto máximo.</p>
-                    <button class="text-sm text-azul hover:underline">Leer más →</button>
-                </div>
-            </div>
-        </section>
+        <!-- NBA -->
+        <div id="tab-nba" class="tab-content">
+            <section>
+                <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-5 dark:text-white">🏀 NBA • Temporada Regular</h2>
 
-        <!-- ==================== NEGOCIO ==================== -->
-        <section id="seccion-negocio" class="tab-content space-y-8">
-            <h2 class="text-3xl font-extrabold gradient-text">💼 SportVive360 Business</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="glass-card rounded-2xl p-6 text-center">
-                    <div class="text-5xl mb-3">📈</div>
-                    <h3 class="font-bold text-xl">Audiencia Masiva</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">+500k usuarios mensuales apasionados por el deporte.</p>
+                <!-- ==== ANUNCIO 4 ==== -->
+                <div class="my-6 ad-container">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-3765201153278683"
+                         data-ad-slot="7802021862"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
                 </div>
-                <div class="glass-card rounded-2xl p-6 text-center border-2 border-azul/30">
-                    <div class="text-5xl mb-3">🎯</div>
-                    <h3 class="font-bold text-xl">Segmentación precisa</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Llega a aficionados de MLB, fútbol y NBA con mensajes personalizados.</p>
-                </div>
-                <div class="glass-card rounded-2xl p-6 text-center">
-                    <div class="text-5xl mb-3">🤝</div>
-                    <h3 class="font-bold text-xl">Alianzas Estratégicas</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Colabora con nosotros para potenciar tu marca.</p>
-                </div>
-            </div>
-            <div class="glass-card rounded-2xl p-6">
-                <h3 class="font-bold text-xl mb-4">Nuestros Partners</h3>
-                <div class="flex flex-wrap gap-6 items-center justify-center">
-                    <img src="https://via.placeholder.com/120x60?text=Partner+1" alt="Partner" class="partner-logo h-12" />
-                    <img src="https://via.placeholder.com/120x60?text=Partner+2" alt="Partner" class="partner-logo h-12" />
-                    <img src="https://via.placeholder.com/120x60?text=Partner+3" alt="Partner" class="partner-logo h-12" />
-                    <img src="https://via.placeholder.com/120x60?text=Partner+4" alt="Partner" class="partner-logo h-12" />
-                </div>
-            </div>
-            <div class="glass-card rounded-2xl p-6 text-center">
-                <h3 class="font-bold text-xl">¿Quieres anunciarte con nosotros?</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Descubre nuestros planes de publicidad y patrocinio.</p>
-                <button class="btn-primary">Contactar ahora</button>
-            </div>
-        </section>
 
+                <div id="lista-nba" class="space-y-5">
+                    <div class="flex justify-center py-10"><div class="spinner"></div></div>
+                </div>
+            </section>
+        </div>
     </main>
 
-    <!-- Footer mejorado -->
-    <footer class="glass border-t border-white/10 dark:border-gray-700/30 mt-12 py-10">
-        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8 text-sm">
-            <div>
-                <h4 class="font-bold text-lg gradient-text">SportVive360</h4>
-                <p class="text-gray-500 dark:text-gray-400 mt-2">Tu portal deportivo con cobertura en vivo de MLB, Mundial 2026 y NBA. Datos actualizados desde Lima, Perú.</p>
-                <div class="flex gap-3 mt-4">
-                    <a href="#" class="text-gray-400 hover:text-azul transition"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.56a9.83 9.83 0 01-2.83.78 4.92 4.92 0 002.16-2.72 9.82 9.82 0 01-3.13 1.19 4.92 4.92 0 00-8.38 4.48A13.94 13.94 0 011.67 3.15a4.9 4.9 0 001.52 6.56A4.88 4.88 0 01.96 9.1v.06a4.92 4.92 0 003.94 4.82 4.93 4.93 0 01-2.22.08 4.93 4.93 0 004.6 3.42 9.88 9.88 0 01-6.1 2.1c-.39 0-.78-.02-1.16-.07a13.92 13.92 0 007.55 2.21c9.06 0 14.01-7.5 14.01-14 0-.21 0-.42-.02-.63A10.02 10.02 0 0024 4.56z"/></svg></a>
-                    <a href="#" class="text-gray-400 hover:text-azul transition"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 01-1.93.07 4.28 4.28 0 004 2.98 8.52 8.52 0 01-5.33 1.84c-.34 0-.68-.02-1.02-.06A12.08 12.08 0 007.29 21c8.75 0 13.54-7.25 13.54-13.54 0-.21 0-.41-.01-.62A9.68 9.68 0 0022.46 6z"/></svg></a>
-                    <a href="#" class="text-gray-400 hover:text-azul transition"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg></a>
-                </div>
-            </div>
-            <div>
-                <h5 class="font-semibold mb-2">Deportes</h5>
-                <ul class="space-y-1 text-gray-500 dark:text-gray-400">
-                    <li><button class="hover:text-azul" data-seccion="mlb">MLB</button></li>
-                    <li><button class="hover:text-azul" data-seccion="futbol">Mundial 2026</button></li>
-                    <li><button class="hover:text-azul" data-seccion="nba">NBA</button></li>
-                </ul>
-            </div>
-            <div>
-                <h5 class="font-semibold mb-2">Información</h5>
-                <ul class="space-y-1 text-gray-500 dark:text-gray-400">
-                    <li><a href="#" class="hover:text-azul">Política de privacidad</a></li>
-                    <li><a href="#" class="hover:text-azul">Términos de uso</a></li>
-                    <li><a href="#" class="hover:text-azul">Contacto</a></li>
-                </ul>
-            </div>
-            <div>
-                <h5 class="font-semibold mb-2">Horario</h5>
-                <p class="text-gray-500 dark:text-gray-400">Actualización continua<br />Lima UTC-5</p>
-                <p class="mt-2 text-xs text-gray-400">Datos proporcionados por MLB API y fuentes oficiales.</p>
-            </div>
-        </div>
-        <div class="max-w-7xl mx-auto px-4 mt-8 pt-4 border-t border-white/10 dark:border-gray-700/30 text-center text-xs text-gray-400">
-            © 2026 SportVive360. Todos los derechos reservados.
-        </div>
+    <!-- Pie -->
+    <footer class="bg-white dark:bg-gray-800 border-t border-grisClaro dark:border-gray-700 py-6 mt-12 text-center text-xs text-gray-600 dark:text-gray-400">
+        <p>© 2026 <strong>SportVive360</strong> • Datos MLB API pública • Actualizado Lima UTC‑5</p>
+        <p class="mt-2"><a href="https://sportvive360.cyou/privacidad" class="hover:underline">Política de privacidad</a></p>
     </footer>
 
-    <!-- Modal de ficha de partido (mejorado) -->
-    <div id="modalPartido" class="fixed inset-0 z-[999] flex items-center justify-center p-4" style="display:none;">
-        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="cerrarModal()"></div>
-        <div class="modal-glass relative">
-            <button class="close absolute top-4 right-4" onclick="cerrarModal()">✕</button>
-            <div id="modalContenido">
-                <div class="flex justify-center py-10"><div class="spinner"></div></div>
-            </div>
-        </div>
-    </div>
-
+    <!-- Scripts -->
     <script>
-        // ========== NAVEGACIÓN MEJORADA ==========
-        const secciones = ['home','mlb','futbol','nba','envivo','noticias','negocio'];
-        document.querySelectorAll('[data-seccion]').forEach(el => {
-            el.addEventListener('click', (e) => {
-                e.preventDefault();
-                const sec = el.dataset.seccion;
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                const target = document.getElementById('seccion-'+sec);
-                if (target) target.classList.add('active');
-                document.querySelectorAll('.tab-modern').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll(`.tab-modern[data-seccion="${sec}"]`).forEach(b => b.classList.add('active'));
-                document.getElementById('mobileMenu')?.classList.add('hidden');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-        });
-
-        // ========== TEMA OSCURO ==========
-        const chk = document.getElementById('themeCheckbox');
-        if (localStorage.getItem('tema') === 'dark' || (!localStorage.getItem('tema') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-            chk.checked = true;
-        }
-        chk.addEventListener('change', () => {
-            document.documentElement.classList.toggle('dark');
-            localStorage.setItem('tema', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-        });
-
-        // ========== COOKIES ==========
-        function aceptarCookies() {
-            document.getElementById('cookieBanner').style.display = 'none';
-            localStorage.setItem('cookiesAceptadas', 'si');
-        }
-        if (!localStorage.getItem('cookiesAceptadas')) {
-            document.getElementById('cookieBanner').style.display = 'flex';
-        }
-
-        // ========== MENÚ MÓVIL ==========
-        document.getElementById('menuMobile').addEventListener('click', function() {
-            document.getElementById('mobileMenu').classList.toggle('hidden');
-        });
-
-        // ========== CUENTA ATRÁS MUNDIAL ==========
-        function actualizarCuentaAtras() {
-            const inicio = new Date('2026-06-11T00:00:00-05:00').getTime();
-            const ahora = Date.now();
-            let diff = Math.max(0, inicio - ahora);
-            document.getElementById('dias').textContent = String(Math.floor(diff / (1000*60*60*24))).padStart(2,'0');
-            document.getElementById('horas').textContent = String(Math.floor((diff % (1000*60*60*24)) / (1000*60*60))).padStart(2,'0');
-            document.getElementById('minutos').textContent = String(Math.floor((diff % (1000*60*60)) / (1000*60))).padStart(2,'0');
-            document.getElementById('segundos').textContent = String(Math.floor((diff % (1000*60)) / 1000)).padStart(2,'0');
-        }
-        actualizarCuentaAtras();
-        setInterval(actualizarCuentaAtras, 1000);
-
-        // ========== MLB ==========
-        const ZONA_UTC = -5;
-        let fechaActual = new Date();
-        function iso(d) { return d.toISOString().split('T')[0]; }
-        function textoFecha(d) {
-            const dias = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-            const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-            return `${dias[d.getDay()]} ${d.getDate()} ${meses[d.getMonth()]}`;
-        }
-        function cambiarFecha(n) { fechaActual.setDate(fechaActual.getDate()+n); mostrarFechas(); cargarMLB(iso(fechaActual)); }
-        function irFecha(s) { fechaActual = new Date(s+'T00:00:00'); mostrarFechas(); cargarMLB(s); }
-        function mostrarFechas() {
-            const cont = document.getElementById('selector-fechas');
-            let h = '';
-            for (let i=-1; i<=1; i++) {
-                let f = new Date(fechaActual); f.setDate(f.getDate()+i);
-                const act = iso(f) === iso(fechaActual);
-                h += `<span class="px-3 py-1 rounded-full cursor-pointer ${act ? 'bg-azul text-white' : 'hover:bg-white/20'}" onclick="irFecha('${iso(f)}')">${textoFecha(f)}</span>`;
-            }
-            cont.innerHTML = h;
-        }
-
-        function leerEntradas(ls, visitante) {
-            const inn = ls?.innings || [];
-            const fila = [];
-            for (let i=0; i<9; i++) {
-                const x = inn[i];
-                fila.push(x ? (visitante ? x.away?.runs : x.home?.runs) ?? '-' : '-');
-            }
-            const tot = ls?.teams?.[visitante ? 'away' : 'home'] || {};
-            return { fila, C: tot.runs ?? '‑', H: tot.hits ?? '‑', E: tot.errors ?? '‑' };
-        }
-
-        function dibujarBases(off) {
-            const b1 = !!off?.first, b2 = !!off?.second, b3 = !!off?.third;
-            return `
-            <div class="relative w-16 h-16 mx-auto">
-                <div class="diamante-base absolute top-0 left-1/2 -translate-x-1/2 ${b2?'ocupada':'vacia'}"></div>
-                <div class="diamante-base absolute bottom-1/2 right-0 translate-y-1/2 ${b1?'ocupada':'vacia'}"></div>
-                <div class="diamante-base absolute bottom-1/2 left-0 translate-y-1/2 ${b3?'ocupada':'vacia'}"></div>
-                <div class="diamante-base absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 plato"></div>
-            </div>`;
-        }
-
-        async function cargarMLB(fecha) {
-            const cont = document.getElementById('lista-partidos-mlb');
-            try {
-                const res = await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${fecha}&language=es&hydrate=linescore,probablePitchers,status,linescore.offense,boxscore`);
-                const datos = await res.json();
-                const juegos = datos.dates?.[0]?.games || [];
-                if (!juegos.length) { cont.innerHTML = '<p class="text-center py-8 text-gray-400">Sin partidos</p>'; return; }
-                let html = '';
-                for (const p of juegos) {
-                    const a = p.teams.away, h = p.teams.home;
-                    const estado = p.status;
-                    const vivo = estado.abstractGameState === 'Live';
-                    const final = estado.abstractGameState === 'Final';
-                    const horaLocal = new Date(new Date(p.gameDate).getTime() + ZONA_UTC*3600000).toLocaleTimeString('es-PE', {hour:'2-digit',minute:'2-digit'});
-                    const ls = p.linescore || {};
-                    const v = leerEntradas(ls, true), l = leerEntradas(ls, false);
-                    let lanzA = p.probablePitchers?.away || {}, lanzH = p.probablePitchers?.home || {};
-                    if (!lanzA.fullName) lanzA.fullName = final ? 'Finalizado' : 'Por confirmar';
-                    if (!lanzH.fullName) lanzH.fullName = final ? 'Finalizado' : 'Por confirmar';
-                    const marcador = final ? `${v.C}‑${l.C}` : vivo ? `${v.C}‑${l.C}` : horaLocal;
-                    const claseVivo = vivo ? 'vivo' : (final ? 'final' : '');
-                    html += `
-                    <div class="glass-card rounded-2xl p-5 card-match ${claseVivo} relative cursor-pointer" onclick="verFichaPartido('${p.gamePk}')">
-                        ${vivo ? `<span class="absolute top-3 right-3 bg-red-500 text-white text-[0.65rem] px-2 py-0.5 rounded-full flex items-center gap-1"><span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>EN VIVO</span>` : ''}
-                        ${final ? `<span class="absolute top-3 right-3 bg-gray-500 text-white text-[0.65rem] px-2 py-0.5 rounded-full">FINAL</span>` : ''}
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex items-center gap-2">
-                                <img src="https://www.mlbstatic.com/team-logos/${a.team.id}.svg" class="w-10 h-10" alt="${a.team.name}" loading="lazy" />
-                                <div><div class="font-bold">${a.team.name}</div><div class="text-xs opacity-60">${a.leagueRecord.wins}-${a.leagueRecord.losses}</div></div>
-                            </div>
-                            <div class="text-3xl font-extrabold">${marcador}</div>
-                            <div class="flex items-center gap-2 flex-row-reverse">
-                                <img src="https://www.mlbstatic.com/team-logos/${h.team.id}.svg" class="w-10 h-10" alt="${h.team.name}" loading="lazy" />
-                                <div><div class="font-bold">${h.team.name}</div><div class="text-xs opacity-60">${h.leagueRecord.wins}-${h.leagueRecord.losses}</div></div>
-                            </div>
-                        </div>
-                        <div class="overflow-x-auto text-xs">
-                            <div class="grid grid-entradas gap-x-1 text-center font-medium opacity-60">
-                                ${[1,2,3,4,5,6,7,8,9].map(n=>`<span>${n}</span>`).join('')}
-                                <span class="border-l border-white/20">C</span><span>H</span><span>E</span>
-                            </div>
-                            <div class="grid grid-entradas gap-x-1 text-center py-1 border-t border-white/10 mt-1">
-                                ${v.fila.map(x=>`<span>${x}</span>`).join('')}
-                                <span class="font-bold border-l border-white/20">${v.C}</span><span>${v.H}</span><span>${v.E}</span>
-                            </div>
-                            <div class="grid grid-entradas gap-x-1 text-center py-1">
-                                ${l.fila.map(x=>`<span>${x}</span>`).join('')}
-                                <span class="font-bold border-l border-white/20">${l.C}</span><span>${l.H}</span><span>${l.E}</span>
-                            </div>
-                        </div>
-                        ${vivo ? `<div class="mt-3 flex justify-around text-xs bg-black/20 rounded-lg py-2">${dibujarBases(ls.offense)}<span>B ${ls.balls} • S ${ls.strikes} • O ${ls.outs}</span></div>` : ''}
-                        <div class="mt-3 text-center text-xs text-azul hover:underline">Ver ficha completa →</div>
-                    </div>`;
-                }
-                cont.innerHTML = html;
-            } catch(e) {
-                cont.innerHTML = `<p class="text-center text-red-400">Error: ${e.message}</p>`;
-            }
-        }
-
-        // ========== NBA ==========
-        async function cargarNBA() {
-            const cont = document.getElementById('lista-nba');
-            try {
-                const res = await fetch('https://www.balldontlie.io/api/v1/games?dates[]=' + iso(new Date()));
-                const d = await res.json();
-                if (!d.data.length) { cont.innerHTML = '<p class="text-center py-8 text-gray-400">Sin partidos hoy</p>'; return; }
-                let html = '';
-                for (const g of d.data) {
-                    html += `
-                    <div class="glass-card rounded-2xl p-5">
-                        <div class="flex justify-between items-center">
-                            <div class="text-center flex-1">
-                                <div class="font-bold">${g.home_team.name}</div>
-                                <div class="text-3xl font-extrabold">${g.home_team_score}</div>
-                            </div>
-                            <div class="px-4 text-xs opacity-50">VS</div>
-                            <div class="text-center flex-1">
-                                <div class="font-bold">${g.visitor_team.name}</div>
-                                <div class="text-3xl font-extrabold">${g.visitor_team_score}</div>
-                            </div>
-                        </div>
-                        <div class="text-center text-xs mt-2 opacity-50">${g.status}</div>
-                    </div>`;
-                }
-                cont.innerHTML = html;
-            } catch(e) {
-                cont.innerHTML = `<p class="text-center text-red-400">Error NBA</p>`;
-            }
-        }
-
-        // ========== EN VIVO ==========
-        async function cargarEnVivo() {
-            const cont = document.getElementById('lista-envivo');
-            try {
-                const res = await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${iso(new Date())}&language=es&hydrate=linescore,status`);
-                const datos = await res.json();
-                const juegos = datos.dates?.[0]?.games || [];
-                const vivos = juegos.filter(p => p.status.abstractGameState === 'Live');
-                if (!vivos.length) { cont.innerHTML = '<p class="text-center py-8 text-gray-400">No hay partidos en vivo</p>'; document.getElementById('contadorVivo').textContent = '0'; return; }
-                let html = '';
-                for (const p of vivos) {
-                    const a = p.teams.away, h = p.teams.home;
-                    const ls = p.linescore || {};
-                    const v = leerEntradas(ls, true), l = leerEntradas(ls, false);
-                    html += `
-                    <div class="glass-card rounded-2xl p-5 border-l-4 border-red-500">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-3">
-                                <img src="https://www.mlbstatic.com/team-logos/${a.team.id}.svg" class="w-10 h-10" alt="${a.team.name}" />
-                                <div><span class="font-bold">${a.team.name}</span> <span class="text-2xl font-bold">${v.C}</span></div>
-                            </div>
-                            <span class="bg-red-500 text-white text-xs px-3 py-1 rounded-full flex items-center gap-1"><span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span> VIVO</span>
-                            <div class="flex items-center gap-3 flex-row-reverse">
-                                <img src="https://www.mlbstatic.com/team-logos/${h.team.id}.svg" class="w-10 h-10" alt="${h.team.name}" />
-                                <div><span class="font-bold">${h.team.name}</span> <span class="text-2xl font-bold">${l.C}</span></div>
-                            </div>
-                        </div>
-                        <div class="mt-2 text-xs opacity-60">Inning ${ls.currentInning??'-'} • B ${ls.balls??0} • S ${ls.strikes??0} • O ${ls.outs??0}</div>
-                        <div class="mt-2 text-center text-xs text-azul cursor-pointer" onclick="verFichaPartido('${p.gamePk}')">Ver ficha →</div>
-                    </div>`;
-                }
-                cont.innerHTML = html;
-                document.getElementById('contadorVivo').textContent = vivos.length;
-            } catch(e) {
-                cont.innerHTML = `<p class="text-center text-red-400">Error cargando en vivo</p>`;
-            }
-        }
-
-        // ========== FICHA DE PARTIDO (MODAL) ==========
-        async function verFichaPartido(gamePk) {
-            const modal = document.getElementById('modalPartido');
-            const contenido = document.getElementById('modalContenido');
-            modal.style.display = 'flex';
-            contenido.innerHTML = '<div class="flex justify-center py-10"><div class="spinner"></div></div>';
-            try {
-                const res = await fetch(`https://statsapi.mlb.com/api/v1/game/${gamePk}/boxscore`);
-                const data = await res.json();
-                const teams = data.teams;
-                const away = teams.away.team.name;
-                const home = teams.home.team.name;
-                const aStats = teams.away.teamStats.batting;
-                const hStats = teams.home.teamStats.batting;
-                contenido.innerHTML = `
-                    <h3 class="text-2xl font-bold mb-3">${away} vs ${home}</h3>
-                    <div class="grid grid-cols-2 gap-4 text-sm">
-                        <div><span class="font-semibold">Carreras:</span> ${aStats.runs??'-'}</div>
-                        <div><span class="font-semibold">Carreras:</span> ${hStats.runs??'-'}</div>
-                        <div><span class="font-semibold">Hits:</span> ${aStats.hits??'-'}</div>
-                        <div><span class="font-semibold">Hits:</span> ${hStats.hits??'-'}</div>
-                        <div><span class="font-semibold">Errores:</span> ${aStats.errors??'-'}</div>
-                        <div><span class="font-semibold">Errores:</span> ${hStats.errors??'-'}</div>
-                    </div>
-                    <div class="mt-4 text-xs opacity-60">Alineación y detalles completos disponibles en la versión final.</div>
-                    <button class="btn-primary mt-4" onclick="cerrarModal()">Cerrar</button>
-                `;
-            } catch(e) {
-                contenido.innerHTML = `<p class="text-red-400">Error cargando ficha</p>`;
-            }
-        }
-
-        function cerrarModal() {
-            document.getElementById('modalPartido').style.display = 'none';
-        }
-        // Cerrar con ESC
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarModal(); });
-
-        // ========== INICIALIZAR ==========
-        mostrarFechas();
-        cargarMLB(iso(fechaActual));
-        cargarNBA();
-        cargarEnVivo();
-        setInterval(() => {
-            if (iso(fechaActual) === iso(new Date())) cargarMLB(iso(fechaActual));
-            cargarEnVivo();
-        }, 30000);
-    </script>
-</body>
-</html>
+        // Pestañas
+        document.querySelectorAll('.tab-button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c
