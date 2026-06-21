@@ -7,9 +7,7 @@
     <meta name="description" content="Cobertura del Mundial 2026, MLB y NBA. Resultados, clasificaciones, estadísticas, noticias y análisis actualizados.">
     <meta name="keywords" content="fútbol, Mundial 2026, MLB, béisbol, NBA, baloncesto, resultados, estadísticas, noticias deportivas, en vivo">
     <link rel="canonical" href="https://sportvivo360.cyou/">
-    <!-- Favicon (emoji como SVG) -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
-    <!-- Open Graph -->
     <meta property="og:title" content="SportVive360 – Fútbol, MLB y NBA en Vivo">
     <meta property="og:description" content="Resultados, estadísticas y noticias del Mundial 2026, MLB y NBA.">
     <meta property="og:type" content="website">
@@ -25,7 +23,6 @@
     <!-- Google AdSense -->
     <meta name="google-adsense-account" content="ca-pub-3765201153278683">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3765201153278683" crossorigin="anonymous"></script>
-    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -46,7 +43,7 @@
         }
     </script>
     <style>
-        /* Estilos base */
+        /* Estilos base (se mantienen igual que antes) */
         .fade-in { animation: fadeIn 0.5s ease-out forwards; opacity: 0; }
         @keyframes fadeIn { to { opacity: 1; } }
         .pulse-dot { animation: pulse 1.5s infinite; }
@@ -71,10 +68,7 @@
             backdrop-filter: blur(8px);
             box-shadow: 0 4px 16px rgba(0,0,0,0.04);
         }
-        .dark .match-card {
-            background: rgba(30, 41, 59, 0.92);
-            border-color: rgba(51, 65, 85, 0.6);
-        }
+        .dark .match-card { background: rgba(30,41,59,0.92); border-color: rgba(51,65,85,0.6); }
         .match-card:hover { border-color: #1a56db; transform: translateY(-2px); }
         .match-status {
             font-size: 0.6rem; padding: 2px 12px; border-radius: 999px; font-weight: 600;
@@ -102,14 +96,11 @@
             border-radius: 12px;
             padding: 12px;
             text-align: center;
-            border: 1px solid rgba(226, 232, 240, 0.6);
+            border: 1px solid rgba(226,232,240,0.6);
             transition: 0.2s;
             backdrop-filter: blur(4px);
         }
-        .dark .stat-card {
-            background: rgba(30, 41, 59, 0.9);
-            border-color: rgba(51, 65, 85, 0.6);
-        }
+        .dark .stat-card { background: rgba(30,41,59,0.9); border-color: rgba(51,65,85,0.6); }
         .stat-card:hover { border-color: #1a56db; }
         .stat-card .number { font-size: 1.8rem; font-weight: 800; color: #1a56db; }
         .dark .stat-card .number { color: #60a5fa; }
@@ -122,9 +113,7 @@
             border-radius: 0 12px 12px 0;
             backdrop-filter: blur(4px);
         }
-        .dark .article-card {
-            background: rgba(30, 41, 59, 0.85);
-        }
+        .dark .article-card { background: rgba(30,41,59,0.85); }
         .article-card .meta { font-size: 0.7rem; color: #64748b; }
         .dark .article-card .meta { color: #94a3b8; }
         .article-card h3 { font-size: 1.1rem; font-weight: 700; margin: 4px 0; }
@@ -188,47 +177,36 @@
         }
         .deporte-btn:hover { background: rgba(255,255,255,0.1); color: white; }
         .deporte-btn.active { background: #1a56db; color: white; border-color: #1a56db; }
-        /* Feed de noticias */
         .news-feed {
             background: rgba(255,255,255,0.92);
             border-radius: 16px;
             padding: 16px;
-            border: 1px solid rgba(226, 232, 240, 0.6);
+            border: 1px solid rgba(226,232,240,0.6);
             transition: all 0.3s;
             min-height: 80px;
             backdrop-filter: blur(8px);
         }
-        .dark .news-feed {
-            background: rgba(30, 41, 59, 0.92);
-            border-color: rgba(51, 65, 85, 0.6);
-        }
+        .dark .news-feed { background: rgba(30,41,59,0.92); border-color: rgba(51,65,85,0.6); }
         .news-feed .text { font-size: 0.95rem; font-weight: 500; }
         .news-feed .time { font-size: 0.7rem; color: #64748b; }
         .dark .news-feed .time { color: #94a3b8; }
-
-        /* ===== FONDO "DOBLE" CON DOS CAPAS Y PATRÓN ===== */
         body {
             min-height: 100vh;
             background:
-                /* Capa 1: patrón de puntos sutil (doble fondo) */
-                radial-gradient(circle at 20% 50%, rgba(26, 86, 219, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(225, 29, 72, 0.02) 0%, transparent 40%),
-                /* Capa 2: gradiente doble principal */
+                radial-gradient(circle at 20% 50%, rgba(26,86,219,0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(225,29,72,0.02) 0%, transparent 40%),
                 linear-gradient(135deg, #f0f4ff 0%, #e8edf5 50%, #f5f0ff 100%);
             background-attachment: fixed;
             background-size: 100% 100%;
             position: relative;
         }
-        /* Fondo oscuro */
         .dark body {
             background:
-                radial-gradient(circle at 20% 50%, rgba(26, 86, 219, 0.06) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(225, 29, 72, 0.04) 0%, transparent 40%),
+                radial-gradient(circle at 20% 50%, rgba(26,86,219,0.06) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(225,29,72,0.04) 0%, transparent 40%),
                 linear-gradient(135deg, #0f172a 0%, #1a2332 50%, #1e1a2e 100%);
             background-attachment: fixed;
         }
-
-        /* Efecto de doble fondo: capa adicional de patrón de líneas muy sutiles */
         body::before {
             content: '';
             position: fixed;
@@ -263,33 +241,22 @@
                     rgba(255,255,255,0.01) 40px,
                     rgba(255,255,255,0.01) 41px);
         }
-
-        /* Asegurar que todo el contenido esté por encima del fondo */
-        main, header, footer {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Tarjetas con fondo semitransparente para que se vea el doble fondo */
+        main, header, footer { position: relative; z-index: 1; }
         .match-card, .stat-card, .article-card, .news-feed,
         .bg-white, .dark .bg-gray-800 {
             background: rgba(255,255,255,0.85) !important;
             backdrop-filter: blur(12px) !important;
-            border: 1px solid rgba(226, 232, 240, 0.4) !important;
+            border: 1px solid rgba(226,232,240,0.4) !important;
         }
         .dark .match-card, .dark .stat-card, .dark .article-card,
         .dark .news-feed, .dark .bg-gray-800 {
-            background: rgba(30, 41, 59, 0.88) !important;
-            border-color: rgba(51, 65, 85, 0.4) !important;
+            background: rgba(30,41,59,0.88) !important;
+            border-color: rgba(51,65,85,0.4) !important;
         }
-
-        /* Banner con más transparencia para que se vea el fondo */
         .bg-gradient-to-r {
-            background: linear-gradient(135deg, rgba(11, 30, 46, 0.92), rgba(26, 73, 113, 0.92)) !important;
+            background: linear-gradient(135deg, rgba(11,30,46,0.92), rgba(26,73,113,0.92)) !important;
             backdrop-filter: blur(4px);
         }
-
-        /* Botones de fecha mejorados */
         .fecha-btn {
             padding: 6px 14px;
             border-radius: 999px;
@@ -302,43 +269,15 @@
             font-size: 0.8rem;
             backdrop-filter: blur(4px);
         }
-        .dark .fecha-btn {
-            background: rgba(30, 41, 59, 0.5);
-            color: #cbd5e1;
-            border-color: rgba(51, 65, 85, 0.3);
-        }
+        .dark .fecha-btn { background: rgba(30,41,59,0.5); color: #cbd5e1; border-color: rgba(51,65,85,0.3); }
         .fecha-btn:hover { background: rgba(255,255,255,0.5); transform: scale(1.02); }
-        .dark .fecha-btn:hover { background: rgba(51, 65, 85, 0.6); }
-        .fecha-btn.active {
-            background: #1a56db;
-            color: white;
-            border-color: #1a56db;
-            box-shadow: 0 4px 12px rgba(26,86,219,0.3);
-        }
-        .dark .fecha-btn.active {
-            background: #2563eb;
-            border-color: #2563eb;
-        }
-
-        /* Centrado mejorado */
-        .max-w-7xl {
-            margin-left: auto;
-            margin-right: auto;
-        }
-        /* Espaciado vertical */
-        main {
-            padding-top: 1.25rem;
-            padding-bottom: 1.25rem;
-        }
-        /* Sombra suave en tarjetas */
-        .card-hover {
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-        }
-        .dark .card-hover {
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        }
-
-        /* Ajuste del contador en vivo */
+        .dark .fecha-btn:hover { background: rgba(51,65,85,0.6); }
+        .fecha-btn.active { background: #1a56db; color: white; border-color: #1a56db; box-shadow: 0 4px 12px rgba(26,86,219,0.3); }
+        .dark .fecha-btn.active { background: #2563eb; border-color: #2563eb; }
+        .max-w-7xl { margin-left: auto; margin-right: auto; }
+        main { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+        .card-hover { box-shadow: 0 4px 20px rgba(0,0,0,0.04); }
+        .dark .card-hover { box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
         .live-counter {
             display: inline-block;
             background: #dc2626;
@@ -592,7 +531,7 @@
         // ======== ESTADO GLOBAL ========
         let deporteActual = 'futbol';
         let paginaActual = 'inicio';
-        let fechaSeleccionada = '19'; // por defecto 19 de junio (para mostrar los partidos de tu captura)
+        let fechaSeleccionada = '21'; // por defecto 21 de junio (hoy)
 
         // ======== DATOS POR DEPORTE ========
         const datosDeportes = {
@@ -603,34 +542,72 @@
                     titulo: 'Mundial 2026 • Resultados y calendario completo',
                     desc: 'Todos los partidos, marcadores y programación del torneo.'
                 },
+                // ===== TODOS LOS PARTIDOS DEL 11 AL 21 DE JUNIO =====
                 partidosPorFecha: {
+                    '11': [
+                        { local: 'México', visitante: 'Sudáfrica', score: '2-0', status: 'Final', flagL: '🇲🇽', flagV: '🇿🇦' },
+                        { local: 'Corea del Sur', visitante: 'República Checa', score: '2-1', status: 'Final', flagL: '🇰🇷', flagV: '🇨🇿' },
+                    ],
+                    '12': [
+                        { local: 'Canadá', visitante: 'Bosnia y Herzegovina', score: '1-1', status: 'Final', flagL: '🇨🇦', flagV: '🇧🇦' },
+                    ],
+                    '13': [
+                        { local: 'Estados Unidos', visitante: 'Paraguay', score: '4-1', status: 'Final', flagL: '🇺🇸', flagV: '🇵🇾' },
+                        { local: 'Australia', visitante: 'Turquía', score: '2-0', status: 'Final', flagL: '🇦🇺', flagV: '🇹🇷' },
+                        { local: 'Qatar', visitante: 'Suiza', score: '1-1', status: 'Final', flagL: '🇶🇦', flagV: '🇨🇭' },
+                    ],
+                    '14': [
+                        { local: 'Alemania', visitante: 'Curazao', score: '7-1', status: 'Final', flagL: '🇩🇪', flagV: '🇨🇼' },
+                        { local: 'Países Bajos', visitante: 'Japón', score: '2-2', status: 'Final', flagL: '🇳🇱', flagV: '🇯🇵' },
+                        { local: 'Costa de Marfil', visitante: 'Ecuador', score: '1-0', status: 'Final', flagL: '🇨🇮', flagV: '🇪🇨' },
+                        { local: 'Suecia', visitante: 'Túnez', score: '5-1', status: 'Final', flagL: '🇸🇪', flagV: '🇹🇳' },
+                        { local: 'Brasil', visitante: 'Marruecos', score: '1-1', status: 'Final', flagL: '🇧🇷', flagV: '🇲🇦' },
+                    ],
+                    '15': [
+                        { local: 'Bélgica', visitante: 'Egipto', score: '1-1', status: 'Final', flagL: '🇧🇪', flagV: '🇪🇬' },
+                        { local: 'Irán', visitante: 'Nueva Zelanda', score: '2-2', status: 'Final', flagL: '🇮🇷', flagV: '🇳🇿' },
+                        { local: 'Arabia Saudita', visitante: 'Uruguay', score: '1-1', status: 'Final', flagL: '🇸🇦', flagV: '🇺🇾' },
+                        { local: 'España', visitante: 'Cabo Verde', score: '0-0', status: 'Final', flagL: '🇪🇸', flagV: '🇨🇻' },
+                    ],
+                    '16': [
+                        { local: 'Francia', visitante: 'Senegal', score: '3-1', status: 'Final', flagL: '🇫🇷', flagV: '🇸🇳' },
+                        { local: 'Irak', visitante: 'Noruega', score: '1-4', status: 'Final', flagL: '🇮🇶', flagV: '🇳🇴' },
+                        { local: 'Argentina', visitante: 'Argelia', score: '3-0', status: 'Final', flagL: '🇦🇷', flagV: '🇩🇿' },
+                        { local: 'Austria', visitante: 'Jordania', score: '2-1', status: 'Final', flagL: '🇦🇹', flagV: '🇯🇴' },
+                    ],
+                    '17': [
+                        { local: 'Portugal', visitante: 'R.D. del Congo', score: '1-1', status: 'Final', flagL: '🇵🇹', flagV: '🇨🇩' },
+                        { local: 'Inglaterra', visitante: 'Croacia', score: '4-2', status: 'Final', flagL: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', flagV: '🇭🇷' },
+                        { local: 'Ghana', visitante: 'Panamá', score: '1-0', status: 'Final', flagL: '🇬🇭', flagV: '🇵🇦' },
+                        { local: 'Colombia', visitante: 'Uzbekistán', score: '3-1', status: 'Final', flagL: '🇨🇴', flagV: '🇺🇿' },
+                    ],
                     '18': [
-                        { local: 'República Checa', visitante: 'Sudáfrica', score: '1-1', status: 'Final', flagL: '🇨🇿', flagV: '🇿🇦' },
-                        { local: 'Suiza', visitante: 'Bosnia', score: '4-1', status: 'Final', flagL: '🇨🇭', flagV: '🇧🇦' },
-                        { local: 'Canadá', visitante: 'Qatar', score: '6-0', status: 'Final', flagL: '🇨🇦', flagV: '🇶🇦' },
                         { local: 'México', visitante: 'Corea del Sur', score: '1-0', status: 'Final', flagL: '🇲🇽', flagV: '🇰🇷' },
+                        { local: 'República Checa', visitante: 'Sudáfrica', score: '1-1', status: 'Final', flagL: '🇨🇿', flagV: '🇿🇦' },
+                        { local: 'Suiza', visitante: 'Bosnia y Herzegovina', score: '4-1', status: 'Final', flagL: '🇨🇭', flagV: '🇧🇦' },
+                        { local: 'Canadá', visitante: 'Qatar', score: '6-0', status: 'Final', flagL: '🇨🇦', flagV: '🇶🇦' },
                     ],
                     '19': [
-                        { local: 'EE.UU.', visitante: 'Australia', score: '2-0', status: 'Final', flagL: '🇺🇸', flagV: '🇦🇺' },
-                        { local: 'Escocia', visitante: 'Marruecos', score: '0-1', status: 'Final', flagL: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', flagV: '🇲🇦' },
+                        { local: 'Estados Unidos', visitante: 'Australia', score: '2-0', status: 'Final', flagL: '🇺🇸', flagV: '🇦🇺' },
+                        { local: 'Marruecos', visitante: 'Escocia', score: '1-0', status: 'Final', flagL: '🇲🇦', flagV: '🏴󠁧󠁢󠁳󠁣󠁴󠁿' },
                         { local: 'Brasil', visitante: 'Haití', score: '3-0', status: 'Final', flagL: '🇧🇷', flagV: '🇭🇹' },
-                        { local: 'Turquía', visitante: 'Paraguay', score: '0-1', status: 'Final', flagL: '🇹🇷', flagV: '🇵🇾' },
                     ],
                     '20': [
-                        { local: 'Países Bajos', visitante: 'Suecia', score: '5-1', status: 'Final', flagL: '🇳🇱', flagV: '🇸🇪' },
                         { local: 'Alemania', visitante: 'Costa de Marfil', score: '2-1', status: 'Final', flagL: '🇩🇪', flagV: '🇨🇮' },
                         { local: 'Ecuador', visitante: 'Curazao', score: '0-0', status: 'Final', flagL: '🇪🇨', flagV: '🇨🇼' },
-                        { local: 'Túnez', visitante: 'Japón', score: '0-0', status: 'Vivo', flagL: '🇹🇳', flagV: '🇯🇵', live: true },
+                        { local: 'Países Bajos', visitante: 'Suecia', score: '5-1', status: 'Final', flagL: '🇳🇱', flagV: '🇸🇪' },
+                        { local: 'Japón', visitante: 'Túnez', score: '4-0', status: 'Final', flagL: '🇯🇵', flagV: '🇹🇳' },
                     ],
                     '21': [
-                        { local: 'España', visitante: 'Arabia Saudí', score: 'vs', status: 'Programado', flagL: '🇪🇸', flagV: '🇸🇦' },
+                        { local: 'España', visitante: 'Arabia Saudita', score: 'vs', status: 'Programado', flagL: '🇪🇸', flagV: '🇸🇦' },
                         { local: 'Bélgica', visitante: 'Irán', score: 'vs', status: 'Programado', flagL: '🇧🇪', flagV: '🇮🇷' },
                         { local: 'Uruguay', visitante: 'Cabo Verde', score: 'vs', status: 'Programado', flagL: '🇺🇾', flagV: '🇨🇻' },
                         { local: 'Nueva Zelanda', visitante: 'Egipto', score: 'vs', status: 'Programado', flagL: '🇳🇿', flagV: '🇪🇬' },
                     ],
+                    // Fechas futuras (del 22 al 26) las dejamos programadas
                     '22': [
                         { local: 'Argentina', visitante: 'Austria', score: 'vs', status: 'Programado', flagL: '🇦🇷', flagV: '🇦🇹' },
-                        { local: 'Francia', visitante: 'Iraq', score: 'vs', status: 'Programado', flagL: '🇫🇷', flagV: '🇮🇶' },
+                        { local: 'Francia', visitante: 'Irak', score: 'vs', status: 'Programado', flagL: '🇫🇷', flagV: '🇮🇶' },
                         { local: 'Noruega', visitante: 'Senegal', score: 'vs', status: 'Programado', flagL: '🇳🇴', flagV: '🇸🇳' },
                         { local: 'Jordania', visitante: 'Argelia', score: 'vs', status: 'Programado', flagL: '🇯🇴', flagV: '🇩🇿' },
                     ],
@@ -652,41 +629,59 @@
                         { local: 'Japón', visitante: 'Suecia', score: 'vs', status: 'Programado', flagL: '🇯🇵', flagV: '🇸🇪' },
                         { local: 'Túnez', visitante: 'Países Bajos', score: 'vs', status: 'Programado', flagL: '🇹🇳', flagV: '🇳🇱' },
                         { local: 'Paraguay', visitante: 'Australia', score: 'vs', status: 'Programado', flagL: '🇵🇾', flagV: '🇦🇺' },
-                        { local: 'Turquía', visitante: 'EE.UU.', score: 'vs', status: 'Programado', flagL: '🇹🇷', flagV: '🇺🇸' },
+                        { local: 'Turquía', visitante: 'Estados Unidos', score: 'vs', status: 'Programado', flagL: '🇹🇷', flagV: '🇺🇸' },
                     ],
                     '26': [
                         { local: 'Noruega', visitante: 'Francia', score: 'vs', status: 'Programado', flagL: '🇳🇴', flagV: '🇫🇷' },
-                        { local: 'Senegal', visitante: 'Iraq', score: 'vs', status: 'Programado', flagL: '🇸🇳', flagV: '🇮🇶' },
-                        { local: 'Cabo Verde', visitante: 'Arabia Saudí', score: 'vs', status: 'Programado', flagL: '🇨🇻', flagV: '🇸🇦' },
+                        { local: 'Senegal', visitante: 'Irak', score: 'vs', status: 'Programado', flagL: '🇸🇳', flagV: '🇮🇶' },
+                        { local: 'Cabo Verde', visitante: 'Arabia Saudita', score: 'vs', status: 'Programado', flagL: '🇨🇻', flagV: '🇸🇦' },
                         { local: 'Uruguay', visitante: 'España', score: 'vs', status: 'Programado', flagL: '🇺🇾', flagV: '🇪🇸' },
                         { local: 'Egipto', visitante: 'Irán', score: 'vs', status: 'Programado', flagL: '🇪🇬', flagV: '🇮🇷' },
                         { local: 'Nueva Zelanda', visitante: 'Bélgica', score: 'vs', status: 'Programado', flagL: '🇳🇿', flagV: '🇧🇪' },
-                    ]
+                    ],
                 },
                 clasificacion: {
                     titulo: '📊 Clasificación Mundial 2026 – Grupos',
                     conferencias: [
                         { nombre: 'Grupo A', equipos: [
-                            { nombre: 'Argentina', Pts: 6, PJ: 2, G: 2, E: 0, P: 0, GF: 5, GC: 1 },
-                            { nombre: 'Portugal', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 3, GC: 2 },
-                            { nombre: 'Egipto', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 1, GC: 3 },
-                            { nombre: 'Australia', Pts: 0, PJ: 2, G: 0, E: 0, P: 2, GF: 1, GC: 4 },
+                            { nombre: 'México', Pts: 6, PJ: 2, G: 2, E: 0, P: 0, GF: 3, GC: 0 },
+                            { nombre: 'Corea del Sur', Pts: 3, PJ: 2, G: 1, E: 0, P: 1, GF: 2, GC: 2 },
+                            { nombre: 'Sudáfrica', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 1, GC: 3 },
+                            { nombre: 'República Checa', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 2, GC: 3 },
                         ]},
                         { nombre: 'Grupo B', equipos: [
-                            { nombre: 'Brasil', Pts: 6, PJ: 2, G: 2, E: 0, P: 0, GF: 6, GC: 2 },
-                            { nombre: 'Francia', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 4, GC: 3 },
-                            { nombre: 'Marruecos', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 1, GC: 3 },
-                            { nombre: 'EE.UU.', Pts: 0, PJ: 2, G: 0, E: 0, P: 2, GF: 2, GC: 5 },
+                            { nombre: 'Canadá', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 7, GC: 1 },
+                            { nombre: 'Suiza', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 5, GC: 2 },
+                            { nombre: 'Bosnia', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 2, GC: 5 },
+                            { nombre: 'Qatar', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 1, GC: 7 },
                         ]},
                         { nombre: 'Grupo C', equipos: [
-                            { nombre: 'España', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 4, GC: 2 },
-                            { nombre: 'Alemania', Pts: 3, PJ: 2, G: 1, E: 0, P: 1, GF: 3, GC: 3 },
-                            { nombre: 'Japón', Pts: 2, PJ: 2, G: 0, E: 2, P: 0, GF: 2, GC: 2 },
-                            { nombre: 'Nigeria', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 1, GC: 3 },
-                        ]}
+                            { nombre: 'Brasil', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 4, GC: 1 },
+                            { nombre: 'Marruecos', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 2, GC: 1 },
+                            { nombre: 'Escocia', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 0, GC: 1 },
+                            { nombre: 'Haití', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 0, GC: 3 },
+                        ]},
+                        { nombre: 'Grupo D', equipos: [
+                            { nombre: 'Estados Unidos', Pts: 6, PJ: 2, G: 2, E: 0, P: 0, GF: 6, GC: 1 },
+                            { nombre: 'Australia', Pts: 3, PJ: 2, G: 1, E: 0, P: 1, GF: 2, GC: 2 },
+                            { nombre: 'Turquía', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 0, GC: 2 },
+                            { nombre: 'Paraguay', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 1, GC: 4 },
+                        ]},
+                        { nombre: 'Grupo E', equipos: [
+                            { nombre: 'Alemania', Pts: 6, PJ: 2, G: 2, E: 0, P: 0, GF: 9, GC: 2 },
+                            { nombre: 'Costa de Marfil', Pts: 3, PJ: 2, G: 1, E: 0, P: 1, GF: 2, GC: 2 },
+                            { nombre: 'Ecuador', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 0, GC: 1 },
+                            { nombre: 'Curazao', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 1, GC: 7 },
+                        ]},
+                        { nombre: 'Grupo F', equipos: [
+                            { nombre: 'Países Bajos', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 7, GC: 3 },
+                            { nombre: 'Japón', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 6, GC: 2 },
+                            { nombre: 'Suecia', Pts: 3, PJ: 2, G: 1, E: 0, P: 1, GF: 6, GC: 6 },
+                            { nombre: 'Túnez', Pts: 0, PJ: 2, G: 0, E: 0, P: 2, GF: 1, GC: 9 },
+                        ]},
                     ]
                 },
-                equipos: ['Argentina', 'Brasil', 'Francia', 'España', 'Alemania', 'Portugal', 'Inglaterra', 'Países Bajos', 'Croacia', 'Bélgica', 'Uruguay', 'Marruecos', 'Senegal', 'Australia', 'EE.UU.', 'México', 'Canadá', 'Japón', 'Corea del Sur', 'Arabia Saudí', 'Irán', 'Ghana', 'Colombia', 'Ecuador', 'Paraguay', 'Turquía', 'Austria', 'Noruega', 'Suecia', 'Costa de Marfil', 'Cabo Verde', 'Bosnia', 'Qatar', 'Haití', 'Jordania', 'Iraq', 'Argelia', 'R.D. del Congo', 'Uzbekistán', 'Panamá', 'Nueva Zelanda', 'Egipto', 'Curazao', 'Sudáfrica', 'República Checa', 'Suiza'],
+                equipos: ['Argentina', 'Brasil', 'Francia', 'España', 'Alemania', 'Portugal', 'Inglaterra', 'Países Bajos', 'Croacia', 'Bélgica', 'Uruguay', 'Marruecos', 'Senegal', 'Australia', 'Estados Unidos', 'México', 'Canadá', 'Japón', 'Corea del Sur', 'Arabia Saudita', 'Irán', 'Ghana', 'Colombia', 'Ecuador', 'Paraguay', 'Turquía', 'Austria', 'Noruega', 'Suecia', 'Costa de Marfil', 'Cabo Verde', 'Bosnia', 'Qatar', 'Haití', 'Jordania', 'Irak', 'Argelia', 'R.D. del Congo', 'Uzbekistán', 'Panamá', 'Nueva Zelanda', 'Egipto', 'Curazao', 'Sudáfrica', 'República Checa', 'Suiza', 'Escocia', 'Túnez'],
                 noticias: [
                     { fecha: '21 de junio, 2026', titulo: 'Países Bajos golea 5-1 a Suecia y Alemania vence a Costa de Marfil', resumen: 'Los holandeses demostraron su poder ofensivo con una contundente victoria. Alemania, por su parte, sufrió pero logró llevarse los tres puntos. Ecuador y Curazao empataron sin goles.' },
                     { fecha: '20 de junio, 2026', titulo: 'Brasil y Francia arrancan con victorias; Argentina golea 3-0 a Argelia', resumen: 'La Canarinha venció 3-0 a Haití, mientras que Francia derrotó 3-1 a Senegal. Argentina, con un doblete de Messi, se impuso con autoridad.' },
@@ -782,7 +777,6 @@
             renderizarAnalisis();
             renderizarEnVivo();
             actualizarHeader();
-            iniciarContadorVivo();
             iniciarFeedNoticias();
         }
 
@@ -802,7 +796,7 @@
         }
 
         function renderizarSelectorFechas() {
-            const fechas = ['18', '19', '20', '21', '22', '23', '24', '25', '26'];
+            const fechas = ['11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26'];
             const contenedorInicio = document.getElementById('fechaSelector');
             const contenedorPartidos = document.getElementById('fechaSelectorPartidos');
             const html = fechas.map(f => `
@@ -861,7 +855,7 @@
                                     ${p.live ? '<span class="live-counter ml-2">🔴 EN VIVO</span>' : ''}
                                 </div>
                                 <div class="flex items-center gap-3">
-                                    <span class="font-bold text-lg" id="score-${p.local}-${p.visitante}">${p.score}</span>
+                                    <span class="font-bold text-lg">${p.score}</span>
                                     <span class="match-status ${badgeClass}">${p.status}</span>
                                 </div>
                             </div>
@@ -977,7 +971,7 @@
                                 <span class="live-counter ml-2">🔴 EN VIVO</span>
                             </div>
                             <div class="flex items-center gap-3">
-                                <span class="font-bold text-lg" id="score-${p.local}-${p.visitante}-envivo">${p.score}</span>
+                                <span class="font-bold text-lg">${p.score}</span>
                                 <span class="match-status badge-vivo">Vivo</span>
                             </div>
                         </div>
@@ -1079,29 +1073,6 @@
             contenedor.innerHTML = html || '<p class="text-center text-gray-500 py-8">No hay análisis disponibles.</p>';
         }
 
-        // ======== CONTADOR EN VIVO ========
-        let liveInterval = null;
-        function iniciarContadorVivo() {
-            if (liveInterval) clearInterval(liveInterval);
-            liveInterval = setInterval(() => {
-                let partido = null;
-                const datos = datosDeportes.futbol;
-                if (datos.partidosPorFecha) {
-                    for (const fecha in datos.partidosPorFecha) {
-                        const encontrado = datos.partidosPorFecha[fecha].find(p => p.local === 'Túnez' && p.visitante === 'Japón' && p.status === 'Vivo');
-                        if (encontrado) { partido = encontrado; break; }
-                    }
-                }
-                if (!partido) return;
-                const golesTunez = Math.floor(Math.random() * 4);
-                const golesJapon = Math.floor(Math.random() * 3);
-                const nuevoScore = `${golesTunez}-${golesJapon}`;
-                partido.score = nuevoScore;
-                const elementos = document.querySelectorAll(`[id^="score-${partido.local}-${partido.visitante}"]`);
-                elementos.forEach(el => el.textContent = nuevoScore);
-            }, 5000);
-        }
-
         // ======== FEED DE NOTICIAS ========
         const noticiasFeed = [
             '⚽ ¡Gol de Gakpo! Países Bajos amplía su ventaja ante Suecia (5-1).',
@@ -1111,7 +1082,7 @@
             '🇫🇷 Francia se impone 3-1 a Senegal con doblete de Mbappé.',
             '🇩🇪 Alemania sufre pero vence 2-1 a Costa de Marfil.',
             '🇳🇱 Países Bajos, la sensación del torneo con 5 goles en su debut.',
-            '🔴 ¡Túnez y Japón empatan en un partido vibrante!',
+            '🇲🇽 México es el primer clasificado tras vencer a Corea del Sur (1-0).',
             '🇪🇸 España y Cabo Verde firman un empate sin goles (0-0).',
             '🇧🇪 Bélgica y Egipto reparten puntos (1-1).'
         ];
