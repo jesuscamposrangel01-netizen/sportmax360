@@ -62,7 +62,7 @@
         }
         .division-titulo:first-of-type { margin-top: 0; }
         .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background: #000; }
-        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
         .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
         .card-hover:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
         .spinner {
@@ -137,6 +137,10 @@
         }
         .ad-container { min-height: 90px; background: rgba(0,0,0,0.02); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #94a3b8; }
         .dark .ad-container { background: rgba(255,255,255,0.02); }
+        /* Estilos extra videos */
+        .seccion-videos { margin: 2rem 0; }
+        .video-card { margin-bottom: 1.5rem; }
+        .video-titulo { font-weight: 600; font-size: 0.9rem; margin-top: 0.6rem; }
     </style>
 </head>
 <body class="bg-gray-50 text-gris font-sans min-h-screen transition-colors duration-300 dark:bg-gray-900 dark:text-gray-200">
@@ -166,6 +170,7 @@
                 <button class="tab-button active" data-tab="mlb">⚾ MLB</button>
                 <button class="tab-button" data-tab="futbol">⚽ Mundial 2026</button>
                 <button class="tab-button" data-tab="nba">🏀 NBA</button>
+                <button class="tab-button" data-tab="videos">▶️ Videos</button>
             </div>
         </div>
     </header>
@@ -312,6 +317,29 @@
                 </div>
             </section>
         </div>
+
+        <!-- 🎬 Pestaña VIDEOS YouTube fijos -->
+        <div id="tab-videos" class="tab-content">
+            <section class="seccion-videos">
+                <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-5 dark:text-white">▶️ Videos Destacados</h2>
+                <div id="lista-videos">
+                    <!-- Video 1 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow-sm border border-grisClaro dark:border-gray-700 card-hover video-card">
+                        <div class="video-wrapper">
+                            <iframe src="https://www.youtube.com/embed/rLd3rs5G2Vc" allowfullscreen loading="lazy"></iframe>
+                        </div>
+                        <div class="video-titulo dark:text-gray-200">Resumen y jugadas destacadas MLB</div>
+                    </div>
+                    <!-- Video 2 -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-3 shadow-sm border border-grisClaro dark:border-gray-700 card-hover video-card">
+                        <div class="video-wrapper">
+                            <iframe src="https://www.youtube.com/embed/Zq42h1tYGMU" allowfullscreen loading="lazy"></iframe>
+                        </div>
+                        <div class="video-titulo dark:text-gray-200">Lo mejor de la jornada en vivo</div>
+                    </div>
+                </div>
+            </section>
+        </div>
     </main>
 
     <!-- Pie -->
@@ -320,7 +348,7 @@
         <p class="mt-2"><a href="https://sportvive360.cyou/privacidad" class="hover:underline">Política de privacidad</a></p>
     </footer>
 
-    <!-- Scripts -->
+    <!-- Scripts originales sin cambios -->
     <script>
         // Pestañas
         document.querySelectorAll('.tab-button').forEach(btn => {
