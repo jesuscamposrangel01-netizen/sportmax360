@@ -287,6 +287,52 @@
             font-size: 0.7rem;
             animation: pulse 1.2s infinite;
         }
+        /* Estilo para las tablas de clasificación */
+        .standings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+        .standings-table {
+            background: rgba(255,255,255,0.9);
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid rgba(226,232,240,0.6);
+            backdrop-filter: blur(8px);
+        }
+        .dark .standings-table {
+            background: rgba(30,41,59,0.9);
+            border-color: rgba(51,65,85,0.6);
+        }
+        .standings-table h4 {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #1a56db;
+        }
+        .standings-table table {
+            width: 100%;
+            font-size: 0.75rem;
+        }
+        .standings-table th {
+            background: #f1f5f9;
+            padding: 4px 6px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .dark .standings-table th { background: #1e293b; }
+        .standings-table td {
+            padding: 4px 6px;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: center;
+        }
+        .dark .standings-table td { border-color: #334155; }
+        .standings-table .pos { font-weight: 700; }
+        .standings-table .equipo { text-align: left; }
+        .standings-table tr:hover td { background: #f8fafc; }
+        .dark .standings-table tr:hover td { background: #1e293b; }
+        .standings-table .clasificado { border-left: 3px solid #22c55e; }
     </style>
 </head>
 <body>
@@ -401,11 +447,12 @@
             </div>
         </section>
 
-        <!-- PÁGINA: CLASIFICACIÓN -->
+        <!-- PÁGINA: CLASIFICACIÓN - AQUÍ VAN TODAS LAS TABLAS -->
         <section id="page-clasificacion" class="page-section">
-            <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white" id="clasificacion-titulo">📊 Clasificación Mundial 2026 – Grupos</h2>
-            <div id="clasificacion-contenido" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="flex justify-center py-10 col-span-2"><div class="spinner"></div></div>
+            <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">📊 Clasificación Mundial 2026 – Grupos</h2>
+            <div id="clasificacion-contenido" class="standings-grid">
+                <!-- Las tablas se generan dinámicamente con JS -->
+                <div class="flex justify-center py-10 col-span-full"><div class="spinner"></div></div>
             </div>
         </section>
 
@@ -531,7 +578,7 @@
         // ======== ESTADO GLOBAL ========
         let deporteActual = 'futbol';
         let paginaActual = 'inicio';
-        let fechaSeleccionada = '21'; // por defecto 21 de junio (hoy)
+        let fechaSeleccionada = '21';
 
         // ======== DATOS POR DEPORTE ========
         const datosDeportes = {
@@ -542,7 +589,6 @@
                     titulo: 'Mundial 2026 • Resultados y calendario completo',
                     desc: 'Todos los partidos, marcadores y programación del torneo.'
                 },
-                // ===== TODOS LOS PARTIDOS DEL 11 AL 21 DE JUNIO =====
                 partidosPorFecha: {
                     '11': [
                         { local: 'México', visitante: 'Sudáfrica', score: '2-0', status: 'Final', flagL: '🇲🇽', flagV: '🇿🇦' },
@@ -604,7 +650,6 @@
                         { local: 'Uruguay', visitante: 'Cabo Verde', score: 'vs', status: 'Programado', flagL: '🇺🇾', flagV: '🇨🇻' },
                         { local: 'Nueva Zelanda', visitante: 'Egipto', score: 'vs', status: 'Programado', flagL: '🇳🇿', flagV: '🇪🇬' },
                     ],
-                    // Fechas futuras (del 22 al 26) las dejamos programadas
                     '22': [
                         { local: 'Argentina', visitante: 'Austria', score: 'vs', status: 'Programado', flagL: '🇦🇷', flagV: '🇦🇹' },
                         { local: 'Francia', visitante: 'Irak', score: 'vs', status: 'Programado', flagL: '🇫🇷', flagV: '🇮🇶' },
@@ -640,44 +685,93 @@
                         { local: 'Nueva Zelanda', visitante: 'Bélgica', score: 'vs', status: 'Programado', flagL: '🇳🇿', flagV: '🇧🇪' },
                     ],
                 },
+                // ===== TODAS LAS TABLAS DE POSICIONES (A a L) =====
                 clasificacion: {
                     titulo: '📊 Clasificación Mundial 2026 – Grupos',
                     conferencias: [
+                        // Grupo A
                         { nombre: 'Grupo A', equipos: [
-                            { nombre: 'México', Pts: 6, PJ: 2, G: 2, E: 0, P: 0, GF: 3, GC: 0 },
-                            { nombre: 'Corea del Sur', Pts: 3, PJ: 2, G: 1, E: 0, P: 1, GF: 2, GC: 2 },
-                            { nombre: 'Sudáfrica', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 1, GC: 3 },
-                            { nombre: 'República Checa', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 2, GC: 3 },
+                            { nombre: '🇲🇽 México', Pts: 6, PJ: 2, G: 2, E: 0, P: 0, GF: 3, GC: 0 },
+                            { nombre: '🇰🇷 Corea del Sur', Pts: 3, PJ: 2, G: 1, E: 0, P: 1, GF: 2, GC: 2 },
+                            { nombre: '🇿🇦 Sudáfrica', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 1, GC: 3 },
+                            { nombre: '🇨🇿 Rep. Checa', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 2, GC: 3 },
                         ]},
+                        // Grupo B
                         { nombre: 'Grupo B', equipos: [
-                            { nombre: 'Canadá', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 7, GC: 1 },
-                            { nombre: 'Suiza', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 5, GC: 2 },
-                            { nombre: 'Bosnia', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 2, GC: 5 },
-                            { nombre: 'Qatar', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 1, GC: 7 },
+                            { nombre: '🇨🇦 Canadá', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 7, GC: 1 },
+                            { nombre: '🇨🇭 Suiza', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 5, GC: 2 },
+                            { nombre: '🇧🇦 Bosnia', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 2, GC: 5 },
+                            { nombre: '🇶🇦 Qatar', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 1, GC: 7 },
                         ]},
+                        // Grupo C
                         { nombre: 'Grupo C', equipos: [
-                            { nombre: 'Brasil', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 4, GC: 1 },
-                            { nombre: 'Marruecos', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 2, GC: 1 },
-                            { nombre: 'Escocia', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 0, GC: 1 },
-                            { nombre: 'Haití', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 0, GC: 3 },
+                            { nombre: '🇧🇷 Brasil', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 4, GC: 1 },
+                            { nombre: '🇲🇦 Marruecos', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 2, GC: 1 },
+                            { nombre: '🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 0, GC: 1 },
+                            { nombre: '🇭🇹 Haití', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 0, GC: 3 },
                         ]},
+                        // Grupo D
                         { nombre: 'Grupo D', equipos: [
-                            { nombre: 'Estados Unidos', Pts: 6, PJ: 2, G: 2, E: 0, P: 0, GF: 6, GC: 1 },
-                            { nombre: 'Australia', Pts: 3, PJ: 2, G: 1, E: 0, P: 1, GF: 2, GC: 2 },
-                            { nombre: 'Turquía', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 0, GC: 2 },
-                            { nombre: 'Paraguay', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 1, GC: 4 },
+                            { nombre: '🇺🇸 EE.UU.', Pts: 6, PJ: 2, G: 2, E: 0, P: 0, GF: 6, GC: 1 },
+                            { nombre: '🇦🇺 Australia', Pts: 3, PJ: 2, G: 1, E: 0, P: 1, GF: 2, GC: 2 },
+                            { nombre: '🇹🇷 Turquía', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 0, GC: 2 },
+                            { nombre: '🇵🇾 Paraguay', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 1, GC: 4 },
                         ]},
+                        // Grupo E
                         { nombre: 'Grupo E', equipos: [
-                            { nombre: 'Alemania', Pts: 6, PJ: 2, G: 2, E: 0, P: 0, GF: 9, GC: 2 },
-                            { nombre: 'Costa de Marfil', Pts: 3, PJ: 2, G: 1, E: 0, P: 1, GF: 2, GC: 2 },
-                            { nombre: 'Ecuador', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 0, GC: 1 },
-                            { nombre: 'Curazao', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 1, GC: 7 },
+                            { nombre: '🇩🇪 Alemania', Pts: 6, PJ: 2, G: 2, E: 0, P: 0, GF: 9, GC: 2 },
+                            { nombre: '🇨🇮 Costa de Marfil', Pts: 3, PJ: 2, G: 1, E: 0, P: 1, GF: 2, GC: 2 },
+                            { nombre: '🇪🇨 Ecuador', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 0, GC: 1 },
+                            { nombre: '🇨🇼 Curazao', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 1, GC: 7 },
                         ]},
+                        // Grupo F
                         { nombre: 'Grupo F', equipos: [
-                            { nombre: 'Países Bajos', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 7, GC: 3 },
-                            { nombre: 'Japón', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 6, GC: 2 },
-                            { nombre: 'Suecia', Pts: 3, PJ: 2, G: 1, E: 0, P: 1, GF: 6, GC: 6 },
-                            { nombre: 'Túnez', Pts: 0, PJ: 2, G: 0, E: 0, P: 2, GF: 1, GC: 9 },
+                            { nombre: '🇳🇱 Países Bajos', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 7, GC: 3 },
+                            { nombre: '🇯🇵 Japón', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 6, GC: 2 },
+                            { nombre: '🇸🇪 Suecia', Pts: 3, PJ: 2, G: 1, E: 0, P: 1, GF: 6, GC: 6 },
+                            { nombre: '🇹🇳 Túnez', Pts: 0, PJ: 2, G: 0, E: 0, P: 2, GF: 1, GC: 9 },
+                        ]},
+                        // Grupo G
+                        { nombre: 'Grupo G', equipos: [
+                            { nombre: '🇧🇪 Bélgica', Pts: 1, PJ: 1, G: 0, E: 1, P: 0, GF: 1, GC: 1 },
+                            { nombre: '🇪🇬 Egipto', Pts: 1, PJ: 1, G: 0, E: 1, P: 0, GF: 1, GC: 1 },
+                            { nombre: '🇮🇷 Irán', Pts: 1, PJ: 1, G: 0, E: 1, P: 0, GF: 2, GC: 2 },
+                            { nombre: '🇳🇿 Nueva Zelanda', Pts: 1, PJ: 1, G: 0, E: 1, P: 0, GF: 2, GC: 2 },
+                        ]},
+                        // Grupo H
+                        { nombre: 'Grupo H', equipos: [
+                            { nombre: '🇪🇸 España', Pts: 1, PJ: 1, G: 0, E: 1, P: 0, GF: 0, GC: 0 },
+                            { nombre: '🇨🇻 Cabo Verde', Pts: 1, PJ: 1, G: 0, E: 1, P: 0, GF: 0, GC: 0 },
+                            { nombre: '🇸🇦 Arabia Saudita', Pts: 1, PJ: 1, G: 0, E: 1, P: 0, GF: 1, GC: 1 },
+                            { nombre: '🇺🇾 Uruguay', Pts: 1, PJ: 1, G: 0, E: 1, P: 0, GF: 1, GC: 1 },
+                        ]},
+                        // Grupo I
+                        { nombre: 'Grupo I', equipos: [
+                            { nombre: '🇫🇷 Francia', Pts: 3, PJ: 1, G: 1, E: 0, P: 0, GF: 3, GC: 1 },
+                            { nombre: '🇳🇴 Noruega', Pts: 3, PJ: 1, G: 1, E: 0, P: 0, GF: 4, GC: 1 },
+                            { nombre: '🇸🇳 Senegal', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 1, GC: 3 },
+                            { nombre: '🇮🇶 Irak', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 1, GC: 4 },
+                        ]},
+                        // Grupo J
+                        { nombre: 'Grupo J', equipos: [
+                            { nombre: '🇦🇷 Argentina', Pts: 3, PJ: 1, G: 1, E: 0, P: 0, GF: 3, GC: 0 },
+                            { nombre: '🇦🇹 Austria', Pts: 3, PJ: 1, G: 1, E: 0, P: 0, GF: 2, GC: 1 },
+                            { nombre: '🇯🇴 Jordania', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 1, GC: 2 },
+                            { nombre: '🇩🇿 Argelia', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 0, GC: 3 },
+                        ]},
+                        // Grupo K
+                        { nombre: 'Grupo K', equipos: [
+                            { nombre: '🇨🇴 Colombia', Pts: 3, PJ: 1, G: 1, E: 0, P: 0, GF: 3, GC: 1 },
+                            { nombre: '🇵🇹 Portugal', Pts: 1, PJ: 1, G: 0, E: 1, P: 0, GF: 1, GC: 1 },
+                            { nombre: '🇨🇩 R.D. Congo', Pts: 1, PJ: 1, G: 0, E: 1, P: 0, GF: 1, GC: 1 },
+                            { nombre: '🇺🇿 Uzbekistán', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 1, GC: 3 },
+                        ]},
+                        // Grupo L
+                        { nombre: 'Grupo L', equipos: [
+                            { nombre: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra', Pts: 3, PJ: 1, G: 1, E: 0, P: 0, GF: 4, GC: 2 },
+                            { nombre: '🇬🇭 Ghana', Pts: 3, PJ: 1, G: 1, E: 0, P: 0, GF: 1, GC: 0 },
+                            { nombre: '🇭🇷 Croacia', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 2, GC: 4 },
+                            { nombre: '🇵🇦 Panamá', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 0, GC: 1 },
                         ]},
                     ]
                 },
@@ -865,7 +959,7 @@
                 html += `</div></div>`;
             }
 
-            // Estadísticas
+            // Estadísticas (se mantienen)
             html += `<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
                 <div class="stat-card card-hover">
                     <h4 class="font-bold text-lg mb-2">⚽ Máximos goleadores</h4>
@@ -886,26 +980,6 @@
                     </ul>
                 </div>
             </div>`;
-
-            // Clasificación
-            if (datos.clasificacion && datos.clasificacion.conferencias) {
-                html += `<div class="space-y-4">
-                    <h3 class="text-xl font-bold text-secondary border-l-4 border-accent pl-3 mb-2 dark:text-white">📊 Clasificación</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
-                datos.clasificacion.conferencias.slice(0, 2).forEach(conf => {
-                    html += `<div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
-                        <h4 class="font-semibold text-md mb-2">${conf.nombre}</h4>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-xs table-standings dark:text-gray-300">
-                                <thead><tr><th class="text-left">Equipo</th><th class="text-center">Pts</th></tr></thead>
-                                <tbody>`;
-                    conf.equipos.forEach(eq => {
-                        html += `<tr><td>${eq.nombre}</td><td class="text-center font-bold">${eq.Pts || eq.G}</td></tr>`;
-                    });
-                    html += `</tbody></table></div></div>`;
-                });
-                html += `</div></div>`;
-            }
 
             contenedor.innerHTML = html;
         }
@@ -933,6 +1007,49 @@
                         <span>${p.score} <span class="match-status ${badgeClass}">${p.status}</span></span>
                     </div>
                 `;
+            });
+            contenedor.innerHTML = html;
+        }
+
+        // ===== NUEVA FUNCIÓN DE CLASIFICACIÓN CON TODOS LOS GRUPOS =====
+        function renderizarClasificacion() {
+            const datos = datosDeportes[deporteActual];
+            document.getElementById('clasificacion-titulo').textContent = datos.clasificacion.titulo;
+            const contenedor = document.getElementById('clasificacion-contenido');
+            if (!datos.clasificacion || !datos.clasificacion.conferencias) {
+                contenedor.innerHTML = '<p class="text-center py-8 text-gray-500">No hay datos de clasificación.</p>';
+                return;
+            }
+            let html = '';
+            datos.clasificacion.conferencias.forEach(conf => {
+                // Determinar el ancho de columnas según el grupo
+                const keys = conf.equipos[0] ? Object.keys(conf.equipos[0]) : [];
+                html += `<div class="standings-table">
+                    <h4>${conf.nombre}</h4>
+                    <div class="overflow-x-auto">
+                        <table>
+                            <thead><tr>`;
+                // Cabeceras
+                keys.forEach(key => {
+                    const label = key === 'nombre' ? 'Equipo' : key;
+                    html += `<th>${label}</th>`;
+                });
+                html += `</tr></thead><tbody>`;
+                conf.equipos.forEach(eq => {
+                    // Marcar al líder con verde
+                    const isLeader = conf.equipos.indexOf(eq) === 0;
+                    html += `<tr class="${isLeader ? 'clasificado' : ''}">`;
+                    keys.forEach(key => {
+                        const value = eq[key];
+                        if (key === 'nombre') {
+                            html += `<td class="equipo"><span class="font-semibold">${value}</span></td>`;
+                        } else {
+                            html += `<td>${value}</td>`;
+                        }
+                    });
+                    html += `</tr>`;
+                });
+                html += `</tbody></table></div></div>`;
             });
             contenedor.innerHTML = html;
         }
@@ -977,48 +1094,6 @@
                         </div>
                     </div>
                 `;
-            });
-            contenedor.innerHTML = html;
-        }
-
-        function renderizarClasificacion() {
-            const datos = datosDeportes[deporteActual];
-            document.getElementById('clasificacion-titulo').textContent = datos.clasificacion.titulo;
-            const contenedor = document.getElementById('clasificacion-contenido');
-            if (!datos.clasificacion || !datos.clasificacion.conferencias) {
-                contenedor.innerHTML = '<p class="text-center py-8 text-gray-500">No hay datos de clasificación.</p>';
-                return;
-            }
-            let html = '';
-            datos.clasificacion.conferencias.forEach(conf => {
-                html += `<div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
-                    <h3 class="font-bold text-lg mb-3">${conf.nombre}</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-xs table-standings dark:text-gray-300">
-                            <thead><tr>`;
-                const first = conf.equipos[0];
-                if (first) {
-                    Object.keys(first).forEach(key => {
-                        if (key !== 'nombre') {
-                            html += `<th class="text-center">${key}</th>`;
-                        } else {
-                            html += `<th class="text-left">Equipo</th>`;
-                        }
-                    });
-                }
-                html += `</tr></thead><tbody>`;
-                conf.equipos.forEach(eq => {
-                    html += `<tr>`;
-                    Object.keys(eq).forEach(key => {
-                        if (key === 'nombre') {
-                            html += `<td>${eq[key]}</td>`;
-                        } else {
-                            html += `<td class="text-center">${eq[key]}</td>`;
-                        }
-                    });
-                    html += `</tr>`;
-                });
-                html += `</tbody></table></div></div>`;
             });
             contenedor.innerHTML = html;
         }
