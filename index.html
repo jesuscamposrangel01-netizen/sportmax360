@@ -3,27 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SportVive360 | MLB Béisbol en Vivo – Resultados, Estadísticas y Noticias</title>
-    <meta name="description" content="SportVive360 – MLB: Cobertura en vivo de la Liga Mayor de Béisbol. Resultados, estadísticas de lanzadores y bateadores, clasificaciones, noticias y análisis. Datos oficiales MLB.">
-    <meta name="keywords" content="MLB, béisbol, resultados MLB, estadísticas MLB, lanzadores, bateadores, Liga Mayor, Béisbol en vivo, MLB hoy, partidos MLB, clasificación MLB, noticias MLB, análisis MLB, Mundial 2026, NBA">
+    <title>SportVive360 | MLB, Fútbol y NBA – Resultados, Estadísticas y Noticias</title>
+    <meta name="description" content="SportVive360 – Cobertura en vivo de MLB, Mundial 2026 y NBA. Resultados, estadísticas, clasificaciones y noticias.">
+    <meta name="keywords" content="MLB, béisbol, fútbol, Mundial 2026, NBA, baloncesto, resultados, estadísticas, noticias deportivas">
     <link rel="canonical" href="https://sportvive360.cyou/">
     <!-- Open Graph -->
-    <meta property="og:title" content="SportVive360 – MLB Béisbol en Vivo">
-    <meta property="og:description" content="Resultados, estadísticas y noticias de la MLB. Sigue a tus equipos favoritos.">
+    <meta property="og:title" content="SportVive360 – Deportes en Vivo">
+    <meta property="og:description" content="Cobertura de MLB, Fútbol y NBA. Resultados, estadísticas y noticias.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sportvive360.cyou/">
-    <meta property="og:image" content="https://sportvive360.cyou/og-image.jpg">
-    <!-- Datos estructurados -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "SportsOrganization",
-      "name": "SportVive360",
-      "url": "https://sportvive360.cyou/",
-      "description": "Cobertura completa de la MLB, Mundial 2026 y NBA.",
-      "sport": ["Baseball", "Soccer", "Basketball"]
-    }
-    </script>
     <!-- Google AdSense -->
     <meta name="google-adsense-account" content="ca-pub-3765201153278683">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3765201153278683" crossorigin="anonymous"></script>
@@ -48,7 +36,7 @@
         }
     </script>
     <style>
-        /* Estilos mejorados */
+        /* Estilos base */
         .fade-in { animation: fadeIn 0.5s ease-out forwards; opacity: 0; }
         @keyframes fadeIn { to { opacity: 1; } }
         .pulse-dot { animation: pulse 1.5s infinite; }
@@ -151,21 +139,19 @@
             .stat-card .number { font-size: 1.4rem; }
             .desktop-menu { display: none; }
             .mobile-menu { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+            .deporte-selector { flex-wrap: wrap; justify-content: center; }
         }
         @media (min-width: 641px) {
             .mobile-menu { display: none; }
         }
-        /* Nuevo: estilos para la sección de características */
-        .feature-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;
+        /* Selector de deportes */
+        .deporte-btn {
+            padding: 4px 14px; border-radius: 999px; font-weight: 600; cursor: pointer;
+            transition: all 0.2s; background: rgba(255,255,255,0.05); border: 1px solid transparent;
+            color: #94a3b8; font-size: 0.8rem;
         }
-        .feature-item {
-            background: white; padding: 16px; border-radius: 12px; text-align: center;
-            border: 1px solid #e2e8f0; transition: 0.2s;
-        }
-        .dark .feature-item { background: #1e293b; border-color: #334155; }
-        .feature-item:hover { border-color: #1a56db; transform: scale(1.02); }
-        .feature-item .icon { font-size: 2rem; }
+        .deporte-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .deporte-btn.active { background: #1a56db; color: white; border-color: #1a56db; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-700 font-sans min-h-screen transition-colors duration-300 dark:bg-gray-900 dark:text-gray-200">
@@ -176,14 +162,14 @@
         <button onclick="aceptarCookies()">Aceptar</button>
     </div>
 
-    <!-- Header con navegación mejorada -->
+    <!-- Header con navegación y selector de deporte -->
     <header class="bg-primary text-white py-3 px-4 sticky top-0 z-50 shadow-lg transition-colors dark:bg-gray-800">
         <div class="max-w-7xl mx-auto">
             <div class="flex items-center justify-between flex-wrap gap-2">
                 <div class="flex items-center gap-2">
-                    <span class="text-2xl">⚾</span>
+                    <span class="text-2xl" id="header-icon">⚾</span>
                     <h1 class="font-bold text-xl tracking-wide">SportVive360</h1>
-                    <span class="text-xs bg-white/10 px-3 py-1 rounded-full hidden sm:inline">MLB • Béisbol</span>
+                    <span class="text-xs bg-white/10 px-3 py-1 rounded-full hidden sm:inline" id="header-sport-label">MLB</span>
                 </div>
                 <div class="flex items-center gap-4">
                     <span class="text-xs hidden sm:inline-block bg-green-500/20 px-3 py-1 rounded-full animate-pulse">📺 En vivo</span>
@@ -194,8 +180,14 @@
                     </label>
                 </div>
             </div>
+            <!-- Selector de deportes (visible siempre) -->
+            <div class="flex flex-wrap gap-2 mt-2 border-t border-white/10 pt-2 deporte-selector">
+                <button class="deporte-btn active" data-deporte="mlb">⚾ MLB</button>
+                <button class="deporte-btn" data-deporte="futbol">⚽ Mundial 2026</button>
+                <button class="deporte-btn" data-deporte="nba">🏀 NBA</button>
+            </div>
             <!-- Menú de navegación (escritorio) -->
-            <nav class="desktop-menu flex flex-wrap gap-4 mt-3 border-t border-white/10 pt-3 text-sm">
+            <nav class="desktop-menu flex flex-wrap gap-4 mt-2 border-t border-white/10 pt-2 text-sm">
                 <span class="nav-link active" data-page="inicio">Inicio</span>
                 <span class="nav-link" data-page="partidos">Partidos</span>
                 <span class="nav-link" data-page="clasificacion">Clasificación</span>
@@ -205,7 +197,7 @@
                 <span class="nav-link" data-page="contacto">Contacto</span>
             </nav>
             <!-- Menú móvil -->
-            <nav class="mobile-menu mt-3 border-t border-white/10 pt-3 text-xs">
+            <nav class="mobile-menu mt-2 border-t border-white/10 pt-2 text-xs">
                 <span class="nav-link active" data-page="inicio">Inicio</span>
                 <span class="nav-link" data-page="partidos">Partidos</span>
                 <span class="nav-link" data-page="clasificacion">Clasificación</span>
@@ -223,27 +215,10 @@
 
         <!-- ==================== PÁGINA: INICIO ==================== -->
         <section id="page-inicio" class="page-section active">
-            <!-- Banner de bienvenida con características -->
-            <div class="bg-gradient-to-r from-primary to-secondary text-white p-5 rounded-2xl shadow-lg mb-6">
-                <h2 class="text-2xl font-bold">Liga Mayor de Béisbol • Cobertura en vivo, estadísticas, lanzadores y bateadores</h2>
-                <p class="text-sm opacity-80 mt-1">Resultados en tiempo real, análisis y noticias de la MLB 2026</p>
-                <div class="feature-grid mt-4">
-                    <div class="feature-item bg-white/10 backdrop-blur-sm border-0 text-white">
-                        <div class="icon">🔒</div>
-                        <p class="font-semibold">En tiempo real</p>
-                        <p class="text-xs opacity-75">Seguimiento minuto a minuto, marcadores y cambios</p>
-                    </div>
-                    <div class="feature-item bg-white/10 backdrop-blur-sm border-0 text-white">
-                        <div class="icon">📊</div>
-                        <p class="font-semibold">Datos completos</p>
-                        <p class="text-xs opacity-75">Lanzadores titulares, estadísticas de bateo y más</p>
-                    </div>
-                    <div class="feature-item bg-white/10 backdrop-blur-sm border-0 text-white">
-                        <div class="icon">📰</div>
-                        <p class="font-semibold">Noticias y análisis</p>
-                        <p class="text-xs opacity-75">Artículos originales de nuestros expertos</p>
-                    </div>
-                </div>
+            <!-- Banner dinámico -->
+            <div class="bg-gradient-to-r from-primary to-secondary text-white p-5 rounded-2xl shadow-lg mb-6" id="banner-inicio">
+                <h2 class="text-2xl font-bold" id="banner-titulo">Liga Mayor de Béisbol • Cobertura en vivo, estadísticas, lanzadores y bateadores</h2>
+                <p class="text-sm opacity-80 mt-1" id="banner-desc">Resultados en tiempo real, análisis y noticias de la MLB 2026</p>
             </div>
 
             <!-- Indicador zona horaria -->
@@ -252,248 +227,62 @@
                 <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500 pulse-dot"></span> Actualizado</span>
             </div>
 
-            <!-- Tabs deportivos -->
-            <div class="flex flex-wrap gap-2 mb-6">
-                <button class="tab-btn active" data-tab="mlb">⚾ MLB</button>
-                <button class="tab-btn" data-tab="futbol">⚽ Mundial 2026</button>
-                <button class="tab-btn" data-tab="nba">🏀 NBA</button>
-            </div>
-
-            <!-- Contenido MLB -->
-            <div id="tab-mlb" class="tab-content active">
-                <section>
-                    <h3 class="text-xl font-bold text-secondary border-l-4 border-accent pl-3 mb-4 dark:text-white flex items-center gap-2">
-                        📋 Resultados y partidos en vivo
-                    </h3>
-
-                    <!-- Selector de fechas -->
-                    <div class="flex items-center justify-center gap-2 bg-white dark:bg-gray-800 rounded-xl py-2 px-3 mb-6 border border-gray-200 dark:border-gray-700 shadow-sm">
-                        <button onclick="cambiarFecha(-1)" class="text-lg px-3 py-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">‹</button>
-                        <div id="selector-fechas" class="flex gap-2 text-sm font-medium"></div>
-                        <button onclick="cambiarFecha(1)" class="text-lg px-3 py-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">›</button>
-                    </div>
-
-                    <!-- Anuncio -->
-                    <div class="ad-container">
-                        <ins class="adsbygoogle"
-                             style="display:block"
-                             data-ad-client="ca-pub-3765201153278683"
-                             data-ad-slot="7802021862"
-                             data-ad-format="auto"
-                             data-full-width-responsive="true"></ins>
-                        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-                    </div>
-
-                    <!-- Lista de partidos -->
-                    <div id="lista-partidos" class="space-y-5 mb-8">
-                        <div class="flex justify-center py-10"><div class="spinner"></div></div>
-                    </div>
-
-                    <!-- Estadísticas destacadas (lanzadores y bateadores) -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
-                            <h4 class="font-bold text-lg mb-2">🔥 Líderes de bateo</h4>
-                            <ul class="space-y-2 text-sm">
-                                <li class="flex justify-between"><span>⚾ Aaron Judge (NYY)</span> <span class="font-bold">.345 AVG</span></li>
-                                <li class="flex justify-between"><span>⚾ Ronald Acuña Jr. (ATL)</span> <span class="font-bold">.332 AVG</span></li>
-                                <li class="flex justify-between"><span>⚾ Shohei Ohtani (LAD)</span> <span class="font-bold">.328 AVG</span></li>
-                                <li class="flex justify-between"><span>⚾ Juan Soto (NYY)</span> <span class="font-bold">.311 AVG</span></li>
-                            </ul>
-                        </div>
-                        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
-                            <h4 class="font-bold text-lg mb-2">🔥 Líderes de pitcheo</h4>
-                            <ul class="space-y-2 text-sm">
-                                <li class="flex justify-between"><span>⚾ Zack Wheeler (PHI)</span> <span class="font-bold">2.78 ERA</span></li>
-                                <li class="flex justify-between"><span>⚾ Spencer Strider (ATL)</span> <span class="font-bold">2.91 ERA</span></li>
-                                <li class="flex justify-between"><span>⚾ Gerrit Cole (NYY)</span> <span class="font-bold">3.05 ERA</span></li>
-                                <li class="flex justify-between"><span>⚾ Corbin Burnes (BAL)</span> <span class="font-bold">3.12 ERA</span></li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Clasificación (resumida) -->
-                    <div class="space-y-4">
-                        <h3 class="text-xl font-bold text-secondary border-l-4 border-accent pl-3 mb-2 dark:text-white">📊 Clasificación MLB</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
-                                <h4 class="font-semibold text-md mb-2">Liga Americana – Este</h4>
-                                <div class="overflow-x-auto">
-                                    <table class="w-full text-xs table-standings dark:text-gray-300">
-                                        <thead><tr><th class="text-left">Equipo</th><th class="text-center">G</th><th class="text-center">P</th><th class="text-center">PCT</th></tr></thead>
-                                        <tbody>
-                                            <tr><td>New York Yankees</td><td class="text-center">45</td><td class="text-center">28</td><td class="text-center">.616</td></tr>
-                                            <tr><td>Tampa Bay Rays</td><td class="text-center">41</td><td class="text-center">30</td><td class="text-center">.577</td></tr>
-                                            <tr><td>Toronto Blue Jays</td><td class="text-center">34</td><td class="text-center">38</td><td class="text-center">.472</td></tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
-                                <h4 class="font-semibold text-md mb-2">Liga Nacional – Este</h4>
-                                <div class="overflow-x-auto">
-                                    <table class="w-full text-xs table-standings dark:text-gray-300">
-                                        <thead><tr><th class="text-left">Equipo</th><th class="text-center">G</th><th class="text-center">P</th><th class="text-center">PCT</th></tr></thead>
-                                        <tbody>
-                                            <tr><td>Atlanta Braves</td><td class="text-center">46</td><td class="text-center">25</td><td class="text-center">.648</td></tr>
-                                            <tr><td>Philadelphia Phillies</td><td class="text-center">40</td><td class="text-center">34</td><td class="text-center">.541</td></tr>
-                                            <tr><td>Washington Nationals</td><td class="text-center">38</td><td class="text-center">37</td><td class="text-center">.507</td></tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- Fútbol -->
-            <div id="tab-futbol" class="tab-content">
-                <section>
-                    <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">⚽ Mundial 2026 – Fase de Grupos</h2>
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover mb-6">
-                        <div id="futbol-partidos" class="space-y-3">
-                            <div class="flex justify-center py-6"><div class="spinner"></div></div>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
-                            <div class="group-header">Grupo A</div>
-                            <table class="w-full text-xs table-standings dark:text-gray-300"><tr><td>🇦🇷 Argentina</td><td>6</td></tr><tr><td>🇵🇹 Portugal</td><td>4</td></tr></table>
-                        </div>
-                        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
-                            <div class="group-header">Grupo B</div>
-                            <table class="w-full text-xs table-standings dark:text-gray-300"><tr><td>🇧🇷 Brasil</td><td>6</td></tr><tr><td>🇫🇷 Francia</td><td>4</td></tr></table>
-                        </div>
-                        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
-                            <div class="group-header">Grupo C</div>
-                            <table class="w-full text-xs table-standings dark:text-gray-300"><tr><td>🇪🇸 España</td><td>4</td></tr><tr><td>🇩🇪 Alemania</td><td>3</td></tr></table>
-                        </div>
-                    </div>
-                </section>
-            </div>
-
-            <!-- NBA -->
-            <div id="tab-nba" class="tab-content">
-                <section>
-                    <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">🏀 NBA – Temporada 2025-26</h2>
-                    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover space-y-4">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div><h3 class="font-semibold">Este</h3><table class="w-full text-xs table-standings"><tr><td>Boston Celtics</td><td>58-24</td></tr><tr><td>Milwaukee Bucks</td><td>55-27</td></tr></table></div>
-                            <div><h3 class="font-semibold">Oeste</h3><table class="w-full text-xs table-standings"><tr><td>Denver Nuggets</td><td>57-25</td></tr><tr><td>OKC Thunder</td><td>54-28</td></tr></table></div>
-                        </div>
-                    </div>
-                </section>
+            <!-- Contenido dinámico de la página de inicio (partidos, estadísticas, clasificación) -->
+            <div id="contenido-inicio">
+                <!-- Los datos se renderizan con JavaScript -->
+                <div class="flex justify-center py-10"><div class="spinner"></div></div>
             </div>
         </section>
 
         <!-- ==================== PÁGINA: PARTIDOS ==================== -->
         <section id="page-partidos" class="page-section">
-            <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">📅 Calendario de Partidos MLB</h2>
+            <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white" id="partidos-titulo">📅 Calendario de Partidos MLB</h2>
             <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm">
-                <p class="text-sm">Próximos partidos y resultados de la temporada 2026. Actualización constante.</p>
-                <div class="mt-4 space-y-2">
-                    <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 py-2"><span>⚾ NYY vs BOS</span><span>21 jun, 7:05 PM</span></div>
-                    <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 py-2"><span>⚾ LAD vs SFG</span><span>21 jun, 9:45 PM</span></div>
-                    <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 py-2"><span>⚾ ATL vs PHI</span><span>22 jun, 1:20 PM</span></div>
-                    <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 py-2"><span>⚾ HOU vs SEA</span><span>22 jun, 8:10 PM</span></div>
+                <p class="text-sm" id="partidos-desc">Próximos partidos y resultados de la temporada 2026. Actualización constante.</p>
+                <div id="lista-partidos-pagina" class="mt-4 space-y-2">
+                    <!-- Renderizado dinámico -->
+                    <div class="flex justify-center py-6"><div class="spinner"></div></div>
                 </div>
             </div>
         </section>
 
         <!-- ==================== PÁGINA: CLASIFICACIÓN ==================== -->
         <section id="page-clasificacion" class="page-section">
-            <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">📊 Clasificación MLB 2026</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
-                    <h3 class="font-bold text-lg mb-3">Liga Americana</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-xs table-standings dark:text-gray-300">
-                            <thead><tr><th>Equipo</th><th>G</th><th>P</th><th>PCT</th></tr></thead>
-                            <tbody>
-                                <tr><td>New York Yankees</td><td>45</td><td>28</td><td>.616</td></tr>
-                                <tr><td>Tampa Bay Rays</td><td>41</td><td>30</td><td>.577</td></tr>
-                                <tr><td>Baltimore Orioles</td><td>34</td><td>39</td><td>.466</td></tr>
-                                <tr><td>Toronto Blue Jays</td><td>34</td><td>38</td><td>.472</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
-                    <h3 class="font-bold text-lg mb-3">Liga Nacional</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-xs table-standings dark:text-gray-300">
-                            <thead><tr><th>Equipo</th><th>G</th><th>P</th><th>PCT</th></tr></thead>
-                            <tbody>
-                                <tr><td>Atlanta Braves</td><td>46</td><td>25</td><td>.648</td></tr>
-                                <tr><td>Philadelphia Phillies</td><td>40</td><td>34</td><td>.541</td></tr>
-                                <tr><td>Washington Nationals</td><td>38</td><td>37</td><td>.507</td></tr>
-                                <tr><td>New York Mets</td><td>34</td><td>41</td><td>.453</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+            <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white" id="clasificacion-titulo">📊 Clasificación MLB 2026</h2>
+            <div id="clasificacion-contenido" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Renderizado dinámico -->
+                <div class="flex justify-center py-10 col-span-2"><div class="spinner"></div></div>
             </div>
         </section>
 
         <!-- ==================== PÁGINA: EQUIPOS ==================== -->
         <section id="page-equipos" class="page-section">
-            <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">🏟️ Equipos MLB</h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-3 text-center card-hover"><span class="text-3xl">⚾</span><p class="font-semibold text-sm">Yankees</p></div>
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-3 text-center card-hover"><span class="text-3xl">⚾</span><p class="font-semibold text-sm">Dodgers</p></div>
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-3 text-center card-hover"><span class="text-3xl">⚾</span><p class="font-semibold text-sm">Braves</p></div>
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-3 text-center card-hover"><span class="text-3xl">⚾</span><p class="font-semibold text-sm">Phillies</p></div>
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-3 text-center card-hover"><span class="text-3xl">⚾</span><p class="font-semibold text-sm">Red Sox</p></div>
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-3 text-center card-hover"><span class="text-3xl">⚾</span><p class="font-semibold text-sm">Cubs</p></div>
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-3 text-center card-hover"><span class="text-3xl">⚾</span><p class="font-semibold text-sm">Astros</p></div>
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-3 text-center card-hover"><span class="text-3xl">⚾</span><p class="font-semibold text-sm">Giants</p></div>
+            <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white" id="equipos-titulo">🏟️ Equipos MLB</h2>
+            <div id="equipos-contenido" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <!-- Renderizado dinámico -->
+                <div class="flex justify-center py-10 col-span-full"><div class="spinner"></div></div>
             </div>
         </section>
 
         <!-- ==================== PÁGINA: NOTICIAS ==================== -->
         <section id="page-noticias" class="page-section">
-            <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">📰 Noticias MLB</h2>
-            <div class="space-y-6">
-                <article class="article-card">
-                    <div class="meta">21 de junio, 2026 | Por Redacción</div>
-                    <h3>Yankees y Braves lideran la MLB; Judge y Acuña pelean por el MVP</h3>
-                    <p>La temporada 2026 está siendo histórica para ambos jugadores. Aaron Judge lidera en jonrones y carreras impulsadas, mientras que Ronald Acuña Jr. es el líder en bases robadas y promedio. El duelo por el premio al Jugador Más Valioso se intensifica.</p>
-                    <p>Ambos equipos están empatados con el mejor récord de la liga y se perfilan como los favoritos para ganar la Serie Mundial. Los Yankees cuentan con una rotación de pitcheo sólida, mientras que los Braves tienen un lineup letal. El enfrentamiento entre estos dos equipos en la postemporada sería épico.</p>
-                </article>
-                <article class="article-card">
-                    <div class="meta">20 de junio, 2026</div>
-                    <h3>Shohei Ohtani lanza joya y conecta su 25to jonrón en la victoria de los Dodgers</h3>
-                    <p>El japonés sigue demostrando por qué es el jugador más talentoso del planeta. En la victoria 5-1 sobre los Giants, Ohtani lanzó 7 entradas sin carreras y pegó un cuadrangular de 3 carreras. Su promedio de bateo subió a .328 y su ERA bajó a 2.95.</p>
-                    <p>Ohtani se convierte en el primer jugador en la historia en tener 25 jonrones y 10 victorias como lanzador antes del receso del Juego de Estrellas. Los Dodgers pagan por verlo y no defrauda.</p>
-                </article>
-                <article class="article-card">
-                    <div class="meta">19 de junio, 2026</div>
-                    <h3>El dominicano Juan Soto brilla con los Yankees; 4 hits y 5 RBIs</h3>
-                    <p>Soto está teniendo una temporada espectacular. En el juego contra los Red Sox, conectó dos jonrones y un doble, impulsando 5 carreras. Su OPS supera 1.000 y se perfila como uno de los mejores bateadores de la liga.</p>
-                </article>
+            <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white" id="noticias-titulo">📰 Noticias MLB</h2>
+            <div id="noticias-contenido" class="space-y-6">
+                <!-- Renderizado dinámico -->
+                <div class="flex justify-center py-10"><div class="spinner"></div></div>
             </div>
         </section>
 
         <!-- ==================== PÁGINA: ANÁLISIS ==================== -->
         <section id="page-analisis" class="page-section">
-            <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">🔍 Análisis y Previas</h2>
-            <div class="space-y-6">
-                <article class="article-card">
-                    <div class="meta">Análisis MLB | Por Juan Pérez</div>
-                    <h3>¿Quién ganará la Serie Mundial 2026? Dodgers, Yankees o Braves</h3>
-                    <p>La temporada de la MLB ha estado marcada por el poder ofensivo. Los Dodgers, con Mookie Betts y Shohei Ohtani, tienen el mejor roster de la liga. Los Yankees, con Judge y Soto, son imparables en el Bronx. Los Braves, con Acuña y Olson, tienen una alineación letal.</p>
-                    <p>Sin embargo, el pitcheo es clave: los equipos con mejores rotaciones (Astros, Phillies) podrían dar la sorpresa. Nuestro pronóstico: Yankees vs. Dodgers en la Serie Mundial, con los Yankees llevándose el título en 6 juegos.</p>
-                </article>
-                <article class="article-card">
-                    <div class="meta">Previa Mundial 2026 | Por Carlos Rodríguez</div>
-                    <h3>Análisis táctico de los grupos: ¿quién puede dar la sorpresa?</h3>
-                    <p>El Mundial 2026, con 48 selecciones, promete ser el más impredecible. Argentina, Brasil y Francia parten como favoritos, pero equipos como Portugal, España y Alemania tienen planteles de lujo.</p>
-                    <p>Las selecciones africanas (Marruecos, Nigeria, Egipto) y asiáticas (Japón, Australia) han mejorado notablemente. El formato de grupos de 4 equipos aún deja poco margen de error. Claves: el estado físico de los veteranos (Messi, CR7, Lewandowski) y el impacto de jóvenes promesas como Garnacho, Bellingham o Musiala.</p>
-                </article>
+            <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white" id="analisis-titulo">🔍 Análisis y Previas</h2>
+            <div id="analisis-contenido" class="space-y-6">
+                <!-- Renderizado dinámico -->
+                <div class="flex justify-center py-10"><div class="spinner"></div></div>
             </div>
         </section>
 
-        <!-- ==================== PÁGINA: CONTACTO ==================== -->
+        <!-- ==================== PÁGINAS ESTÁTICAS: CONTACTO, ACERCA, PRIVACIDAD ==================== -->
         <section id="page-contacto" class="page-section">
             <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">📬 Contacto</h2>
             <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm max-w-2xl">
@@ -515,57 +304,35 @@
             </div>
         </section>
 
-        <!-- ==================== PÁGINA: ACERCA DE ==================== -->
         <section id="page-acerca" class="page-section">
             <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">📖 Acerca de SportVive360</h2>
             <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm max-w-3xl space-y-4">
                 <p>SportVive360 es un portal deportivo independiente fundado en 2025 con la misión de ofrecer a los aficionados información actualizada, análisis profundos y contenido original sobre los deportes más populares del mundo: fútbol, béisbol y baloncesto.</p>
                 <p>Nos enfocamos en el Mundial de la FIFA 2026, la Major League Baseball (MLB) y la National Basketball Association (NBA), brindando resultados en vivo, tablas de posiciones, noticias de última hora y previas exclusivas.</p>
                 <p>Nuestro equipo está compuesto por periodistas deportivos y analistas apasionados, todos con amplia experiencia en la cobertura de eventos internacionales. Estamos basados en Lima, Perú, y operamos en la zona horaria UTC‑5.</p>
-                <p>Creemos en el deporte como un vehículo de unión y emoción, y trabajamos día a día para que nuestros lectores vivan cada partido como si estuvieran en la cancha.</p>
                 <p>¡Gracias por ser parte de nuestra comunidad!</p>
             </div>
         </section>
 
-        <!-- ==================== PÁGINA: PRIVACIDAD ==================== -->
         <section id="page-privacidad" class="page-section">
             <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">🔒 Política de Privacidad</h2>
             <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm max-w-3xl space-y-4 text-sm">
                 <p><strong>Última actualización:</strong> 21 de junio de 2026</p>
                 <p>En SportVive360 (sportvive360.cyou), nos tomamos muy en serio la privacidad de nuestros usuarios. Esta política explica cómo recopilamos, usamos y protegemos tu información personal cuando visitas nuestro sitio web.</p>
-                
                 <h4 class="font-bold text-base mt-4">1. Información que recopilamos</h4>
                 <p>Recopilamos información que nos proporcionas voluntariamente, como tu nombre y correo electrónico cuando nos contactas a través del formulario de contacto. Además, podemos recopilar datos de navegación anónimos (dirección IP, tipo de navegador, páginas visitadas) a través de cookies y herramientas de análisis.</p>
-
                 <h4 class="font-bold text-base mt-4">2. Uso de cookies</h4>
-                <p>Utilizamos cookies propias y de terceros para mejorar la experiencia del usuario, analizar el tráfico y mostrar anuncios personalizados de Google AdSense. Las cookies son pequeños archivos que se almacenan en tu dispositivo. Puedes configurar tu navegador para rechazarlas, aunque algunas funcionalidades del sitio podrían verse afectadas.</p>
-                <p>Google AdSense utiliza cookies para mostrar anuncios basados en tus visitas previas a este y otros sitios web. Puedes desactivar la personalización de anuncios en la <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">configuración de anuncios de Google</a>.</p>
-
+                <p>Utilizamos cookies propias y de terceros para mejorar la experiencia del usuario, analizar el tráfico y mostrar anuncios personalizados de Google AdSense. Puedes configurar tu navegador para rechazarlas, aunque algunas funcionalidades del sitio podrían verse afectadas.</p>
+                <p>Google AdSense utiliza cookies para mostrar anuncios basados en tus visitas previas. Puedes desactivar la personalización de anuncios en la <a href="https://adssettings.google.com" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline">configuración de anuncios de Google</a>.</p>
                 <h4 class="font-bold text-base mt-4">3. Uso de la información</h4>
-                <p>La información recopilada se utiliza para:</p>
-                <ul class="list-disc pl-6 space-y-1">
-                    <li>Responder a tus consultas y comentarios.</li>
-                    <li>Mejorar nuestro contenido y la navegación del sitio.</li>
-                    <li>Mostrar anuncios relevantes a través de Google AdSense.</li>
-                    <li>Analizar tendencias y estadísticas de uso.</li>
-                </ul>
-
+                <p>La información recopilada se utiliza para: responder consultas, mejorar el contenido, mostrar anuncios relevantes y analizar tendencias.</p>
                 <h4 class="font-bold text-base mt-4">4. Compartir datos</h4>
-                <p>No vendemos ni compartimos tu información personal con terceros, excepto cuando sea necesario para cumplir con la ley o proteger nuestros derechos. Los datos de navegación pueden ser compartidos con Google Analytics y AdSense para fines publicitarios y de análisis, siempre de forma agregada y anónima.</p>
-
+                <p>No vendemos ni compartimos tu información personal con terceros, excepto cuando sea necesario para cumplir con la ley o proteger nuestros derechos.</p>
                 <h4 class="font-bold text-base mt-4">5. Seguridad</h4>
-                <p>Implementamos medidas de seguridad razonables para proteger tu información contra accesos no autorizados, alteración o divulgación. Sin embargo, ningún método de transmisión por Internet es 100% seguro, por lo que no podemos garantizar la seguridad absoluta.</p>
-
-                <h4 class="font-bold text-base mt-4">6. Enlaces a terceros</h4>
-                <p>Nuestro sitio puede contener enlaces a otros sitios web. No nos responsabilizamos por las políticas de privacidad de estos terceros. Te recomendamos revisar sus políticas antes de proporcionarles cualquier información personal.</p>
-
-                <h4 class="font-bold text-base mt-4">7. Tus derechos</h4>
-                <p>Puedes solicitar la eliminación o modificación de tus datos personales en cualquier momento enviándonos un correo a <a href="mailto:info@sportvive360.cyou" class="text-blue-400 hover:underline">info@sportvive360.cyou</a>. También puedes optar por no recibir comunicaciones nuestras en el futuro.</p>
-
-                <h4 class="font-bold text-base mt-4">8. Cambios en esta política</h4>
-                <p>Nos reservamos el derecho de actualizar esta política de privacidad. Publicaremos cualquier cambio en esta página con la fecha de actualización.</p>
-
-                <p class="mt-4">Si tienes preguntas sobre esta política, contáctanos a través de nuestro <span class="nav-link text-blue-400 hover:underline" onclick="navegar('contacto')">formulario de contacto</span>.</p>
+                <p>Implementamos medidas de seguridad razonables para proteger tu información, pero ningún método de transmisión por Internet es 100% seguro.</p>
+                <h4 class="font-bold text-base mt-4">6. Tus derechos</h4>
+                <p>Puedes solicitar la eliminación o modificación de tus datos personales enviándonos un correo a <a href="mailto:info@sportvive360.cyou" class="text-blue-400 hover:underline">info@sportvive360.cyou</a>.</p>
+                <p class="mt-4">Si tienes preguntas, contáctanos a través de nuestro <span class="nav-link text-blue-400 hover:underline" onclick="navegar('contacto')">formulario de contacto</span>.</p>
             </div>
         </section>
 
@@ -614,139 +381,416 @@
             }
         });
 
-        // ======== NAVEGACIÓN ========
-        function navegar(pageId) {
-            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
-            const target = document.getElementById('page-' + pageId);
-            if (target) target.classList.add('active');
-            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-            document.querySelectorAll(`.nav-link[data-page="${pageId}"]`).forEach(link => link.classList.add('active'));
-            if (pageId === 'inicio') {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelector('.tab-btn[data-tab="mlb"]')?.classList.add('active');
-                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
-                document.getElementById('tab-mlb')?.classList.add('active');
-            }
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        // ======== ESTADO GLOBAL ========
+        let deporteActual = 'mlb'; // 'mlb', 'futbol', 'nba'
+        let paginaActual = 'inicio';
 
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                const page = this.dataset.page;
-                if (page) navegar(page);
-            });
-        });
-
-        // ======== TABS DEPORTIVOS ========
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
-                const target = document.getElementById('tab-' + this.dataset.tab);
-                if (target) target.classList.add('active');
-            });
-        });
-
-        // ======== FECHA ========
-        document.getElementById('footer-fecha').textContent = new Date().toLocaleDateString('es-ES', { year:'numeric', month:'long', day:'numeric' });
-
-        // ======== MLB: selector de fechas ========
-        let fechaActual = new Date();
-        const fechasDiv = document.getElementById('selector-fechas');
-
-        function actualizarFechas() {
-            const opciones = { weekday: 'short', month: 'short', day: 'numeric' };
-            const hoyStr = fechaActual.toLocaleDateString('es-ES', opciones);
-            const ayer = new Date(fechaActual); ayer.setDate(ayer.getDate() - 1);
-            const manana = new Date(fechaActual); manana.setDate(manana.getDate() + 1);
-            fechasDiv.innerHTML = `
-                <span class="px-2 py-1 rounded-lg bg-gray-100 dark:bg-gray-700 text-xs">${ayer.toLocaleDateString('es-ES', opciones)}</span>
-                <span class="px-3 py-1 rounded-lg bg-blue-600 text-white text-xs font-bold">${hoyStr}</span>
-                <span class="px-2 py-1 rounded-lg bg-gray-100 dark:bg-gray-700 text-xs">${manana.toLocaleDateString('es-ES', opciones)}</span>
-            `;
-            cargarPartidosMLB(fechaActual);
-        }
-
-        function cambiarFecha(dias) {
-            fechaActual.setDate(fechaActual.getDate() + dias);
-            actualizarFechas();
-        }
-
-        function cargarPartidosMLB(fecha) {
-            const contenedor = document.getElementById('lista-partidos');
-            contenedor.innerHTML = '<div class="flex justify-center py-10"><div class="spinner"></div></div>';
-            setTimeout(() => {
-                const partidos = [
+        // ======== DATOS POR DEPORTE ========
+        const datosDeportes = {
+            mlb: {
+                nombre: 'MLB',
+                icono: '⚾',
+                banner: {
+                    titulo: 'Liga Mayor de Béisbol • Cobertura en vivo, estadísticas, lanzadores y bateadores',
+                    desc: 'Resultados en tiempo real, análisis y noticias de la MLB 2026'
+                },
+                partidos: [
                     { local: 'New York Yankees', visitante: 'Boston Red Sox', score: '6-4', status: 'Final', badge: 'badge-final' },
                     { local: 'Los Angeles Dodgers', visitante: 'San Francisco Giants', score: '3-2', status: 'Vivo', badge: 'badge-vivo' },
                     { local: 'Chicago Cubs', visitante: 'St. Louis Cardinals', score: 'vs', status: 'Programado', badge: 'badge-programado' },
                     { local: 'Houston Astros', visitante: 'Seattle Mariners', score: '8-1', status: 'Final', badge: 'badge-final' },
                     { local: 'Atlanta Braves', visitante: 'Philadelphia Phillies', score: 'vs', status: 'Programado', badge: 'badge-programado' },
-                ];
-                let html = '';
-                partidos.forEach(p => {
-                    html += `
-                        <div class="match-card">
-                            <div class="flex items-center justify-between flex-wrap gap-2">
-                                <div class="flex items-center gap-3">
-                                    <span class="font-semibold">${p.local}</span>
-                                    <span class="text-gray-400 text-sm">vs</span>
-                                    <span class="font-semibold">${p.visitante}</span>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <span class="font-bold text-lg">${p.score}</span>
-                                    <span class="match-status ${p.badge}">${p.status}</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-                contenedor.innerHTML = html;
-            }, 600);
-        }
-
-        // ======== SIMULACIÓN DE PARTIDOS DE FÚTBOL ========
-        function cargarPartidosFutbol() {
-            const contenedor = document.getElementById('futbol-partidos');
-            contenedor.innerHTML = '<div class="flex justify-center py-6"><div class="spinner"></div></div>';
-            setTimeout(() => {
-                const partidos = [
+                ],
+                clasificacion: {
+                    titulo: '📊 Clasificación MLB 2026',
+                    conferencias: [
+                        { nombre: 'Liga Americana – Este', equipos: [
+                            { nombre: 'New York Yankees', G: 45, P: 28, PCT: '.616' },
+                            { nombre: 'Tampa Bay Rays', G: 41, P: 30, PCT: '.577' },
+                            { nombre: 'Toronto Blue Jays', G: 34, P: 38, PCT: '.472' },
+                            { nombre: 'Baltimore Orioles', G: 34, P: 39, PCT: '.466' },
+                        ]},
+                        { nombre: 'Liga Nacional – Este', equipos: [
+                            { nombre: 'Atlanta Braves', G: 46, P: 25, PCT: '.648' },
+                            { nombre: 'Philadelphia Phillies', G: 40, P: 34, PCT: '.541' },
+                            { nombre: 'Washington Nationals', G: 38, P: 37, PCT: '.507' },
+                            { nombre: 'New York Mets', G: 34, P: 41, PCT: '.453' },
+                        ]}
+                    ]
+                },
+                equipos: ['Yankees', 'Dodgers', 'Braves', 'Phillies', 'Red Sox', 'Cubs', 'Astros', 'Giants', 'Mets', 'Cardinals'],
+                noticias: [
+                    { fecha: '21 de junio, 2026', titulo: 'Yankees y Braves lideran la MLB; Judge y Acuña pelean por el MVP', resumen: 'La temporada 2026 está siendo histórica para ambos jugadores. Aaron Judge lidera en jonrones y carreras impulsadas, mientras que Ronald Acuña Jr. es el líder en bases robadas y promedio. El duelo por el premio al Jugador Más Valioso se intensifica.' },
+                    { fecha: '20 de junio, 2026', titulo: 'Shohei Ohtani lanza joya y conecta su 25to jonrón en la victoria de los Dodgers', resumen: 'El japonés sigue demostrando por qué es el jugador más talentoso del planeta. En la victoria 5-1 sobre los Giants, Ohtani lanzó 7 entradas sin carreras y pegó un cuadrangular de 3 carreras.' },
+                    { fecha: '19 de junio, 2026', titulo: 'El dominicano Juan Soto brilla con los Yankees; 4 hits y 5 RBIs', resumen: 'Soto está teniendo una temporada espectacular. En el juego contra los Red Sox, conectó dos jonrones y un doble, impulsando 5 carreras. Su OPS supera 1.000.' },
+                ],
+                analisis: [
+                    { autor: 'Por Juan Pérez', titulo: '¿Quién ganará la Serie Mundial 2026? Dodgers, Yankees o Braves', texto: 'La temporada de la MLB ha estado marcada por el poder ofensivo. Los Dodgers, con Mookie Betts y Shohei Ohtani, tienen el mejor roster de la liga. Los Yankees, con Judge y Soto, son imparables en el Bronx. Los Braves, con Acuña y Olson, tienen una alineación letal. Sin embargo, el pitcheo es clave: los equipos con mejores rotaciones (Astros, Phillies) podrían dar la sorpresa. Nuestro pronóstico: Yankees vs. Dodgers en la Serie Mundial, con los Yankees llevándose el título en 6 juegos.' },
+                    { autor: 'Por Carlos Rodríguez', titulo: 'Análisis de la temporada: el resurgir de los Cachorros', texto: 'Los Cachorros han sorprendido a todos con un récord positivo. Su joven rotación de lanzadores y el bateo de Suzuki y Happ han sido claves. Podrían ser el comodín en la postemporada.' },
+                ]
+            },
+            futbol: {
+                nombre: 'Mundial 2026',
+                icono: '⚽',
+                banner: {
+                    titulo: 'Mundial 2026 • Fase de Grupos – Partidos, resultados y clasificación',
+                    desc: 'Sigue a tu selección favorita en el torneo más importante del mundo.'
+                },
+                partidos: [
                     { local: 'Argentina', visitante: 'Australia', score: '2-0', status: 'Final', badge: 'badge-final', flagL: '🇦🇷', flagV: '🇦🇺' },
                     { local: 'Portugal', visitante: 'Egipto', score: '1-1', status: 'Final', badge: 'badge-final', flagL: '🇵🇹', flagV: '🇪🇬' },
                     { local: 'Brasil', visitante: 'EE.UU.', score: '3-1', status: 'Vivo', badge: 'badge-vivo', flagL: '🇧🇷', flagV: '🇺🇸' },
                     { local: 'Francia', visitante: 'Marruecos', score: 'vs', status: 'Programado', badge: 'badge-programado', flagL: '🇫🇷', flagV: '🇲🇦' },
-                ];
-                let html = '';
-                partidos.forEach(p => {
-                    html += `
-                        <div class="match-card">
-                            <div class="flex items-center justify-between flex-wrap gap-2">
-                                <div class="flex items-center gap-3">
-                                    <span class="text-xl">${p.flagL}</span>
-                                    <span class="font-semibold">${p.local}</span>
-                                    <span class="text-gray-400 text-sm">vs</span>
-                                    <span class="text-xl">${p.flagV}</span>
-                                    <span class="font-semibold">${p.visitante}</span>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <span class="font-bold text-lg">${p.score}</span>
-                                    <span class="match-status ${p.badge}">${p.status}</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-                contenedor.innerHTML = html;
-            }, 500);
+                    { local: 'España', visitante: 'Alemania', score: '2-2', status: 'Final', badge: 'badge-final', flagL: '🇪🇸', flagV: '🇩🇪' },
+                ],
+                clasificacion: {
+                    titulo: '📊 Clasificación Mundial 2026 – Grupos',
+                    conferencias: [
+                        { nombre: 'Grupo A', equipos: [
+                            { nombre: 'Argentina', Pts: 6, PJ: 2, G: 2, E: 0, P: 0, GF: 5, GC: 1 },
+                            { nombre: 'Portugal', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 3, GC: 2 },
+                            { nombre: 'Egipto', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 1, GC: 3 },
+                            { nombre: 'Australia', Pts: 0, PJ: 2, G: 0, E: 0, P: 2, GF: 1, GC: 4 },
+                        ]},
+                        { nombre: 'Grupo B', equipos: [
+                            { nombre: 'Brasil', Pts: 6, PJ: 2, G: 2, E: 0, P: 0, GF: 6, GC: 2 },
+                            { nombre: 'Francia', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 4, GC: 3 },
+                            { nombre: 'Marruecos', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 1, GC: 3 },
+                            { nombre: 'EE.UU.', Pts: 0, PJ: 2, G: 0, E: 0, P: 2, GF: 2, GC: 5 },
+                        ]}
+                    ]
+                },
+                equipos: ['Argentina', 'Brasil', 'Francia', 'España', 'Alemania', 'Portugal', 'Inglaterra', 'Países Bajos'],
+                noticias: [
+                    { fecha: '21 de junio, 2026', titulo: 'Argentina arranca con contundencia y ya es favorita', resumen: 'La albiceleste goleó 5-1 a Australia. Messi, Di María y Garnacho fueron las figuras. El equipo de Scaloni parece imparable.' },
+                    { fecha: '20 de junio, 2026', titulo: 'España y Alemania empatan en un partidazo; Japón sorprende', resumen: 'El duelo entre españoles y alemanes terminó 2-2 con goles de Morata y Wirtz. Japón empató 1-1 ante Nigeria.' },
+                ],
+                analisis: [
+                    { autor: 'Por Juan Pérez', titulo: 'Análisis táctico de los grupos: ¿quién puede dar la sorpresa?', texto: 'El Mundial 2026, con 48 selecciones, promete ser el más impredecible. Argentina, Brasil y Francia parten como favoritos, pero equipos como Portugal, España y Alemania tienen planteles de lujo. Las selecciones africanas y asiáticas han mejorado notablemente.' },
+                ]
+            },
+            nba: {
+                nombre: 'NBA',
+                icono: '🏀',
+                banner: {
+                    titulo: 'NBA • Temporada 2025-26 – Resultados, estadísticas y clasificación',
+                    desc: 'Sigue a tus equipos favoritos en la mejor liga de baloncesto del mundo.'
+                },
+                partidos: [
+                    { local: 'Boston Celtics', visitante: 'Los Angeles Lakers', score: '112-108', status: 'Final', badge: 'badge-final' },
+                    { local: 'Denver Nuggets', visitante: 'Golden State Warriors', score: '105-98', status: 'Vivo', badge: 'badge-vivo' },
+                    { local: 'Milwaukee Bucks', visitante: 'Phoenix Suns', score: 'vs', status: 'Programado', badge: 'badge-programado' },
+                    { local: 'Philadelphia 76ers', visitante: 'Dallas Mavericks', score: '121-115', status: 'Final', badge: 'badge-final' },
+                ],
+                clasificacion: {
+                    titulo: '📊 Clasificación NBA 2025-26',
+                    conferencias: [
+                        { nombre: 'Conferencia Este', equipos: [
+                            { nombre: 'Boston Celtics', G: 58, P: 24, PCT: '.707' },
+                            { nombre: 'Milwaukee Bucks', G: 55, P: 27, PCT: '.671' },
+                            { nombre: 'Philadelphia 76ers', G: 50, P: 32, PCT: '.610' },
+                            { nombre: 'New York Knicks', G: 47, P: 35, PCT: '.573' },
+                        ]},
+                        { nombre: 'Conferencia Oeste', equipos: [
+                            { nombre: 'Denver Nuggets', G: 57, P: 25, PCT: '.695' },
+                            { nombre: 'Oklahoma City Thunder', G: 54, P: 28, PCT: '.659' },
+                            { nombre: 'Phoenix Suns', G: 49, P: 33, PCT: '.598' },
+                            { nombre: 'Los Angeles Lakers', G: 46, P: 36, PCT: '.561' },
+                        ]}
+                    ]
+                },
+                equipos: ['Celtics', 'Lakers', 'Nuggets', 'Warriors', 'Bucks', 'Suns', '76ers', 'Mavericks', 'Heat', 'Clippers'],
+                noticias: [
+                    { fecha: '21 de junio, 2026', titulo: 'Celtics y Nuggets, los reyes de la temporada regular', resumen: 'Boston y Denver han sido los equipos más consistentes. Con Tatum y Jokic como MVPs virtuales, llegan con ventaja de local a los playoffs.' },
+                    { fecha: '20 de junio, 2026', titulo: 'LeBron James anuncia que será su última temporada', resumen: 'El Rey ha confirmado que la temporada 2025-26 será su última en la NBA. Los Lakers buscarán darle un campeonato de despedida.' },
+                ],
+                analisis: [
+                    { autor: 'Por Laura Gómez', titulo: 'Playoffs NBA 2026: Celtics y Nuggets, los grandes favoritos', texto: 'Los playoffs comienzan con una sensación de déjà vu. Celtics y Nuggets han sido los mejores equipos de la temporada regular. Sin embargo, los Bucks de Giannis y los Lakers de LeBron no se rinden. Pronóstico: Celtics y Nuggets en las finales, con Boston campeón en 7 juegos.' },
+                ]
+            }
+        };
+
+        // ======== FUNCIONES DE RENDERIZADO ========
+        function renderizarTodo() {
+            renderizarBanner();
+            renderizarInicio();
+            renderizarPartidos();
+            renderizarClasificacion();
+            renderizarEquipos();
+            renderizarNoticias();
+            renderizarAnalisis();
+            actualizarHeader();
         }
 
-        // ======== INICIALIZAR ========
-        actualizarFechas();
-        cargarPartidosFutbol();
-        navegar('inicio');
+        function actualizarHeader() {
+            const datos = datosDeportes[deporteActual];
+            document.getElementById('header-icon').textContent = datos.icono;
+            document.getElementById('header-sport-label').textContent = datos.nombre;
+            // Actualizar botones de deporte
+            document.querySelectorAll('.deporte-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.deporte === deporteActual);
+            });
+        }
 
-        // Cargar anuncios
+        function renderizarBanner() {
+            const datos = datosDeportes[deporteActual];
+            document.getElementById('banner-titulo').textContent = datos.banner.titulo;
+            document.getElementById('banner-desc').textContent = datos.banner.desc;
+        }
+
+        function renderizarInicio() {
+            const datos = datosDeportes[deporteActual];
+            const contenedor = document.getElementById('contenido-inicio');
+            // Construir HTML para la página de inicio (partidos + estadísticas + clasificación resumida)
+            let html = '';
+
+            // Partidos destacados
+            html += `<div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover mb-6">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-semibold text-lg">📅 Partidos de hoy</h3>
+                    <span class="text-xs bg-accent/10 text-accent px-3 py-1 rounded-full">${datos.partidos.filter(p => p.status === 'Vivo').length} en vivo</span>
+                </div>
+                <div class="space-y-3">`;
+            datos.partidos.forEach(p => {
+                const flagL = p.flagL || '';
+                const flagV = p.flagV || '';
+                html += `
+                    <div class="match-card">
+                        <div class="flex items-center justify-between flex-wrap gap-2">
+                            <div class="flex items-center gap-3">
+                                ${flagL ? `<span class="text-xl">${flagL}</span>` : ''}
+                                <span class="font-semibold">${p.local}</span>
+                                <span class="text-gray-400 text-sm">vs</span>
+                                ${flagV ? `<span class="text-xl">${flagV}</span>` : ''}
+                                <span class="font-semibold">${p.visitante}</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="font-bold text-lg">${p.score}</span>
+                                <span class="match-status ${p.badge}">${p.status}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            html += `</div></div>`;
+
+            // Estadísticas (simuladas)
+            html += `<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
+                    <h4 class="font-bold text-lg mb-2">🔥 Líderes destacados</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex justify-between"><span>${datos.icono} Jugador 1 (${datos.nombre})</span> <span class="font-bold">.XXX</span></li>
+                        <li class="flex justify-between"><span>${datos.icono} Jugador 2 (${datos.nombre})</span> <span class="font-bold">.XXX</span></li>
+                        <li class="flex justify-between"><span>${datos.icono} Jugador 3 (${datos.nombre})</span> <span class="font-bold">.XXX</span></li>
+                    </ul>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
+                    <h4 class="font-bold text-lg mb-2">🔥 Líderes (otra categoría)</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex justify-between"><span>${datos.icono} Líder 1</span> <span class="font-bold">XX</span></li>
+                        <li class="flex justify-between"><span>${datos.icono} Líder 2</span> <span class="font-bold">XX</span></li>
+                        <li class="flex justify-between"><span>${datos.icono} Líder 3</span> <span class="font-bold">XX</span></li>
+                    </ul>
+                </div>
+            </div>`;
+
+            // Clasificación resumida (primeras dos tablas)
+            if (datos.clasificacion && datos.clasificacion.conferencias) {
+                html += `<div class="space-y-4">
+                    <h3 class="text-xl font-bold text-secondary border-l-4 border-accent pl-3 mb-2 dark:text-white">📊 Clasificación</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
+                datos.clasificacion.conferencias.slice(0, 2).forEach(conf => {
+                    html += `<div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
+                        <h4 class="font-semibold text-md mb-2">${conf.nombre}</h4>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-xs table-standings dark:text-gray-300">
+                                <thead><tr><th class="text-left">Equipo</th><th class="text-center">G</th><th class="text-center">P</th><th class="text-center">PCT</th></tr></thead>
+                                <tbody>`;
+                    conf.equipos.forEach(eq => {
+                        html += `<tr><td>${eq.nombre}</td><td class="text-center">${eq.G}</td><td class="text-center">${eq.P}</td><td class="text-center">${eq.PCT}</td></tr>`;
+                    });
+                    html += `</tbody></table></div></div>`;
+                });
+                html += `</div></div>`;
+            }
+
+            contenedor.innerHTML = html;
+        }
+
+        function renderizarPartidos() {
+            const datos = datosDeportes[deporteActual];
+            document.getElementById('partidos-titulo').textContent = `📅 Calendario de Partidos ${datos.nombre}`;
+            document.getElementById('partidos-desc').textContent = `Próximos partidos y resultados de la temporada 2026. Actualización constante.`;
+            const contenedor = document.getElementById('lista-partidos-pagina');
+            let html = '';
+            datos.partidos.forEach(p => {
+                const flagL = p.flagL || '';
+                const flagV = p.flagV || '';
+                html += `
+                    <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 py-2">
+                        <span>${flagL} ${p.local} vs ${p.visitante} ${flagV}</span>
+                        <span>${p.score} <span class="match-status ${p.badge}">${p.status}</span></span>
+                    </div>
+                `;
+            });
+            contenedor.innerHTML = html || '<p class="text-gray-500">No hay partidos disponibles.</p>';
+        }
+
+        function renderizarClasificacion() {
+            const datos = datosDeportes[deporteActual];
+            document.getElementById('clasificacion-titulo').textContent = datos.clasificacion.titulo;
+            const contenedor = document.getElementById('clasificacion-contenido');
+            if (!datos.clasificacion || !datos.clasificacion.conferencias) {
+                contenedor.innerHTML = '<p>No hay datos de clasificación.</p>';
+                return;
+            }
+            let html = '';
+            datos.clasificacion.conferencias.forEach(conf => {
+                html += `<div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover">
+                    <h3 class="font-bold text-lg mb-3">${conf.nombre}</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs table-standings dark:text-gray-300">
+                            <thead><tr>`;
+                // Cabeceras dinámicas según las claves del primer equipo
+                const first = conf.equipos[0];
+                if (first) {
+                    Object.keys(first).forEach(key => {
+                        if (key !== 'nombre') {
+                            html += `<th class="text-center">${key}</th>`;
+                        } else {
+                            html += `<th class="text-left">Equipo</th>`;
+                        }
+                    });
+                }
+                html += `</tr></thead><tbody>`;
+                conf.equipos.forEach(eq => {
+                    html += `<tr>`;
+                    Object.keys(eq).forEach(key => {
+                        if (key === 'nombre') {
+                            html += `<td>${eq[key]}</td>`;
+                        } else {
+                            html += `<td class="text-center">${eq[key]}</td>`;
+                        }
+                    });
+                    html += `</tr>`;
+                });
+                html += `</tbody></table></div></div>`;
+            });
+            contenedor.innerHTML = html;
+        }
+
+        function renderizarEquipos() {
+            const datos = datosDeportes[deporteActual];
+            document.getElementById('equipos-titulo').textContent = `🏟️ Equipos ${datos.nombre}`;
+            const contenedor = document.getElementById('equipos-contenido');
+            let html = '';
+            datos.equipos.forEach(eq => {
+                html += `
+                    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-3 text-center card-hover">
+                        <span class="text-3xl">${datos.icono}</span>
+                        <p class="font-semibold text-sm">${eq}</p>
+                    </div>
+                `;
+            });
+            contenedor.innerHTML = html || '<p class="col-span-full text-gray-500">No hay equipos disponibles.</p>';
+        }
+
+        function renderizarNoticias() {
+            const datos = datosDeportes[deporteActual];
+            document.getElementById('noticias-titulo').textContent = `📰 Noticias ${datos.nombre}`;
+            const contenedor = document.getElementById('noticias-contenido');
+            let html = '';
+            datos.noticias.forEach(noticia => {
+                html += `
+                    <article class="article-card">
+                        <div class="meta">${noticia.fecha}</div>
+                        <h3>${noticia.titulo}</h3>
+                        <p>${noticia.resumen}</p>
+                    </article>
+                `;
+            });
+            contenedor.innerHTML = html || '<p class="text-gray-500">No hay noticias disponibles.</p>';
+        }
+
+        function renderizarAnalisis() {
+            const datos = datosDeportes[deporteActual];
+            document.getElementById('analisis-titulo').textContent = `🔍 Análisis y Previas - ${datos.nombre}`;
+            const contenedor = document.getElementById('analisis-contenido');
+            let html = '';
+            datos.analisis.forEach(art => {
+                html += `
+                    <article class="article-card">
+                        <div class="meta">${art.autor}</div>
+                        <h3>${art.titulo}</h3>
+                        <p>${art.texto}</p>
+                    </article>
+                `;
+            });
+            contenedor.innerHTML = html || '<p class="text-gray-500">No hay análisis disponibles.</p>';
+        }
+
+        // ======== CAMBIO DE DEPORTE ========
+        function cambiarDeporte(deporte) {
+            if (deporte === deporteActual) return;
+            deporteActual = deporte;
+            // Actualizar botones
+            document.querySelectorAll('.deporte-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.deporte === deporte);
+            });
+            // Renderizar todo
+            renderizarTodo();
+            // Si estamos en una página que no sea inicio, recargar esa página también
+            if (paginaActual !== 'inicio') {
+                // Volver a renderizar la página actual (ya se hizo con renderizarTodo, pero podemos forzar)
+                // Pero como las páginas están ocultas, al cambiar de deporte se actualizan los contenedores
+                // y al navegar a ellas se mostrarán los nuevos datos.
+            }
+        }
+
+        // ======== NAVEGACIÓN ENTRE PÁGINAS ========
+        function navegar(pageId) {
+            paginaActual = pageId;
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
+            const target = document.getElementById('page-' + pageId);
+            if (target) target.classList.add('active');
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            document.querySelectorAll(`.nav-link[data-page="${pageId}"]`).forEach(link => link.classList.add('active'));
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Si es una página que necesita datos, ya se renderizaron al cambiar deporte, pero forzamos actualización por si acaso
+            // (las funciones de renderizado ya se llamaron en renderizarTodo)
+        }
+
+        // ======== EVENT LISTENERS ========
+        document.addEventListener('DOMContentLoaded', function() {
+            // Botones de deporte
+            document.querySelectorAll('.deporte-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    cambiarDeporte(this.dataset.deporte);
+                });
+            });
+
+            // Navegación
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const page = this.dataset.page;
+                    if (page) navegar(page);
+                });
+            });
+
+            // Fecha
+            document.getElementById('footer-fecha').textContent = new Date().toLocaleDateString('es-ES', { year:'numeric', month:'long', day:'numeric' });
+
+            // Renderizado inicial
+            renderizarTodo();
+            navegar('inicio');
+        });
+
+        // ======== COOKIES ========
+        if (!localStorage.getItem('cookiesAceptadas')) {
+            document.getElementById('cookieBanner').classList.add('show');
+        }
+
+        // ======== ANUNCIOS ========
         setTimeout(() => {
             if (window.adsbygoogle) {
                 try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
