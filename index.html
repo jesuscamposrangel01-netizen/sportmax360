@@ -1,612 +1,680 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SportVive360 | Portal Deportivo Profesional</title>
-    <meta name="description" content="SportVive360: MLB, Fútbol Mundial 2026 y NBA en vivo. Noticias, resultados y estadísticas.">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SportVive360 • Portal Deportivo 2026</title>
+    <meta name="description" content="SportVive360: cobertura en vivo de MLB, Mundial 2026 y NBA con estadísticas, noticias y análisis." />
     <!-- Google AdSense -->
-    <meta name="google-adsense-account" content="ca-pub-3765201153278683">
+    <meta name="google-adsense-account" content="ca-pub-3765201153278683" />
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3765201153278683" crossorigin="anonymous"></script>
-    <!-- Tailwind -->
+    <!-- Tailwind + Inter font -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
     <script>
         tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: { sans: ['Inter', 'Segoe UI', 'system-ui', 'sans-serif'] },
                     colors: {
-                        mlbAzul: '#0a1e3c',
-                        azul: '#1a56db',
-                        rojoVivo: '#dc2626',
+                        azul: '#2563eb',
+                        azulOscuro: '#0f172a',
+                        celeste: '#38bdf8',
+                        rojo: '#ef4444',
+                        verde: '#22c55e',
+                        amarillo: '#eab308',
                         gris: '#475569',
                         grisClaro: '#f1f5f9',
-                        verdeBase: '#22c55e',
-                        dorado: '#f59e0b',
+                        vidrio: 'rgba(255,255,255,0.08)',
                     },
-                    fontFamily: { sans: ['Inter', 'Segoe UI', 'Roboto', 'Arial', 'sans-serif'] }
+                    backdropBlur: { xs: '2px', sm: '4px', md: '8px', lg: '12px' },
+                    animation: {
+                        'gradient': 'gradient 6s ease infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        gradient: { '0%,100%': { backgroundPosition: '0% 50%' }, '50%': { backgroundPosition: '100% 50%' } },
+                        float: { '0%,100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-10px)' } },
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+                    }
                 }
             }
         }
     </script>
     <style>
-        /* Animaciones y estilos personalizados */
-        .parpadeo { animation: parpadeo 1.2s infinite ease-in-out; }
-        @keyframes parpadeo { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-        .fade-in { animation: fadeIn 0.5s ease-out forwards; opacity: 0; }
-        @keyframes fadeIn { to { opacity: 1; } }
-        .diamante-base {
-            width: 14px; height: 14px; transform: rotate(45deg);
-            border: 1px solid #94a3b8; box-sizing: border-box;
+        /* Reset y base */
+        * { box-sizing: border-box; }
+        body { background: #f8fafc; transition: background 0.3s; }
+        .dark body { background: #0f172a; }
+        /* Efecto de vidrio */
+        .glass {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .dark .glass {
+            background: rgba(15,23,42,0.6);
+            border-color: rgba(255,255,255,0.05);
+        }
+        .glass-card {
+            background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+        .dark .glass-card {
+            background: rgba(15,23,42,0.7);
+            border-color: rgba(255,255,255,0.05);
+        }
+        .glass-card:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        /* Gradientes animados */
+        .gradient-bg {
+            background: linear-gradient(-45deg, #0f172a, #1e3a8a, #3b82f6, #0f172a);
+            background-size: 400% 400%;
+            animation: gradient 8s ease infinite;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #38bdf8, #2563eb, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: gradient 4s ease infinite;
+        }
+        /* Botones modernos */
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            border: none;
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(37,99,235,0.4);
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+        /* Tarjetas de deporte */
+        .sport-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1.5rem;
+            padding: 2rem 1.5rem;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .sport-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(37,99,235,0.2), rgba(124,58,237,0.1));
+            opacity: 0;
+            transition: opacity 0.4s;
+            border-radius: 1.5rem;
+        }
+        .sport-card:hover::before { opacity: 1; }
+        .sport-card .icon { font-size: 4rem; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2)); }
+        .sport-card .title { font-size: 1.8rem; font-weight: 800; color: white; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        .sport-card .desc { color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+        /* Ficha de partido (modal) mejorada */
+        .modal-glass {
+            background: rgba(15,23,42,0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 2rem;
+            padding: 2rem;
+            max-width: 600px;
+            width: 92%;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+        }
+        .modal-glass .close {
+            background: rgba(255,255,255,0.05);
+            border: none;
+            color: #94a3b8;
+            width: 40px;
+            height: 40px;
+            border-radius: 9999px;
+            font-size: 1.4rem;
             transition: all 0.2s;
         }
-        .diamante-base.ocupada { background-color: #22c55e; border-color: #16a34a; box-shadow: 0 0 8px rgba(34,197,94,0.4); }
-        .diamante-base.vacia { background-color: #e2e8f0; border-color: #cbd5e1; }
-        .diamante-base.plato { background-color: #94a3b8; border-color: #64748b; }
-        .grid-entradas { display: grid; grid-template-columns: repeat(9, 1.6rem) 2rem 2rem 2rem; }
-        .grid-entradas > span {
-            text-align: center; display: flex; align-items: center; justify-content: center;
-            font-variant-numeric: tabular-nums;
+        .modal-glass .close:hover { background: rgba(239,68,68,0.2); color: #ef4444; transform: rotate(90deg); }
+        /* Scoreboard */
+        .scoreboard {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: rgba(0,0,0,0.2);
+            border-radius: 1rem;
         }
-        @media (max-width: 480px) {
-            .grid-entradas { grid-template-columns: repeat(9, 1.2rem) 1.6rem 1.6rem 1.6rem; font-size: 0.65rem; }
+        .scoreboard .team { font-weight: 700; font-size: 1.1rem; }
+        .scoreboard .score { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; }
+        .scoreboard .vs { font-size: 0.8rem; opacity: 0.5; }
+        /* Animación de entrada */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.6s ease forwards;
         }
-        .tabla-posiciones th {
-            background-color: #f1f5f9; font-weight: 600; padding: 6px 8px;
-            text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.5px;
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #2563eb; border-radius: 999px; }
+        /* Responsive */
+        @media (max-width: 640px) {
+            .sport-card .title { font-size: 1.4rem; }
+            .scoreboard .score { font-size: 1.6rem; }
         }
-        .tabla-posiciones td { padding: 6px 8px; border-bottom: 1px solid #e2e8f0; }
-        .tabla-posiciones tr:hover td { background-color: #f8fafc; }
-        .tabla-posiciones tr:last-child td { border-bottom: none; }
-        .division-titulo {
-            background: linear-gradient(to right, #e2e8f0, #f1f5f9); font-weight: 700;
-            padding: 6px 12px; margin-top: 12px; font-size: 0.8rem;
-            text-transform: uppercase; letter-spacing: 0.5px; border-radius: 4px;
+        /* Tabs modernos */
+        .tab-modern {
+            padding: 0.5rem 1.2rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: all 0.3s;
+            background: transparent;
+            color: #94a3b8;
+            border: none;
+            cursor: pointer;
         }
-        .division-titulo:first-of-type { margin-top: 0; }
-        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background: #000; }
-        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
-        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
-        .spinner {
-            border: 4px solid rgba(0,0,0,0.1); border-left-color: #1a56db; border-radius: 50%;
-            width: 40px; height: 40px; animation: spin 0.8s linear infinite; margin: 20px auto;
+        .tab-modern:hover { color: white; background: rgba(255,255,255,0.05); }
+        .tab-modern.active {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: white;
+            box-shadow: 0 4px 15px rgba(37,99,235,0.3);
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .dark .tabla-posiciones th { background-color: #1e293b; }
-        .dark .tabla-posiciones tr:hover td { background-color: #1e293b; }
-        .dark .division-titulo { background: linear-gradient(to right, #1e293b, #334155); color: #e2e8f0; }
-        .theme-toggle { cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem; }
-        .theme-toggle input { display: none; }
-        .theme-toggle .slider {
-            width: 40px; height: 22px; background: #cbd5e1; border-radius: 999px;
-            position: relative; transition: background 0.3s;
+        .dark .tab-modern { color: #94a3b8; }
+        .dark .tab-modern.active { color: white; }
+        /* Negocio / Partners */
+        .partner-logo {
+            filter: grayscale(1) brightness(0.8);
+            transition: all 0.3s;
+            opacity: 0.6;
         }
-        .theme-toggle .slider::after {
-            content: ''; position: absolute; width: 18px; height: 18px; background: white;
-            border-radius: 50%; top: 2px; left: 2px; transition: transform 0.3s;
+        .dark .partner-logo { filter: grayscale(1) brightness(0.5); }
+        .partner-logo:hover { filter: none; opacity: 1; }
+        /* Noticias */
+        .news-item {
+            border-left: 3px solid #2563eb;
+            padding-left: 1rem;
+            transition: all 0.2s;
         }
-        .dark .theme-toggle .slider { background: #1a56db; }
-        .dark .theme-toggle .slider::after { transform: translateX(18px); }
-        .tab-button {
-            padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer;
-            transition: all 0.2s; background: transparent; border: none; color: #e2e8f0;
-        }
-        .tab-button:hover { background: rgba(255,255,255,0.1); }
-        .tab-button.active { background: #1a56db; color: white; box-shadow: 0 4px 12px rgba(26,86,219,0.3); }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .countdown { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-        .countdown-item { background: rgba(0,0,0,0.04); padding: 8px 16px; border-radius: 8px; text-align: center; min-width: 60px; }
-        .dark .countdown-item { background: rgba(255,255,255,0.05); }
-        .countdown-number { font-size: 1.8rem; font-weight: 700; display: block; }
-        .countdown-label { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.7; }
-        .ad-container { min-height: 90px; background: rgba(0,0,0,0.02); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #94a3b8; border: 1px dashed #cbd5e1; }
-        .dark .ad-container { background: rgba(255,255,255,0.02); border-color: #334155; }
-        .cookie-banner {
-            position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(6px); color: white; padding: 12px 20px; text-align: center;
-            font-size: 0.85rem; z-index: 999; display: none; justify-content: center;
-            align-items: center; gap: 16px; flex-wrap: wrap;
-        }
-        .cookie-banner a { color: #93c5fd; text-decoration: underline; }
-        .cookie-banner button {
-            background: #1a56db; border: none; color: white; padding: 6px 18px;
-            border-radius: 999px; font-weight: 600; cursor: pointer; transition: background 0.2s;
-        }
-        .cookie-banner button:hover { background: #2563eb; }
-        .cookie-banner.show { display: flex; }
-        .nav-link { color: #e2e8f0; transition: color 0.2s; }
-        .nav-link:hover { color: white; }
-        .mega-menu { background: #0a1e3c; border-bottom: 2px solid #1a56db; }
-        .dark .mega-menu { background: #1e293b; }
-        .card-match {
-            border-left: 4px solid #1a56db;
-        }
-        .card-match.vivo { border-left-color: #dc2626; }
-        .card-match.final { border-left-color: #64748b; }
-        .badge-vivo { background: #dc2626; color: white; }
-        .badge-final { background: #64748b; color: white; }
-        .badge-programado { background: #dbeafe; color: #1e40af; }
-        .dark .badge-programado { background: #1e293b; color: #93c5fd; }
-        .modal-overlay {
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center;
-        }
-        .modal-overlay.active { display: flex; }
-        .modal-card {
-            background: white; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;
-            border-radius: 16px; padding: 24px; position: relative; box-shadow: 0 30px 60px rgba(0,0,0,0.3);
-        }
-        .dark .modal-card { background: #1e293b; color: #e2e8f0; }
-        .modal-close {
-            position: absolute; top: 12px; right: 16px; font-size: 1.5rem; cursor: pointer;
-            background: none; border: none; color: #94a3b8; transition: color 0.2s;
-        }
-        .modal-close:hover { color: #dc2626; }
-        .noticia-card {
-            border-bottom: 1px solid #e2e8f0; padding-bottom: 16px; margin-bottom: 16px;
-        }
-        .dark .noticia-card { border-color: #334155; }
-        .noticia-card:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        .noticia-card .fecha { font-size: 0.65rem; color: #64748b; }
-        .dark .noticia-card .fecha { color: #94a3b8; }
-        .noticia-card .titulo { font-weight: 700; font-size: 1rem; }
-        .noticia-card .resumen { font-size: 0.85rem; color: #475569; margin-top: 4px; }
-        .dark .noticia-card .resumen { color: #cbd5e1; }
-        .social-icon { transition: transform 0.2s; }
-        .social-icon:hover { transform: scale(1.1); }
-        /* Estilo para el menú desplegable (mega menú) */
-        .dropdown:hover .dropdown-menu { display: block; }
-        .dropdown-menu { display: none; position: absolute; background: white; min-width: 200px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border-radius: 12px; padding: 8px 0; top: 100%; left: 0; z-index: 50; }
-        .dark .dropdown-menu { background: #1e293b; }
-        .dropdown-menu a { display: block; padding: 8px 20px; color: #1e293b; transition: background 0.2s; }
-        .dark .dropdown-menu a { color: #e2e8f0; }
-        .dropdown-menu a:hover { background: #f1f5f9; }
-        .dark .dropdown-menu a:hover { background: #334155; }
-        /* En Vivo destacado */
-        .live-banner {
-            background: linear-gradient(135deg, #0a1e3c 0%, #1a56db 100%);
-            color: white; padding: 20px; border-radius: 16px; position: relative; overflow: hidden;
-        }
-        .live-banner::after {
-            content: ''; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Ccircle cx='50%25' cy='50%25' r='200' fill='rgba(255,255,255,0.05)'/%3E%3C/svg%3E") no-repeat center; background-size: cover; pointer-events: none;
-        }
-        .live-banner .contenido { position: relative; z-index: 1; }
-        .btn-ver-mas { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); padding: 6px 18px; border-radius: 999px; color: white; transition: background 0.2s; }
-        .btn-ver-mas:hover { background: rgba(255,255,255,0.25); }
+        .news-item:hover { border-left-color: #7c3aed; }
     </style>
 </head>
-<body class="bg-gray-50 text-gris font-sans min-h-screen transition-colors duration-300 dark:bg-gray-900 dark:text-gray-200">
+<body class="bg-gray-50 text-gris font-sans antialiased transition-colors duration-300 dark:bg-gray-900 dark:text-gray-200">
 
-    <!-- Aviso Cookies -->
-    <div id="cookieBanner" class="cookie-banner">
-        <span>🍪 Usamos cookies para mejorar tu experiencia. Al continuar, aceptas nuestra <a href="#">política de privacidad</a>.</span>
-        <button onclick="aceptarCookies()">Aceptar</button>
+    <!-- Aviso Cookies (moderno) -->
+    <div id="cookieBanner" class="fixed bottom-0 left-0 right-0 z-[999] glass text-white p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm backdrop-blur-md border-t border-white/10" style="display:none;">
+        <span>🍪 Usamos cookies para mejorar tu experiencia. Al continuar, aceptas nuestra <a href="#" class="text-celeste underline hover:no-underline">política de privacidad</a>.</span>
+        <button onclick="aceptarCookies()" class="btn-primary text-sm py-1.5 px-6">Aceptar</button>
     </div>
 
-    <!-- Cabecera con Mega Menú -->
-    <header class="mega-menu text-white sticky top-0 z-50 shadow-lg transition-colors dark:bg-gray-800">
-        <div class="max-w-6xl mx-auto px-4 py-2 flex items-center justify-between flex-wrap">
+    <!-- Cabecera con efecto vidrio -->
+    <header class="sticky top-0 z-50 glass border-b border-white/10 dark:border-gray-700/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between flex-wrap gap-2">
             <div class="flex items-center gap-2">
-                <span class="text-2xl">🏟️</span>
-                <h1 class="font-bold text-xl tracking-wide">SportVive360</h1>
+                <span class="text-3xl">🏟️</span>
+                <h1 class="text-2xl font-extrabold tracking-tight gradient-text">SportVive360</h1>
+                <span class="hidden sm:inline text-xs bg-azul/20 text-azul px-2 py-0.5 rounded-full">2026</span>
             </div>
             <div class="flex items-center gap-4">
-                <nav class="hidden md:flex items-center gap-1 text-sm font-medium">
-                    <a href="#" class="nav-link px-3 py-2 rounded-lg hover:bg-white/10 transition" data-seccion="home">Inicio</a>
-                    <div class="relative dropdown">
-                        <button class="nav-link px-3 py-2 rounded-lg hover:bg-white/10 transition flex items-center gap-1" data-seccion="mlb">MLB <span class="text-xs">▼</span></button>
-                        <div class="dropdown-menu">
-                            <a href="#" data-seccion="mlb">Resultados</a>
-                            <a href="#" data-seccion="mlb">Posiciones</a>
-                            <a href="#" data-seccion="mlb">Calendario</a>
-                        </div>
-                    </div>
-                    <div class="relative dropdown">
-                        <button class="nav-link px-3 py-2 rounded-lg hover:bg-white/10 transition flex items-center gap-1" data-seccion="futbol">Mundial 2026 <span class="text-xs">▼</span></button>
-                        <div class="dropdown-menu">
-                            <a href="#" data-seccion="futbol">Calendario</a>
-                            <a href="#" data-seccion="futbol">Grupos</a>
-                            <a href="#" data-seccion="futbol">Resultados</a>
-                        </div>
-                    </div>
-                    <div class="relative dropdown">
-                        <button class="nav-link px-3 py-2 rounded-lg hover:bg-white/10 transition flex items-center gap-1" data-seccion="nba">NBA <span class="text-xs">▼</span></button>
-                        <div class="dropdown-menu">
-                            <a href="#" data-seccion="nba">Resultados</a>
-                            <a href="#" data-seccion="nba">Posiciones</a>
-                            <a href="#" data-seccion="nba">Calendario</a>
-                        </div>
-                    </div>
-                    <a href="#" class="nav-link px-3 py-2 rounded-lg hover:bg-white/10 transition" data-seccion="envivo">🔴 En Vivo</a>
-                    <a href="#" class="nav-link px-3 py-2 rounded-lg hover:bg-white/10 transition" data-seccion="noticias">📰 Noticias</a>
+                <nav class="hidden md:flex items-center gap-1 text-sm">
+                    <button class="tab-modern active" data-seccion="home">Inicio</button>
+                    <button class="tab-modern" data-seccion="mlb">⚾ MLB</button>
+                    <button class="tab-modern" data-seccion="futbol">⚽ Mundial</button>
+                    <button class="tab-modern" data-seccion="nba">🏀 NBA</button>
+                    <button class="tab-modern" data-seccion="envivo">🔴 En Vivo</button>
+                    <button class="tab-modern" data-seccion="noticias">📰 Noticias</button>
+                    <button class="tab-modern" data-seccion="negocio">💼 Negocio</button>
                 </nav>
-                <label class="theme-toggle" title="Cambiar tema">
-                    <span class="text-sm hidden sm:inline">🌙</span>
-                    <input type="checkbox" id="themeCheckbox">
-                    <span class="slider"></span>
-                </label>
-                <button id="menuMobile" class="md:hidden text-2xl">☰</button>
+                <div class="flex items-center gap-2">
+                    <label class="theme-toggle cursor-pointer flex items-center gap-2 text-sm">
+                        <span class="hidden sm:inline">🌙</span>
+                        <input type="checkbox" id="themeCheckbox" class="hidden" />
+                        <span class="slider block w-10 h-5 bg-gray-300 dark:bg-azul rounded-full relative transition-colors duration-300">
+                            <span class="dot block w-4 h-4 bg-white rounded-full absolute top-0.5 left-0.5 transition-transform duration-300 dark:translate-x-5"></span>
+                        </span>
+                    </label>
+                    <button id="menuMobile" class="md:hidden text-2xl">☰</button>
+                </div>
             </div>
         </div>
         <!-- Menú móvil -->
-        <div id="mobileMenu" class="md:hidden bg-mlbAzul/95 dark:bg-gray-800/95 px-4 py-3 hidden flex-col gap-2 text-sm border-t border-white/10">
-            <a href="#" class="nav-link py-2" data-seccion="home">Inicio</a>
-            <a href="#" class="nav-link py-2" data-seccion="mlb">⚾ MLB</a>
-            <a href="#" class="nav-link py-2" data-seccion="futbol">⚽ Mundial 2026</a>
-            <a href="#" class="nav-link py-2" data-seccion="nba">🏀 NBA</a>
-            <a href="#" class="nav-link py-2" data-seccion="envivo">🔴 En Vivo</a>
-            <a href="#" class="nav-link py-2" data-seccion="noticias">📰 Noticias</a>
+        <div id="mobileMenu" class="md:hidden glass border-t border-white/10 px-4 py-3 hidden flex-col gap-2 text-sm">
+            <button class="tab-modern active" data-seccion="home">Inicio</button>
+            <button class="tab-modern" data-seccion="mlb">⚾ MLB</button>
+            <button class="tab-modern" data-seccion="futbol">⚽ Mundial</button>
+            <button class="tab-modern" data-seccion="nba">🏀 NBA</button>
+            <button class="tab-modern" data-seccion="envivo">🔴 En Vivo</button>
+            <button class="tab-modern" data-seccion="noticias">📰 Noticias</button>
+            <button class="tab-modern" data-seccion="negocio">💼 Negocio</button>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 py-6">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         <!-- Indicador de actualización -->
-        <div class="flex items-center justify-between mb-6 text-xs text-gray-500 dark:text-gray-400">
-            <span class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_6px_#22c55e]"></span> Actualizado • Lima (UTC‑5)</span>
-            <span class="bg-white dark:bg-gray-800 px-3 py-1 rounded-full shadow-sm">📡 En vivo: <span id="contadorVivo">0</span></span>
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-6 text-xs text-gray-500 dark:text-gray-400">
+            <div class="flex items-center gap-2">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                <span>Actualizado • Lima UTC‑5</span>
+                <span class="bg-white/30 dark:bg-gray-800/30 px-3 py-1 rounded-full backdrop-blur-sm">📡 En vivo: <span id="contadorVivo">0</span></span>
+            </div>
+            <span class="hidden sm:inline text-[0.6rem] uppercase tracking-wider opacity-50">⚡ Datos en tiempo real</span>
         </div>
 
-        <!-- ==================== SECCIÓN HOME (Página principal) ==================== -->
-        <section id="seccion-home" class="tab-content active">
-            <!-- Banner En Vivo Destacado -->
-            <div class="live-banner mb-8">
-                <div class="contenido flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <!-- ==================== HOME ==================== -->
+        <section id="seccion-home" class="tab-content active space-y-10">
+            <!-- Banner En Vivo Destacado (glass) -->
+            <div class="glass rounded-3xl p-6 md:p-8 relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-azul/20 to-purple-500/20 pointer-events-none"></div>
+                <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
                         <div class="flex items-center gap-2 mb-1">
-                            <span class="w-2 h-2 rounded-full bg-red-500 parpadeo"></span>
-                            <span class="text-sm font-semibold uppercase tracking-wider">En Vivo</span>
+                            <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                            <span class="text-sm font-semibold uppercase tracking-wider text-red-400">En Vivo</span>
                         </div>
-                        <h2 class="text-2xl font-bold">Partidos destacados del momento</h2>
-                        <p class="text-sm opacity-80">Sigue la acción en tiempo real con todas las estadísticas.</p>
+                        <h2 class="text-3xl font-extrabold text-white">Partidos destacados</h2>
+                        <p class="text-white/70 text-sm">Sigue la acción en tiempo real con estadísticas completas.</p>
                     </div>
-                    <a href="#" class="btn-ver-mas" data-seccion="envivo">Ver todos los partidos →</a>
+                    <button class="btn-secondary" data-seccion="envivo">Ver todos →</button>
                 </div>
-                <!-- Mini carrusel de partidos en vivo (simulado) -->
-                <div class="contenido mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
-                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 flex justify-between items-center">
-                        <div><span class="font-bold">NYY</span> <span class="text-xs">vs</span> <span class="font-bold">BOS</span></div>
-                        <div class="text-center"><span class="text-lg font-bold">3-2</span><div class="text-xs">7mo inning</div></div>
-                        <span class="badge-vivo text-xs px-2 py-0.5 rounded-full">VIVO</span>
+                <!-- Mini partidos en vivo (simulados con datos reales desde JS) -->
+                <div id="mini-vivo" class="relative z-10 mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="glass-card rounded-xl p-3 flex justify-between items-center">
+                        <div><span class="font-bold">NYY</span> <span class="text-xs opacity-50">vs</span> <span class="font-bold">BOS</span></div>
+                        <div class="text-center"><span class="text-lg font-bold">3-2</span><div class="text-xs opacity-50">7mo</div></div>
+                        <span class="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">VIVO</span>
                     </div>
-                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 flex justify-between items-center">
-                        <div><span class="font-bold">LAD</span> <span class="text-xs">vs</span> <span class="font-bold">SF</span></div>
-                        <div class="text-center"><span class="text-lg font-bold">1-0</span><div class="text-xs">4to inning</div></div>
-                        <span class="badge-vivo text-xs px-2 py-0.5 rounded-full">VIVO</span>
+                    <div class="glass-card rounded-xl p-3 flex justify-between items-center">
+                        <div><span class="font-bold">LAD</span> <span class="text-xs opacity-50">vs</span> <span class="font-bold">SF</span></div>
+                        <div class="text-center"><span class="text-lg font-bold">1-0</span><div class="text-xs opacity-50">4to</div></div>
+                        <span class="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">VIVO</span>
                     </div>
-                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-3 flex justify-between items-center">
-                        <div><span class="font-bold">MIA</span> <span class="text-xs">vs</span> <span class="font-bold">ATL</span></div>
-                        <div class="text-center"><span class="text-lg font-bold">0-0</span><div class="text-xs">1er inning</div></div>
-                        <span class="badge-programado text-xs px-2 py-0.5 rounded-full">Próximo</span>
+                    <div class="glass-card rounded-xl p-3 flex justify-between items-center">
+                        <div><span class="font-bold">MIA</span> <span class="text-xs opacity-50">vs</span> <span class="font-bold">ATL</span></div>
+                        <div class="text-center"><span class="text-lg font-bold">0-0</span><div class="text-xs opacity-50">1er</div></div>
+                        <span class="bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full">Próximo</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Grid de accesos rápidos -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                <a href="#" data-seccion="mlb" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-grisClaro dark:border-gray-700 p-6 text-center card-hover transition">
-                    <div class="text-5xl mb-2">⚾</div>
-                    <h3 class="font-bold text-xl">MLB</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Resultados, posiciones y estadísticas</p>
-                </a>
-                <a href="#" data-seccion="futbol" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-grisClaro dark:border-gray-700 p-6 text-center card-hover transition">
-                    <div class="text-5xl mb-2">⚽</div>
-                    <h3 class="font-bold text-xl">Mundial 2026</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Calendario, grupos y resultados</p>
-                </a>
-                <a href="#" data-seccion="nba" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-grisClaro dark:border-gray-700 p-6 text-center card-hover transition">
-                    <div class="text-5xl mb-2">🏀</div>
-                    <h3 class="font-bold text-xl">NBA</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Temporada regular y playoffs</p>
-                </a>
+            <!-- Accesos rápidos a deportes -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="sport-card gradient-bg" data-seccion="mlb" style="background: linear-gradient(135deg, #0f172a, #1e3a8a);">
+                    <div class="relative z-10">
+                        <div class="icon">⚾</div>
+                        <div class="title">MLB</div>
+                        <div class="desc">Resultados, posiciones y estadísticas en vivo</div>
+                        <button class="btn-secondary mt-3 text-sm">Explorar →</button>
+                    </div>
+                </div>
+                <div class="sport-card" style="background: linear-gradient(135deg, #064e3b, #047857);">
+                    <div class="relative z-10">
+                        <div class="icon">⚽</div>
+                        <div class="title">Mundial 2026</div>
+                        <div class="desc">Calendario, grupos y resultados del torneo</div>
+                        <button class="btn-secondary mt-3 text-sm">Explorar →</button>
+                    </div>
+                </div>
+                <div class="sport-card" style="background: linear-gradient(135deg, #451a03, #92400e);">
+                    <div class="relative z-10">
+                        <div class="icon">🏀</div>
+                        <div class="title">NBA</div>
+                        <div class="desc">Temporada regular y playoffs</div>
+                        <button class="btn-secondary mt-3 text-sm">Explorar →</button>
+                    </div>
+                </div>
             </div>
 
-            <!-- Últimas Noticias -->
-            <div class="mb-10">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-2xl font-bold text-mlbAzul dark:text-white border-l-4 border-azul pl-3">📰 Últimas Noticias</h2>
-                    <a href="#" data-seccion="noticias" class="text-sm text-azul hover:underline">Ver todas →</a>
+            <!-- Últimas Noticias + Negocio preview -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 glass-card rounded-2xl p-6 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xl font-bold">📰 Últimas Noticias</h3>
+                        <button class="text-sm text-azul hover:underline" data-seccion="noticias">Ver todas →</button>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="news-item">
+                            <div class="text-xs text-gray-500 dark:text-gray-400">Hace 2h</div>
+                            <div class="font-semibold">Yankees aseguran serie ante Red Sox con victoria 5-3</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-300">Aaron Judge conecta su 30mo jonrón de la temporada.</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="text-xs text-gray-500 dark:text-gray-400">Hace 5h</div>
+                            <div class="font-semibold">Mundial 2026: Argentina y Brasil encabezan grupo de la muerte</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-300">El sorteo deja enfrentamientos electrizantes.</div>
+                        </div>
+                        <div class="news-item">
+                            <div class="text-xs text-gray-500 dark:text-gray-400">Hace 8h</div>
+                            <div class="font-semibold">NBA: LeBron James anuncia su retiro al final de la temporada</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-300">El legendario jugador de los Lakers se despedirá.</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-grisClaro dark:border-gray-700 p-4 card-hover">
-                        <div class="flex items-start gap-3">
-                            <div class="w-16 h-16 bg-azul/10 rounded-lg flex items-center justify-center text-2xl">⚾</div>
-                            <div>
-                                <div class="text-xs text-gray-500 dark:text-gray-400">Hace 2 horas</div>
-                                <h3 class="font-bold text-md">Yankees aseguran serie ante Red Sox con victoria 5-3</h3>
-                                <p class="text-sm text-gray-600 dark:text-gray-300">Aaron Judge conecta su 30mo jonrón de la temporada.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-grisClaro dark:border-gray-700 p-4 card-hover">
-                        <div class="flex items-start gap-3">
-                            <div class="w-16 h-16 bg-verdeBase/10 rounded-lg flex items-center justify-center text-2xl">⚽</div>
-                            <div>
-                                <div class="text-xs text-gray-500 dark:text-gray-400">Hace 5 horas</div>
-                                <h3 class="font-bold text-md">Mundial 2026: Argentina y Brasil encabezan grupo de la muerte</h3>
-                                <p class="text-sm text-gray-600 dark:text-gray-300">El sorteo deja enfrentamientos electrizantes.</p>
-                            </div>
-                        </div>
-                    </div>
+                <div class="glass-card rounded-2xl p-6 flex flex-col items-center text-center">
+                    <div class="text-4xl mb-2">💼</div>
+                    <h4 class="font-bold text-lg">¿Quieres anunciarte?</h4>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Llega a miles de aficionados al deporte cada día.</p>
+                    <button class="btn-primary mt-4 text-sm" data-seccion="negocio">Ver planes</button>
                 </div>
             </div>
 
             <!-- Anuncio -->
-            <div class="my-6 ad-container">
+            <div class="ad-container glass-card rounded-2xl p-4 text-center text-gray-400 text-sm">
                 <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3765201153278683" data-ad-slot="7802021862" data-ad-format="auto" data-full-width-responsive="true"></ins>
                 <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
             </div>
         </section>
 
-        <!-- ==================== SECCIÓN MLB ==================== -->
-        <section id="seccion-mlb" class="tab-content">
-            <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-5 dark:text-white">⚾ MLB - Resultados y En Vivo</h2>
-            <div class="flex items-center justify-center gap-2 bg-white dark:bg-gray-800 rounded-xl py-2 px-3 mb-6 border border-grisClaro dark:border-gray-700 shadow-sm">
-                <button onclick="cambiarFecha(-1)" class="text-lg px-3 py-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">‹</button>
-                <div id="selector-fechas" class="flex gap-2 text-sm font-medium"></div>
-                <button onclick="cambiarFecha(1)" class="text-lg px-3 py-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">›</button>
+        <!-- ==================== MLB ==================== -->
+        <section id="seccion-mlb" class="tab-content space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <h2 class="text-3xl font-extrabold gradient-text">⚾ MLB</h2>
+                <div class="flex items-center gap-2 bg-white/30 dark:bg-gray-800/30 rounded-full p-1 backdrop-blur-sm">
+                    <button onclick="cambiarFecha(-1)" class="px-3 py-1 rounded-full hover:bg-white/20">‹</button>
+                    <div id="selector-fechas" class="flex gap-1 text-sm font-medium"></div>
+                    <button onclick="cambiarFecha(1)" class="px-3 py-1 rounded-full hover:bg-white/20">›</button>
+                </div>
             </div>
-
-            <div id="lista-partidos-mlb" class="space-y-5 mb-10">
+            <div id="lista-partidos-mlb" class="space-y-5">
                 <div class="flex justify-center py-10"><div class="spinner"></div></div>
             </div>
-
-            <!-- Posiciones MLB (igual que antes, pero mejor organizado) -->
-            <div class="space-y-6">
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm card-hover">
-                    <h3 class="font-semibold text-mlbAzul dark:text-white text-lg mb-3 flex items-center gap-2">🏆 Liga Americana</h3>
-                    <div class="overflow-x-auto">
-                        <div class="division-titulo dark:bg-gray-700 dark:text-gray-300">ESTE</div>
-                        <table class="w-full text-xs tabla-posiciones dark:text-gray-300">
-                            <thead><tr><th class="text-left">Equipo</th><th class="text-center">G</th><th class="text-center">P</th><th class="text-center">PCT</th><th class="text-center">DIF</th><th class="text-center">DIFWC</th></tr></thead>
-                            <tbody>
-                                <tr><td>New York Yankees</td><td class="text-center">45</td><td class="text-center">28</td><td class="text-center">.616</td><td class="text-center">-</td><td class="text-center">-</td></tr>
-                                <tr><td>Tampa Bay Rays</td><td class="text-center">41</td><td class="text-center">30</td><td class="text-center">.577</td><td class="text-center">3.0</td><td class="text-center">+1.0</td></tr>
-                                <tr><td>Toronto Blue Jays</td><td class="text-center">34</td><td class="text-center">38</td><td class="text-center">.472</td><td class="text-center">10.5</td><td class="text-center">6.5</td></tr>
-                                <tr><td>Baltimore Orioles</td><td class="text-center">34</td><td class="text-center">39</td><td class="text-center">.466</td><td class="text-center">11.0</td><td class="text-center">7.0</td></tr>
-                                <tr><td>Boston Red Sox</td><td class="text-center">29</td><td class="text-center">40</td><td class="text-center">.420</td><td class="text-center">14.0</td><td class="text-center">10.0</td></tr>
-                            </tbody>
-                        </table>
-                        <!-- ... resto de divisiones ... (acortado por brevedad) ... -->
-                    </div>
-                </div>
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm card-hover">
-                    <h3 class="font-semibold text-mlbAzul dark:text-white text-lg mb-3 flex items-center gap-2">🏆 Liga Nacional</h3>
-                    <!-- Similar, omito por longitud, pero se incluiría igual -->
-                    <p class="text-sm text-gray-500">(Tabla completa en versión final)</p>
+            <!-- Posiciones (simplificadas pero con estilo) -->
+            <div class="glass-card rounded-2xl p-6">
+                <h3 class="text-xl font-bold mb-4">🏆 Tabla de Posiciones</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm tabla-posiciones">
+                        <thead><tr><th class="text-left">Equipo</th><th class="text-center">G</th><th class="text-center">P</th><th class="text-center">PCT</th></tr></thead>
+                        <tbody>
+                            <tr><td>New York Yankees</td><td class="text-center">45</td><td class="text-center">28</td><td class="text-center">.616</td></tr>
+                            <tr><td>Los Angeles Dodgers</td><td class="text-center">44</td><td class="text-center">30</td><td class="text-center">.595</td></tr>
+                            <tr><td>Atlanta Braves</td><td class="text-center">46</td><td class="text-center">25</td><td class="text-center">.648</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
 
-        <!-- ==================== SECCIÓN MUNDIAL 2026 ==================== -->
-        <section id="seccion-futbol" class="tab-content">
-            <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-5 dark:text-white">⚽ Mundial 2026 - Calendario y Resultados</h2>
-            <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-grisClaro dark:border-gray-700">
-                <div class="countdown mb-6">
-                    <div class="countdown-item"><span class="countdown-number" id="dias">--</span><span class="countdown-label">días</span></div>
-                    <div class="countdown-item"><span class="countdown-number" id="horas">--</span><span class="countdown-label">horas</span></div>
-                    <div class="countdown-item"><span class="countdown-number" id="minutos">--</span><span class="countdown-label">min</span></div>
-                    <div class="countdown-item"><span class="countdown-number" id="segundos">--</span><span class="countdown-label">seg</span></div>
+        <!-- ==================== MUNDIAL ==================== -->
+        <section id="seccion-futbol" class="tab-content space-y-6">
+            <h2 class="text-3xl font-extrabold gradient-text">⚽ Mundial 2026</h2>
+            <div class="glass-card rounded-2xl p-6">
+                <div class="countdown flex gap-4 justify-center flex-wrap mb-4">
+                    <div class="countdown-item glass-card rounded-xl px-4 py-2 text-center"><span class="countdown-number text-3xl font-bold" id="dias">--</span><div class="text-xs opacity-50">días</div></div>
+                    <div class="countdown-item glass-card rounded-xl px-4 py-2 text-center"><span class="countdown-number text-3xl font-bold" id="horas">--</span><div class="text-xs opacity-50">horas</div></div>
+                    <div class="countdown-item glass-card rounded-xl px-4 py-2 text-center"><span class="countdown-number text-3xl font-bold" id="minutos">--</span><div class="text-xs opacity-50">min</div></div>
+                    <div class="countdown-item glass-card rounded-xl px-4 py-2 text-center"><span class="countdown-number text-3xl font-bold" id="segundos">--</span><div class="text-xs opacity-50">seg</div></div>
                 </div>
-                <p class="text-center text-sm text-gray-600 dark:text-gray-400 mb-4">Inicio: 11 de junio de 2026 • EE.UU., México y Canadá</p>
-                <div id="lista-mundial" class="space-y-3">
+                <p class="text-center text-sm text-gray-500 dark:text-gray-400">Inicio: 11 de junio de 2026 • EE.UU., México y Canadá</p>
+                <div id="lista-mundial" class="mt-6 space-y-3">
                     <p class="text-center py-6">Cargando partidos…</p>
                 </div>
             </div>
         </section>
 
-        <!-- ==================== SECCIÓN NBA ==================== -->
-        <section id="seccion-nba" class="tab-content">
-            <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-5 dark:text-white">🏀 NBA - Temporada Regular</h2>
+        <!-- ==================== NBA ==================== -->
+        <section id="seccion-nba" class="tab-content space-y-6">
+            <h2 class="text-3xl font-extrabold gradient-text">🏀 NBA</h2>
             <div id="lista-nba" class="space-y-5">
                 <div class="flex justify-center py-10"><div class="spinner"></div></div>
             </div>
         </section>
 
-        <!-- ==================== SECCIÓN EN VIVO ==================== -->
-        <section id="seccion-envivo" class="tab-content">
-            <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-5 dark:text-white">🔴 En Vivo - Partidos en curso</h2>
+        <!-- ==================== EN VIVO ==================== -->
+        <section id="seccion-envivo" class="tab-content space-y-6">
+            <h2 class="text-3xl font-extrabold gradient-text">🔴 En Vivo</h2>
             <div id="lista-envivo" class="space-y-5">
                 <div class="flex justify-center py-10"><div class="spinner"></div></div>
             </div>
         </section>
 
-        <!-- ==================== SECCIÓN NOTICIAS ==================== -->
-        <section id="seccion-noticias" class="tab-content">
-            <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-5 dark:text-white">📰 Noticias y Artículos</h2>
+        <!-- ==================== NOTICIAS ==================== -->
+        <section id="seccion-noticias" class="tab-content space-y-6">
+            <h2 class="text-3xl font-extrabold gradient-text">📰 Noticias</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-grisClaro dark:border-gray-700 p-4 card-hover">
-                    <div class="flex items-start gap-3">
-                        <div class="w-16 h-16 bg-azul/10 rounded-lg flex items-center justify-center text-2xl">⚾</div>
-                        <div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400">15 de junio, 2026</div>
-                            <h3 class="font-bold text-md">Ohtani conecta su jonrón número 40 y lidera a los Dodgers</h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">El japonés sigue rompiendo récords y se perfila como MVP.</p>
-                            <a href="#" class="text-xs text-azul hover:underline mt-1 inline-block">Leer más →</a>
-                        </div>
-                    </div>
+                <div class="glass-card rounded-2xl p-5 space-y-2">
+                    <div class="text-xs text-gray-500">15 jun 2026</div>
+                    <h3 class="font-bold text-lg">Ohtani conecta su jonrón número 40 y lidera a los Dodgers</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">El japonés sigue rompiendo récords y se perfila como MVP.</p>
+                    <button class="text-sm text-azul hover:underline">Leer más →</button>
                 </div>
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-grisClaro dark:border-gray-700 p-4 card-hover">
-                    <div class="flex items-start gap-3">
-                        <div class="w-16 h-16 bg-verdeBase/10 rounded-lg flex items-center justify-center text-2xl">⚽</div>
-                        <div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400">14 de junio, 2026</div>
-                            <h3 class="font-bold text-md">Mundial 2026: sorteo define grupos emocionantes</h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">Argentina, Brasil, Alemania y Francia en grupos muy parejos.</p>
-                            <a href="#" class="text-xs text-azul hover:underline mt-1 inline-block">Leer más →</a>
-                        </div>
-                    </div>
+                <div class="glass-card rounded-2xl p-5 space-y-2">
+                    <div class="text-xs text-gray-500">14 jun 2026</div>
+                    <h3 class="font-bold text-lg">Mundial 2026: sorteo define grupos emocionantes</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Argentina, Brasil, Alemania y Francia en grupos muy parejos.</p>
+                    <button class="text-sm text-azul hover:underline">Leer más →</button>
                 </div>
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-grisClaro dark:border-gray-700 p-4 card-hover">
-                    <div class="flex items-start gap-3">
-                        <div class="w-16 h-16 bg-azul/10 rounded-lg flex items-center justify-center text-2xl">🏀</div>
-                        <div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400">13 de junio, 2026</div>
-                            <h3 class="font-bold text-md">NBA: LeBron James anuncia su retiro al final de la temporada</h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">El legendario jugador de los Lakers se despedirá del baloncesto.</p>
-                            <a href="#" class="text-xs text-azul hover:underline mt-1 inline-block">Leer más →</a>
-                        </div>
-                    </div>
+                <div class="glass-card rounded-2xl p-5 space-y-2">
+                    <div class="text-xs text-gray-500">13 jun 2026</div>
+                    <h3 class="font-bold text-lg">NBA: LeBron James anuncia su retiro al final de la temporada</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">El legendario jugador de los Lakers se despedirá del baloncesto.</p>
+                    <button class="text-sm text-azul hover:underline">Leer más →</button>
                 </div>
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-grisClaro dark:border-gray-700 p-4 card-hover">
-                    <div class="flex items-start gap-3">
-                        <div class="w-16 h-16 bg-verdeBase/10 rounded-lg flex items-center justify-center text-2xl">⚾</div>
-                        <div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400">12 de junio, 2026</div>
-                            <h3 class="font-bold text-md">MLB: Yankees y Mets se enfrentan en la Serie de la Ciudad</h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-300">La rivalidad neoyorquina llega a su punto máximo este fin de semana.</p>
-                            <a href="#" class="text-xs text-azul hover:underline mt-1 inline-block">Leer más →</a>
-                        </div>
-                    </div>
+                <div class="glass-card rounded-2xl p-5 space-y-2">
+                    <div class="text-xs text-gray-500">12 jun 2026</div>
+                    <h3 class="font-bold text-lg">MLB: Yankees y Mets se enfrentan en la Serie de la Ciudad</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">La rivalidad neoyorquina llega a su punto máximo.</p>
+                    <button class="text-sm text-azul hover:underline">Leer más →</button>
                 </div>
+            </div>
+        </section>
+
+        <!-- ==================== NEGOCIO ==================== -->
+        <section id="seccion-negocio" class="tab-content space-y-8">
+            <h2 class="text-3xl font-extrabold gradient-text">💼 SportVive360 Business</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card rounded-2xl p-6 text-center">
+                    <div class="text-5xl mb-3">📈</div>
+                    <h3 class="font-bold text-xl">Audiencia Masiva</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">+500k usuarios mensuales apasionados por el deporte.</p>
+                </div>
+                <div class="glass-card rounded-2xl p-6 text-center border-2 border-azul/30">
+                    <div class="text-5xl mb-3">🎯</div>
+                    <h3 class="font-bold text-xl">Segmentación precisa</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Llega a aficionados de MLB, fútbol y NBA con mensajes personalizados.</p>
+                </div>
+                <div class="glass-card rounded-2xl p-6 text-center">
+                    <div class="text-5xl mb-3">🤝</div>
+                    <h3 class="font-bold text-xl">Alianzas Estratégicas</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Colabora con nosotros para potenciar tu marca.</p>
+                </div>
+            </div>
+            <div class="glass-card rounded-2xl p-6">
+                <h3 class="font-bold text-xl mb-4">Nuestros Partners</h3>
+                <div class="flex flex-wrap gap-6 items-center justify-center">
+                    <img src="https://via.placeholder.com/120x60?text=Partner+1" alt="Partner" class="partner-logo h-12" />
+                    <img src="https://via.placeholder.com/120x60?text=Partner+2" alt="Partner" class="partner-logo h-12" />
+                    <img src="https://via.placeholder.com/120x60?text=Partner+3" alt="Partner" class="partner-logo h-12" />
+                    <img src="https://via.placeholder.com/120x60?text=Partner+4" alt="Partner" class="partner-logo h-12" />
+                </div>
+            </div>
+            <div class="glass-card rounded-2xl p-6 text-center">
+                <h3 class="font-bold text-xl">¿Quieres anunciarte con nosotros?</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Descubre nuestros planes de publicidad y patrocinio.</p>
+                <button class="btn-primary">Contactar ahora</button>
             </div>
         </section>
 
     </main>
 
-    <!-- Footer completo -->
-    <footer class="bg-white dark:bg-gray-800 border-t border-grisClaro dark:border-gray-700 py-10 mt-12">
-        <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8 text-sm">
+    <!-- Footer mejorado -->
+    <footer class="glass border-t border-white/10 dark:border-gray-700/30 mt-12 py-10">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8 text-sm">
             <div>
-                <h4 class="font-bold text-lg mb-3 text-mlbAzul dark:text-white">SportVive360</h4>
-                <p class="text-gray-600 dark:text-gray-400">Tu portal deportivo con cobertura en vivo de MLB, Mundial 2026 y NBA. Datos actualizados desde Lima, Perú (UTC-5).</p>
+                <h4 class="font-bold text-lg gradient-text">SportVive360</h4>
+                <p class="text-gray-500 dark:text-gray-400 mt-2">Tu portal deportivo con cobertura en vivo de MLB, Mundial 2026 y NBA. Datos actualizados desde Lima, Perú.</p>
                 <div class="flex gap-3 mt-4">
-                    <a href="#" class="social-icon text-gray-500 hover:text-azul"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.56a9.83 9.83 0 01-2.83.78 4.92 4.92 0 002.16-2.72 9.82 9.82 0 01-3.13 1.19 4.92 4.92 0 00-8.38 4.48A13.94 13.94 0 011.67 3.15a4.9 4.9 0 001.52 6.56A4.88 4.88 0 01.96 9.1v.06a4.92 4.92 0 003.94 4.82 4.93 4.93 0 01-2.22.08 4.93 4.93 0 004.6 3.42 9.88 9.88 0 01-6.1 2.1c-.39 0-.78-.02-1.16-.07a13.92 13.92 0 007.55 2.21c9.06 0 14.01-7.5 14.01-14 0-.21 0-.42-.02-.63A10.02 10.02 0 0024 4.56z"/></svg></a>
-                    <a href="#" class="social-icon text-gray-500 hover:text-azul"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 01-1.93.07 4.28 4.28 0 004 2.98 8.52 8.52 0 01-5.33 1.84c-.34 0-.68-.02-1.02-.06A12.08 12.08 0 007.29 21c8.75 0 13.54-7.25 13.54-13.54 0-.21 0-.41-.01-.62A9.68 9.68 0 0022.46 6z"/></svg></a>
-                    <a href="#" class="social-icon text-gray-500 hover:text-azul"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg></a>
-                    <a href="#" class="social-icon text-gray-500 hover:text-azul"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.244 3.768-5.487 0-2.866-2.06-4.874-5.003-4.874-3.406 0-5.406 2.556-5.406 5.194 0 1.028.395 2.13.889 2.729a.362.362 0 01.084.344c-.09.378-.29 1.162-.329 1.326-.052.214-.169.26-.385.157-1.445-.669-2.35-2.773-2.35-4.463 0-3.636 2.636-6.975 7.612-6.975 3.994 0 7.099 2.846 7.099 6.653 0 3.974-2.507 7.174-5.987 7.174-1.169 0-2.268-.607-2.645-1.326 0 0-.579 2.207-.72 2.748-.262.995-.969 2.242-1.44 3.002 1.086.334 2.24.513 3.44.513 6.626 0 11.99-5.369 11.99-11.991C23.99 5.367 18.626 0 12.017 0z"/></svg></a>
+                    <a href="#" class="text-gray-400 hover:text-azul transition"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.56a9.83 9.83 0 01-2.83.78 4.92 4.92 0 002.16-2.72 9.82 9.82 0 01-3.13 1.19 4.92 4.92 0 00-8.38 4.48A13.94 13.94 0 011.67 3.15a4.9 4.9 0 001.52 6.56A4.88 4.88 0 01.96 9.1v.06a4.92 4.92 0 003.94 4.82 4.93 4.93 0 01-2.22.08 4.93 4.93 0 004.6 3.42 9.88 9.88 0 01-6.1 2.1c-.39 0-.78-.02-1.16-.07a13.92 13.92 0 007.55 2.21c9.06 0 14.01-7.5 14.01-14 0-.21 0-.42-.02-.63A10.02 10.02 0 0024 4.56z"/></svg></a>
+                    <a href="#" class="text-gray-400 hover:text-azul transition"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 01-1.93.07 4.28 4.28 0 004 2.98 8.52 8.52 0 01-5.33 1.84c-.34 0-.68-.02-1.02-.06A12.08 12.08 0 007.29 21c8.75 0 13.54-7.25 13.54-13.54 0-.21 0-.41-.01-.62A9.68 9.68 0 0022.46 6z"/></svg></a>
+                    <a href="#" class="text-gray-400 hover:text-azul transition"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg></a>
                 </div>
             </div>
             <div>
                 <h5 class="font-semibold mb-2">Deportes</h5>
-                <ul class="space-y-1 text-gray-600 dark:text-gray-400">
-                    <li><a href="#" data-seccion="mlb" class="hover:text-azul">MLB</a></li>
-                    <li><a href="#" data-seccion="futbol" class="hover:text-azul">Mundial 2026</a></li>
-                    <li><a href="#" data-seccion="nba" class="hover:text-azul">NBA</a></li>
+                <ul class="space-y-1 text-gray-500 dark:text-gray-400">
+                    <li><button class="hover:text-azul" data-seccion="mlb">MLB</button></li>
+                    <li><button class="hover:text-azul" data-seccion="futbol">Mundial 2026</button></li>
+                    <li><button class="hover:text-azul" data-seccion="nba">NBA</button></li>
                 </ul>
             </div>
             <div>
                 <h5 class="font-semibold mb-2">Información</h5>
-                <ul class="space-y-1 text-gray-600 dark:text-gray-400">
+                <ul class="space-y-1 text-gray-500 dark:text-gray-400">
                     <li><a href="#" class="hover:text-azul">Política de privacidad</a></li>
                     <li><a href="#" class="hover:text-azul">Términos de uso</a></li>
                     <li><a href="#" class="hover:text-azul">Contacto</a></li>
-                    <li><a href="#" class="hover:text-azul">Anunciantes</a></li>
                 </ul>
             </div>
             <div>
                 <h5 class="font-semibold mb-2">Horario</h5>
-                <p class="text-gray-600 dark:text-gray-400">Actualización continua<br>Lima UTC-5</p>
-                <p class="mt-2 text-xs text-gray-500">Datos proporcionados por MLB API y fuentes oficiales.</p>
+                <p class="text-gray-500 dark:text-gray-400">Actualización continua<br />Lima UTC-5</p>
+                <p class="mt-2 text-xs text-gray-400">Datos proporcionados por MLB API y fuentes oficiales.</p>
             </div>
         </div>
-        <div class="max-w-6xl mx-auto px-4 mt-8 pt-4 border-t border-grisClaro dark:border-gray-700 text-center text-xs text-gray-500 dark:text-gray-400">
+        <div class="max-w-7xl mx-auto px-4 mt-8 pt-4 border-t border-white/10 dark:border-gray-700/30 text-center text-xs text-gray-400">
             © 2026 SportVive360. Todos los derechos reservados.
         </div>
     </footer>
 
-    <!-- Modal para ficha de partido (detalle) -->
-    <div id="modalPartido" class="modal-overlay">
-        <div class="modal-card">
-            <button class="modal-close" onclick="cerrarModal()">✕</button>
+    <!-- Modal de ficha de partido (mejorado) -->
+    <div id="modalPartido" class="fixed inset-0 z-[999] flex items-center justify-center p-4" style="display:none;">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="cerrarModal()"></div>
+        <div class="modal-glass relative">
+            <button class="close absolute top-4 right-4" onclick="cerrarModal()">✕</button>
             <div id="modalContenido">
-                <div class="flex justify-center py-6"><div class="spinner"></div></div>
+                <div class="flex justify-center py-10"><div class="spinner"></div></div>
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
     <script>
-        // Navegación entre secciones (pestañas)
-        const secciones = ['home', 'mlb', 'futbol', 'nba', 'envivo', 'noticias'];
+        // ========== NAVEGACIÓN MEJORADA ==========
+        const secciones = ['home','mlb','futbol','nba','envivo','noticias','negocio'];
         document.querySelectorAll('[data-seccion]').forEach(el => {
             el.addEventListener('click', (e) => {
                 e.preventDefault();
                 const sec = el.dataset.seccion;
-                // Ocultar todas
                 document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                // Mostrar la correspondiente
-                const target = document.getElementById('seccion-' + sec);
+                const target = document.getElementById('seccion-'+sec);
                 if (target) target.classList.add('active');
-                // Cerrar menú móvil
-                document.getElementById('mobileMenu').classList.add('hidden');
-                // Scroll al inicio
+                document.querySelectorAll('.tab-modern').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll(`.tab-modern[data-seccion="${sec}"]`).forEach(b => b.classList.add('active'));
+                document.getElementById('mobileMenu')?.classList.add('hidden');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         });
 
-        // Tema oscuro
+        // ========== TEMA OSCURO ==========
         const chk = document.getElementById('themeCheckbox');
-        if(localStorage.getItem('tema')==='dark' || 
-           (!localStorage.getItem('tema') && window.matchMedia('(prefers-color-scheme: dark)').matches)){
+        if (localStorage.getItem('tema') === 'dark' || (!localStorage.getItem('tema') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
-            chk.checked=true;
+            chk.checked = true;
         }
-        chk.addEventListener('change',()=>{
+        chk.addEventListener('change', () => {
             document.documentElement.classList.toggle('dark');
-            localStorage.setItem('tema', document.documentElement.classList.contains('dark')?'dark':'light');
+            localStorage.setItem('tema', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
         });
 
-        // Cookies
-        function aceptarCookies(){
-            document.getElementById('cookieBanner').classList.remove('show');
-            localStorage.setItem('cookiesAceptadas','si');
+        // ========== COOKIES ==========
+        function aceptarCookies() {
+            document.getElementById('cookieBanner').style.display = 'none';
+            localStorage.setItem('cookiesAceptadas', 'si');
         }
-        if(!localStorage.getItem('cookiesAceptadas')){
-            document.getElementById('cookieBanner').classList.add('show');
+        if (!localStorage.getItem('cookiesAceptadas')) {
+            document.getElementById('cookieBanner').style.display = 'flex';
         }
 
-        // Menú móvil
+        // ========== MENÚ MÓVIL ==========
         document.getElementById('menuMobile').addEventListener('click', function() {
             document.getElementById('mobileMenu').classList.toggle('hidden');
         });
 
-        // Cuenta atrás Mundial 2026
+        // ========== CUENTA ATRÁS MUNDIAL ==========
         function actualizarCuentaAtras() {
             const inicio = new Date('2026-06-11T00:00:00-05:00').getTime();
             const ahora = Date.now();
-            let diff = inicio - ahora;
-            if (diff < 0) diff = 0;
-            document.getElementById('dias').textContent = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
-            document.getElementById('horas').textContent = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-            document.getElementById('minutos').textContent = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-            document.getElementById('segundos').textContent = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+            let diff = Math.max(0, inicio - ahora);
+            document.getElementById('dias').textContent = String(Math.floor(diff / (1000*60*60*24))).padStart(2,'0');
+            document.getElementById('horas').textContent = String(Math.floor((diff % (1000*60*60*24)) / (1000*60*60))).padStart(2,'0');
+            document.getElementById('minutos').textContent = String(Math.floor((diff % (1000*60*60)) / (1000*60))).padStart(2,'0');
+            document.getElementById('segundos').textContent = String(Math.floor((diff % (1000*60)) / 1000)).padStart(2,'0');
         }
         actualizarCuentaAtras();
         setInterval(actualizarCuentaAtras, 1000);
 
-        // Fechas MLB
+        // ========== MLB ==========
         const ZONA_UTC = -5;
         let fechaActual = new Date();
-        function iso(d){return d.toISOString().split('T')[0];}
-        function textoFecha(d){
-            const dias=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
-            const meses=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+        function iso(d) { return d.toISOString().split('T')[0]; }
+        function textoFecha(d) {
+            const dias = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+            const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
             return `${dias[d.getDay()]} ${d.getDate()} ${meses[d.getMonth()]}`;
         }
-        function cambiarFecha(n){fechaActual.setDate(fechaActual.getDate()+n);mostrarFechas();cargarMLB(iso(fechaActual));}
-        function irFecha(s){fechaActual=new Date(s+'T00:00:00');mostrarFechas();cargarMLB(s);}
-        function mostrarFechas(){
-            const cont=document.getElementById('selector-fechas');let h='';
-            for(let i=-1;i<=1;i++){
-                let f=new Date(fechaActual);f.setDate(f.getDate()+i);
-                const act=iso(f)===iso(fechaActual);
-                h+=`<span class="px-3 py-1.5 rounded-lg cursor-pointer ${act?'bg-azul text-white font-semibold':'hover:bg-gray-100 dark:hover:bg-gray-700'}" onclick="irFecha('${iso(f)}')">${textoFecha(f)}</span>`;
+        function cambiarFecha(n) { fechaActual.setDate(fechaActual.getDate()+n); mostrarFechas(); cargarMLB(iso(fechaActual)); }
+        function irFecha(s) { fechaActual = new Date(s+'T00:00:00'); mostrarFechas(); cargarMLB(s); }
+        function mostrarFechas() {
+            const cont = document.getElementById('selector-fechas');
+            let h = '';
+            for (let i=-1; i<=1; i++) {
+                let f = new Date(fechaActual); f.setDate(f.getDate()+i);
+                const act = iso(f) === iso(fechaActual);
+                h += `<span class="px-3 py-1 rounded-full cursor-pointer ${act ? 'bg-azul text-white' : 'hover:bg-white/20'}" onclick="irFecha('${iso(f)}')">${textoFecha(f)}</span>`;
             }
-            cont.innerHTML=h;
+            cont.innerHTML = h;
         }
 
-        // MLB helpers
-        function leerEntradas(ls,visitante){
-            const inn=ls?.innings||[];const fila=[];
-            for(let i=0;i<9;i++){
-                const x=inn[i];fila.push(x?(visitante?x.away?.runs:x.home?.runs)??'-':'-');
+        function leerEntradas(ls, visitante) {
+            const inn = ls?.innings || [];
+            const fila = [];
+            for (let i=0; i<9; i++) {
+                const x = inn[i];
+                fila.push(x ? (visitante ? x.away?.runs : x.home?.runs) ?? '-' : '-');
             }
-            const tot=ls?.teams?.[visitante?'away':'home']||{};
-            return {fila,C:tot.runs??'‑',H:tot.hits??'‑',E:tot.errors??'‑'};
+            const tot = ls?.teams?.[visitante ? 'away' : 'home'] || {};
+            return { fila, C: tot.runs ?? '‑', H: tot.hits ?? '‑', E: tot.errors ?? '‑' };
         }
-        function dibujarBases(off){
-            const b1=!!off?.first,b2=!!off?.second,b3=!!off?.third;
+
+        function dibujarBases(off) {
+            const b1 = !!off?.first, b2 = !!off?.second, b3 = !!off?.third;
             return `
             <div class="relative w-16 h-16 mx-auto">
                 <div class="diamante-base absolute top-0 left-1/2 -translate-x-1/2 ${b2?'ocupada':'vacia'}"></div>
@@ -616,146 +684,151 @@
             </div>`;
         }
 
-        // Cargar MLB (para la sección MLB)
-        async function cargarMLB(fecha){
+        async function cargarMLB(fecha) {
             const cont = document.getElementById('lista-partidos-mlb');
-            try{
-                const res=await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${fecha}&language=es&hydrate=linescore,probablePitchers,status,linescore.offense,boxscore`);
-                const datos=await res.json();const juegos=datos.dates?.[0]?.games||[];
-                if(!juegos.length){cont.innerHTML='<p class="text-center py-8">Sin partidos</p>';return;}
-                let html='';
-                for(const p of juegos){
-                    const a=p.teams.away,h=p.teams.home;
-                    const estado=p.status;const vivo=estado.abstractGameState==='Live',final=estado.abstractGameState==='Final';
-                    const horaLocal=new Date(new Date(p.gameDate).getTime()+ZONA_UTC*3600000).toLocaleTimeString('es-PE',{hour:'2-digit',minute:'2-digit'});
-                    const ls=p.linescore||{};const v=leerEntradas(ls,true),l=leerEntradas(ls,false);
-                    let lanzA=p.probablePitchers?.away||{},lanzH=p.probablePitchers?.home||{};
-                    if(!lanzA.fullName) lanzA.fullName=final?'Finalizado':'Por confirmar';
-                    if(!lanzH.fullName) lanzH.fullName=final?'Finalizado':'Por confirmar';
-                    const marcador=final?`${v.C}‑${l.C}`:vivo?`${v.C}‑${l.C}`:horaLocal;
+            try {
+                const res = await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${fecha}&language=es&hydrate=linescore,probablePitchers,status,linescore.offense,boxscore`);
+                const datos = await res.json();
+                const juegos = datos.dates?.[0]?.games || [];
+                if (!juegos.length) { cont.innerHTML = '<p class="text-center py-8 text-gray-400">Sin partidos</p>'; return; }
+                let html = '';
+                for (const p of juegos) {
+                    const a = p.teams.away, h = p.teams.home;
+                    const estado = p.status;
+                    const vivo = estado.abstractGameState === 'Live';
+                    const final = estado.abstractGameState === 'Final';
+                    const horaLocal = new Date(new Date(p.gameDate).getTime() + ZONA_UTC*3600000).toLocaleTimeString('es-PE', {hour:'2-digit',minute:'2-digit'});
+                    const ls = p.linescore || {};
+                    const v = leerEntradas(ls, true), l = leerEntradas(ls, false);
+                    let lanzA = p.probablePitchers?.away || {}, lanzH = p.probablePitchers?.home || {};
+                    if (!lanzA.fullName) lanzA.fullName = final ? 'Finalizado' : 'Por confirmar';
+                    if (!lanzH.fullName) lanzH.fullName = final ? 'Finalizado' : 'Por confirmar';
+                    const marcador = final ? `${v.C}‑${l.C}` : vivo ? `${v.C}‑${l.C}` : horaLocal;
                     const claseVivo = vivo ? 'vivo' : (final ? 'final' : '');
-                    html+=`
-                    <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm card-hover relative card-match ${claseVivo}" onclick="verFichaPartido('${p.gamePk}')">
-                        ${vivo?`<span class="absolute top-2 right-3 bg-rojoVivo text-white text-[0.7rem] px-2 py-0.5 rounded-full flex items-center gap-1"><span class="w-1.5 h-1.5 bg-white rounded-full parpadeo"></span>EN VIVO</span>`:''}
-                        ${final?`<span class="absolute top-2 right-3 bg-gris text-white text-[0.7rem] px-2 py-0.5 rounded-full">FINAL</span>`:''}
-                        <div class="flex items-center justify-between mb-4 cursor-pointer">
+                    html += `
+                    <div class="glass-card rounded-2xl p-5 card-match ${claseVivo} relative cursor-pointer" onclick="verFichaPartido('${p.gamePk}')">
+                        ${vivo ? `<span class="absolute top-3 right-3 bg-red-500 text-white text-[0.65rem] px-2 py-0.5 rounded-full flex items-center gap-1"><span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span>EN VIVO</span>` : ''}
+                        ${final ? `<span class="absolute top-3 right-3 bg-gray-500 text-white text-[0.65rem] px-2 py-0.5 rounded-full">FINAL</span>` : ''}
+                        <div class="flex items-center justify-between mb-3">
                             <div class="flex items-center gap-2">
-                                <img src="https://www.mlbstatic.com/team-logos/${a.team.id}.svg" class="w-9 h-9" alt="${a.team.name}" loading="lazy">
-                                <div><div class="font-semibold text-sm">${a.team.name}</div><div class="text-xs">${a.leagueRecord.wins}-${a.leagueRecord.losses}</div></div>
+                                <img src="https://www.mlbstatic.com/team-logos/${a.team.id}.svg" class="w-10 h-10" alt="${a.team.name}" loading="lazy" />
+                                <div><div class="font-bold">${a.team.name}</div><div class="text-xs opacity-60">${a.leagueRecord.wins}-${a.leagueRecord.losses}</div></div>
                             </div>
-                            <div class="text-2xl font-bold min-w-[4rem] text-center">${marcador}</div>
-                            <div class="flex items-center gap-2 text-right flex-row-reverse">
-                                <img src="https://www.mlbstatic.com/team-logos/${h.team.id}.svg" class="w-9 h-9" alt="${h.team.name}" loading="lazy">
-                                <div><div class="font-semibold text-sm">${h.team.name}</div><div class="text-xs">${h.leagueRecord.wins}-${h.leagueRecord.losses}</div></div>
+                            <div class="text-3xl font-extrabold">${marcador}</div>
+                            <div class="flex items-center gap-2 flex-row-reverse">
+                                <img src="https://www.mlbstatic.com/team-logos/${h.team.id}.svg" class="w-10 h-10" alt="${h.team.name}" loading="lazy" />
+                                <div><div class="font-bold">${h.team.name}</div><div class="text-xs opacity-60">${h.leagueRecord.wins}-${h.leagueRecord.losses}</div></div>
                             </div>
                         </div>
-                        <div class="overflow-x-auto">
-                            <div class="grid grid-entradas gap-x-1 text-xs text-center font-medium text-gris/80">
+                        <div class="overflow-x-auto text-xs">
+                            <div class="grid grid-entradas gap-x-1 text-center font-medium opacity-60">
                                 ${[1,2,3,4,5,6,7,8,9].map(n=>`<span>${n}</span>`).join('')}
-                                <span class="border-l border-grisClaro">C</span><span>H</span><span>E</span>
+                                <span class="border-l border-white/20">C</span><span>H</span><span>E</span>
                             </div>
-                            <div class="grid grid-entradas gap-x-1 text-xs text-center py-1 border-t border-grisClaro mt-1">
+                            <div class="grid grid-entradas gap-x-1 text-center py-1 border-t border-white/10 mt-1">
                                 ${v.fila.map(x=>`<span>${x}</span>`).join('')}
-                                <span class="font-semibold border-l border-grisClaro">${v.C}</span><span class="font-semibold">${v.H}</span><span class="font-semibold">${v.E}</span>
+                                <span class="font-bold border-l border-white/20">${v.C}</span><span>${v.H}</span><span>${v.E}</span>
                             </div>
-                            <div class="grid grid-entradas gap-x-1 text-xs text-center py-1">
+                            <div class="grid grid-entradas gap-x-1 text-center py-1">
                                 ${l.fila.map(x=>`<span>${x}</span>`).join('')}
-                                <span class="font-semibold border-l border-grisClaro">${l.C}</span><span class="font-semibold">${l.H}</span><span class="font-semibold">${l.E}</span>
+                                <span class="font-bold border-l border-white/20">${l.C}</span><span>${l.H}</span><span>${l.E}</span>
                             </div>
                         </div>
-                        ${vivo?`<div class="mt-3 flex justify-around text-xs bg-gray-50 dark:bg-gray-700 rounded py-2">${dibujarBases(ls.offense)}<span>B ${ls.balls} • S ${ls.strikes} • O ${ls.outs}</span></div>`:''}
-                        <div class="mt-4 grid grid-cols-2 gap-2 text-xs">
-                            <div><div class="text-gris dark:text-gray-400">Lanzando</div><div class="font-medium">${lanzA.fullName}</div></div>
-                            <div class="text-right"><div class="text-gris dark:text-gray-400">Al bate</div><div class="font-medium">${lanzH.fullName}</div></div>
-                        </div>
-                        <div class="mt-2 text-center text-xs text-azul hover:underline cursor-pointer">Ver ficha completa →</div>
+                        ${vivo ? `<div class="mt-3 flex justify-around text-xs bg-black/20 rounded-lg py-2">${dibujarBases(ls.offense)}<span>B ${ls.balls} • S ${ls.strikes} • O ${ls.outs}</span></div>` : ''}
+                        <div class="mt-3 text-center text-xs text-azul hover:underline">Ver ficha completa →</div>
                     </div>`;
                 }
-                cont.innerHTML=html;
-            }catch(e){cont.innerHTML=`<p class="text-center text-red-600">Error: ${e.message}</p>`;}
+                cont.innerHTML = html;
+            } catch(e) {
+                cont.innerHTML = `<p class="text-center text-red-400">Error: ${e.message}</p>`;
+            }
         }
 
-        // Cargar NBA (sección NBA)
-        async function cargarNBA(){
-            const cont=document.getElementById('lista-nba');
-            try{
-                const res=await fetch('https://www.balldontlie.io/api/v1/games?dates[]='+iso(new Date()));
-                const d=await res.json();
-                if(!d.data.length){cont.innerHTML='<p class="text-center py-8">Sin partidos hoy</p>';return;}
-                let html='';
-                for(const g of d.data){
-                    html+=`
-                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-grisClaro dark:border-gray-700 card-hover">
+        // ========== NBA ==========
+        async function cargarNBA() {
+            const cont = document.getElementById('lista-nba');
+            try {
+                const res = await fetch('https://www.balldontlie.io/api/v1/games?dates[]=' + iso(new Date()));
+                const d = await res.json();
+                if (!d.data.length) { cont.innerHTML = '<p class="text-center py-8 text-gray-400">Sin partidos hoy</p>'; return; }
+                let html = '';
+                for (const g of d.data) {
+                    html += `
+                    <div class="glass-card rounded-2xl p-5">
                         <div class="flex justify-between items-center">
                             <div class="text-center flex-1">
-                                <div class="font-semibold">${g.home_team.name}</div>
-                                <div class="text-2xl font-bold">${g.home_team_score}</div>
+                                <div class="font-bold">${g.home_team.name}</div>
+                                <div class="text-3xl font-extrabold">${g.home_team_score}</div>
                             </div>
-                            <div class="px-4 text-xs text-gray-500 dark:text-gray-400">VS</div>
+                            <div class="px-4 text-xs opacity-50">VS</div>
                             <div class="text-center flex-1">
-                                <div class="font-semibold">${g.visitor_team.name}</div>
-                                <div class="text-2xl font-bold">${g.visitor_team_score}</div>
+                                <div class="font-bold">${g.visitor_team.name}</div>
+                                <div class="text-3xl font-extrabold">${g.visitor_team_score}</div>
                             </div>
                         </div>
-                        <div class="text-center text-xs mt-2 text-gray-500 dark:text-gray-400">${g.status}</div>
+                        <div class="text-center text-xs mt-2 opacity-50">${g.status}</div>
                     </div>`;
                 }
-                cont.innerHTML=html;
-            }catch(e){cont.innerHTML=`<p class="text-center text-red-600">Error NBA</p>`;}
+                cont.innerHTML = html;
+            } catch(e) {
+                cont.innerHTML = `<p class="text-center text-red-400">Error NBA</p>`;
+            }
         }
 
-        // Cargar En Vivo (partidos en vivo de MLB y NBA)
-        async function cargarEnVivo(){
-            const cont=document.getElementById('lista-envivo');
-            try{
-                const res=await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${iso(new Date())}&language=es&hydrate=linescore,status`);
-                const datos=await res.json();
-                const juegos=datos.dates?.[0]?.games||[];
-                const vivos=juegos.filter(p=>p.status.abstractGameState==='Live');
-                if(!vivos.length){cont.innerHTML='<p class="text-center py-8">No hay partidos en vivo en este momento</p>';return;}
-                let html='';
-                for(const p of vivos){
-                    const a=p.teams.away,h=p.teams.home;
-                    const ls=p.linescore||{};
-                    const v=leerEntradas(ls,true),l=leerEntradas(ls,false);
-                    html+=`
-                    <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-grisClaro dark:border-gray-700 card-hover border-l-4 border-red-500">
+        // ========== EN VIVO ==========
+        async function cargarEnVivo() {
+            const cont = document.getElementById('lista-envivo');
+            try {
+                const res = await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${iso(new Date())}&language=es&hydrate=linescore,status`);
+                const datos = await res.json();
+                const juegos = datos.dates?.[0]?.games || [];
+                const vivos = juegos.filter(p => p.status.abstractGameState === 'Live');
+                if (!vivos.length) { cont.innerHTML = '<p class="text-center py-8 text-gray-400">No hay partidos en vivo</p>'; document.getElementById('contadorVivo').textContent = '0'; return; }
+                let html = '';
+                for (const p of vivos) {
+                    const a = p.teams.away, h = p.teams.home;
+                    const ls = p.linescore || {};
+                    const v = leerEntradas(ls, true), l = leerEntradas(ls, false);
+                    html += `
+                    <div class="glass-card rounded-2xl p-5 border-l-4 border-red-500">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3">
-                                <img src="https://www.mlbstatic.com/team-logos/${a.team.id}.svg" class="w-10 h-10" alt="${a.team.name}">
-                                <div><span class="font-bold">${a.team.name}</span> <span class="text-lg font-bold">${v.C}</span></div>
+                                <img src="https://www.mlbstatic.com/team-logos/${a.team.id}.svg" class="w-10 h-10" alt="${a.team.name}" />
+                                <div><span class="font-bold">${a.team.name}</span> <span class="text-2xl font-bold">${v.C}</span></div>
                             </div>
-                            <div class="text-xs bg-red-500 text-white px-2 py-1 rounded-full flex items-center gap-1"><span class="w-1.5 h-1.5 bg-white rounded-full parpadeo"></span> EN VIVO</div>
+                            <span class="bg-red-500 text-white text-xs px-3 py-1 rounded-full flex items-center gap-1"><span class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></span> VIVO</span>
                             <div class="flex items-center gap-3 flex-row-reverse">
-                                <img src="https://www.mlbstatic.com/team-logos/${h.team.id}.svg" class="w-10 h-10" alt="${h.team.name}">
-                                <div><span class="font-bold">${h.team.name}</span> <span class="text-lg font-bold">${l.C}</span></div>
+                                <img src="https://www.mlbstatic.com/team-logos/${h.team.id}.svg" class="w-10 h-10" alt="${h.team.name}" />
+                                <div><span class="font-bold">${h.team.name}</span> <span class="text-2xl font-bold">${l.C}</span></div>
                             </div>
                         </div>
-                        <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">Inning ${ls.currentInning??'-'} • Balls ${ls.balls??0} • Strikes ${ls.strikes??0} • Outs ${ls.outs??0}</div>
+                        <div class="mt-2 text-xs opacity-60">Inning ${ls.currentInning??'-'} • B ${ls.balls??0} • S ${ls.strikes??0} • O ${ls.outs??0}</div>
                         <div class="mt-2 text-center text-xs text-azul cursor-pointer" onclick="verFichaPartido('${p.gamePk}')">Ver ficha →</div>
                     </div>`;
                 }
-                cont.innerHTML=html;
+                cont.innerHTML = html;
                 document.getElementById('contadorVivo').textContent = vivos.length;
-            }catch(e){cont.innerHTML=`<p class="text-center text-red-600">Error cargando en vivo</p>`;}
+            } catch(e) {
+                cont.innerHTML = `<p class="text-center text-red-400">Error cargando en vivo</p>`;
+            }
         }
 
-        // Ficha de partido (modal)
-        async function verFichaPartido(gamePk){
+        // ========== FICHA DE PARTIDO (MODAL) ==========
+        async function verFichaPartido(gamePk) {
             const modal = document.getElementById('modalPartido');
             const contenido = document.getElementById('modalContenido');
-            modal.classList.add('active');
+            modal.style.display = 'flex';
             contenido.innerHTML = '<div class="flex justify-center py-10"><div class="spinner"></div></div>';
-            try{
-                const res=await fetch(`https://statsapi.mlb.com/api/v1/game/${gamePk}/boxscore`);
-                const data=await res.json();
+            try {
+                const res = await fetch(`https://statsapi.mlb.com/api/v1/game/${gamePk}/boxscore`);
+                const data = await res.json();
                 const teams = data.teams;
                 const away = teams.away.team.name;
                 const home = teams.home.team.name;
                 const aStats = teams.away.teamStats.batting;
                 const hStats = teams.home.teamStats.batting;
                 contenido.innerHTML = `
-                    <h3 class="text-xl font-bold mb-2">${away} vs ${home}</h3>
+                    <h3 class="text-2xl font-bold mb-3">${away} vs ${home}</h3>
                     <div class="grid grid-cols-2 gap-4 text-sm">
                         <div><span class="font-semibold">Carreras:</span> ${aStats.runs??'-'}</div>
                         <div><span class="font-semibold">Carreras:</span> ${hStats.runs??'-'}</div>
@@ -764,29 +837,27 @@
                         <div><span class="font-semibold">Errores:</span> ${aStats.errors??'-'}</div>
                         <div><span class="font-semibold">Errores:</span> ${hStats.errors??'-'}</div>
                     </div>
-                    <div class="mt-4"><span class="font-semibold">Alineación:</span> (detalles completos en versión final)</div>
-                    <button class="mt-4 bg-azul text-white px-4 py-2 rounded-lg" onclick="cerrarModal()">Cerrar</button>
+                    <div class="mt-4 text-xs opacity-60">Alineación y detalles completos disponibles en la versión final.</div>
+                    <button class="btn-primary mt-4" onclick="cerrarModal()">Cerrar</button>
                 `;
-            }catch(e){
-                contenido.innerHTML = `<p class="text-red-600">Error cargando ficha</p>`;
+            } catch(e) {
+                contenido.innerHTML = `<p class="text-red-400">Error cargando ficha</p>`;
             }
         }
-        function cerrarModal(){
-            document.getElementById('modalPartido').classList.remove('active');
-        }
-        // Cerrar modal al hacer clic fuera
-        document.getElementById('modalPartido').addEventListener('click', function(e){
-            if(e.target === this) cerrarModal();
-        });
 
-        // Inicializar
+        function cerrarModal() {
+            document.getElementById('modalPartido').style.display = 'none';
+        }
+        // Cerrar con ESC
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarModal(); });
+
+        // ========== INICIALIZAR ==========
         mostrarFechas();
         cargarMLB(iso(fechaActual));
         cargarNBA();
         cargarEnVivo();
-        // Actualizaciones periódicas
-        setInterval(()=>{
-            if(iso(fechaActual)===iso(new Date())) cargarMLB(iso(fechaActual));
+        setInterval(() => {
+            if (iso(fechaActual) === iso(new Date())) cargarMLB(iso(fechaActual));
             cargarEnVivo();
         }, 30000);
     </script>
