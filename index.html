@@ -62,7 +62,7 @@
         }
         .division-titulo:first-of-type { margin-top: 0; }
         .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background: #000; }
-        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
         .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
         .card-hover:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
         .spinner {
@@ -185,9 +185,7 @@
             <span class="dark:text-gray-400">Actualizado • Lima (UTC‑5)</span>
         </div>
 
-        <!-- ============================================================ -->
-        <!-- MLB                                                          -->
-        <!-- ============================================================ -->
+        <!-- MLB -->
         <div id="tab-mlb" class="tab-content active">
             <section>
                 <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-5 dark:text-white">📋 Resultados & En vivo</h2>
@@ -197,7 +195,7 @@
                     <button onclick="cambiarFecha(1)" class="text-lg px-3 py-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">›</button>
                 </div>
 
-                <!-- ANUNCIO 1 -->
+                <!-- Bloque anuncio -->
                 <div class="my-6 ad-container">
                     <ins class="adsbygoogle"
                          style="display:block"
@@ -214,6 +212,7 @@
 
                 <!-- Posiciones MLB -->
                 <div class="space-y-6">
+                    <!-- Liga Americana -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm card-hover">
                         <h3 class="font-semibold text-mlbAzul dark:text-white text-lg mb-3 flex items-center gap-2">🏆 Liga Americana</h3>
                         <div class="overflow-x-auto">
@@ -252,6 +251,7 @@
                             </table>
                         </div>
                     </div>
+                    <!-- Liga Nacional -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm card-hover">
                         <h3 class="font-semibold text-mlbAzul dark:text-white text-lg mb-3 flex items-center gap-2">🏆 Liga Nacional</h3>
                         <div class="overflow-x-auto">
@@ -291,82 +291,199 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- ANUNCIO 2 -->
-                <div class="my-8 ad-container">
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-3765201153278683"
-                         data-ad-slot="7802021862"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-                </div>
-
-                <!-- VIDEOS -->
-                <div class="mt-10">
-                    <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-5 dark:text-white">🎥 Destacados MLB</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-grisClaro dark:border-gray-700 overflow-hidden card-hover">
-                            <div class="video-wrapper">
-                                <iframe src="https://www.youtube.com/embed/P5hOMfdFv8Y?si=_yl2u_0CiEAscwFq" title="MLB Highlights 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
-                            </div>
-                            <div class="p-3">
-                                <p class="text-sm font-semibold dark:text-white">⚾ Resumen de la jornada</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Las mejores jugadas del día en la MLB.</p>
-                            </div>
-                        </div>
-                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-grisClaro dark:border-gray-700 overflow-hidden card-hover">
-                            <div class="video-wrapper">
-                                <iframe src="https://www.youtube.com/embed/f5YBfDI-CnM?si=i3OMDqU2aEP7LdrM" title="MLB Highlights 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
-                            </div>
-                            <div class="p-3">
-                                <p class="text-sm font-semibold dark:text-white">⚾ Mejores jugadas de la semana</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Los momentos más espectaculares de la semana.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </section>
         </div>
 
-        <!-- ============================================================ -->
-        <!-- MUNDIAL 2026 - CALENDARIO COMPLETO                           -->
-        <!-- ============================================================ -->
+        <!-- Mundial 2026 • Actualizado ESPN -->
         <div id="tab-futbol" class="tab-content">
             <section>
-                <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-5 dark:text-white">⚽ Mundial 2026 • Calendario & Resultados</h2>
-
-                <!-- ANUNCIO 3 -->
-                <div class="my-6 ad-container">
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-3765201153278683"
-                         data-ad-slot="7802021862"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-                </div>
-
+                <h2 class="text-2xl font-bold text-mlbAzul border-l-4 border-azul pl-3 mb-5 dark:text-white">⚽ Mundial 2026 • EE.UU.‑México‑Canadá</h2>
                 <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm border border-grisClaro dark:border-gray-700 mb-6">
-                    <div class="countdown mb-4">
-                        <div class="countdown-item"><span class="countdown-number" id="dias">--</span><span class="countdown-label">días</span></div>
-                        <div class="countdown-item"><span class="countdown-number" id="horas">--</span><span class="countdown-label">horas</span></div>
-                        <div class="countdown-item"><span class="countdown-number" id="minutos">--</span><span class="countdown-label">min</span></div>
-                        <div class="countdown-item"><span class="countdown-number" id="segundos">--</span><span class="countdown-label">seg</span></div>
-                    </div>
-                    <p class="text-center text-sm text-gray-600 dark:text-gray-400">🇺🇸🇲🇽🇨🇦 Inicio: 11 de junio de 2026 • 48 selecciones • 16 sedes</p>
+                    <p class="text-center text-green-600 font-semibold mb-2">✅ TORNEO EN CURSO</p>
+                    <p class="text-center text-sm text-gray-600 dark:text-gray-400">
+                        📅 11 jun – 19 jul 2026 • 🏟 16 sedes • ⏰ Horario: Lima UTC‑5
+                    </p>
+                    <p class="text-center text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        Actualizado: desde calendario ESPN
+                    </p>
                 </div>
-
-                <!-- Calendario Mundial -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm">
-                    <h3 class="font-bold text-mlbAzul dark:text-white text-lg mb-4 flex items-center gap-2">📅 Calendario Mundial 2026</h3>
-
-                    <!-- Días del calendario -->
-                    <div class="space-y-6">
-
-                        <!-- DOMINGO 21 DE JUNIO 2026 -->
-                        <div>
-                            <div class="bg-mlbAzul text-white p-2 rounded-lg font-bold text-center dark:bg-gray-700">Domingo 21 de Junio 2026</div>
-                            <table class="w-full text-xs mundial-table dark:text-gray-300 mt-2">
-                                <thead
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <button class="px-3 py-1 rounded bg-azul text-white text-xs font-semibold" onclick="filtrarGrupo('todos')">Todos</button>
+                    <button class="px-3 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-xs" onclick="filtrarGrupo('A')">A</button>
+                    <button class="px-3 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-xs" onclick="filtrarGrupo('B')">B</button>
+                    <button class="px-3 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-xs" onclick="filtrarGrupo('C')">C</button>
+                    <button class="px-3 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-xs" onclick="filtrarGrupo('D')">D</button>
+                    <button class="px-3 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-xs" onclick="filtrarGrupo('E')">E</button>
+                    <button class="px-3 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-xs" onclick="filtrarGrupo('F')">F</button>
+                    <span class="text-xs text-gray-500 ml-auto self-center">Datos ESPN</span>
+                </div>
+                <div id="lista-mundial" class="space-y-6 mb-8">
+                    <!-- Jueves 11 Jun -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm">
+                        <h4 class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-3">📅 Jueves, 11 de Junio 2026</h4>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇲🇽</span><span>México</span></div>
+                                <span class="font-semibold">2 - 0</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🇿🇦</span><span>Sudáfrica</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">Estadio Banorte, CDMX • F</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇰🇷</span><span>Corea del Sur</span></div>
+                                <span class="font-semibold">2 - 1</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🇨🇿</span><span>República Checa</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">Estadio Akron, GDL • F</p>
+                        </div>
+                    </div>
+                    <!-- Viernes 12 Jun -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm">
+                        <h4 class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-3">📅 Viernes, 12 de Junio 2026</h4>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇨🇦</span><span>Canadá</span></div>
+                                <span class="font-semibold">1 - 1</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🇧🇦</span><span>Bosnia‑Herzegovina</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">BMO Field, Toronto • F</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇺🇸</span><span>Estados Unidos</span></div>
+                                <span class="font-semibold">4 - 1</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🇵🇾</span><span>Paraguay</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">SoFi Stadium, Inglewood • F</p>
+                        </div>
+                    </div>
+                    <!-- Sábado 13 Jun -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm">
+                        <h4 class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-3">📅 Sábado, 13 de Junio 2026</h4>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇶🇦</span><span>Qatar</span></div>
+                                <span class="font-semibold">1 - 1</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🇨🇭</span><span>Suiza</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">Levi’s Stadium, Santa Clara • F</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇧🇷</span><span>Brasil</span></div>
+                                <span class="font-semibold">1 - 1</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🇲🇦</span><span>Marruecos</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">MetLife Stadium • F</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇭🇹</span><span>Haití</span></div>
+                                <span class="font-semibold">0 - 1</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span><span>Escocia</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">Gillette Stadium • F</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇦🇺</span><span>Australia</span></div>
+                                <span class="font-semibold">2 - 0</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🇹🇷</span><span>Turquía</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">BC Place • F</p>
+                        </div>
+                    </div>
+                    <!-- Domingo 14 Jun -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm">
+                        <h4 class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-3">📅 Domingo, 14 de Junio 2026</h4>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇩🇪</span><span>Alemania</span></div>
+                                <span class="font-semibold">7 - 1</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🇨🇼</span><span>Curazao</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">NRG Stadium • F</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇳🇱</span><span>Países Bajos</span></div>
+                                <span class="font-semibold">2 - 2</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🇯🇵</span><span>Japón</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">AT&T Stadium • F</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇨🇮</span><span>Costa de Marfil</span></div>
+                                <span class="font-semibold">1 - 0</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🇪🇨</span><span>Ecuador</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">Lincoln Financial Field • F</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇸🇪</span><span>Suecia</span></div>
+                                <span class="font-semibold">5 - 1</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🇹🇳</span><span>Túnez</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">Estadio BBVA • F</p>
+                        </div>
+                    </div>
+                    <!-- Lunes 15 Jun -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm">
+                        <h4 class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-3">📅 Lunes, 15 de Junio 2026</h4>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇪🇸</span><span>España</span></div>
+                                <span class="font-semibold">0 - 0</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🇨🇷</span><span>Costa Rica</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">Mercedes‑Benz Stadium • F</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇧🇪</span><span>Bélgica</span></div>
+                                <span class="font-semibold">1 - 1</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🇪🇬</span><span>Egipto</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">Lumen Field • F</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇸🇦</span><span>Arabia Saudita</span></div>
+                                <span class="font-semibold">1 - 1</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🇺🇾</span><span>Uruguay</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">Hard Rock Stadium • F</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇮🇷</span><span>Irán</span></div>
+                                <span class="font-semibold">2 - 2</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🇳🇿</span><span>Nueva Zelanda</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">SoFi Stadium • F</p>
+                        </div>
+                    </div>
+                    <!-- Martes 16 Jun -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm">
+                        <h4 class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-3">📅 Martes, 16 de Junio 2026</h4>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇫🇷</span><span>Francia</span></div>
+                                <span class="font-semibold">3 - 1</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🇸🇳</span><span>Senegal</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">MetLife Stadium • F</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇮🇶</span><span>Irak</span></div>
+                                <span class="font-semibold">1 - 4</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🇳🇴</span><span>Noruega</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">Gillette Stadium • F</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇦🇷</span><span>Argentina</span></div>
+                                <span class="font-semibold">3 - 0</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🇩🇿</span><span>Argelia</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">GEHA Field • F</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇦🇹</span><span>Austria</span></div>
+                                <span class="font-semibold">3 - 1</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🇯🇴</span><span>Jordania</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">Levi’s Stadium • F</p>
+                        </div>
+                    </div>
+                    <!-- Miércoles 17 Jun -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl border border-grisClaro dark:border-gray-700 p-4 shadow-sm">
+                        <h4 class="text-sm font-medium text-gray-600 dark:text-gray-300 mb-3">📅 Miércoles, 17 de Junio 2026</h4>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇵🇹</span><span>Portugal</span></div>
+                                <span class="font-semibold">1 - 1</span>
+                                <div class="flex items-center gap-2 text-right flex-row-reverse"><span class="text-lg">🇨🇩</span><span>R.D. Congo</span></div>
+                            </div>
+                            <p class="text-xs text-gray-500 text-right">NRG Stadium • F</p>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-2"><span class="text-lg">🇬🇧</span><span>Inglaterra</span></div>
+                                <span class="font-semibold">4 - 2
