@@ -331,13 +331,18 @@
         }
         .dark .theme-toggle .slider { background: #1a56db; }
         .dark .theme-toggle .slider::after { transform: translateX(18px); }
+
+        /* ===== NEGOCIO ===== */
+        .bloque-negocio { background: radial-gradient(circle at top,#1e293b,#0f172a); color:white; border-radius:16px; padding:2rem; }
+        .tarjeta-negocio { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:1.5rem; transition:transform .2s; }
+        .tarjeta-negocio:hover { transform:translateY(-4px); }
     </style>
 </head>
 <body>
 
     <!-- Cookie Banner -->
     <div id="cookieBanner" class="cookie-banner">
-        <span>🍪 Usamos cookies para mejorar tu experiencia. Al continuar, aceptas nuestra <a href="#" onclick="navegar('privacidad')">política de privacidad</a>.</span>
+        <span>🍪 Usamos cookies para mejorar tu experiencia. Al continuar, aceptas nuestra <a href="https://sportvivo360.cyou/privacidad">política de privacidad</a>.</span>
         <button onclick="aceptarCookies()">Aceptar</button>
     </div>
 
@@ -374,6 +379,7 @@
                 <span class="nav-link" data-page="equipos">Equipos</span>
                 <span class="nav-link" data-page="noticias">Noticias</span>
                 <span class="nav-link" data-page="analisis">Análisis</span>
+                <span class="nav-link" data-page="negocio">💼 Negocio</span>
                 <span class="nav-link" data-page="contacto">Contacto</span>
             </nav>
             <!-- Menú móvil -->
@@ -385,6 +391,7 @@
                 <span class="nav-link" data-page="equipos">Equipos</span>
                 <span class="nav-link" data-page="noticias">Noticias</span>
                 <span class="nav-link" data-page="analisis">Análisis</span>
+                <span class="nav-link" data-page="negocio">💼 Negocio</span>
                 <span class="nav-link" data-page="contacto">Contacto</span>
                 <span class="nav-link" data-page="acerca">Acerca</span>
                 <span class="nav-link" data-page="privacidad">Privacidad</span>
@@ -441,7 +448,7 @@
             </div>
         </section>
 
-        <!-- PÁGINA: CLASIFICACIÓN (SOLO AQUÍ SE MUESTRA) -->
+        <!-- PÁGINA: CLASIFICACIÓN -->
         <section id="page-clasificacion" class="page-section">
             <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">📊 Clasificación Mundial 2026 – Grupos</h2>
             <div id="clasificacion-contenido" class="standings-grid">
@@ -470,6 +477,31 @@
             <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white" id="analisis-titulo">🔍 Análisis y Previas – Mundial 2026</h2>
             <div id="analisis-contenido" class="space-y-6">
                 <div class="flex justify-center py-10"><div class="spinner"></div></div>
+            </div>
+        </section>
+
+        <!-- PÁGINA: NEGOCIO -->
+        <section id="page-negocio" class="page-section">
+            <h2 class="text-2xl font-bold text-secondary border-l-4 border-accent pl-3 mb-5 dark:text-white">💼 Negocio & Alianzas</h2>
+            <div class="bloque-negocio mb-10">
+                <p class="text-gray-300 max-w-2xl mb-8">SportVive360 conecta marcas con millones de aficionados en Perú y toda América. Ofrecemos visibilidad, datos deportivos y activaciones exclusivas.</p>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="tarjeta-negocio">
+                        <h3 class="font-bold text-lg mb-2 text-gold">📢 Publicidad</h3>
+                        <p class="text-sm text-gray-300">Formatos optimizados, segmentación por deporte y dispositivo. Alta tasa de visualización.</p>
+                    </div>
+                    <div class="tarjeta-negocio">
+                        <h3 class="font-bold text-lg mb-2 text-gold">🤝 Patrocinios</h3>
+                        <p class="text-sm text-gray-300">Colaboraciones oficiales, secciones destacadas y presencia en eventos clave.</p>
+                    </div>
+                    <div class="tarjeta-negocio">
+                        <h3 class="font-bold text-lg mb-2 text-gold">📊 Datos & API</h3>
+                        <p class="text-sm text-gray-300">Licencias de resultados, estadísticas en vivo y calendarios para terceros.</p>
+                    </div>
+                </div>
+                <div class="mt-10 text-center">
+                    <a href="#contacto" onclick="navegar('contacto')" class="bg-gold hover:bg-amber-500 text-black font-bold px-8 py-3 rounded-lg">Solicitar propuesta</a>
+                </div>
             </div>
         </section>
 
@@ -533,6 +565,7 @@
             <span class="nav-link" onclick="navegar('equipos')">Equipos</span>
             <span class="nav-link" onclick="navegar('noticias')">Noticias</span>
             <span class="nav-link" onclick="navegar('analisis')">Análisis</span>
+            <span class="nav-link" onclick="navegar('negocio')">Negocio</span>
             <span class="nav-link" onclick="navegar('contacto')">Contacto</span>
             <span class="nav-link" onclick="navegar('acerca')">Acerca</span>
             <span class="nav-link" onclick="navegar('privacidad')">Privacidad</span>
@@ -635,7 +668,7 @@
                     ],
                     '17': [
                         { local: 'Portugal', visitante: 'R.D. del Congo', score: '1-1', status: 'Final', flagL: '🇵🇹', flagV: '🇨🇩' },
-                        { local: 'Inglaterra', visitante: 'Croacia', score: '4-2', status: 'Final', flagL: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', flagV: '🇭🇷' },
+                        { local: 'Inglaterra', visitante: 'Croacia', score: '4-2', status: 'Final', flagL: '🏴', flagV: '🇭🇷' },
                         { local: 'Ghana', visitante: 'Panamá', score: '1-0', status: 'Final', flagL: '🇬🇭', flagV: '🇵🇦' },
                         { local: 'Colombia', visitante: 'Uzbekistán', score: '3-1', status: 'Final', flagL: '🇨🇴', flagV: '🇺🇿' },
                     ],
@@ -647,563 +680,8 @@
                     ],
                     '19': [
                         { local: 'Estados Unidos', visitante: 'Australia', score: '2-0', status: 'Final', flagL: '🇺🇸', flagV: '🇦🇺' },
-                        { local: 'Marruecos', visitante: 'Escocia', score: '1-0', status: 'Final', flagL: '🇲🇦', flagV: '🏴󠁧󠁢󠁳󠁣󠁴󠁿' },
+                        { local: 'Marruecos', visitante: 'Escocia', score: '1-0', status: 'Final', flagL: '🇲🇦', flagV: '🏴' },
                         { local: 'Brasil', visitante: 'Haití', score: '3-0', status: 'Final', flagL: '🇧🇷', flagV: '🇭🇹' },
                     ],
                     '20': [
-                        { local: 'Alemania', visitante: 'Costa de Marfil', score: '2-1', status: 'Final', flagL: '🇩🇪', flagV: '🇨🇮' },
-                        { local: 'Ecuador', visitante: 'Curazao', score: '0-0', status: 'Final', flagL: '🇪🇨', flagV: '🇨🇼' },
-                        { local: 'Países Bajos', visitante: 'Suecia', score: '5-1', status: 'Final', flagL: '🇳🇱', flagV: '🇸🇪' },
-                        { local: 'Japón', visitante: 'Túnez', score: '4-0', status: 'Final', flagL: '🇯🇵', flagV: '🇹🇳' },
-                    ],
-                    '21': [
-                        { local: 'España', visitante: 'Arabia Saudita', score: 'vs', status: 'Programado', flagL: '🇪🇸', flagV: '🇸🇦' },
-                        { local: 'Bélgica', visitante: 'Irán', score: 'vs', status: 'Programado', flagL: '🇧🇪', flagV: '🇮🇷' },
-                        { local: 'Uruguay', visitante: 'Cabo Verde', score: 'vs', status: 'Programado', flagL: '🇺🇾', flagV: '🇨🇻' },
-                        { local: 'Nueva Zelanda', visitante: 'Egipto', score: 'vs', status: 'Programado', flagL: '🇳🇿', flagV: '🇪🇬' },
-                    ],
-                    '22': [
-                        { local: 'Argentina', visitante: 'Austria', score: 'vs', status: 'Programado', flagL: '🇦🇷', flagV: '🇦🇹' },
-                        { local: 'Francia', visitante: 'Irak', score: 'vs', status: 'Programado', flagL: '🇫🇷', flagV: '🇮🇶' },
-                        { local: 'Noruega', visitante: 'Senegal', score: 'vs', status: 'Programado', flagL: '🇳🇴', flagV: '🇸🇳' },
-                        { local: 'Jordania', visitante: 'Argelia', score: 'vs', status: 'Programado', flagL: '🇯🇴', flagV: '🇩🇿' },
-                    ],
-                    '23': [
-                        { local: 'Portugal', visitante: 'Uzbekistán', score: 'vs', status: 'Programado', flagL: '🇵🇹', flagV: '🇺🇿' },
-                        { local: 'Inglaterra', visitante: 'Ghana', score: 'vs', status: 'Programado', flagL: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', flagV: '🇬🇭' },
-                        { local: 'Panamá', visitante: 'Croacia', score: 'vs', status: 'Programado', flagL: '🇵🇦', flagV: '🇭🇷' },
-                        { local: 'Colombia', visitante: 'R.D. del Congo', score: 'vs', status: 'Programado', flagL: '🇨🇴', flagV: '🇨🇩' },
-                    ],
-                    '24': [
-                        { local: 'Bosnia', visitante: 'Qatar', score: 'vs', status: 'Programado', flagL: '🇧🇦', flagV: '🇶🇦' },
-                        { local: 'Suiza', visitante: 'Canadá', score: 'vs', status: 'Programado', flagL: '🇨🇭', flagV: '🇨🇦' },
-                        { local: 'Marruecos', visitante: 'Haití', score: 'vs', status: 'Programado', flagL: '🇲🇦', flagV: '🇭🇹' },
-                        { local: 'Escocia', visitante: 'Brasil', score: 'vs', status: 'Programado', flagL: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', flagV: '🇧🇷' },
-                    ],
-                    '25': [
-                        { local: 'Curazao', visitante: 'Costa de Marfil', score: 'vs', status: 'Programado', flagL: '🇨🇼', flagV: '🇨🇮' },
-                        { local: 'Ecuador', visitante: 'Alemania', score: 'vs', status: 'Programado', flagL: '🇪🇨', flagV: '🇩🇪' },
-                        { local: 'Japón', visitante: 'Suecia', score: 'vs', status: 'Programado', flagL: '🇯🇵', flagV: '🇸🇪' },
-                        { local: 'Túnez', visitante: 'Países Bajos', score: 'vs', status: 'Programado', flagL: '🇹🇳', flagV: '🇳🇱' },
-                        { local: 'Paraguay', visitante: 'Australia', score: 'vs', status: 'Programado', flagL: '🇵🇾', flagV: '🇦🇺' },
-                        { local: 'Turquía', visitante: 'Estados Unidos', score: 'vs', status: 'Programado', flagL: '🇹🇷', flagV: '🇺🇸' },
-                    ],
-                    '26': [
-                        { local: 'Noruega', visitante: 'Francia', score: 'vs', status: 'Programado', flagL: '🇳🇴', flagV: '🇫🇷' },
-                        { local: 'Senegal', visitante: 'Irak', score: 'vs', status: 'Programado', flagL: '🇸🇳', flagV: '🇮🇶' },
-                        { local: 'Cabo Verde', visitante: 'Arabia Saudita', score: 'vs', status: 'Programado', flagL: '🇨🇻', flagV: '🇸🇦' },
-                        { local: 'Uruguay', visitante: 'España', score: 'vs', status: 'Programado', flagL: '🇺🇾', flagV: '🇪🇸' },
-                        { local: 'Egipto', visitante: 'Irán', score: 'vs', status: 'Programado', flagL: '🇪🇬', flagV: '🇮🇷' },
-                        { local: 'Nueva Zelanda', visitante: 'Bélgica', score: 'vs', status: 'Programado', flagL: '🇳🇿', flagV: '🇧🇪' },
-                    ],
-                },
-                // ===== CLASIFICACIÓN COMPLETA (GRUPOS A-L) =====
-                clasificacion: {
-                    titulo: '📊 Clasificación Mundial 2026 – Grupos',
-                    conferencias: [
-                        { nombre: 'Grupo A', equipos: [
-                            { nombre: '🇲🇽 México', Pts: 6, PJ: 2, G: 2, E: 0, P: 0, GF: 3, GC: 0 },
-                            { nombre: '🇰🇷 Corea del Sur', Pts: 3, PJ: 2, G: 1, E: 0, P: 1, GF: 2, GC: 2 },
-                            { nombre: '🇿🇦 Sudáfrica', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 1, GC: 3 },
-                            { nombre: '🇨🇿 Rep. Checa', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 2, GC: 3 },
-                        ]},
-                        { nombre: 'Grupo B', equipos: [
-                            { nombre: '🇨🇦 Canadá', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 7, GC: 1 },
-                            { nombre: '🇨🇭 Suiza', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 5, GC: 2 },
-                            { nombre: '🇧🇦 Bosnia', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 2, GC: 5 },
-                            { nombre: '🇶🇦 Qatar', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 1, GC: 7 },
-                        ]},
-                        { nombre: 'Grupo C', equipos: [
-                            { nombre: '🇧🇷 Brasil', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 4, GC: 1 },
-                            { nombre: '🇲🇦 Marruecos', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 2, GC: 1 },
-                            { nombre: '🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 0, GC: 1 },
-                            { nombre: '🇭🇹 Haití', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 0, GC: 3 },
-                        ]},
-                        { nombre: 'Grupo D', equipos: [
-                            { nombre: '🇺🇸 EE.UU.', Pts: 6, PJ: 2, G: 2, E: 0, P: 0, GF: 6, GC: 1 },
-                            { nombre: '🇦🇺 Australia', Pts: 3, PJ: 2, G: 1, E: 0, P: 1, GF: 2, GC: 2 },
-                            { nombre: '🇹🇷 Turquía', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 0, GC: 2 },
-                            { nombre: '🇵🇾 Paraguay', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 1, GC: 4 },
-                        ]},
-                        { nombre: 'Grupo E', equipos: [
-                            { nombre: '🇩🇪 Alemania', Pts: 6, PJ: 2, G: 2, E: 0, P: 0, GF: 9, GC: 2 },
-                            { nombre: '🇨🇮 Costa de Marfil', Pts: 3, PJ: 2, G: 1, E: 0, P: 1, GF: 2, GC: 2 },
-                            { nombre: '🇪🇨 Ecuador', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 0, GC: 1 },
-                            { nombre: '🇨🇼 Curazao', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 1, GC: 7 },
-                        ]},
-                        { nombre: 'Grupo F', equipos: [
-                            { nombre: '🇳🇱 Países Bajos', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 7, GC: 3 },
-                            { nombre: '🇯🇵 Japón', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 6, GC: 2 },
-                            { nombre: '🇸🇪 Suecia', Pts: 3, PJ: 2, G: 1, E: 0, P: 1, GF: 6, GC: 6 },
-                            { nombre: '🇹🇳 Túnez', Pts: 0, PJ: 2, G: 0, E: 0, P: 2, GF: 1, GC: 9 },
-                        ]},
-                        { nombre: 'Grupo G', equipos: [
-                            { nombre: '🇧🇪 Bélgica', Pts: 1, PJ: 1, G: 0, E: 1, P: 0, GF: 1, GC: 1 },
-                            { nombre: '🇪🇬 Egipto', Pts: 1, PJ: 1, G: 0, E: 1, P: 0, GF: 1, GC: 1 },
-                            { nombre: '🇮🇷 Irán', Pts: 1, PJ: 1, G: 0, E: 1, P: 0, GF: 2, GC: 2 },
-                            { nombre: '🇳🇿 Nueva Zelanda', Pts: 1, PJ: 1, G: 0, E: 1, P: 0, GF: 2, GC: 2 },
-                        ]},
-                        { nombre: 'Grupo H', equipos: [
-                            { nombre: '🇪🇸 España', Pts: 1, PJ: 1, G: 0, E: 1, P: 0, GF: 0, GC: 0 },
-                            { nombre: '🇨🇻 Cabo Verde', Pts: 1, PJ: 1, G: 0, E: 1, P: 0, GF: 0, GC: 0 },
-                            { nombre: '🇸🇦 Arabia Saudita', Pts: 1, PJ: 1, G: 0, E: 1, P: 0, GF: 1, GC: 1 },
-                            { nombre: '🇺🇾 Uruguay', Pts: 1, PJ: 1, G: 0, E: 1, P: 0, GF: 1, GC: 1 },
-                        ]},
-                        { nombre: 'Grupo I', equipos: [
-                            { nombre: '🇫🇷 Francia', Pts: 3, PJ: 1, G: 1, E: 0, P: 0, GF: 3, GC: 1 },
-                            { nombre: '🇳🇴 Noruega', Pts: 3, PJ: 1, G: 1, E: 0, P: 0, GF: 4, GC: 1 },
-                            { nombre: '🇸🇳 Senegal', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 1, GC: 3 },
-                            { nombre: '🇮🇶 Irak', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 1, GC: 4 },
-                        ]},
-                        { nombre: 'Grupo J', equipos: [
-                            { nombre: '🇦🇷 Argentina', Pts: 3, PJ: 1, G: 1, E: 0, P: 0, GF: 3, GC: 0 },
-                            { nombre: '🇦🇹 Austria', Pts: 3, PJ: 1, G: 1, E: 0, P: 0, GF: 2, GC: 1 },
-                            { nombre: '🇯🇴 Jordania', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 1, GC: 2 },
-                            { nombre: '🇩🇿 Argelia', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 0, GC: 3 },
-                        ]},
-                        { nombre: 'Grupo K', equipos: [
-                            { nombre: '🇨🇴 Colombia', Pts: 3, PJ: 1, G: 1, E: 0, P: 0, GF: 3, GC: 1 },
-                            { nombre: '🇵🇹 Portugal', Pts: 1, PJ: 1, G: 0, E: 1, P: 0, GF: 1, GC: 1 },
-                            { nombre: '🇨🇩 R.D. Congo', Pts: 1, PJ: 1, G: 0, E: 1, P: 0, GF: 1, GC: 1 },
-                            { nombre: '🇺🇿 Uzbekistán', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 1, GC: 3 },
-                        ]},
-                        { nombre: 'Grupo L', equipos: [
-                            { nombre: '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra', Pts: 3, PJ: 1, G: 1, E: 0, P: 0, GF: 4, GC: 2 },
-                            { nombre: '🇬🇭 Ghana', Pts: 3, PJ: 1, G: 1, E: 0, P: 0, GF: 1, GC: 0 },
-                            { nombre: '🇭🇷 Croacia', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 2, GC: 4 },
-                            { nombre: '🇵🇦 Panamá', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 0, GC: 1 },
-                        ]},
-                    ]
-                },
-                equipos: ['Argentina', 'Brasil', 'Francia', 'España', 'Alemania', 'Portugal', 'Inglaterra', 'Países Bajos', 'Croacia', 'Bélgica', 'Uruguay', 'Marruecos', 'Senegal', 'Australia', 'Estados Unidos', 'México', 'Canadá', 'Japón', 'Corea del Sur', 'Arabia Saudita', 'Irán', 'Ghana', 'Colombia', 'Ecuador', 'Paraguay', 'Turquía', 'Austria', 'Noruega', 'Suecia', 'Costa de Marfil', 'Cabo Verde', 'Bosnia', 'Qatar', 'Haití', 'Jordania', 'Irak', 'Argelia', 'R.D. del Congo', 'Uzbekistán', 'Panamá', 'Nueva Zelanda', 'Egipto', 'Curazao', 'Sudáfrica', 'República Checa', 'Suiza', 'Escocia', 'Túnez'],
-                noticias: [
-                    { fecha: '21 de junio, 2026', titulo: 'Países Bajos golea 5-1 a Suecia y Alemania vence a Costa de Marfil', resumen: 'Los holandeses demostraron su poder ofensivo con una contundente victoria. Alemania, por su parte, sufrió pero logró llevarse los tres puntos. Ecuador y Curazao empataron sin goles.' },
-                    { fecha: '20 de junio, 2026', titulo: 'Brasil y Francia arrancan con victorias; Argentina golea 3-0 a Argelia', resumen: 'La Canarinha venció 3-0 a Haití, mientras que Francia derrotó 3-1 a Senegal. Argentina, con un doblete de Messi, se impuso con autoridad.' },
-                    { fecha: '19 de junio, 2026', titulo: 'Inglaterra golea 4-2 a Croacia en un partidazo', resumen: 'Los ingleses mostraron su mejor versión con goles de Kane, Bellingham y Saka. Croacia recortó distancias pero no pudo con el poderío inglés.' },
-                ],
-                analisis: [
-                    { autor: 'Por Juan Pérez', titulo: 'Análisis de la primera jornada: favoritos y sorpresas', texto: 'El Mundial 2026 arrancó con todo. Argentina, Brasil y Francia cumplieron con creces. Países Bajos e Inglaterra también mostraron su mejor cara. Las sorpresas llegaron de la mano de Marruecos, que venció a Escocia, y Paraguay, que derrotó a Turquía. La lucha por los grupos promete ser intensa.' },
-                    { autor: 'Por Carlos Rodríguez', titulo: 'Claves del éxito de Países Bajos: juego ofensivo y efectividad', texto: 'El equipo de Van Gaal ha demostrado una capacidad goleadora impresionante. Con jugadores como Depay, Gakpo y Malen, los holandeses son una de las selecciones más temidas. Su presión alta y transiciones rápidas son sus principales armas.' },
-                ]
-            },
-            mlb: {
-                nombre: 'MLB',
-                icono: '⚾',
-                banner: { titulo: 'Liga Mayor de Béisbol • Cobertura en vivo, estadísticas, lanzadores y bateadores', desc: 'Resultados en tiempo real, análisis y noticias de la MLB 2026' },
-                partidos: [
-                    { local: 'New York Yankees', visitante: 'Boston Red Sox', score: '6-4', status: 'Final' },
-                    { local: 'Los Angeles Dodgers', visitante: 'San Francisco Giants', score: '3-2', status: 'Vivo' },
-                    { local: 'Chicago Cubs', visitante: 'St. Louis Cardinals', score: 'vs', status: 'Programado' },
-                    { local: 'Houston Astros', visitante: 'Seattle Mariners', score: '8-1', status: 'Final' },
-                    { local: 'Atlanta Braves', visitante: 'Philadelphia Phillies', score: 'vs', status: 'Programado' },
-                    { local: 'Toronto Blue Jays', visitante: 'Tampa Bay Rays', score: '5-3', status: 'Final' },
-                    { local: 'New York Mets', visitante: 'Washington Nationals', score: 'vs', status: 'Programado' },
-                ],
-                clasificacion: {
-                    titulo: '📊 Clasificación MLB 2026',
-                    conferencias: [
-                        { nombre: 'Liga Americana – Este', equipos: [
-                            { nombre: 'New York Yankees', G: 45, P: 28, PCT: '.616' },
-                            { nombre: 'Tampa Bay Rays', G: 41, P: 30, PCT: '.577' },
-                            { nombre: 'Toronto Blue Jays', G: 34, P: 38, PCT: '.472' },
-                        ]},
-                        { nombre: 'Liga Nacional – Este', equipos: [
-                            { nombre: 'Atlanta Braves', G: 46, P: 25, PCT: '.648' },
-                            { nombre: 'Philadelphia Phillies', G: 40, P: 34, PCT: '.541' },
-                            { nombre: 'Washington Nationals', G: 38, P: 37, PCT: '.507' },
-                        ]}
-                    ]
-                },
-                equipos: ['Yankees', 'Dodgers', 'Braves', 'Phillies', 'Red Sox', 'Cubs', 'Astros', 'Giants', 'Blue Jays', 'Mets'],
-                noticias: [
-                    { fecha: '21 de junio, 2026', titulo: 'Yankees y Braves lideran la MLB; Judge y Acuña pelean por el MVP', resumen: 'La temporada 2026 está siendo histórica para ambos jugadores.' },
-                ],
-                analisis: [
-                    { autor: 'Por Juan Pérez', titulo: '¿Quién ganará la Serie Mundial 2026?', texto: 'Dodgers, Yankees y Braves son los principales candidatos.' },
-                ]
-            },
-            nba: {
-                nombre: 'NBA',
-                icono: '🏀',
-                banner: { titulo: 'NBA • Temporada 2025-26 – Resultados, estadísticas y clasificación', desc: 'Sigue a tus equipos favoritos.' },
-                partidos: [
-                    { local: 'Boston Celtics', visitante: 'Los Angeles Lakers', score: '112-108', status: 'Final' },
-                    { local: 'Denver Nuggets', visitante: 'Golden State Warriors', score: '105-98', status: 'Vivo' },
-                    { local: 'Milwaukee Bucks', visitante: 'Phoenix Suns', score: 'vs', status: 'Programado' },
-                    { local: 'Philadelphia 76ers', visitante: 'Dallas Mavericks', score: '121-115', status: 'Final' },
-                    { local: 'Miami Heat', visitante: 'New York Knicks', score: '98-95', status: 'Final' },
-                    { local: 'Oklahoma City Thunder', visitante: 'LA Clippers', score: 'vs', status: 'Programado' },
-                ],
-                clasificacion: {
-                    titulo: '📊 Clasificación NBA 2025-26',
-                    conferencias: [
-                        { nombre: 'Conferencia Este', equipos: [
-                            { nombre: 'Boston Celtics', G: 58, P: 24, PCT: '.707' },
-                            { nombre: 'Milwaukee Bucks', G: 55, P: 27, PCT: '.671' },
-                            { nombre: 'Philadelphia 76ers', G: 50, P: 32, PCT: '.610' },
-                        ]},
-                        { nombre: 'Conferencia Oeste', equipos: [
-                            { nombre: 'Denver Nuggets', G: 57, P: 25, PCT: '.695' },
-                            { nombre: 'OKC Thunder', G: 54, P: 28, PCT: '.659' },
-                            { nombre: 'Phoenix Suns', G: 49, P: 33, PCT: '.598' },
-                        ]}
-                    ]
-                },
-                equipos: ['Celtics', 'Lakers', 'Nuggets', 'Warriors', 'Bucks', 'Suns', '76ers', 'Mavericks', 'Heat', 'Knicks', 'Thunder', 'Clippers'],
-                noticias: [
-                    { fecha: '21 de junio, 2026', titulo: 'Celtics y Nuggets, los reyes de la temporada regular', resumen: 'Boston y Denver han sido los equipos más consistentes.' },
-                ],
-                analisis: [
-                    { autor: 'Por Laura Gómez', titulo: 'Playoffs NBA 2026', texto: 'Celtics y Nuggets son los grandes favoritos.' },
-                ]
-            }
-        };
-
-        // ======== RENDERIZADO ========
-        function renderizarTodo() {
-            renderizarBanner();
-            renderizarSelectorFechas();
-            renderizarInicio();
-            renderizarPartidos();
-            renderizarClasificacion();  // Ahora solo se llama aquí
-            renderizarEquipos();
-            renderizarNoticias();
-            renderizarAnalisis();
-            renderizarEnVivo();
-            actualizarHeader();
-            iniciarFeedNoticias();
-        }
-
-        function actualizarHeader() {
-            const datos = datosDeportes[deporteActual];
-            document.getElementById('header-icon').textContent = datos.icono;
-            document.getElementById('header-sport-label').textContent = datos.nombre;
-            document.querySelectorAll('.deporte-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.deporte === deporteActual);
-            });
-        }
-
-        function renderizarBanner() {
-            const datos = datosDeportes[deporteActual];
-            document.getElementById('banner-titulo').textContent = datos.banner.titulo;
-            document.getElementById('banner-desc').textContent = datos.banner.desc;
-        }
-
-        function renderizarSelectorFechas() {
-            const fechas = ['11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26'];
-            const contenedorInicio = document.getElementById('fechaSelector');
-            const contenedorPartidos = document.getElementById('fechaSelectorPartidos');
-            const html = fechas.map(f => `
-                <button class="fecha-btn ${f === fechaSeleccionada ? 'active' : ''}" data-fecha="${f}">${f} Jun</button>
-            `).join('');
-            if (contenedorInicio) contenedorInicio.innerHTML = html;
-            if (contenedorPartidos) contenedorPartidos.innerHTML = html;
-
-            document.querySelectorAll('.fecha-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    fechaSeleccionada = this.dataset.fecha;
-                    document.querySelectorAll('.fecha-btn').forEach(b => b.classList.remove('active'));
-                    document.querySelectorAll(`.fecha-btn[data-fecha="${fechaSeleccionada}"]`).forEach(b => b.classList.add('active'));
-                    renderizarInicio();
-                    renderizarPartidos();
-                });
-            });
-        }
-
-        function getPartidosPorFecha(fecha) {
-            const datos = datosDeportes[deporteActual];
-            if (deporteActual === 'futbol' && datos.partidosPorFecha) {
-                return datos.partidosPorFecha[fecha] || [];
-            }
-            return [];
-        }
-
-        function renderizarInicio() {
-            const datos = datosDeportes[deporteActual];
-            const contenedor = document.getElementById('contenido-inicio');
-            const partidos = getPartidosPorFecha(fechaSeleccionada);
-
-            let html = '';
-            if (partidos.length === 0) {
-                html = `<p class="text-gray-500 text-center py-8">No hay partidos para esta fecha.</p>`;
-            } else {
-                html += `<div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm card-hover mb-6">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="font-semibold text-lg">📅 Partidos del ${fechaSeleccionada} de junio</h3>
-                        <span class="text-xs bg-accent/10 text-accent px-3 py-1 rounded-full">${partidos.filter(p => p.status === 'Vivo').length} en vivo</span>
-                    </div>
-                    <div class="space-y-3">`;
-                partidos.forEach(p => {
-                    const flagL = p.flagL || '';
-                    const flagV = p.flagV || '';
-                    const badgeClass = p.status === 'Final' ? 'badge-final' : p.status === 'Vivo' ? 'badge-vivo' : 'badge-programado';
-                    html += `
-                        <div class="match-card">
-                            <div class="flex items-center justify-between flex-wrap gap-2">
-                                <div class="flex items-center gap-3">
-                                    ${flagL ? `<span class="text-xl">${flagL}</span>` : ''}
-                                    <span class="font-semibold">${p.local}</span>
-                                    <span class="text-gray-400 text-sm">vs</span>
-                                    ${flagV ? `<span class="text-xl">${flagV}</span>` : ''}
-                                    <span class="font-semibold">${p.visitante}</span>
-                                    ${p.live ? '<span class="live-counter ml-2">🔴 EN VIVO</span>' : ''}
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <span class="font-bold text-lg">${p.score}</span>
-                                    <span class="match-status ${badgeClass}">${p.status}</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-                html += `</div></div>`;
-            }
-
-            // Estadísticas (no incluye clasificación)
-            html += `<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-                <div class="stat-card card-hover">
-                    <h4 class="font-bold text-lg mb-2">⚽ Máximos goleadores</h4>
-                    <ul class="space-y-2 text-sm text-left">
-                        <li class="flex justify-between"><span>🇳🇱 Países Bajos (Gakpo, Depay)</span> <span class="font-bold">5 goles</span></li>
-                        <li class="flex justify-between"><span>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra (Kane, Bellingham)</span> <span class="font-bold">4 goles</span></li>
-                        <li class="flex justify-between"><span>🇦🇷 Argentina (Messi, Álvarez)</span> <span class="font-bold">3 goles</span></li>
-                        <li class="flex justify-between"><span>🇧🇷 Brasil (Vinicius Jr., Endrick)</span> <span class="font-bold">3 goles</span></li>
-                    </ul>
-                </div>
-                <div class="stat-card card-hover">
-                    <h4 class="font-bold text-lg mb-2">🎯 Asistencias líderes</h4>
-                    <ul class="space-y-2 text-sm text-left">
-                        <li class="flex justify-between"><span>🇦🇷 Ángel Di María</span> <span class="font-bold">3 asistencias</span></li>
-                        <li class="flex justify-between"><span>🇧🇪 Kevin De Bruyne</span> <span class="font-bold">2 asistencias</span></li>
-                        <li class="flex justify-between"><span>🇫🇷 Antoine Griezmann</span> <span class="font-bold">2 asistencias</span></li>
-                        <li class="flex justify-between"><span>🇪🇸 Dani Olmo</span> <span class="font-bold">2 asistencias</span></li>
-                    </ul>
-                </div>
-            </div>`;
-
-            contenedor.innerHTML = html;
-        }
-
-        function renderizarPartidos() {
-            const datos = datosDeportes[deporteActual];
-            document.getElementById('partidos-titulo').textContent = `📅 Calendario de Partidos ${datos.nombre}`;
-            document.getElementById('partidos-desc').textContent = `Selecciona una fecha para ver los partidos. Actualización constante.`;
-            const contenedor = document.getElementById('lista-partidos-pagina');
-            const partidos = getPartidosPorFecha(fechaSeleccionada);
-
-            if (partidos.length === 0) {
-                contenedor.innerHTML = '<p class="text-gray-500 text-center py-8">No hay partidos para esta fecha.</p>';
-                return;
-            }
-
-            let html = '';
-            partidos.forEach(p => {
-                const flagL = p.flagL || '';
-                const flagV = p.flagV || '';
-                const badgeClass = p.status === 'Final' ? 'badge-final' : p.status === 'Vivo' ? 'badge-vivo' : 'badge-programado';
-                html += `
-                    <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 py-3">
-                        <span>${flagL} ${p.local} vs ${p.visitante} ${flagV}</span>
-                        <span>${p.score} <span class="match-status ${badgeClass}">${p.status}</span></span>
-                    </div>
-                `;
-            });
-            contenedor.innerHTML = html;
-        }
-
-        // ===== CLASIFICACIÓN: SOLO SE RENDERIZA AQUÍ =====
-        function renderizarClasificacion() {
-            const datos = datosDeportes[deporteActual];
-            const contenedor = document.getElementById('clasificacion-contenido');
-            if (!datos.clasificacion || !datos.clasificacion.conferencias) {
-                contenedor.innerHTML = '<p class="text-center py-8 text-gray-500">No hay datos de clasificación.</p>';
-                return;
-            }
-            let html = '';
-            datos.clasificacion.conferencias.forEach(conf => {
-                const keys = conf.equipos[0] ? Object.keys(conf.equipos[0]) : [];
-                html += `<div class="standings-table">
-                    <h4>${conf.nombre}</h4>
-                    <div class="overflow-x-auto">
-                        <table>
-                            <thead><tr>`;
-                keys.forEach(key => {
-                    const label = key === 'nombre' ? 'Equipo' : key;
-                    html += `<th>${label}</th>`;
-                });
-                html += `</tr></thead><tbody>`;
-                conf.equipos.forEach(eq => {
-                    const isLeader = conf.equipos.indexOf(eq) === 0;
-                    html += `<tr class="${isLeader ? 'clasificado' : ''}">`;
-                    keys.forEach(key => {
-                        const value = eq[key];
-                        if (key === 'nombre') {
-                            html += `<td class="equipo"><span class="font-semibold">${value}</span></td>`;
-                        } else {
-                            html += `<td>${value}</td>`;
-                        }
-                    });
-                    html += `</tr>`;
-                });
-                html += `</tbody></table></div></div>`;
-            });
-            contenedor.innerHTML = html;
-        }
-
-        function renderizarEnVivo() {
-            const datos = datosDeportes[deporteActual];
-            const contenedor = document.getElementById('envivo-contenido');
-            let vivos = [];
-            if (deporteActual === 'futbol' && datos.partidosPorFecha) {
-                Object.values(datos.partidosPorFecha).forEach(lista => {
-                    lista.forEach(p => {
-                        if (p.status === 'Vivo') vivos.push(p);
-                    });
-                });
-            } else {
-                vivos = datos.partidos.filter(p => p.status === 'Vivo');
-            }
-
-            if (vivos.length === 0) {
-                contenedor.innerHTML = '<p class="text-gray-500 text-center py-8">No hay partidos en vivo en este momento.</p>';
-                return;
-            }
-            let html = '';
-            vivos.forEach(p => {
-                const flagL = p.flagL || '';
-                const flagV = p.flagV || '';
-                html += `
-                    <div class="match-card">
-                        <div class="flex items-center justify-between flex-wrap gap-2">
-                            <div class="flex items-center gap-3">
-                                ${flagL ? `<span class="text-xl">${flagL}</span>` : ''}
-                                <span class="font-semibold">${p.local}</span>
-                                <span class="text-gray-400 text-sm">vs</span>
-                                ${flagV ? `<span class="text-xl">${flagV}</span>` : ''}
-                                <span class="font-semibold">${p.visitante}</span>
-                                <span class="live-counter ml-2">🔴 EN VIVO</span>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <span class="font-bold text-lg">${p.score}</span>
-                                <span class="match-status badge-vivo">Vivo</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            contenedor.innerHTML = html;
-        }
-
-        function renderizarEquipos() {
-            const datos = datosDeportes[deporteActual];
-            document.getElementById('equipos-titulo').textContent = `🏟️ Equipos ${datos.nombre}`;
-            const contenedor = document.getElementById('equipos-contenido');
-            let html = '';
-            datos.equipos.forEach(eq => {
-                html += `
-                    <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-3 text-center card-hover">
-                        <span class="text-3xl">${datos.icono}</span>
-                        <p class="font-semibold text-sm">${eq}</p>
-                    </div>
-                `;
-            });
-            contenedor.innerHTML = html || '<p class="col-span-full text-center text-gray-500">No hay equipos disponibles.</p>';
-        }
-
-        function renderizarNoticias() {
-            const datos = datosDeportes[deporteActual];
-            document.getElementById('noticias-titulo').textContent = `📰 Noticias ${datos.nombre}`;
-            const contenedor = document.getElementById('noticias-contenido');
-            let html = '';
-            datos.noticias.forEach(noticia => {
-                html += `
-                    <article class="article-card">
-                        <div class="meta">${noticia.fecha}</div>
-                        <h3>${noticia.titulo}</h3>
-                        <p>${noticia.resumen}</p>
-                    </article>
-                `;
-            });
-            contenedor.innerHTML = html || '<p class="text-center text-gray-500 py-8">No hay noticias disponibles.</p>';
-        }
-
-        function renderizarAnalisis() {
-            const datos = datosDeportes[deporteActual];
-            document.getElementById('analisis-titulo').textContent = `🔍 Análisis y Previas - ${datos.nombre}`;
-            const contenedor = document.getElementById('analisis-contenido');
-            let html = '';
-            datos.analisis.forEach(art => {
-                html += `
-                    <article class="article-card">
-                        <div class="meta">${art.autor}</div>
-                        <h3>${art.titulo}</h3>
-                        <p>${art.texto}</p>
-                    </article>
-                `;
-            });
-            contenedor.innerHTML = html || '<p class="text-center text-gray-500 py-8">No hay análisis disponibles.</p>';
-        }
-
-        // ======== FEED DE NOTICIAS ========
-        const noticiasFeed = [
-            '⚽ ¡Gol de Gakpo! Países Bajos amplía su ventaja ante Suecia (5-1).',
-            '🇦🇷 Argentina golea 3-0 a Argelia con doblete de Messi.',
-            '🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra vence 4-2 a Croacia en un partidazo.',
-            '🇧🇷 Brasil derrota 3-0 a Haití con goles de Vinicius y Endrick.',
-            '🇫🇷 Francia se impone 3-1 a Senegal con doblete de Mbappé.',
-            '🇩🇪 Alemania sufre pero vence 2-1 a Costa de Marfil.',
-            '🇳🇱 Países Bajos, la sensación del torneo con 5 goles en su debut.',
-            '🇲🇽 México es el primer clasificado tras vencer a Corea del Sur (1-0).',
-            '🇪🇸 España y Cabo Verde firman un empate sin goles (0-0).',
-            '🇧🇪 Bélgica y Egipto reparten puntos (1-1).'
-        ];
-        let indiceNoticia = 0;
-        let feedInterval = null;
-
-        function iniciarFeedNoticias() {
-            if (feedInterval) clearInterval(feedInterval);
-            actualizarNoticia();
-            feedInterval = setInterval(() => {
-                indiceNoticia = (indiceNoticia + 1) % noticiasFeed.length;
-                actualizarNoticia();
-            }, 8000);
-        }
-
-        function actualizarNoticia() {
-            const texto = document.getElementById('newsText');
-            const tiempo = document.getElementById('newsTime');
-            if (texto) texto.textContent = noticiasFeed[indiceNoticia];
-            if (tiempo) tiempo.textContent = 'hace ' + (Math.floor(Math.random() * 10) + 1) + 's';
-        }
-
-        // ======== CAMBIO DE DEPORTE ========
-        document.querySelectorAll('.deporte-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const nuevo = this.dataset.deporte;
-                if (nuevo === deporteActual) return;
-                deporteActual = nuevo;
-                renderizarTodo();
-            });
-        });
-
-        // ======== INICIO ========
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('footer-fecha').textContent = new Date().toLocaleDateString('es-ES', { year:'numeric', month:'long', day:'numeric' });
-            renderizarTodo();
-            navegar('inicio');
-        });
-
-        // ======== COOKIES ========
-        if (!localStorage.getItem('cookiesAceptadas')) {
-            document.getElementById('cookieBanner').classList.add('show');
-        }
-
-        // ======== ANUNCIOS ========
-        setTimeout(() => {
-            if (window.adsbygoogle) {
-                try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
-            }
-        }, 1500);
-    </script>
-</body>
-</html>
+                        { local: 'Alemania', visitante: 'Costa de Marfil', score: '2-1', status: 'Final',
