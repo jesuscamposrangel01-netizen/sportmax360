@@ -11,6 +11,7 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3765201153278683" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+/* ===== ESTILOS BASE (sin cambios) ===== */
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --primary:#0b1e2e;
@@ -147,6 +148,40 @@ footer{background:var(--primary);color:rgba(255,255,255,.55);text-align:center;p
 .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;margin:40px auto;}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media(max-width:640px){.banner h2{font-size:1.3rem}.grid-standings{grid-template-columns:1fr}.grid-teams{grid-template-columns:repeat(3,1fr)}.grid-main{grid-template-columns:1fr}}
+
+/* ===== NUEVOS ESTILOS PARA VIDEOS Y NOTICIAS MEJORADAS ===== */
+.video-card {
+  padding: 20px !important;
+  border-left: 4px solid var(--blue);
+}
+
+.video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%; /* Relación de aspecto 16:9 */
+  height: 0;
+  overflow: hidden;
+  border-radius: 10px;
+  margin: 12px 0;
+  background: #000;
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.news-card.video-card .news-title {
+  font-size: 1.2rem;
+  color: var(--text);
+}
+
+.news-card .news-summary {
+  margin-top: 4px;
+}
 </style>
 </head>
 <body>
@@ -240,11 +275,45 @@ footer{background:var(--primary);color:rgba(255,255,255,.55);text-align:center;p
   <div class="grid-teams" id="equiposGrid"></div>
 </div>
 
-<!-- NOTICIAS -->
+<!-- ============================================================ -->
+<!-- NOTICIAS MEJORADAS CON VIDEOS (INTEGRADO)                    -->
+<!-- ============================================================ -->
 <div id="page-noticias" class="page">
-  <div class="section-title" id="noticiasTitulo">📰 Noticias Mundial 2026</div>
-  <div class="grid-2" id="noticiasList"></div>
+  <div class="section-title">📰 Noticias y Videos Destacados</div>
+
+  <!-- Video Destacado 1: Resumen España -->
+  <div class="news-card video-card">
+    <div class="news-meta">
+      <span class="news-sport-tag">🎥 VIDEO DESTACADO</span>
+      <span class="news-date">21 jun 2026</span>
+    </div>
+    <div class="news-title">¡ESPAÑA GOLEA y CONSIGUE su PRIMERA VICTORIA! | España 4–0 Arabia Saudita</div>
+    <div class="video-wrapper">
+      <iframe width="100%" height="315" src="https://www.youtube.com/embed/YiFE-jbe1TA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+    <p class="news-summary" style="margin-top: 12px;">Revive el triunfo de la selección española con un contundente 4-0 sobre Arabia Saudita.</p>
+    <div class="news-more">Leer más →</div>
+  </div>
+
+  <!-- Video Destacado 2: Resumen Jornada -->
+  <div class="news-card video-card">
+    <div class="news-meta">
+      <span class="news-sport-tag">🎥 VIDEO DESTACADO</span>
+      <span class="news-date">20 jun 2026</span>
+    </div>
+    <div class="news-title">¡LLUVIA DE GOLES! PALIZAS DE PAÍSES BAJOS Y JAPÓN | TODOS LOS GOLES DEL DÍA</div>
+    <div class="video-wrapper">
+      <iframe width="100%" height="315" src="https://www.youtube.com/embed/0sXFwMc2Z4s" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+    <p class="news-summary" style="margin-top: 12px;">Un resumen con todos los goles de una jornada espectacular en el Mundial 2026.</p>
+    <div class="news-more">Leer más →</div>
+  </div>
+
+  <!-- Noticias de Texto (cargadas desde JavaScript) -->
+  <div id="noticiasList"></div>
 </div>
+
+<!-- ============================================================ -->
 
 <!-- ANÁLISIS -->
 <div id="page-analisis" class="page">
@@ -334,10 +403,10 @@ footer{background:var(--primary);color:rgba(255,255,255,.55);text-align:center;p
   <p>© 2026 SportVivo360 – Todos los derechos reservados | Lima, Perú · <span id="footerFecha"></span></p>
 </footer>
 
-<!-- JAVASCRIPT COMPLETO ACTUALIZADO -->
+<!-- JAVASCRIPT COMPLETO -->
 <script>
 // --------------------------
-// DATOS COMPLETOS ACTUALIZADOS (MUNDIAL 2026 + MLB + NBA)
+// DATOS COMPLETOS (MUNDIAL 2026 + MLB + NBA)
 // --------------------------
 const datosDeportes = {
   futbol: {
@@ -1004,10 +1073,11 @@ function renderEquipos() {
   eq.innerHTML = d.equipos.map(e => `<div class="team-card"><div class="team-icon">${d.icono}</div><div class="team-card-name">${e}</div></div>`).join('');
 }
 
-// --- NOTICIAS ---
+// --- NOTICIAS (solo las de texto, los videos ya están en el HTML) ---
 function renderNoticias() {
   const d = datosDeportes[deporte];
   const nl = document.getElementById('noticiasList');
+  // Aquí se añaden las noticias de texto debajo de los videos
   nl.innerHTML = d.noticias.map(n => `<div class="news-card"><div class="news-meta"><span class="news-sport-tag">${d.nombre}</span><span class="news-date">${n.fecha}</span></div><div class="news-title">${n.titulo}</div><div class="news-summary">${n.resumen}</div><div class="news-more">Leer más →</div></div>`).join('');
 }
 
