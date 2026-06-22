@@ -350,16 +350,200 @@ footer{background:var(--primary);color:rgba(255,255,255,.55);text-align:center;p
 <main>
 
 <!-- ============================================================ -->
-<!-- INICIO MEJORADO -->
+<!-- SECCIÓN INICIO / MUNDIAL -->
 <!-- ============================================================ -->
 <div id="page-inicio" class="page active">
-  <!-- Banner -->
   <div class="banner">
     <h2 id="bannerTitulo">Mundial 2026 • Resultados y calendario completo</h2>
     <p id="bannerDesc">Todos los partidos, marcadores y programación del torneo.</p>
   </div>
 
-  <!-- Ticker -->
   <div class="ticker">
     <span class="ticker-label">Última hora</span>
-    <span class="ticker-text" id="tickerText">España golea 4-0 a Arabia Saudit
+    <span class="ticker-text" id="tickerText">España golea 4-0 a Arabia Saudita</span>
+  </div>
+
+  <div class="empty" style="margin-top:2rem;">
+    <div class="empty-icon">⚽</div>
+    <p>Contenido del Mundial 2026</p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECCIÓN MLB CORREGIDA -->
+<!-- ============================================================ -->
+<div id="page-mlb" class="page">
+  <!-- Los datos se cargan aquí automáticamente -->
+</div>
+
+<!-- ============================================================ -->
+<!-- SECCIÓN NBA -->
+<!-- ============================================================ -->
+<div id="page-nba" class="page">
+  <div class="banner">
+    <h2>🏀 NBA • Temporada 2025-2026</h2>
+    <p>Próximamente con resultados y estadísticas en vivo</p>
+  </div>
+  <div class="empty">
+    <div class="empty-icon">🏀</div>
+    <p>Sección en desarrollo</p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- OTRAS PÁGINAS -->
+<!-- ============================================================ -->
+<div id="page-envivo" class="page"><div class="empty"><p>En vivo</p></div></div>
+<div id="page-partidos" class="page"><div class="empty"><p>Partidos</p></div></div>
+<div id="page-clasificacion" class="page"><div class="empty"><p>Clasificación</p></div></div>
+<div id="page-equipos" class="page"><div class="empty"><p>Equipos</p></div></div>
+<div id="page-noticias" class="page"><div class="empty"><p>Noticias</p></div></div>
+<div id="page-analisis" class="page"><div class="empty"><p>Análisis</p></div></div>
+<div id="page-contacto" class="page"><div class="static-box"><h3>Contacto</h3><p>Formulario de contacto aquí</p></div></div>
+<div id="page-acerca" class="page"><div class="static-box"><h3>Acerca de nosotros</h3><p>Información del sitio</p></div></div>
+<div id="page-privacidad" class="page"><div class="static-box"><h3>Política de Privacidad</h3><p>Texto legal aquí</p></div></div>
+
+</main>
+
+<footer>
+  <div class="footer-links">
+    <span onclick="navegar('privacidad')">Privacidad</span>
+    <span onclick="navegar('acerca')">Acerca</span>
+    <span onclick="navegar('contacto')">Contacto</span>
+  </div>
+  <p>© 2026 SportVivo360 • Todos los derechos reservados</p>
+</footer>
+
+<!-- ============================================================ -->
+<!-- SCRIPTS CORREGIDOS -->
+<!-- ============================================================ -->
+<script>
+// Navegación entre páginas
+function navegar(pagina) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + pagina).classList.add('active');
+}
+
+// Cambiar tema claro/oscuro
+function toggleTheme() {
+  document.body.classList.toggle('dark');
+  const btn = document.getElementById('themeBtn');
+  btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+}
+
+// Aceptar cookies
+function aceptarCookies() {
+  document.getElementById('cookieBanner').classList.remove('show');
+}
+
+// ✅ FUNCIÓN CARGAR DATOS MLB CON API OFICIAL
+async function cargarDatosMLB(fecha = new Date().toISOString().split('T')[0]) {
+  const contenedor = document.getElementById('page-mlb');
+  if (!contenedor) return;
+
+  contenedor.innerHTML = `<div class="spinner"></div>`;
+
+  try {
+    const respuesta = await fetch(`https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${fecha}&language=es`);
+    if (!respuesta.ok) throw new Error('No se pudo conectar con la API');
+    const datos = await respuesta.json();
+
+    let html = `
+      <div class="banner">
+        <h2>⚾ MLB • Temporada 2026</h2>
+        <p>Resultados, partidos en vivo y programación actualizada</p>
+      </div>
+      <div class="ticker">
+        <span class="ticker-label">MLB</span>
+        <span class="ticker-text">Actualizado: ${new Date().toLocaleString('es-PE')}</span>
+      </div>
+    `;
+
+    if (!datos.dates || datos.dates.length === 0) {
+      html += `
+        <div class="empty">
+          <div class="empty-icon">⚾</div>
+          <p>No hay partidos programados para esta fecha</p>
+        </div>
+      `;
+    } else {
+      const partidos = datos.dates[0].games;
+      html += `<div class="grid-2">`;
+
+      partidos.forEach(partido => {
+        const estado = partido.status.abstractGameState;
+        const estadoTexto = estado === 'Live' ? 'EN VIVO' : estado === 'Final' ? 'FINALIZADO' : 'PROGRAMADO';
+        const claseEstado = estado === 'Live' ? 'badge-vivo' : estado === 'Final' ? 'badge-final' : 'badge-programado';
+
+        const eqLocal = partido.teams.home.team.name;
+        const ptsLocal = partido.teams.home.score ?? '-';
+        const eqVisitante = partido.teams.away.team.name;
+        const ptsVisitante = partido.teams.away.score ?? '-';
+        const hora = new Date(partido.gameDate).toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
+
+        html += `
+          <div class="match-card">
+            <div class="match-header">
+              <span class="status-badge ${claseEstado}">${estadoTexto}</span>
+              <span class="match-date">${hora}</span>
+            </div>
+            <div class="team-row">
+              <div class="team-info">
+                <span class="team-flag">🏟️</span>
+                <span class="team-name">${eqVisitante}</span>
+              </div>
+              <span class="team-score">${ptsVisitante}</span>
+            </div>
+            <div class="team-row">
+              <div class="team-info">
+                <span class="team-flag">🏠</span>
+                <span class="team-name">${eqLocal}</span>
+              </div>
+              <span class="team-score">${ptsLocal}</span>
+            </div>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+    }
+
+    contenedor.innerHTML = html;
+
+  } catch (error) {
+    console.error('Error MLB:', error);
+    contenedor.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">⚠️</div>
+        <p>No se pudo cargar la información. Intenta más tarde.</p>
+      </div>
+    `;
+  }
+}
+
+// ✅ FUNCIÓN CAMBIAR DEPORTE ACTUALIZADA
+function cambiarDeporte(boton) {
+  document.querySelectorAll('.sport-btn').forEach(btn => btn.classList.remove('active'));
+  boton.classList.add('active');
+
+  const deporte = boton.dataset.sport;
+  document.getElementById('headerSportLabel').textContent = 
+    deporte === 'futbol' ? 'Mundial 2026' : 
+    deporte === 'mlb' ? 'MLB' : 
+    deporte === 'nba' ? 'NBA' : '';
+
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+  if (deporte === 'futbol') {
+    document.getElementById('page-inicio').classList.add('active');
+  } else if (deporte === 'mlb') {
+    document.getElementById('page-mlb').classList.add('active');
+    cargarDatosMLB(); // Carga datos reales
+  } else if (deporte === 'nba') {
+    document.getElementById('page-nba').classList.add('active');
+  }
+}
+</script>
+
+</body>
+</html>
