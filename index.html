@@ -11,29 +11,10 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3765201153278683" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+/* ===== ESTILOS COMPLETOS (igual que antes) ===== */
 *{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --primary:#0b1e2e;
-  --secondary:#1a4971;
-  --accent:#e11d48;
-  --blue:#1a56db;
-  --green:#22c55e;
-  --gold:#fbbf24;
-  --bg:#f0f4ff;
-  --card:#ffffff;
-  --text:#1e293b;
-  --muted:#64748b;
-  --border:#e2e8f0;
-  --card-shadow:0 4px 20px rgba(0,0,0,0.06);
-}
-.dark{
-  --bg:#0f172a;
-  --card:#1e293b;
-  --text:#e2e8f0;
-  --muted:#94a3b8;
-  --border:#334155;
-  --card-shadow:0 4px 20px rgba(0,0,0,0.3);
-}
+:root{--primary:#0b1e2e;--secondary:#1a4971;--accent:#e11d48;--blue:#1a56db;--green:#22c55e;--gold:#fbbf24;--bg:#f0f4ff;--card:#ffffff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--card-shadow:0 4px 20px rgba(0,0,0,0.06);}
+.dark{--bg:#0f172a;--card:#1e293b;--text:#e2e8f0;--muted:#94a3b8;--border:#334155;--card-shadow:0 4px 20px rgba(0,0,0,0.3);}
 body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s;}
 a{color:var(--blue);text-decoration:none}
 button{cursor:pointer;border:none;background:none;font-family:inherit}
@@ -335,12 +316,14 @@ footer{background:var(--primary);color:rgba(255,255,255,.55);text-align:center;p
   <p style="margin-top:8px;font-size:.75rem;color:rgba(255,255,255,.4)">Optimizado para SEO y rendimiento</p>
 </footer>
 
-<!-- JAVASCRIPT COMPLETO ACTUALIZADO -->
+<!-- ============================================================ -->
+<!-- JAVASCRIPT COMPLETO CON API DE MLB INTEGRADA                   -->
+<!-- ============================================================ -->
 <script>
-// --------------------------
-// DATOS ACTUALIZADOS MUNDIAL 2026
-// --------------------------
-const datosDeportes = {
+// ============================================================
+// DATOS ESTÁTICOS (Fútbol y NBA + respaldo MLB)
+// ============================================================
+const DATOS = {
   futbol: {
     nombre: 'Mundial 2026',
     icono: '⚽',
@@ -350,127 +333,606 @@ const datosDeportes = {
     },
     partidosPorFecha: {
       '11': [
-        { local: 'México', visitante: 'Sudáfrica', score: '2-0', status: 'Final', flagL: '🇲🇽', flagV: '🇿🇦' },
-        { local: 'Corea del Sur', visitante: 'República Checa', score: '2-1', status: 'Final', flagL: '🇰🇷', flagV: '🇨🇿' }
+        { local:'México', visit:'Sudáfrica', flagL:'🇲🇽', flagV:'🇿🇦', score:'2-0', st:'Final' },
+        { local:'Corea del Sur', visit:'Rep. Checa', flagL:'🇰🇷', flagV:'🇨🇿', score:'2-1', st:'Final' },
       ],
-      '12': [
-        { local: 'Canadá', visitante: 'Bosnia y Herzegovina', score: '1-1', status: 'Final', flagL: '🇨🇦', flagV: '🇧🇦' }
-      ],
+      '12': [{ local:'Canadá', visit:'Bosnia', flagL:'🇨🇦', flagV:'🇧🇦', score:'1-1', st:'Final' }],
       '13': [
-        { local: 'Estados Unidos', visitante: 'Paraguay', score: '4-1', status: 'Final', flagL: '🇺🇸', flagV: '🇵🇾' },
-        { local: 'Australia', visitante: 'Turquía', score: '2-0', status: 'Final', flagL: '🇦🇺', flagV: '🇹🇷' },
-        { local: 'Qatar', visitante: 'Suiza', score: '1-1', status: 'Final', flagL: '🇶🇦', flagV: '🇨🇭' }
+        { local:'EE.UU.', visit:'Paraguay', flagL:'🇺🇸', flagV:'🇵🇾', score:'4-1', st:'Final' },
+        { local:'Australia', visit:'Turquía', flagL:'🇦🇺', flagV:'🇹🇷', score:'2-0', st:'Final' },
+        { local:'Qatar', visit:'Suiza', flagL:'🇶🇦', flagV:'🇨🇭', score:'1-1', st:'Final' },
       ],
       '14': [
-        { local: 'Alemania', visitante: 'Curazao', score: '7-1', status: 'Final', flagL: '🇩🇪', flagV: '🇨🇼' },
-        { local: 'Países Bajos', visitante: 'Japón', score: '2-2', status: 'Final', flagL: '🇳🇱', flagV: '🇯🇵' },
-        { local: 'Costa de Marfil', visitante: 'Ecuador', score: '1-0', status: 'Final', flagL: '🇨🇮', flagV: '🇪🇨' },
-        { local: 'Suecia', visitante: 'Túnez', score: '5-1', status: 'Final', flagL: '🇸🇪', flagV: '🇹🇳' },
-        { local: 'Brasil', visitante: 'Marruecos', score: '1-1', status: 'Final', flagL: '🇧🇷', flagV: '🇲🇦' }
+        { local:'Alemania', visit:'Curazao', flagL:'🇩🇪', flagV:'🇨🇼', score:'7-1', st:'Final' },
+        { local:'Países Bajos', visit:'Japón', flagL:'🇳🇱', flagV:'🇯🇵', score:'2-2', st:'Final' },
+        { local:'Costa de Marfil', visit:'Ecuador', flagL:'🇨🇮', flagV:'🇪🇨', score:'1-0', st:'Final' },
+        { local:'Suecia', visit:'Túnez', flagL:'🇸🇪', flagV:'🇹🇳', score:'5-1', st:'Final' },
+        { local:'Brasil', visit:'Marruecos', flagL:'🇧🇷', flagV:'🇲🇦', score:'1-1', st:'Final' },
       ],
       '15': [
-        { local: 'Bélgica', visitante: 'Egipto', score: '1-1', status: 'Final', flagL: '🇧🇪', flagV: '🇪🇬' },
-        { local: 'Irán', visitante: 'Nueva Zelanda', score: '2-2', status: 'Final', flagL: '🇮🇷', flagV: '🇳🇿' },
-        { local: 'Arabia Saudita', visitante: 'Uruguay', score: '1-1', status: 'Final', flagL: '🇸🇦', flagV: '🇺🇾' },
-        { local: 'España', visitante: 'Cabo Verde', score: '0-0', status: 'Final', flagL: '🇪🇸', flagV: '🇨🇻' }
+        { local:'Bélgica', visit:'Egipto', flagL:'🇧🇪', flagV:'🇪🇬', score:'1-1', st:'Final' },
+        { local:'Irán', visit:'Nueva Zelanda', flagL:'🇮🇷', flagV:'🇳🇿', score:'2-2', st:'Final' },
+        { local:'Arabia Saudita', visit:'Uruguay', flagL:'🇸🇦', flagV:'🇺🇾', score:'1-1', st:'Final' },
+        { local:'España', visit:'Cabo Verde', flagL:'🇪🇸', flagV:'🇨🇻', score:'0-0', st:'Final' },
       ],
       '16': [
-        { local: 'Francia', visitante: 'Senegal', score: '3-1', status: 'Final', flagL: '🇫🇷', flagV: '🇸🇳' },
-        { local: 'Irak', visitante: 'Noruega', score: '1-4', status: 'Final', flagL: '🇮🇶', flagV: '🇳🇴' },
-        { local: 'Argentina', visitante: 'Argelia', score: '3-0', status: 'Final', flagL: '🇦🇷', flagV: '🇩🇿' },
-        { local: 'Austria', visitante: 'Jordania', score: '2-1', status: 'Final', flagL: '🇦🇹', flagV: '🇯🇴' }
+        { local:'Francia', visit:'Senegal', flagL:'🇫🇷', flagV:'🇸🇳', score:'3-1', st:'Final' },
+        { local:'Irak', visit:'Noruega', flagL:'🇮🇶', flagV:'🇳🇴', score:'1-4', st:'Final' },
+        { local:'Argentina', visit:'Argelia', flagL:'🇦🇷', flagV:'🇩🇿', score:'3-0', st:'Final' },
+        { local:'Austria', visit:'Jordania', flagL:'🇦🇹', flagV:'🇯🇴', score:'2-1', st:'Final' },
       ],
       '17': [
-        { local: 'Portugal', visitante: 'R.D. del Congo', score: '1-1', status: 'Final', flagL: '🇵🇹', flagV: '🇨🇩' },
-        { local: 'Inglaterra', visitante: 'Croacia', score: '4-2', status: 'Final', flagL: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', flagV: '🇭🇷' },
-        { local: 'Ghana', visitante: 'Panamá', score: '1-0', status: 'Final', flagL: '🇬🇭', flagV: '🇵🇦' },
-        { local: 'Colombia', visitante: 'Uzbekistán', score: '3-1', status: 'Final', flagL: '🇨🇴', flagV: '🇺🇿' }
+        { local:'Portugal', visit:'R.D. Congo', flagL:'🇵🇹', flagV:'🇨🇩', score:'1-1', st:'Final' },
+        { local:'Inglaterra', visit:'Croacia', flagL:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', flagV:'🇭🇷', score:'4-2', st:'Final' },
+        { local:'Ghana', visit:'Panamá', flagL:'🇬🇭', flagV:'🇵🇦', score:'1-0', st:'Final' },
+        { local:'Colombia', visit:'Uzbekistán', flagL:'🇨🇴', flagV:'🇺🇿', score:'3-1', st:'Final' },
       ],
       '18': [
-        { local: 'México', visitante: 'Corea del Sur', score: '1-0', status: 'Final', flagL: '🇲🇽', flagV: '🇰🇷' },
-        { local: 'República Checa', visitante: 'Sudáfrica', score: '1-1', status: 'Final', flagL: '🇨🇿', flagV: '🇿🇦' },
-        { local: 'Suiza', visitante: 'Bosnia y Herzegovina', score: '4-1', status: 'Final', flagL: '🇨🇭', flagV: '🇧🇦' },
-        { local: 'Canadá', visitante: 'Qatar', score: '6-0', status: 'Final', flagL: '🇨🇦', flagV: '🇶🇦' }
+        { local:'México', visit:'Corea del Sur', flagL:'🇲🇽', flagV:'🇰🇷', score:'1-0', st:'Final' },
+        { local:'Rep. Checa', visit:'Sudáfrica', flagL:'🇨🇿', flagV:'🇿🇦', score:'1-1', st:'Final' },
+        { local:'Suiza', visit:'Bosnia', flagL:'🇨🇭', flagV:'🇧🇦', score:'4-1', st:'Final' },
+        { local:'Canadá', visit:'Qatar', flagL:'🇨🇦', flagV:'🇶🇦', score:'6-0', st:'Final' },
       ],
       '19': [
-        { local: 'Estados Unidos', visitante: 'Australia', score: '2-0', status: 'Final', flagL: '🇺🇸', flagV: '🇦🇺' },
-        { local: 'Marruecos', visitante: 'Escocia', score: '1-0', status: 'Final', flagL: '🇲🇦', flagV: '🏴󠁧󠁢󠁳󠁣󠁴󠁿' },
-        { local: 'Brasil', visitante: 'Haití', score: '3-0', status: 'Final', flagL: '🇧🇷', flagV: '🇭🇹' }
+        { local:'EE.UU.', visit:'Australia', flagL:'🇺🇸', flagV:'🇦🇺', score:'2-0', st:'Final' },
+        { local:'Marruecos', visit:'Escocia', flagL:'🇲🇦', flagV:'🏴󠁧󠁢󠁳󠁣󠁴󠁿', score:'1-0', st:'Final' },
+        { local:'Brasil', visit:'Haití', flagL:'🇧🇷', flagV:'🇭🇹', score:'3-0', st:'Final' },
       ],
       '20': [
-        { local: 'Alemania', visitante: 'Costa de Marfil', score: '2-1', status: 'Final', flagL: '🇩🇪', flagV: '🇨🇮' },
-        { local: 'Ecuador', visitante: 'Curazao', score: '0-0', status: 'Final', flagL: '🇪🇨', flagV: '🇨🇼' },
-        { local: 'Países Bajos', visitante: 'Suecia', score: '5-1', status: 'Final', flagL: '🇳🇱', flagV: '🇸🇪' },
-        { local: 'Japón', visitante: 'Túnez', score: '4-0', status: 'Final', flagL: '🇯🇵', flagV: '🇹🇳' }
+        { local:'Alemania', visit:'Costa de Marfil', flagL:'🇩🇪', flagV:'🇨🇮', score:'2-1', st:'Final' },
+        { local:'Ecuador', visit:'Curazao', flagL:'🇪🇨', flagV:'🇨🇼', score:'0-0', st:'Final' },
+        { local:'Países Bajos', visit:'Suecia', flagL:'🇳🇱', flagV:'🇸🇪', score:'5-1', st:'Final' },
+        { local:'Japón', visit:'Túnez', flagL:'🇯🇵', flagV:'🇹🇳', score:'4-0', st:'Final' },
       ],
-      // ✅ HOY 21 DE JUNIO - RESULTADOS FINALES
       '21': [
-        { local: 'España', visitante: 'Arabia Saudita', score: '0-0', status: 'Final', flagL: '🇪🇸', flagV: '🇸🇦' },
-        { local: 'Bélgica', visitante: 'Irán', score: '1-1', status: 'Final', flagL: '🇧🇪', flagV: '🇮🇷' },
-        { local: 'Uruguay', visitante: 'Cabo Verde', score: '1-1', status: 'Final', flagL: '🇺🇾', flagV: '🇨🇻' },
-        { local: 'Nueva Zelanda', visitante: 'Egipto', score: '2-2', status: 'Final', flagL: '🇳🇿', flagV: '🇪🇬' }
+        { local:'España', visit:'Arabia Saudita', flagL:'🇪🇸', flagV:'🇸🇦', score:'0-0', st:'Final' },
+        { local:'Bélgica', visit:'Irán', flagL:'🇧🇪', flagV:'🇮🇷', score:'1-1', st:'Final' },
+        { local:'Uruguay', visit:'Cabo Verde', flagL:'🇺🇾', flagV:'🇨🇻', score:'1-1', st:'Final' },
+        { local:'Nueva Zelanda', visit:'Egipto', flagL:'🇳🇿', flagV:'🇪🇬', score:'2-2', st:'Final' },
       ],
-      // MAÑANA 22 DE JUNIO - PROGRAMADOS
       '22': [
-        { local: 'Argentina', visitante: 'Austria', score: 'vs', status: 'Programado', flagL: '🇦🇷', flagV: '🇦🇹' },
-        { local: 'Francia', visitante: 'Irak', score: 'vs', status: 'Programado', flagL: '🇫🇷', flagV: '🇮🇶' },
-        { local: 'Noruega', visitante: 'Senegal', score: 'vs', status: 'Programado', flagL: '🇳🇴', flagV: '🇸🇳' },
-        { local: 'Jordania', visitante: 'Argelia', score: 'vs', status: 'Programado', flagL: '🇯🇴', flagV: '🇩🇿' }
+        { local:'Argentina', visit:'Austria', flagL:'🇦🇷', flagV:'🇦🇹', score:'vs', st:'Programado' },
+        { local:'Francia', visit:'Irak', flagL:'🇫🇷', flagV:'🇮🇶', score:'vs', st:'Programado' },
+        { local:'Noruega', visit:'Senegal', flagL:'🇳🇴', flagV:'🇸🇳', score:'vs', st:'Programado' },
+        { local:'Colombia', visit:'Portugal', flagL:'🇨🇴', flagV:'🇵🇹', score:'vs', st:'Programado' },
       ],
       '23': [
-        { local: 'Portugal', visitante: 'Uzbekistán', score: 'vs', status: 'Programado', flagL: '🇵🇹', flagV: '🇺🇿' },
-        { local: 'Inglaterra', visitante: 'Ghana', score: 'vs', status: 'Programado', flagL: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', flagV: '🇬🇭' },
-        { local: 'Panamá', visitante: 'Croacia', score: 'vs', status: 'Programado', flagL: '🇵🇦', flagV: '🇭🇷' },
-        { local: 'Colombia', visitante: 'R.D. del Congo', score: 'vs', status: 'Programado', flagL: '🇨🇴', flagV: '🇨🇩' }
+        { local:'Brasil', visit:'Escocia', flagL:'🇧🇷', flagV:'🏴󠁧󠁢󠁳󠁣󠁴󠁿', score:'vs', st:'Programado' },
+        { local:'EE.UU.', visit:'Turquía', flagL:'🇺🇸', flagV:'🇹🇷', score:'vs', st:'Programado' },
+        { local:'Alemania', visit:'Ecuador', flagL:'🇩🇪', flagV:'🇪🇨', score:'vs', st:'Programado' },
       ],
       '24': [
-        { local: 'Bosnia', visitante: 'Qatar', score: 'vs', status: 'Programado', flagL: '🇧🇦', flagV: '🇶🇦' },
-        { local: 'Suiza', visitante: 'Canadá', score: 'vs', status: 'Programado', flagL: '🇨🇭', flagV: '🇨🇦' },
-        { local: 'Marruecos', visitante: 'Haití', score: 'vs', status: 'Programado', flagL: '🇲🇦', flagV: '🇭🇹' },
-        { local: 'Escocia', visitante: 'Brasil', score: 'vs', status: 'Programado', flagL: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', flagV: '🇧🇷' }
+        { local:'Portugal', visit:'Colombia', flagL:'🇵🇹', flagV:'🇨🇴', score:'vs', st:'Programado' },
+        { local:'Inglaterra', visit:'Ghana', flagL:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', flagV:'🇬🇭', score:'vs', st:'Programado' },
+        { local:'Países Bajos', visit:'Túnez', flagL:'🇳🇱', flagV:'🇹🇳', score:'vs', st:'Programado' },
       ],
       '25': [
-        { local: 'Curazao', visitante: 'Costa de Marfil', score: 'vs', status: 'Programado', flagL: '🇨🇼', flagV: '🇨🇮' },
-        { local: 'Ecuador', visitante: 'Alemania', score: 'vs', status: 'Programado', flagL: '🇪🇨', flagV: '🇩🇪' },
-        { local: 'Japón', visitante: 'Suecia', score: 'vs', status: 'Programado', flagL: '🇯🇵', flagV: '🇸🇪' },
-        { local: 'Túnez', visitante: 'Países Bajos', score: 'vs', status: 'Programado', flagL: '🇹🇳', flagV: '🇳🇱' }
+        { local:'España', visit:'Uruguay', flagL:'🇪🇸', flagV:'🇺🇾', score:'vs', st:'Programado' },
+        { local:'Argentina', visit:'Francia', flagL:'🇦🇷', flagV:'🇫🇷', score:'vs', st:'Programado' },
+        { local:'Alemania', visit:'Brasil', flagL:'🇩🇪', flagV:'🇧🇷', score:'vs', st:'Programado' },
       ],
       '26': [
-        { local: 'Noruega', visitante: 'Francia', score: 'vs', status: 'Programado', flagL: '🇳🇴', flagV: '🇫🇷' },
-        { local: 'Senegal', visitante: 'Irak', score: 'vs', status: 'Programado', flagL: '🇸🇳', flagV: '🇮🇶' },
-        { local: 'Cabo Verde', visitante: 'Arabia Saudita', score: 'vs', status: 'Programado', flagL: '🇨🇻', flagV: '🇸🇦' },
-        { local: 'Uruguay', visitante: 'España', score: 'vs', status: 'Programado', flagL: '🇺🇾', flagV: '🇪🇸' }
-      ]
+        { local:'México', visit:'EE.UU.', flagL:'🇲🇽', flagV:'🇺🇸', score:'vs', st:'Programado' },
+        { local:'Japón', visit:'Países Bajos', flagL:'🇯🇵', flagV:'🇳🇱', score:'vs', st:'Programado' },
+      ],
     },
-    clasificacion: {
-      titulo: '📊 Clasificación Mundial 2026',
-      grupos: [
-        { nombre: 'Grupo A', equipos: [
-          { nombre: '🇲🇽 México', Pts: 6, PJ: 2, G: 2, E: 0, P: 0, GF: 3, GC: 0 },
-          { nombre: '🇰🇷 Corea del Sur', Pts: 3, PJ: 2, G: 1, E: 0, P: 1, GF: 2, GC: 2 },
-          { nombre: '🇿🇦 Sudáfrica', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 1, GC: 3 },
-          { nombre: '🇨🇿 Rep. Checa', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 2, GC: 3 }
-        ]},
-        { nombre: 'Grupo B', equipos: [
-          { nombre: '🇨🇦 Canadá', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 7, GC: 1 },
-          { nombre: '🇨🇭 Suiza', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 5, GC: 2 },
-          { nombre: '🇧🇦 Bosnia', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 2, GC: 5 },
-          { nombre: '🇶🇦 Qatar', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 1, GC: 7 }
-        ]},
-        { nombre: 'Grupo C', equipos: [
-          { nombre: '🇧🇷 Brasil', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 4, GC: 1 },
-          { nombre: '🇲🇦 Marruecos', Pts: 4, PJ: 2, G: 1, E: 1, P: 0, GF: 2, GC: 1 },
-          { nombre: '🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 0, GC: 1 },
-          { nombre: '🇭🇹 Haití', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 0, GC: 3 }
-        ]},
-        { nombre: 'Grupo D', equipos: [
-          { nombre: '🇺🇸 EE.UU.', Pts: 6, PJ: 2, G: 2, E: 0, P: 0, GF: 6, GC: 1 },
-          { nombre: '🇦🇺 Australia', Pts: 3, PJ: 2, G: 1, E: 0, P: 1, GF: 2, GC: 2 },
-          { nombre: '🇹🇷 Turquía', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 0, GC: 2 },
-          { nombre: '🇵🇾 Paraguay', Pts: 0, PJ: 1, G: 0, E: 0, P: 1, GF: 1, GC: 4 }
-        ]},
-        { nombre: 'Grupo E', equipos: [
-          { nombre: '🇩🇪 Alemania', Pts: 6, PJ: 2, G: 2, E: 0, P: 0, GF: 9, GC: 2 },
-          { nombre: '🇨🇮 Costa de Marfil', Pts: 3, PJ: 2, G: 1, E: 0, P: 1, GF: 2, GC: 2 },
-          { nombre: '🇪🇨 Ecuador', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF: 0, GC: 1 },
-          { nombre: '🇨🇼 Curazao', Pts: 1, PJ: 2, G: 0, E: 1, P: 1, GF:
+    clasificacion: [
+      { nombre:'Grupo A', equipos:[ { n:'🇲🇽 México', Pts:4, PJ:2, G:1, E:1, P:0, GF:3, GC:0 }, { n:'🇰🇷 Corea del Sur', Pts:3, PJ:2, G:1, E:0, P:1, GF:3, GC:2 }, { n:'🇿🇦 Sudáfrica', Pts:1, PJ:2, G:0, E:1, P:1, GF:1, GC:2 }, { n:'🇨🇿 Rep. Checa', Pts:0, PJ:1, G:0, E:0, P:1, GF:1, GC:2 } ]},
+      { nombre:'Grupo B', equipos:[ { n:'🇨🇦 Canadá', Pts:4, PJ:2, G:1, E:1, P:0, GF:7, GC:1 }, { n:'🇨🇭 Suiza', Pts:4, PJ:2, G:1, E:1, P:0, GF:5, GC:2 }, { n:'🇧🇦 Bosnia', Pts:1, PJ:2, G:0, E:1, P:1, GF:2, GC:5 }, { n:'🇶🇦 Qatar', Pts:0, PJ:1, G:0, E:0, P:1, GF:0, GC:6 } ]},
+      { nombre:'Grupo C', equipos:[ { n:'🇧🇷 Brasil', Pts:4, PJ:2, G:1, E:1, P:0, GF:4, GC:1 }, { n:'🇲🇦 Marruecos', Pts:4, PJ:2, G:1, E:1, P:0, GF:2, GC:1 }, { n:'🏴󠁧󠁢󠁳󠁣󠁴󠁿 Escocia', Pts:0, PJ:1, G:0, E:0, P:1, GF:0, GC:1 }, { n:'🇭🇹 Haití', Pts:0, PJ:1, G:0, E:0, P:1, GF:0, GC:3 } ]},
+      { nombre:'Grupo D', equipos:[ { n:'🇺🇸 EE.UU.', Pts:6, PJ:2, G:2, E:0, P:0, GF:6, GC:1 }, { n:'🇦🇺 Australia', Pts:3, PJ:2, G:1, E:0, P:1, GF:2, GC:2 }, { n:'🇹🇷 Turquía', Pts:0, PJ:1, G:0, E:0, P:1, GF:0, GC:2 }, { n:'🇵🇾 Paraguay', Pts:0, PJ:1, G:0, E:0, P:1, GF:1, GC:4 } ]},
+      { nombre:'Grupo E', equipos:[ { n:'🇩🇪 Alemania', Pts:6, PJ:2, G:2, E:0, P:0, GF:9, GC:2 }, { n:'🇨🇮 Costa de Marfil', Pts:3, PJ:2, G:1, E:0, P:1, GF:2, GC:2 }, { n:'🇪🇨 Ecuador', Pts:1, PJ:2, G:0, E:1, P:1, GF:0, GC:1 }, { n:'🇨🇼 Curazao', Pts:1, PJ:2, G:0, E:1, P:1, GF:1, GC:7 } ]},
+      { nombre:'Grupo F', equipos:[ { n:'🇳🇱 Países Bajos', Pts:4, PJ:2, G:1, E:1, P:0, GF:7, GC:3 }, { n:'🇯🇵 Japón', Pts:4, PJ:2, G:1, E:1, P:0, GF:6, GC:2 }, { n:'🇸🇪 Suecia', Pts:3, PJ:2, G:1, E:0, P:1, GF:6, GC:6 }, { n:'🇹🇳 Túnez', Pts:0, PJ:2, G:0, E:0, P:2, GF:1, GC:9 } ]},
+      { nombre:'Grupo G', equipos:[ { n:'🇧🇪 Bélgica', Pts:1, PJ:1, G:0, E:1, P:0, GF:1, GC:1 }, { n:'🇪🇬 Egipto', Pts:1, PJ:1, G:0, E:1, P:0, GF:1, GC:1 }, { n:'🇮🇷 Irán', Pts:1, PJ:1, G:0, E:1, P:0, GF:2, GC:2 }, { n:'🇳🇿 Nueva Zelanda', Pts:1, PJ:1, G:0, E:1, P:0, GF:2, GC:2 } ]},
+      { nombre:'Grupo H', equipos:[ { n:'🇪🇸 España', Pts:1, PJ:1, G:0, E:1, P:0, GF:0, GC:0 }, { n:'🇨🇻 Cabo Verde', Pts:1, PJ:1, G:0, E:1, P:0, GF:0, GC:0 }, { n:'🇸🇦 Arabia Saudita', Pts:1, PJ:1, G:0, E:1, P:0, GF:1, GC:1 }, { n:'🇺🇾 Uruguay', Pts:1, PJ:1, G:0, E:1, P:0, GF:1, GC:1 } ]},
+      { nombre:'Grupo I', equipos:[ { n:'🇫🇷 Francia', Pts:3, PJ:1, G:1, E:0, P:0, GF:3, GC:1 }, { n:'🇳🇴 Noruega', Pts:3, PJ:1, G:1, E:0, P:0, GF:4, GC:1 }, { n:'🇸🇳 Senegal', Pts:0, PJ:1, G:0, E:0, P:1, GF:1, GC:3 }, { n:'🇮🇶 Irak', Pts:0, PJ:1, G:0, E:0, P:1, GF:1, GC:4 } ]},
+      { nombre:'Grupo J', equipos:[ { n:'🇦🇷 Argentina', Pts:3, PJ:1, G:1, E:0, P:0, GF:3, GC:0 }, { n:'🇦🇹 Austria', Pts:3, PJ:1, G:1, E:0, P:0, GF:2, GC:1 }, { n:'🇯🇴 Jordania', Pts:0, PJ:1, G:0, E:0, P:1, GF:1, GC:2 }, { n:'🇩🇿 Argelia', Pts:0, PJ:1, G:0, E:0, P:1, GF:0, GC:3 } ]},
+      { nombre:'Grupo K', equipos:[ { n:'🇨🇴 Colombia', Pts:3, PJ:1, G:1, E:0, P:0, GF:3, GC:1 }, { n:'🇵🇹 Portugal', Pts:1, PJ:1, G:0, E:1, P:0, GF:1, GC:1 }, { n:'🇨🇩 R.D. Congo', Pts:1, PJ:1, G:0, E:1, P:0, GF:1, GC:1 }, { n:'🇺🇿 Uzbekistán', Pts:0, PJ:1, G:0, E:0, P:1, GF:1, GC:3 } ]},
+      { nombre:'Grupo L', equipos:[ { n:'🏴󠁧󠁢󠁥󠁮󠁧󠁿 Inglaterra', Pts:3, PJ:1, G:1, E:0, P:0, GF:4, GC:2 }, { n:'🇬🇭 Ghana', Pts:3, PJ:1, G:1, E:0, P:0, GF:1, GC:0 }, { n:'🇭🇷 Croacia', Pts:0, PJ:1, G:0, E:0, P:1, GF:2, GC:4 }, { n:'🇵🇦 Panamá', Pts:0, PJ:1, G:0, E:0, P:1, GF:0, GC:1 } ]},
+    ],
+    equipos: ['Argentina','Brasil','Francia','España','Alemania','Portugal','Inglaterra','Países Bajos','Croacia','Bélgica','Uruguay','Marruecos','Senegal','Australia','EE.UU.','México','Canadá','Japón','Holanda','Corea del Sur','Suecia','Suiza','Turquía','Italia'],
+    noticias: [
+      { titulo:'Países Bajos golea 5-1 a Suecia y Alemania vence a Costa de Marfil', fecha:'21 jun 2026', resumen:'Los holandeses demostraron su poder ofensivo. Alemania sufrió pero se llevó los 3 puntos.' },
+      { titulo:'Brasil y Francia arrancan con victorias; Argentina golea 3-0 a Argelia', fecha:'20 jun 2026', resumen:'La Canarinha venció 3-0 a Haití, mientras que Francia derrotó 3-1 a Senegal. Argentina fue letal.' },
+      { titulo:'Inglaterra golea 4-2 a Croacia en un partidazo', fecha:'17 jun 2026', resumen:'Los ingleses mostraron su mejor versión con goles de Kane, Bellingham y Saka.' },
+    ],
+    analisis: [
+      { titulo:'Análisis de la primera jornada: favoritos y sorpresas', autor:'Por Juan Pérez', fecha:'20 jun 2026', texto:'El Mundial 2026 arrancó con todo. Argentina, Brasil y Francia cumplieron como favoritos. Alemania fue demoledora.' },
+      { titulo:'Claves del éxito de Países Bajos: juego ofensivo y efectividad', autor:'Por Carlos Rodríguez', fecha:'21 jun 2026', texto:'El equipo holandés ha demostrado una capacidad goleadora impresionante en estos primeros partidos.' },
+    ],
+    goleadores: [
+      { n:'Gakpo / Depay (Países Bajos)', v:'5 goles' },
+      { n:'Kane / Bellingham (Inglaterra)', v:'4 goles' },
+      { n:'Messi / Álvarez (Argentina)', v:'3 goles' },
+      { n:'Vinicius / Endrick (Brasil)', v:'3 goles' },
+    ],
+    asistencias: [
+      { n:'Ángel Di María (Argentina)', v:'3' },
+      { n:'Kevin De Bruyne (Bélgica)', v:'2' },
+      { n:'Antoine Griezmann (Francia)', v:'2' },
+      { n:'Dani Olmo (España)', v:'2' },
+    ],
+  },
+  mlb: {
+    nombre: 'MLB',
+    icono: '⚾',
+    banner: {
+      titulo:'MLB 2026 • Resultados en vivo y clasificaciones',
+      desc:'Partidos, marcadores y tablas de posiciones de la MLB actualizadas en tiempo real.'
+    },
+    // Datos estáticos de respaldo (se usan si falla la API)
+    partidos: [
+      { local:'New York Yankees', visit:'Boston Red Sox', score:'6-4', st:'Final' },
+      { local:'Los Ángeles Dodgers', visit:'San Francisco Giants', score:'3-2', st:'Vivo' },
+      { local:'Chicago Cubs', visit:'St. Louis Cardinals', score:'vs', st:'Programado' },
+      { local:'Houston Astros', visit:'Seattle Mariners', score:'8-1', st:'Final' },
+      { local:'Atlanta Braves', visit:'Philadelphia Phillies', score:'vs', st:'Programado' },
+      { local:'Toronto Blue Jays', visit:'Tampa Bay Rays', score:'5-3', st:'Final' },
+      { local:'New York Mets', visit:'Washington Nationals', score:'vs', st:'Programado' },
+    ],
+    clasificacion: [
+      { nombre:'Liga Americana – Este', equipos:[ { n:'New York Yankees', G:45, P:28, PCT:'.616' }, { n:'Tampa Bay Rays', G:41, P:30, PCT:'.577' }, { n:'Toronto Blue Jays', G:34, P:38, PCT:'.472' } ]},
+      { nombre:'Liga Nacional – Este', equipos:[ { n:'Atlanta Braves', G:46, P:25, PCT:'.648' }, { n:'Philadelphia Phillies', G:40, P:34, PCT:'.541' }, { n:'Washington Nationals', G:38, P:37, PCT:'.507' } ]},
+    ],
+    equipos: ['Yankees','Dodgers','Braves','Phillies','Red Sox','Cubs','Astros','Giants','Blue Jays','Mets','Cardinals','Mariners','Rays','Nationals'],
+    noticias: [
+      { titulo:'Yankees y Braves lideran la MLB; Judge y Acuña pelean por el MVP', fecha:'21 jun 2026', resumen:'La temporada 2026 está siendo histórica para ambos jugadores. Judge lidera en jonrones.' },
+    ],
+    analisis: [
+      { titulo:'¿Quién ganará la Serie Mundial 2026?', autor:'Por Juan Pérez', fecha:'20 jun 2026', texto:'Dodgers, Yankees y Braves son los principales candidatos a alzar el trofeo este año.' },
+    ],
+  },
+  nba: {
+    nombre: 'NBA',
+    icono: '🏀',
+    banner: {
+      titulo:'NBA 2025-26 • Temporada regular y playoffs en vivo',
+      desc:'Sigue a tus equipos favoritos con estadísticas actualizadas.'
+    },
+    partidos: [
+      { local:'Boston Celtics', visit:'Los Ángeles Lakers', score:'112-108', st:'Final' },
+      { local:'Denver Nuggets', visit:'Golden State Warriors', score:'105-98', st:'Vivo' },
+      { local:'Milwaukee Bucks', visit:'Phoenix Suns', score:'vs', st:'Programado' },
+      { local:'Philadelphia 76ers', visit:'Dallas Mavericks', score:'121-115', st:'Final' },
+      { local:'Miami Heat', visit:'New York Knicks', score:'98-95', st:'Final' },
+      { local:'Oklahoma City Thunder', visit:'LA Clippers', score:'vs', st:'Programado' },
+    ],
+    clasificacion: [
+      { nombre:'Conferencia Este', equipos:[ { n:'Boston Celtics', G:58, P:24, PCT:'.707' }, { n:'Milwaukee Bucks', G:55, P:27, PCT:'.671' }, { n:'Philadelphia 76ers', G:50, P:32, PCT:'.610' } ]},
+      { nombre:'Conferencia Oeste', equipos:[ { n:'Denver Nuggets', G:57, P:25, PCT:'.695' }, { n:'OKC Thunder', G:54, P:28, PCT:'.659' }, { n:'Phoenix Suns', G:49, P:33, PCT:'.598' } ]},
+    ],
+    equipos: ['Celtics','Lakers','Nuggets','Warriors','Bucks','Suns','76ers','Mavericks','Heat','Knicks','Thunder','Clippers'],
+    noticias: [
+      { titulo:'Celtics y Nuggets, los reyes de la temporada regular', fecha:'21 jun 2026', resumen:'Boston y Denver han sido los equipos más consistentes de la temporada 2025-26.' },
+    ],
+    analisis: [
+      { titulo:'Playoffs NBA 2026: predicciones y favoritos', autor:'Por Laura Gómez', fecha:'18 jun 2026', texto:'Celtics y Nuggets son los grandes favoritos. Giannis Antetokounmpo podría ser el factor decisivo.' },
+    ],
+  },
+};
+
+const TICKER = [
+  'Bienvenido a SportVivo360. Sigue toda la actualidad del Mundial 2026.',
+  'Argentina golea 3-0 a Argelia con doblete de Messi en el Grupo J',
+  'Países Bajos y Japón empatan en el Grupo F; Alemania lidera el Grupo E',
+  'MLB: Dodgers en vivo vs Giants | NBA: Nuggets en vivo vs Warriors',
+  'Hoy: España vs Arabia Saudita | Bélgica vs Irán | Uruguay vs Cabo Verde',
+];
+
+// ============================================================
+// ESTADO GLOBAL
+// ============================================================
+let deporte = 'futbol';
+let pagina = 'inicio';
+let fecha = '21';
+let tickerIdx = 0;
+let tickerTimer;
+
+// ============================================================
+// TEMA Y COOKIES
+// ============================================================
+function toggleTheme() {
+  document.documentElement.classList.toggle('dark');
+  const isDark = document.documentElement.classList.contains('dark');
+  localStorage.setItem('svTheme', isDark ? 'dark' : 'light');
+  document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+}
+if (localStorage.getItem('svTheme') === 'dark') {
+  document.documentElement.classList.add('dark');
+  document.getElementById('themeBtn').textContent = '☀️';
+}
+
+function aceptarCookies() {
+  document.getElementById('cookieBanner').classList.remove('show');
+  localStorage.setItem('svCookies', '1');
+}
+if (!localStorage.getItem('svCookies')) {
+  document.getElementById('cookieBanner').classList.add('show');
+}
+
+// ============================================================
+// NAVEGACIÓN
+// ============================================================
+function navegar(p) {
+  pagina = p;
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  document.getElementById('page-' + p).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll(`.nav-link[data-page="${p}"]`).forEach(el => el.classList.add('active'));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  renderPagina(p);
+}
+
+function cambiarDeporte(btn) {
+  deporte = btn.dataset.sport;
+  document.querySelectorAll('.sport-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const d = DATOS[deporte];
+  document.getElementById('headerIcon').textContent = d.icono;
+  document.getElementById('headerSportLabel').textContent = d.nombre;
+  renderTodo();
+}
+
+// ============================================================
+// TICKER
+// ============================================================
+function iniciarTicker() {
+  clearInterval(tickerTimer);
+  const el = document.getElementById('tickerText');
+  el.textContent = TICKER[tickerIdx];
+  tickerTimer = setInterval(() => {
+    tickerIdx = (tickerIdx + 1) % TICKER.length;
+    el.style.animation = 'none';
+    el.offsetHeight;
+    el.style.animation = '';
+    el.textContent = TICKER[tickerIdx];
+  }, 5000);
+}
+
+// ============================================================
+// RENDERIZADO PRINCIPAL
+// ============================================================
+function renderTodo() {
+  const d = DATOS[deporte];
+  document.getElementById('bannerTitulo').textContent = d.banner.titulo;
+  document.getElementById('bannerDesc').textContent = d.banner.desc;
+  document.getElementById('partidosTitulo').textContent = `📅 Calendario de Partidos – ${d.nombre}`;
+  document.getElementById('clasificacionTitulo').textContent = `📊 Clasificación – ${d.nombre}`;
+  document.getElementById('equiposTitulo').textContent = `🏟️ Equipos – ${d.nombre}`;
+  document.getElementById('noticiasTitulo').textContent = `📰 Noticias – ${d.nombre}`;
+  document.getElementById('analisisTitulo').textContent = `🔍 Análisis – ${d.nombre}`;
+  renderPagina(pagina);
+}
+
+function renderPagina(p) {
+  switch(p) {
+    case 'inicio': renderInicio(); break;
+    case 'envivo': renderEnVivo(); break;
+    case 'partidos': renderPartidos(); break;
+    case 'clasificacion': renderClasificacion(); break;
+    case 'equipos': renderEquipos(); break;
+    case 'noticias': renderNoticias(); break;
+    case 'analisis': renderAnalisis(); break;
+  }
+}
+
+// ============================================================
+// HELPERS DE VISTA
+// ============================================================
+function badgeHtml(st) {
+  if (st === 'Vivo') return '<span class="status-badge badge-vivo">🔴 En Vivo</span>';
+  if (st === 'Final') return '<span class="status-badge badge-final">Final</span>';
+  return '<span class="status-badge badge-programado">Programado</span>';
+}
+
+function matchCardHtml(m) {
+  const flagL = m.flagL || '';
+  const flagV = m.flagV || '';
+  const score = m.score && m.score !== 'vs' ? m.score.split('-') : null;
+  const s1 = score ? score[0] : '-';
+  const s2 = score ? score[1] : '-';
+  return `<div class="match-card"><div class="match-header">${badgeHtml(m.st)}${m.fecha ? '<span class="match-date">Jun ' + m.fecha + '</span>' : ''}</div><div class="team-row"><div class="team-info">${flagL ? '<span class="team-flag">' + flagL + '</span>' : ''}<span class="team-name">${m.local || m.visit_l || ''}</span></div><span class="team-score">${s1}</span></div><div class="team-row"><div class="team-info">${flagV ? '<span class="team-flag">' + flagV + '</span>' : ''}<span class="team-name">${m.visit}</span></div><span class="team-score">${s2}</span></div></div>`;
+}
+
+function standingsHtml(grupo, tipo) {
+  const isFutbol = tipo === 'futbol';
+  const cols = isFutbol ? '<th>PTS</th><th>PJ</th><th>G</th><th>E</th><th>P</th><th>GF</th><th>GC</th>' : '<th>G</th><th>P</th><th>PCT</th>';
+  let rows = grupo.equipos.map((eq, i) => {
+    const cells = isFutbol ? `<td class="pts">${eq.Pts}</td><td>${eq.PJ}</td><td>${eq.G}</td><td>${eq.E}</td><td>${eq.P}</td><td>${eq.GF}</td><td>${eq.GC}</td>` : `<td>${eq.G}</td><td>${eq.P}</td><td style="font-weight:700">${eq.PCT}</td>`;
+    return `<tr class="${isFutbol && i < 2 ? 'clasificado' : ''}"><td style="text-align:left;font-weight:600;padding-left:${isFutbol ? '14px' : '10px'}">${i+1}. ${eq.n}</td>${cells}</tr>`;
+  }).join('');
+  return `<div class="standings-card"><div class="standings-card-header">${grupo.nombre}</div><div style="overflow-x:auto"><table class="standings-table"><thead><tr><th style="text-align:left;padding-left:${isFutbol?'14px':'10px'}">Equipo</th>${cols}</tr></thead><tbody>${rows}</tbody></table></div></div>`;
+}
+
+function emptyHtml(msg) {
+  return `<div class="empty"><div class="empty-icon">🏟️</div><p>${msg}</p></div>`;
+}
+
+function spinnerHtml() {
+  return `<div class="spinner"></div>`;
+}
+
+// ============================================================
+// API MLB (statsapi.mlb.com)
+// ============================================================
+function getFechaMLB() {
+  const hoy = new Date();
+  const y = hoy.getFullYear();
+  const m = String(hoy.getMonth() + 1).padStart(2, '0');
+  const d = String(hoy.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+function parseMLBGame(game, fechaStr) {
+  const teams = game.teams;
+  const local = teams.home.team.name;
+  const visit = teams.away.team.name;
+  let score = 'vs';
+  let st = 'Programado';
+  const status = game.status.detailedState;
+  if (status === 'Final' || status === 'Game Over') {
+    st = 'Final';
+    score = `${teams.home.score}-${teams.away.score}`;
+  } else if (status === 'In Progress' || status === 'Live') {
+    st = 'Vivo';
+    score = `${teams.home.score}-${teams.away.score}`;
+  }
+  return {
+    local,
+    visit,
+    score,
+    st,
+    fecha: fechaStr
+  };
+}
+
+function parseMLBStandings(data) {
+  const records = data.records || [];
+  const grupos = [];
+  records.forEach(rec => {
+    const nombre = rec.division ? rec.division.name : 'División';
+    const equipos = rec.teamRecords.map(tr => ({
+      n: tr.team.name,
+      G: parseInt(tr.wins),
+      P: parseInt(tr.losses),
+      PCT: tr.winningPercentage || '.000'
+    }));
+    grupos.push({ nombre, equipos });
+  });
+  return grupos;
+}
+
+async function fetchMLBSchedule(fecha) {
+  const url = `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${fecha}`;
+  try {
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('Error en la API');
+    const data = await resp.json();
+    const dates = data.dates || [];
+    if (dates.length === 0) return [];
+    const games = dates[0].games || [];
+    return games.map(g => parseMLBGame(g, fecha));
+  } catch (e) {
+    console.warn('Error al obtener partidos MLB, usando respaldo:', e);
+    return null;
+  }
+}
+
+async function fetchMLBStandings() {
+  const url = 'https://statsapi.mlb.com/api/v1/standings?leagueId=103,104&season=2026&standingsTypes=regularSeason';
+  try {
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('Error en la API');
+    const data = await resp.json();
+    return parseMLBStandings(data);
+  } catch (e) {
+    console.warn('Error al obtener clasificación MLB, usando respaldo:', e);
+    return null;
+  }
+}
+
+// ============================================================
+// RENDERIZADO DE SECCIONES (con API para MLB)
+// ============================================================
+
+// --- INICIO ---
+function renderInicio() {
+  const d = DATOS[deporte];
+  iniciarTicker();
+
+  // Selector de fecha
+  const ds = document.getElementById('dateSelector');
+  if (deporte === 'futbol') {
+    const fechas = ['11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26'];
+    ds.style.display = 'flex';
+    ds.innerHTML = '<span class="date-label">Junio:</span>' + fechas.map(f => `<button class="date-btn ${f===fecha?'active':''}" onclick="selFecha('${f}')">${f}</button>`).join('');
+  } else if (deporte === 'mlb') {
+    ds.style.display = 'flex';
+    const hoy = new Date().toISOString().split('T')[0];
+    ds.innerHTML = `<span class="date-label">📅 Fecha:</span>
+      <input type="date" id="mlbDatePicker" value="${hoy}" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text);font-family:inherit;font-size:.85rem;">
+      <button class="date-btn" onclick="cargarMLBDesdeFecha()">Buscar</button>`;
+  } else {
+    ds.style.display = 'none';
+  }
+
+  // Panel de estadísticas (solo fútbol)
+  const sp = document.getElementById('statsPanel');
+  if (deporte === 'futbol') {
+    const goles = d.goleadores.map(g => `<div class="stat-item"><span>${g.n}</span><span class="stat-val">${g.v}</span></div>`).join('');
+    const asist = d.asistencias.map(g => `<div class="stat-item"><span>${g.n}</span><span class="stat-val">${g.v}</span></div>`).join('');
+    sp.innerHTML = `<div class="stat-card" style="margin-bottom:14px"><h4>⚽ Máximos Goleadores</h4>${goles}</div><div class="stat-card"><h4>👟 Líderes en Asistencias</h4>${asist}</div>`;
+  } else {
+    sp.innerHTML = '<div class="stat-card"><h4>📊 Estadísticas</h4><p style="color:var(--muted);font-size:.85rem;padding:8px 0">Datos actualizados en tiempo real.</p></div>';
+  }
+
+  // Cargar partidos según deporte
+  cargarPartidosInicio();
+}
+
+function cargarPartidosInicio() {
+  const ml = document.getElementById('matchesList');
+  const d = DATOS[deporte];
+
+  if (deporte === 'futbol') {
+    const partidos = d.partidosPorFecha[fecha] || [];
+    document.getElementById('matchesTitle').textContent = `Partidos del ${fecha} de Junio`;
+    ml.innerHTML = partidos.length ? partidos.map(p => matchCardHtml(p)).join('') : emptyHtml('No hay partidos para esta fecha.');
+  } else if (deporte === 'mlb') {
+    document.getElementById('matchesTitle').textContent = `⚾ Partidos MLB`;
+    ml.innerHTML = spinnerHtml();
+    const fechaMLB = document.getElementById('mlbDatePicker') ? document.getElementById('mlbDatePicker').value : getFechaMLB();
+    fetchMLBSchedule(fechaMLB).then(games => {
+      if (games && games.length > 0) {
+        ml.innerHTML = games.map(p => matchCardHtml(p)).join('');
+      } else if (games === null) {
+        ml.innerHTML = d.partidos.map(p => matchCardHtml(p)).join('');
+      } else {
+        ml.innerHTML = emptyHtml('No hay partidos en esta fecha.');
+      }
+    });
+  } else { // NBA
+    document.getElementById('matchesTitle').textContent = `🏀 Partidos Destacados`;
+    ml.innerHTML = d.partidos.map(p => matchCardHtml(p)).join('');
+  }
+}
+
+function cargarMLBDesdeFecha() {
+  const picker = document.getElementById('mlbDatePicker');
+  if (!picker) return;
+  renderInicio();
+}
+
+function selFecha(f) {
+  fecha = f;
+  document.querySelectorAll('.date-btn').forEach(b => b.classList.toggle('active', b.textContent == f));
+  renderInicio();
+}
+
+// --- EN VIVO ---
+function renderEnVivo() {
+  const d = DATOS[deporte];
+  const lv = document.getElementById('liveList');
+  if (deporte === 'futbol') {
+    let vivos = [];
+    Object.values(d.partidosPorFecha).forEach(lista => lista.forEach(p => { if (p.st === 'Vivo') vivos.push(p); }));
+    lv.innerHTML = vivos.length ? vivos.map(p => matchCardHtml(p)).join('') : emptyHtml('No hay partidos en vivo.');
+  } else if (deporte === 'mlb') {
+    lv.innerHTML = spinnerHtml();
+    const fechaMLB = getFechaMLB();
+    fetchMLBSchedule(fechaMLB).then(games => {
+      if (games) {
+        const vivos = games.filter(g => g.st === 'Vivo');
+        lv.innerHTML = vivos.length ? vivos.map(p => matchCardHtml(p)).join('') : emptyHtml('No hay partidos en vivo en este momento.');
+      } else {
+        const vivos = d.partidos.filter(p => p.st === 'Vivo');
+        lv.innerHTML = vivos.length ? vivos.map(p => matchCardHtml(p)).join('') : emptyHtml('No hay partidos en vivo.');
+      }
+    });
+  } else { // NBA
+    const vivos = d.partidos.filter(p => p.st === 'Vivo');
+    lv.innerHTML = vivos.length ? vivos.map(p => matchCardHtml(p)).join('') : emptyHtml('No hay partidos en vivo.');
+  }
+}
+
+// --- PARTIDOS ---
+function renderPartidos() {
+  const d = DATOS[deporte];
+  const pl = document.getElementById('partidosList');
+  const ds = document.getElementById('dateSelectorPartidos');
+
+  if (deporte === 'futbol') {
+    const fechas = ['11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26'];
+    ds.innerHTML = '<span class="date-label">Junio:</span>' + fechas.map(f => `<button class="date-btn ${f===fecha?'active':''}" onclick="selFecha('${f}')">${f}</button>`).join('');
+    const partidos = d.partidosPorFecha[fecha] || [];
+    pl.innerHTML = partidos.length ? partidos.map(p => matchCardHtml(p)).join('') : emptyHtml('No hay partidos para esta fecha.');
+  } else if (deporte === 'mlb') {
+    ds.innerHTML = `<span class="date-label">📅 Fecha:</span>
+      <input type="date" id="mlbDatePickerPartidos" value="${getFechaMLB()}" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text);font-family:inherit;font-size:.85rem;">
+      <button class="date-btn" onclick="cargarMLBPartidos()">Buscar</button>`;
+    pl.innerHTML = spinnerHtml();
+    const fechaMLB = document.getElementById('mlbDatePickerPartidos') ? document.getElementById('mlbDatePickerPartidos').value : getFechaMLB();
+    fetchMLBSchedule(fechaMLB).then(games => {
+      if (games && games.length > 0) {
+        pl.innerHTML = games.map(p => matchCardHtml(p)).join('');
+      } else if (games === null) {
+        pl.innerHTML = d.partidos.map(p => matchCardHtml(p)).join('');
+      } else {
+        pl.innerHTML = emptyHtml('No hay partidos en esta fecha.');
+      }
+    });
+  } else { // NBA
+    ds.innerHTML = '';
+    pl.innerHTML = d.partidos.map(p => matchCardHtml(p)).join('');
+  }
+}
+
+function cargarMLBPartidos() {
+  renderPartidos();
+}
+
+// --- CLASIFICACIÓN ---
+function renderClasificacion() {
+  const d = DATOS[deporte];
+  const cg = document.getElementById('clasificacionGrid');
+  if (deporte === 'futbol') {
+    cg.innerHTML = d.clasificacion.map(g => standingsHtml(g, deporte)).join('');
+  } else if (deporte === 'mlb') {
+    cg.innerHTML = spinnerHtml();
+    fetchMLBStandings().then(data => {
+      if (data && data.length > 0) {
+        cg.innerHTML = data.map(g => standingsHtml(g, deporte)).join('');
+      } else {
+        cg.innerHTML = d.clasificacion.map(g => standingsHtml(g, deporte)).join('');
+      }
+    });
+  } else { // NBA
+    cg.innerHTML = d.clasificacion.map(g => standingsHtml(g, deporte)).join('');
+  }
+}
+
+// --- EQUIPOS ---
+function renderEquipos() {
+  const d = DATOS[deporte];
+  const eq = document.getElementById('equiposGrid');
+  eq.innerHTML = d.equipos.map(e => `<div class="team-card"><div class="team-icon">${d.icono}</div><div class="team-card-name">${e}</div></div>`).join('');
+}
+
+// --- NOTICIAS ---
+function renderNoticias() {
+  const d = DATOS[deporte];
+  const nl = document.getElementById('noticiasList');
+  nl.innerHTML = d.noticias.map(n => `<div class="news-card"><div class="news-meta"><span class="news-sport-tag">${d.nombre}</span><span class="news-date">${n.fecha}</span></div><div class="news-title">${n.titulo}</div><div class="news-summary">${n.resumen}</div><div class="news-more">Leer más →</div></div>`).join('');
+}
+
+// --- ANÁLISIS ---
+function renderAnalisis() {
+  const d = DATOS[deporte];
+  const al = document.getElementById('analisisList');
+  al.innerHTML = d.analisis.map(a => `<div class="news-card"><div class="news-meta"><span class="news-sport-tag">${a.autor}</span><span class="news-date">${a.fecha}</span></div><div class="news-title">${a.titulo}</div><div class="news-summary">${a.texto}</div><div class="news-more">Leer análisis completo →</div></div>`).join('');
+}
+
+// --- CONTACTO ---
+function submitContacto(e) {
+  e.preventDefault();
+  document.getElementById('contactSuccess').style.display = 'block';
+  e.target.reset();
+  setTimeout(() => {
+    document.getElementById('contactSuccess').style.display = 'none';
+  }, 3000);
+}
+
+// ============================================================
+// INICIALIZACIÓN
+// ============================================================
+document.getElementById('footerFecha')?.remove(); // Si existe, lo quitamos para no duplicar
+// Añadir fecha en el footer
+const footerP = document.querySelector('footer p:first-of-type');
+if (footerP) {
+  footerP.innerHTML = `© 2026 SportVivo360 – Todos los derechos reservados | Lima, Perú · ${new Date().toLocaleDateString('es-ES')}`;
+}
+
+renderTodo();
+</script>
+</body>
+</html>
