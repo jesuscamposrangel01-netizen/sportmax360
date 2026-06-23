@@ -303,6 +303,46 @@ footer{background:var(--primary);color:rgba(255,255,255,.55);text-align:center;p
 .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;margin:40px auto;}
 @keyframes spin{to{transform:rotate(360deg)}}
 @media(max-width:640px){.banner h2{font-size:1.3rem}.grid-standings{grid-template-columns:1fr}.grid-teams{grid-template-columns:repeat(3,1fr)}.grid-main{grid-template-columns:1fr}.stats-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* ===== FIX: Selector de fechas (botones separados y estilizados) ===== */
+.date-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 8px 0;
+}
+.date-label {
+  font-weight: 700;
+  font-size: .85rem;
+  color: var(--muted);
+  margin-right: 8px;
+}
+.date-btn {
+  padding: 6px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-weight: 600;
+  font-size: .8rem;
+  cursor: pointer;
+  transition: all .2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.date-btn:hover {
+  background: var(--blue);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26,86,219,0.3);
+}
+.date-btn.active {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+  box-shadow: 0 4px 12px rgba(26,86,219,0.4);
+}
 </style>
 </head>
 <body>
@@ -602,7 +642,7 @@ footer{background:var(--primary);color:rgba(255,255,255,.55);text-align:center;p
 </footer>
 
 <!-- ============================================================ -->
-<!-- JAVASCRIPT COMPLETO                                          -->
+<!-- JAVASCRIPT COMPLETO (CORREGIDO)                              -->
 <!-- ============================================================ -->
 <script>
 // ============================================================
@@ -920,6 +960,9 @@ function navegar(p) {
   renderPagina(p);
 }
 
+// ============================================================
+// CAMBIAR DEPORTE (CORREGIDO)
+// ============================================================
 function cambiarDeporte(btn) {
   deporte = btn.dataset.sport;
   document.querySelectorAll('.sport-btn').forEach(b => b.classList.remove('active'));
@@ -927,7 +970,14 @@ function cambiarDeporte(btn) {
   const d = datosDeportes[deporte];
   document.getElementById('headerIcon').textContent = d.icono;
   document.getElementById('headerSportLabel').textContent = d.nombre;
+  
+  // ✅ Forzar actualización del banner y la página actual
   renderTodo();
+  // También actualizar el banner directamente por si acaso
+  const bannerTitulo = document.getElementById('bannerTitulo');
+  const bannerDesc = document.getElementById('bannerDesc');
+  if (bannerTitulo) bannerTitulo.textContent = d.banner.titulo;
+  if (bannerDesc) bannerDesc.textContent = d.banner.desc;
 }
 
 // ============================================================
@@ -1047,7 +1097,7 @@ function spinnerHtml() {
 }
 
 // ============================================================
-// API MLB
+// API MLB (CORREGIDA)
 // ============================================================
 function getFechaMLB() {
   const hoy = new Date();
@@ -1074,11 +1124,23 @@ function parseMLBGame(game, fechaStr) {
   return { local, visitante: visit, score, status: st, fecha: fechaStr };
 }
 
+// ✅ FUNCIÓN CORREGIDA: nunca devuelve "undefined"
 function parseMLBStandings(data) {
   const records = data.records || [];
   const grupos = [];
   records.forEach(rec => {
-    const nombre = rec.division ? rec.division.name : 'División';
+    // Intentar obtener nombre con múltiples fallbacks
+    let nombre = 'División';
+    if (rec.division && rec.division.name) {
+      nombre = rec.division.name;
+    } else if (rec.league && rec.league.name) {
+      nombre = rec.league.name;
+    } else if (rec.name) {
+      nombre = rec.name;
+    } else if (rec.division && rec.division.id) {
+      nombre = `División ${rec.division.id}`;
+    }
+    
     const equipos = rec.teamRecords.map(tr => ({
       nombre: tr.team.name,
       G: parseInt(tr.wins),
@@ -1346,4 +1408,4 @@ document.getElementById('footerFecha').textContent = new Date().toLocaleDateStri
 renderTodo();
 </script>
 </body>
-</html> 
+</html>
