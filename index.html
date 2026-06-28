@@ -11,7 +11,7 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3765201153278683" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-/* ===== ESTILOS (sin cambios, los mismos de antes) ===== */
+/* ===== ESTILOS (con corrección para emojis) ===== */
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --primary:#0b1e2e;
@@ -274,6 +274,7 @@ main{max-width:1280px;margin:0 auto;padding:24px 16px}
 .video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
 .news-card.video-card .news-title{font-size:1.2rem}
 
+/* === EQUIPOS CON EMOJIS (CORREGIDO) === */
 .team-card{
   background:var(--card);border:1px solid var(--border);
   border-radius:14px;padding:16px 12px;box-shadow:var(--card-shadow);
@@ -281,8 +282,15 @@ main{max-width:1280px;margin:0 auto;padding:24px 16px}
   aspect-ratio:1;justify-content:center;transition:all .2s;cursor:pointer;
 }
 .team-card:hover{border-color:var(--blue);transform:translateY(-3px)}
-.team-icon{font-size:2.5rem;line-height:1} /* Aumentado para banderas */
+.team-icon{
+  font-size:3rem !important;
+  font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', 'Android Emoji', sans-serif;
+  line-height:1.2;
+  display:block;
+  text-align:center;
+}
 .team-card-name{font-size:.78rem;font-weight:600;text-align:center}
+
 .static-page{max-width:720px}
 .static-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;box-shadow:var(--card-shadow);}
 .static-box p{margin-bottom:14px;line-height:1.7;color:var(--text)}
@@ -436,6 +444,7 @@ footer{background:var(--primary);color:rgba(255,255,255,.55);text-align:center;p
     <div class="carousel-dots" id="carouselDots"></div>
   </div>
 
+  <!-- ESTADÍSTICAS (se actualizarán dinámicamente) -->
   <div class="stats-grid">
     <div class="stat-card-large">
       <div class="stat-number" id="statPartidos">0</div>
@@ -450,12 +459,12 @@ footer{background:var(--primary);color:rgba(255,255,255,.55);text-align:center;p
       <div class="stat-label">Equipos clasificados</div>
     </div>
     <div class="stat-card-large">
-      <div class="stat-number" id="statRestantes">18</div>
+      <div class="stat-number" id="statRestantes">0</div>
       <div class="stat-label">Días restantes</div>
     </div>
   </div>
 
-  <!-- VIDEO DESTACADO 1: Inglaterra vs Panamá (NUEVO ENLACE FUNCIONAL) -->
+  <!-- VIDEO DESTACADO 1: Inglaterra vs Panamá -->
   <div class="video-highlight">
     <div class="video-title">🎥 Panamá 0-2 Inglaterra | Resumen y goles</div>
     <div class="video-wrapper">
@@ -512,11 +521,11 @@ footer{background:var(--primary);color:rgba(255,255,255,.55);text-align:center;p
   <div class="grid-teams" id="equiposGrid"></div>
 </div>
 
-<!-- NOTICIAS (ACTUALIZADAS CON LA JORNADA DE HOY) -->
+<!-- NOTICIAS (ACTUALIZADAS) -->
 <div id="page-noticias" class="page">
   <div class="section-title">📰 Noticias y Videos Destacados</div>
 
-  <!-- Video 1: Inglaterra (nuevo enlace) -->
+  <!-- Video 1: Inglaterra -->
   <div class="news-card video-card">
     <div class="news-meta">
       <span class="news-sport-tag">🎥 VIDEO DESTACADO</span>
@@ -544,7 +553,6 @@ footer{background:var(--primary);color:rgba(255,255,255,.55);text-align:center;p
     <div class="news-more">Leer más →</div>
   </div>
 
-  <!-- Noticias escritas de hoy -->
   <div id="noticiasList"></div>
 </div>
 
@@ -658,7 +666,6 @@ const datosDeportes = {
       { n: 'Antoine Griezmann (Francia)', v: '2' },
       { n: 'Dani Olmo (España)', v: '2' }
     ],
-    // NOTICIAS ACTUALIZADAS CON LA INFORMACIÓN DE HOY
     noticias: [
       { 
         titulo: '¡Histórico! Cabo Verde clasifica a octavos en su primer Mundial', 
@@ -990,6 +997,34 @@ function calculateStandings(games) {
 }
 
 // ============================================================
+// FUNCIONES PARA CALCULAR ESTADÍSTICAS DINÁMICAS
+// ============================================================
+function calcularEstadisticas(games) {
+  const totalPartidos = games.length;
+  const golesTotales = games.reduce((acc, p) => {
+    if (p.finished === 'TRUE') {
+      return acc + parseInt(p.home_score || 0) + parseInt(p.away_score || 0);
+    }
+    return acc;
+  }, 0);
+  
+  // Clasificados: equipos que están en los primeros 2 de cada grupo
+  const standings = calculateStandings(games);
+  let clasificados = 0;
+  standings.forEach(grupo => {
+    grupo.equipos.slice(0, 2).forEach(() => clasificados++);
+  });
+  
+  // Días restantes hasta la final (19 de julio de 2026)
+  const fechaFinal = new Date(2026, 6, 19); // mes 6 = julio
+  const hoy = new Date();
+  const diffTime = fechaFinal - hoy;
+  const diasRestantes = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+  
+  return { totalPartidos, golesTotales, clasificados, diasRestantes };
+}
+
+// ============================================================
 // RENDERIZADO PRINCIPAL
 // ============================================================
 function renderTodo() {
@@ -1175,19 +1210,12 @@ async function renderInicio() {
   if (deporte === 'futbol') {
     const games = await fetchWorldCupGames();
     if (games) {
-      const total = games.length;
-      const goles = games.reduce((acc, p) => {
-        if (p.finished === 'TRUE') {
-          return acc + parseInt(p.home_score || 0) + parseInt(p.away_score || 0);
-        }
-        return acc;
-      }, 0);
-      const clasificados = 1; // simplificado
-      const diasRestantes = 18;
-      document.getElementById('statPartidos').textContent = total;
-      document.getElementById('statGoles').textContent = goles;
-      document.getElementById('statClasificados').textContent = clasificados;
-      document.getElementById('statRestantes').textContent = diasRestantes;
+      // Calcular estadísticas dinámicas
+      const stats = calcularEstadisticas(games);
+      document.getElementById('statPartidos').textContent = stats.totalPartidos;
+      document.getElementById('statGoles').textContent = stats.golesTotales;
+      document.getElementById('statClasificados').textContent = stats.clasificados;
+      document.getElementById('statRestantes').textContent = stats.diasRestantes;
 
       // Clasificación resumida (líderes)
       const standingsData = calculateStandings(games);
@@ -1379,19 +1407,18 @@ async function renderClasificacion() {
   }
 }
 
-// --- EQUIPOS (CON BANDERAS) ---
+// --- EQUIPOS (CON BANDERAS CORREGIDAS) ---
 function renderEquipos() {
   const d = datosDeportes[deporte];
   const eq = document.getElementById('equiposGrid');
   if (!eq) return;
-  // Mostrar bandera + nombre
   eq.innerHTML = d.equipos.map(e => {
     const flag = getFlagFromName(e);
     return `<div class="team-card"><div class="team-icon">${flag}</div><div class="team-card-name">${e}</div></div>`;
   }).join('');
 }
 
-// --- NOTICIAS (con las nuevas noticias) ---
+// --- NOTICIAS ---
 function renderNoticias() {
   const d = datosDeportes[deporte];
   const nl = document.getElementById('noticiasList');
