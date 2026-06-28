@@ -11,6 +11,7 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3765201153278683" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
+/* ===== ESTILOS (sin cambios, los mismos de antes) ===== */
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --primary:#0b1e2e;
@@ -273,9 +274,14 @@ main{max-width:1280px;margin:0 auto;padding:24px 16px}
 .video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
 .news-card.video-card .news-title{font-size:1.2rem}
 
-.team-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 12px;box-shadow:var(--card-shadow);display:flex;flex-direction:column;align-items:center;gap:8px;aspect-ratio:1;justify-content:center;transition:all .2s;cursor:pointer;}
+.team-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:16px 12px;box-shadow:var(--card-shadow);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  aspect-ratio:1;justify-content:center;transition:all .2s;cursor:pointer;
+}
 .team-card:hover{border-color:var(--blue);transform:translateY(-3px)}
-.team-icon{font-size:1.8rem}
+.team-icon{font-size:2.5rem;line-height:1} /* Aumentado para banderas */
 .team-card-name{font-size:.78rem;font-weight:600;text-align:center}
 .static-page{max-width:720px}
 .static-box{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;box-shadow:var(--card-shadow);}
@@ -449,17 +455,17 @@ footer{background:var(--primary);color:rgba(255,255,255,.55);text-align:center;p
     </div>
   </div>
 
-  <!-- VIDEO DESTACADO 1: Inglaterra vs Panamá -->
+  <!-- VIDEO DESTACADO 1: Inglaterra vs Panamá (NUEVO ENLACE FUNCIONAL) -->
   <div class="video-highlight">
-    <div class="video-title">🎥 ¡INGLATERRA TRABAJÓ Y SE QUEDÓ el LIDERATO! VICTORIA ante PANAMÁ | Panamá 0–2 Inglaterra</div>
+    <div class="video-title">🎥 Panamá 0-2 Inglaterra | Resumen y goles</div>
     <div class="video-wrapper">
-      <iframe src="https://www.youtube.com/embed/7AboOnR_GUk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/_UfwmNBuZLs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
   </div>
 
   <!-- VIDEO DESTACADO 2: Jordania vs Argentina -->
   <div class="video-highlight">
-    <div class="video-title">🎥 CÓSMICO GOL DE MESSI DE TIRO LIBRE Y LIDERATO DE ARGENTINA | Jordania 1-3 Argentina | RESUMEN</div>
+    <div class="video-title">🎥 CÓSMICO GOL DE MESSI DE TIRO LIBRE Y LIDERATO DE ARGENTINA | Jordania 1-3 Argentina</div>
     <div class="video-wrapper">
       <iframe src="https://www.youtube.com/embed/I_Sj_415nu0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
@@ -500,44 +506,45 @@ footer{background:var(--primary);color:rgba(255,255,255,.55);text-align:center;p
   <div class="grid-standings" id="clasificacionGrid"></div>
 </div>
 
-<!-- EQUIPOS -->
+<!-- EQUIPOS (CON BANDERAS) -->
 <div id="page-equipos" class="page">
   <div class="section-title" id="equiposTitulo">🏟️ Equipos Mundial 2026</div>
   <div class="grid-teams" id="equiposGrid"></div>
 </div>
 
-<!-- NOTICIAS -->
+<!-- NOTICIAS (ACTUALIZADAS CON LA JORNADA DE HOY) -->
 <div id="page-noticias" class="page">
   <div class="section-title">📰 Noticias y Videos Destacados</div>
 
-  <!-- Video 1 -->
+  <!-- Video 1: Inglaterra (nuevo enlace) -->
   <div class="news-card video-card">
     <div class="news-meta">
       <span class="news-sport-tag">🎥 VIDEO DESTACADO</span>
       <span class="news-date">27 jun 2026</span>
     </div>
-    <div class="news-title">¡INGLATERRA TRABAJÓ Y SE QUEDÓ el LIDERATO! VICTORIA ante PANAMÁ | Panamá 0–2 Inglaterra</div>
+    <div class="news-title">Panamá 0-2 Inglaterra | Resumen y goles</div>
     <div class="video-wrapper">
-      <iframe src="https://www.youtube.com/embed/7AboOnR_GUk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/_UfwmNBuZLs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
-    <p class="news-summary" style="margin-top:12px;">Inglaterra se impuso con autoridad y consolidó su liderato en el grupo.</p>
+    <p class="news-summary" style="margin-top:12px;">Inglaterra venció 2-0 a Panamá con goles de Bellingham y Kane, asegurando el primer lugar del Grupo L.</p>
     <div class="news-more">Leer más →</div>
   </div>
 
-  <!-- Video 2 -->
+  <!-- Video 2: Argentina -->
   <div class="news-card video-card">
     <div class="news-meta">
       <span class="news-sport-tag">🎥 VIDEO DESTACADO</span>
       <span class="news-date">27 jun 2026</span>
     </div>
-    <div class="news-title">CÓSMICO GOL DE MESSI DE TIRO LIBRE Y LIDERATO DE ARGENTINA | Jordania 1-3 Argentina</div>
+    <div class="news-title">Jordania 1-3 Argentina | Resumen y golazo de Messi</div>
     <div class="video-wrapper">
       <iframe src="https://www.youtube.com/embed/I_Sj_415nu0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
     </div>
-    <p class="news-summary" style="margin-top:12px;">Messi anotó un golazo de tiro libre y Argentina se mantiene en la cima.</p>
+    <p class="news-summary" style="margin-top:12px;">Argentina ganó 3-1 con un gol de tiro libre de Messi y se aseguró el liderato del Grupo J.</p>
     <div class="news-more">Leer más →</div>
   </div>
 
+  <!-- Noticias escritas de hoy -->
   <div id="noticiasList"></div>
 </div>
 
@@ -629,7 +636,7 @@ footer{background:var(--primary);color:rgba(255,255,255,.55);text-align:center;p
 
 <script>
 // ============================================================
-// DATOS ESTÁTICOS (RESPALDO PARA MLB, NBA Y FÚTBOL SI FALLA API)
+// DATOS ESTÁTICOS (RESPALDO) + NOTICIAS ACTUALIZADAS
 // ============================================================
 const hoy = new Date();
 const fechaStr = hoy.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -651,12 +658,42 @@ const datosDeportes = {
       { n: 'Antoine Griezmann (Francia)', v: '2' },
       { n: 'Dani Olmo (España)', v: '2' }
     ],
+    // NOTICIAS ACTUALIZADAS CON LA INFORMACIÓN DE HOY
     noticias: [
-      { titulo: `Actualidad del Mundial 2026 – ${fechaStr}`, fecha: fechaStr, resumen: 'Sigue todos los partidos y resultados en tiempo real.' },
-      { titulo: 'Clasificación actualizada automáticamente', fecha: fechaStr, resumen: 'La tabla de posiciones se calcula con los resultados de la API.' }
+      { 
+        titulo: '¡Histórico! Cabo Verde clasifica a octavos en su primer Mundial', 
+        fecha: fechaStr, 
+        resumen: 'Cabo Verde empató 0-0 con Arabia Saudita y aseguró el segundo lugar del Grupo H, eliminando a Uruguay y convirtiéndose en la nación más pequeña en lograr esta hazaña.' 
+      },
+      { 
+        titulo: 'Messi al banquillo contra Jordania para cuidar su físico', 
+        fecha: fechaStr, 
+        resumen: 'Scaloni confirmó que el capitán argentino empezará el partido desde el banco, ya que Argentina ya está clasificada como líder del Grupo J.' 
+      },
+      { 
+        titulo: 'Colombia y Portugal definen al líder del Grupo K esta noche', 
+        fecha: fechaStr, 
+        resumen: 'El partido entre colombianos y portugueses decidirá quién termina primero en el Grupo K. Se juega a la 1:30 (hora peninsular española).' 
+      },
+      { 
+        titulo: 'España vence 1-0 a Uruguay y se asegura el primer lugar del Grupo H', 
+        fecha: fechaStr, 
+        resumen: 'Un gol de Álex Baena le dio el triunfo a la selección española, que termina líder invicta.' 
+      }
     ],
     analisis: [
-      { titulo: `Análisis de la jornada – ${fechaStr}`, autor: 'Por SportVivo360', fecha: fechaStr, texto: 'Revisa los momentos clave de los partidos de hoy y las proyecciones para la siguiente fase.' }
+      { 
+        titulo: `Análisis de la jornada – ${fechaStr}`, 
+        autor: 'Por SportVivo360', 
+        fecha: fechaStr, 
+        texto: 'La última fecha de grupos dejó momentos históricos: la clasificación de Cabo Verde, el descanso de Messi y la definición del Grupo K entre Colombia y Portugal. Los octavos de final comienzan a tomar forma.' 
+      },
+      { 
+        titulo: '¿Quién es el favorito tras la fase de grupos?', 
+        autor: 'Por SportVivo360', 
+        fecha: fechaStr, 
+        texto: 'Selecciones como España, Inglaterra, Argentina y Países Bajos llegan con buen ritmo. Sin embargo, el formato de 48 equipos ha dado sorpresas como la de Cabo Verde y Curazao.' 
+      }
     ],
     equipos: ['Argentina','Brasil','Francia','España','Alemania','Portugal','Inglaterra','Países Bajos','Croacia','Bélgica','Uruguay','Marruecos','Senegal','Australia','EE.UU.','México','Canadá','Japón','Corea del Sur','Suecia','Suiza','Turquía','Italia']
   },
@@ -728,10 +765,10 @@ const datosDeportes = {
 // ============================================================
 const TICKER = [
   'Bienvenido a SportVivo360. Sigue toda la actualidad del Mundial 2026.',
-  'España golea 4-0 a Arabia Saudita; Egipto vence 3-1 a Nueva Zelanda.',
-  'Países Bajos y Japón empatan en el Grupo F; Alemania lidera el Grupo E.',
-  'MLB: Dodgers en vivo vs Giants | NBA: Nuggets en vivo vs Warriors.',
-  'Hoy: Argentina vs Austria | Francia vs Irak | Colombia vs Portugal.'
+  'Cabo Verde hace historia y clasifica a octavos en su primer Mundial.',
+  'Messi al banquillo vs Jordania; Argentina ya está clasificada.',
+  'Colombia vs Portugal definen al líder del Grupo K esta noche.',
+  'España vence 1-0 a Uruguay y termina líder del Grupo H.'
 ];
 
 // ============================================================
@@ -907,7 +944,6 @@ function transformAPIMatch(match) {
 // ============================================================
 function calculateStandings(games) {
   const groups = {};
-  // Filtrar solo partidos de grupos A-L con equipos definidos
   const validGames = games.filter(g => {
     const group = g.group || '';
     return /^[A-L]$/.test(group) && g.home_team_name_en && g.away_team_name_en && g.finished === 'TRUE';
@@ -1146,7 +1182,7 @@ async function renderInicio() {
         }
         return acc;
       }, 0);
-      const clasificados = 1;
+      const clasificados = 1; // simplificado
       const diasRestantes = 18;
       document.getElementById('statPartidos').textContent = total;
       document.getElementById('statGoles').textContent = goles;
@@ -1343,15 +1379,19 @@ async function renderClasificacion() {
   }
 }
 
-// --- EQUIPOS ---
+// --- EQUIPOS (CON BANDERAS) ---
 function renderEquipos() {
   const d = datosDeportes[deporte];
   const eq = document.getElementById('equiposGrid');
   if (!eq) return;
-  eq.innerHTML = d.equipos.map(e => `<div class="team-card"><div class="team-icon">${d.icono}</div><div class="team-card-name">${e}</div></div>`).join('');
+  // Mostrar bandera + nombre
+  eq.innerHTML = d.equipos.map(e => {
+    const flag = getFlagFromName(e);
+    return `<div class="team-card"><div class="team-icon">${flag}</div><div class="team-card-name">${e}</div></div>`;
+  }).join('');
 }
 
-// --- NOTICIAS ---
+// --- NOTICIAS (con las nuevas noticias) ---
 function renderNoticias() {
   const d = datosDeportes[deporte];
   const nl = document.getElementById('noticiasList');
