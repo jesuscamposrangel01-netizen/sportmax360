@@ -11,6 +11,7 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3765201153278683" crossorigin="anonymous"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
+/* (Mantén tu CSS exactamente igual, no lo cambio) */
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
   --primary:#0b1e2e;
@@ -737,12 +738,14 @@ const TICKER = [
 // ============================================================
 let deporte = 'futbol';
 let pagina = 'inicio';
-let fecha = '21';
+// Fecha por defecto: día actual del mes
+const hoy = new Date();
+let fecha = String(hoy.getDate()).padStart(2, '0');
 let tickerIdx = 0;
 let tickerTimer;
 let carouselIndex = 0;
 let carouselTimer;
-let cachedGames = null; // Cache para la API del Mundial
+let cachedGames = null;
 
 // ============================================================
 // TEMA Y COOKIES
@@ -792,7 +795,7 @@ function cambiarDeporte(btn) {
   document.getElementById('headerSportLabel').textContent = d.nombre;
   
   if (deporte === 'futbol') {
-    cachedGames = null; // forzar recarga de la API
+    cachedGames = null;
   }
   renderTodo();
   const bannerTitulo = document.getElementById('bannerTitulo');
@@ -865,7 +868,6 @@ async function fetchWorldCupGames(force = false) {
   }
 }
 
-// Mapeo de nombres exactos de la API a banderas
 const flagMap = {
   'Mexico': '🇲🇽', 'South Africa': '🇿🇦', 'Korea Republic': '🇰🇷', 'Czech Republic': '🇨🇿',
   'Canada': '🇨🇦', 'Bosnia and Herzegovina': '🇧🇦', 'United States': '🇺🇸', 'Paraguay': '🇵🇾',
@@ -1107,10 +1109,13 @@ async function renderInicio() {
     sp.innerHTML = '<div class="stat-card"><h4>📊 Estadísticas</h4><p style="color:var(--muted);font-size:.85rem;padding:8px 0">Datos actualizados en tiempo real.</p></div>';
   }
 
-  // Selector de fechas
+  // Selector de fechas (dinámico: del 11 al 30 de junio)
   const ds = document.getElementById('dateSelector');
   if (deporte === 'futbol') {
-    const fechas = ['11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26'];
+    const fechas = [];
+    for (let d = 11; d <= 30; d++) {
+      fechas.push(String(d).padStart(2, '0'));
+    }
     ds.style.display = 'flex';
     ds.innerHTML = '<span class="date-label">Junio:</span>' + fechas.map(f => `<button class="date-btn ${f===fecha?'active':''}" onclick="selFecha('${f}')">${f}</button>`).join('');
   } else if (deporte === 'mlb') {
@@ -1134,7 +1139,7 @@ async function renderInicio() {
         }
         return acc;
       }, 0);
-      const clasificados = 1; // simplificado
+      const clasificados = 1;
       const diasRestantes = 18;
       document.getElementById('statPartidos').textContent = total;
       document.getElementById('statGoles').textContent = goles;
@@ -1199,7 +1204,7 @@ async function cargarPartidosInicio() {
         })
         .map(g => transformAPIMatch(g));
       document.getElementById('matchesTitle').textContent = `Partidos del ${fecha} de Junio`;
-      ml.innerHTML = partidosFiltrados.length ? partidosFiltrados.map(p => matchCardHtml(p)).join('') : emptyHtml('No hay partidos para esta fecha.');
+      ml.innerHTML = partidosFiltrados.length ? partidosFiltrados.map(p => matchCardHtml(p)).join('') : emptyHtml('📅 No hay partidos programados para el ' + fecha + ' de junio. Prueba con otra fecha.');
     } else {
       ml.innerHTML = emptyHtml('No se pudo cargar la API. Verifica tu conexión.');
     }
@@ -1222,7 +1227,6 @@ async function renderEnVivo() {
     lv.innerHTML = spinnerHtml();
     const games = await fetchWorldCupGames();
     if (games && games.length > 0) {
-      // Mostrar partidos de hoy que están programados como "Próximamente"
       const hoy = new Date().getDate();
       const hoyStr = String(hoy).padStart(2, '0');
       const filtrados = games
@@ -1232,7 +1236,7 @@ async function renderEnVivo() {
           return parts.length === 3 && parts[1] === hoyStr && g.finished !== 'TRUE';
         })
         .map(g => transformAPIMatch(g));
-      lv.innerHTML = filtrados.length ? filtrados.map(p => matchCardHtml(p)).join('') : emptyHtml('No hay partidos en vivo o próximos.');
+      lv.innerHTML = filtrados.length ? filtrados.map(p => matchCardHtml(p)).join('') : emptyHtml('No hay partidos en vivo o próximos para hoy.');
     } else {
       lv.innerHTML = emptyHtml('No se pudo cargar la API.');
     }
@@ -1261,7 +1265,10 @@ async function renderPartidos() {
   if (!pl) return;
 
   if (deporte === 'futbol') {
-    const fechas = ['11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26'];
+    const fechas = [];
+    for (let d = 11; d <= 30; d++) {
+      fechas.push(String(d).padStart(2, '0'));
+    }
     ds.innerHTML = '<span class="date-label">Junio:</span>' + fechas.map(f => `<button class="date-btn ${f===fecha?'active':''}" onclick="selFechaPartidos('${f}')">${f}</button>`).join('');
     pl.innerHTML = spinnerHtml();
     const games = await fetchWorldCupGames();
@@ -1278,7 +1285,7 @@ async function renderPartidos() {
           return false;
         })
         .map(g => transformAPIMatch(g));
-      pl.innerHTML = partidosFiltrados.length ? partidosFiltrados.map(p => matchCardHtml(p)).join('') : emptyHtml('No hay partidos para esta fecha.');
+      pl.innerHTML = partidosFiltrados.length ? partidosFiltrados.map(p => matchCardHtml(p)).join('') : emptyHtml('📅 No hay partidos programados para el ' + fecha + ' de junio.');
     } else {
       pl.innerHTML = emptyHtml('No se pudo cargar la API.');
     }
@@ -1317,7 +1324,6 @@ async function renderClasificacion() {
       const standingsData = calculateStandings(games);
       cg.innerHTML = standingsData.map(g => standingsHtml(g, deporte)).join('');
     } else {
-      // Fallback: mostrar mensaje
       cg.innerHTML = emptyHtml('No se pudo calcular la clasificación. Verifica la API.');
     }
   } else if (deporte === 'mlb') {
@@ -1338,12 +1344,7 @@ function renderEquipos() {
   const d = datosDeportes[deporte];
   const eq = document.getElementById('equiposGrid');
   if (!eq) return;
-  if (deporte === 'futbol') {
-    // Podríamos extraer equipos de la API, pero usamos lista estática para rapidez
-    eq.innerHTML = d.equipos.map(e => `<div class="team-card"><div class="team-icon">${d.icono}</div><div class="team-card-name">${e}</div></div>`).join('');
-  } else {
-    eq.innerHTML = d.equipos.map(e => `<div class="team-card"><div class="team-icon">${d.icono}</div><div class="team-card-name">${e}</div></div>`).join('');
-  }
+  eq.innerHTML = d.equipos.map(e => `<div class="team-card"><div class="team-icon">${d.icono}</div><div class="team-card-name">${e}</div></div>`).join('');
 }
 
 // --- NOTICIAS ---
