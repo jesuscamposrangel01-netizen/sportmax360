@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- ===== TÍTULO Y PALABRAS CLAVE SEO ===== -->
+    <!-- ===== SEO: PALABRAS CLAVE ===== -->
     <title>MLB 2026 en vivo | Resultados, clasificación y noticias | SportVivo360</title>
     <meta name="description" content="Sigue la MLB 2026 con resultados en vivo, clasificaciones, estadísticas, rosters, noticias oficiales y calendario actualizado. También cobertura del Mundial 2026 y la NBA.">
     <meta name="keywords" content="MLB 2026, resultados MLB hoy, calendario MLB, clasificación MLB, Shohei Ohtani, Aaron Judge, Dodgers, Yankees, Serie Mundial 2026, Mundial 2026, Argentina vs España, final Mundial 2026, NBA 2026, baloncesto, deportes en vivo">
@@ -1060,7 +1060,163 @@
             box-shadow: 0 4px 12px rgba(26, 86, 219, 0.4);
         }
 
-        /* Estilos para el modal de MLB */
+        /* ===== ESTILOS PARA TARJETAS DE PARTIDOS MLB ===== */
+        .mlb-game-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: var(--card-shadow);
+            transition: transform .2s, box-shadow .2s;
+        }
+        .mlb-game-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+        .mlb-game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: .75rem;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .3px;
+        }
+        .mlb-game-teams {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .mlb-team {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+        .mlb-team-abbr {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--text);
+            line-height: 1.2;
+        }
+        .mlb-team-record {
+            font-size: .75rem;
+            font-weight: 600;
+            color: var(--muted);
+        }
+        .mlb-team-name {
+            font-size: .8rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-top: 4px;
+        }
+        .mlb-pitcher {
+            font-size: .75rem;
+            color: var(--muted);
+            margin-top: 4px;
+            text-align: center;
+        }
+        .mlb-pitcher span {
+            font-weight: 600;
+            color: var(--text);
+        }
+        .mlb-game-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 12px;
+            justify-content: center;
+        }
+        .mlb-game-actions button {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 4px 12px;
+            font-size: .7rem;
+            font-weight: 600;
+            color: var(--text);
+            transition: all .2s;
+            cursor: pointer;
+        }
+        .mlb-game-actions button:hover {
+            background: var(--blue);
+            color: #fff;
+            border-color: var(--blue);
+        }
+        .mlb-game-score {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--blue);
+            padding: 0 12px;
+            min-width: 50px;
+            text-align: center;
+        }
+        .mlb-game-score.final {
+            color: var(--text);
+        }
+        .mlb-game-score.live {
+            color: var(--accent);
+            animation: pulse 1.2s infinite;
+        }
+
+        /* Detalle del partido (modal) */
+        .mlb-detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .8rem;
+            margin: 12px 0;
+        }
+        .mlb-detail-table th {
+            background: var(--bg);
+            padding: 6px 8px;
+            text-align: center;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: .65rem;
+            color: var(--muted);
+        }
+        .mlb-detail-table td {
+            padding: 4px 8px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .mlb-detail-table .highlight {
+            font-weight: 700;
+            color: var(--blue);
+        }
+        .mlb-pitcher-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 12px 0;
+            padding: 12px;
+            background: var(--bg);
+            border-radius: 8px;
+            font-size: .85rem;
+        }
+        .mlb-pitcher-stats div {
+            text-align: center;
+        }
+        .mlb-pitcher-stats .label {
+            font-size: .65rem;
+            text-transform: uppercase;
+            color: var(--muted);
+            letter-spacing: .3px;
+        }
+
+        /* Ocultar contenedores vacíos */
+        #mlbLeadersMini:empty {
+            display: none;
+        }
+        .standings-mini:empty {
+            display: none;
+        }
+        #standingsMini:empty {
+            display: none;
+        }
+
+        /* Modal */
         #mlbModal {
             position: fixed;
             top: 0;
@@ -1206,8 +1362,7 @@
                 <div class="stat-card-large"><div class="stat-number" id="statRestantes">0</div><div class="stat-label">Días restantes (temporada)</div></div>
             </div>
 
-            <!-- Sección de MLB: Líderes y calendario -->
-            <div class="section-title">⚾ MLB Líderes de división <span class="sub">Top 1 de cada división</span></div>
+            <!-- Líderes MLB -->
             <div class="standings-mini" id="mlbLeadersMini"></div>
 
             <div class="date-selector" id="dateSelector"></div>
@@ -1659,7 +1814,7 @@
         // ============================================================
         // ESTADO GLOBAL
         // ============================================================
-        let deporte = 'mlb'; // MLB por defecto
+        let deporte = 'mlb';
         let pagina = 'inicio';
         let fecha = String(new Date().getDate()).padStart(2, '0');
         let tickerIdx = 0;
@@ -1769,36 +1924,72 @@
         // ============================================================
         // API MLB
         // ============================================================
-        function getFechaMLB() {
+        function getFechaMLB(offset = 0) {
             const hoy = new Date();
-            const y = hoy.getFullYear(),
-                m = String(hoy.getMonth() + 1).padStart(2, '0'),
-                d = String(hoy.getDate()).padStart(2, '0');
+            hoy.setDate(hoy.getDate() + offset);
+            const y = hoy.getFullYear();
+            const m = String(hoy.getMonth() + 1).padStart(2, '0');
+            const d = String(hoy.getDate()).padStart(2, '0');
             return `${y}-${m}-${d}`;
+        }
+
+        function getDiaSemana(offset) {
+            const dias = ['DOM', 'LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB'];
+            const hoy = new Date();
+            hoy.setDate(hoy.getDate() + offset);
+            return dias[hoy.getDay()];
         }
 
         function parseMLBGame(game, fechaStr) {
             const teams = game.teams;
-            const local = teams.home.team.name;
-            const visit = teams.away.team.name;
+            const home = teams.home.team;
+            const away = teams.away.team;
+            const homeRecord = home.record ? `${home.record.wins}-${home.record.losses}` : '0-0';
+            const awayRecord = away.record ? `${away.record.wins}-${away.record.losses}` : '0-0';
+
+            let homePitcher = null,
+                awayPitcher = null;
+            if (game.linescore && game.linescore.pitchers) {
+                const pitchers = game.linescore.pitchers;
+                if (pitchers.home) homePitcher = pitchers.home;
+                if (pitchers.away) awayPitcher = pitchers.away;
+            }
+            if (!homePitcher && game.probable_pitchers && game.probable_pitchers.home) {
+                homePitcher = game.probable_pitchers.home;
+            }
+            if (!awayPitcher && game.probable_pitchers && game.probable_pitchers.away) {
+                awayPitcher = game.probable_pitchers.away;
+            }
+
             let score = 'vs';
             let st = 'Programado';
             const status = game.status.detailedState;
-            if (status === 'Final' || status === 'Game Over') { st = 'Final';
-                score = `${teams.home.score}-${teams.away.score}`; } else if (status === 'In Progress' || status === 'Live') { st =
-                    'Vivo';
-                score = `${teams.home.score}-${teams.away.score}`; }
+            if (status === 'Final' || status === 'Game Over') {
+                st = 'Final';
+                score = `${teams.home.score}-${teams.away.score}`;
+            } else if (status === 'In Progress' || status === 'Live') {
+                st = 'Vivo';
+                score = `${teams.home.score}-${teams.away.score}`;
+            }
+
             return {
-                local,
-                visitante: visit,
-                score,
+                local: home.name,
+                visitante: away.name,
+                homeAbbr: home.abbreviation || home.name.substring(0, 3).toUpperCase(),
+                awayAbbr: away.abbreviation || away.name.substring(0, 3).toUpperCase(),
+                homeRecord: homeRecord,
+                awayRecord: awayRecord,
+                score: score,
                 status: st,
                 fecha: fechaStr,
                 gameId: game.gamePk,
-                homeId: teams.home.team.id,
-                awayId: teams.away.team.id,
-                flagL: getFlagFromName(local) || '',
-                flagV: getFlagFromName(visit) || ''
+                homeId: home.id,
+                awayId: away.id,
+                flagL: getFlagFromName(home.name) || '',
+                flagV: getFlagFromName(away.name) || '',
+                homePitcher: homePitcher,
+                awayPitcher: awayPitcher,
+                gameData: game
             };
         }
 
@@ -1976,7 +2167,10 @@
             const container = document.getElementById('mlbTeamSelector');
             if (!container) return;
             container.innerHTML = mlbTeams.map(t =>
-                `<button class="date-btn" data-teamid="${t.id}" onclick="cargarRoster(${t.id})">${t.name}</button>`
+                `<button class="date-btn" data-teamid="${t.id}" onclick="cargarRoster(${t.id})" style="display:flex;align-items:center;gap:6px;">
+                    <img src="https://www.mlbstatic.com/team-logos/${t.id}.svg" alt="" style="height:20px;width:20px;object-fit:contain;">
+                    ${t.name}
+                </button>`
             ).join('');
         }
 
@@ -2053,24 +2247,73 @@
             `).join('');
         }
 
+        // --- RENDER TARJETA DE PARTIDO MLB ---
+        function renderMLBGameCard(m) {
+            const isFinal = m.status === 'Final';
+            const isLive = m.status === 'Vivo';
+            const scoreClass = isFinal ? 'final' : (isLive ? 'live' : '');
+            const scoreDisplay = (isFinal || isLive) ? m.score : 'vs';
+
+            function pitcherHtml(pitcher, teamAbbr) {
+                if (!pitcher) return `<div class="mlb-pitcher">${teamAbbr} - Sin abridor confirmado</div>`;
+                const name = pitcher.fullName || pitcher.name || 'Desconocido';
+                const record = pitcher.wins && pitcher.losses ? `${pitcher.wins}-${pitcher.losses}` : '0-0';
+                const era = pitcher.era || pitcher.eraValue || '0.00';
+                return `<div class="mlb-pitcher">${teamAbbr} · <span>${name}</span> · ${record} · ${era} EFE</div>`;
+            }
+
+            return `
+                <div class="mlb-game-card" data-gameid="${m.gameId}">
+                    <div class="mlb-game-header">
+                        <span>${m.fecha}</span>
+                        <span class="status-badge ${isFinal ? 'badge-final' : (isLive ? 'badge-vivo' : 'badge-programado')}">${m.status}</span>
+                    </div>
+                    <div class="mlb-game-teams">
+                        <div class="mlb-team">
+                            <div class="mlb-team-abbr">${m.awayAbbr}</div>
+                            <div class="mlb-team-record">${m.awayRecord}</div>
+                            <div class="mlb-team-name">${m.visitante}</div>
+                            ${pitcherHtml(m.awayPitcher, m.awayAbbr)}
+                        </div>
+                        <div class="mlb-game-score ${scoreClass}">${scoreDisplay}</div>
+                        <div class="mlb-team">
+                            <div class="mlb-team-abbr">${m.homeAbbr}</div>
+                            <div class="mlb-team-record">${m.homeRecord}</div>
+                            <div class="mlb-team-name">${m.local}</div>
+                            ${pitcherHtml(m.homePitcher, m.homeAbbr)}
+                        </div>
+                    </div>
+                    <div class="mlb-game-actions">
+                        <button onclick="mostrarPrevioMLB(${m.gameId})">📋 Previo</button>
+                        <button onclick="comprarBoletosMLB(${m.gameId})">🎟️ Boletos</button>
+                        <button onclick="mostrarDetalleMLB(${m.gameId}, ${m.homeId}, ${m.awayId})">📊 Crónica</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function mostrarPrevioMLB(gameId) {
+            alert(`📋 Previo del partido ID: ${gameId}\n\n(Esta función mostrará estadísticas previas y alineaciones.)`);
+        }
+
+        function comprarBoletosMLB(gameId) {
+            alert(`🎟️ Boletos para el partido ID: ${gameId}\n\n(Redirigirá a la página oficial de venta de boletos.)`);
+        }
+
         // --- MOSTRAR MODAL CON DETALLE DE PARTIDO ---
-        function mostrarDetallePartidoMLB(gameId, homeTeamId, awayTeamId) {
+        async function mostrarDetalleMLB(gameId, homeTeamId, awayTeamId) {
             const modal = document.getElementById('mlbModal');
             if (!modal) return;
             modal.style.display = 'flex';
             const content = document.getElementById('mlbModalContent');
             content.innerHTML = '<div class="spinner"></div>';
-            cargarDetallePartido(gameId, homeTeamId, awayTeamId);
-        }
 
-        async function cargarDetallePartido(gameId, homeTeamId, awayTeamId) {
-            const content = document.getElementById('mlbModalContent');
-            if (!content) return;
             const gameData = await fetchGameDetails(gameId);
             if (!gameData) {
                 content.innerHTML = '<p>Error al cargar los detalles del partido.</p>';
                 return;
             }
+
             const home = gameData.gameData.teams.home;
             const away = gameData.gameData.teams.away;
             const linescore = gameData.liveData.linescore;
@@ -2082,61 +2325,92 @@
             const homeErrors = linescore.teams.home.errors || 0;
             const awayErrors = linescore.teams.away.errors || 0;
 
-            let html = `<h3 style="margin-bottom:8px;">${away.team.name} @ ${home.team.name}</h3>
+            const decisions = gameData.liveData.decisions || {};
+            const winner = decisions.winner ? decisions.winner.fullName : 'N/A';
+            const loser = decisions.loser ? decisions.loser.fullName : 'N/A';
+            const save = decisions.save ? decisions.save.fullName : 'N/A';
+            const winnerRecord = decisions.winner ? `${decisions.winner.wins}-${decisions.winner.losses}` : '';
+            const loserRecord = decisions.loser ? `${decisions.loser.wins}-${decisions.loser.losses}` : '';
+            const saveCount = decisions.save ? decisions.save.saves || '' : '';
+
+            let html = `
+                <h3>${away.team.name} vs ${home.team.name}</h3>
                 <p style="font-size:.9rem;color:var(--muted);margin-bottom:12px;">${gameData.gameData.status.detailedState} · ${new Date(gameData.gameData.datetime.dateTime).toLocaleString('es-ES')}</p>
                 <div style="display:flex;justify-content:space-between;background:var(--bg);padding:12px 16px;border-radius:8px;margin-bottom:16px;">
-                    <div><strong>${away.team.name}</strong><br>${awayRuns} carreras · ${awayHits} hits · ${awayErrors} errores</div>
+                    <div><strong>${away.team.name}</strong><br>${awayRuns} C · ${awayHits} H · ${awayErrors} E</div>
                     <div style="font-size:2rem;font-weight:900;color:var(--blue);">${awayRuns} - ${homeRuns}</div>
-                    <div style="text-align:right;"><strong>${home.team.name}</strong><br>${homeRuns} carreras · ${homeHits} hits · ${homeErrors} errores</div>
-                </div>`;
+                    <div style="text-align:right;"><strong>${home.team.name}</strong><br>${homeRuns} C · ${homeHits} H · ${homeErrors} E</div>
+                </div>
+            `;
 
             if (innings.length > 0) {
                 html += `<h4 style="margin:12px 0 8px;">📊 Desglose por entradas</h4>
                 <div style="overflow-x:auto;">
-                    <table style="width:100%;border-collapse:collapse;font-size:.8rem;">
-                        <thead><tr style="background:var(--bg);">
-                            <th style="padding:6px 8px;">Entrada</th>
-                            <th style="padding:6px 8px;">${away.team.name}</th>
-                            <th style="padding:6px 8px;">${home.team.name}</th>
-                        </tr></thead>
-                        <tbody>`;
-                innings.forEach((inn, idx) => {
-                    const a = inn.away ? inn.away.runs : 0;
-                    const h = inn.home ? inn.home.runs : 0;
-                    html += `<tr><td style="padding:4px 8px;border-bottom:1px solid var(--border);">${idx+1}</td>
-                        <td style="padding:4px 8px;border-bottom:1px solid var(--border);">${a}</td>
-                        <td style="padding:4px 8px;border-bottom:1px solid var(--border);">${h}</td></tr>`;
+                    <table class="mlb-detail-table">
+                        <thead><tr>
+                            <th>Entrada</th>`;
+                for (let i = 1; i <= Math.max(9, innings.length); i++) {
+                    html += `<th>${i}</th>`;
+                }
+                html += `<th>C</th><th>H</th><th>E</th>
+                        </tr></thead><tbody>`;
+                // Fila visitante
+                html += `<tr><td><strong>${away.team.name}</strong></td>`;
+                let totalAwayRuns = 0,
+                    totalAwayHits = 0,
+                    totalAwayErrors = 0;
+                innings.forEach(inn => {
+                    const runs = inn.away ? inn.away.runs : 0;
+                    const hits = inn.away ? inn.away.hits : 0;
+                    const errors = inn.away ? inn.away.errors : 0;
+                    totalAwayRuns += runs;
+                    totalAwayHits += hits;
+                    totalAwayErrors += errors;
+                    html += `<td>${runs}</td>`;
                 });
+                for (let i = innings.length; i < 9; i++) {
+                    html += `<td>-</td>`;
+                }
+                html += `<td><strong>${totalAwayRuns}</strong></td><td>${totalAwayHits}</td><td>${totalAwayErrors}</td></tr>`;
+
+                // Fila local
+                html += `<tr><td><strong>${home.team.name}</strong></td>`;
+                let totalHomeRuns = 0,
+                    totalHomeHits = 0,
+                    totalHomeErrors = 0;
+                innings.forEach(inn => {
+                    const runs = inn.home ? inn.home.runs : 0;
+                    const hits = inn.home ? inn.home.hits : 0;
+                    const errors = inn.home ? inn.home.errors : 0;
+                    totalHomeRuns += runs;
+                    totalHomeHits += hits;
+                    totalHomeErrors += errors;
+                    html += `<td>${runs}</td>`;
+                });
+                for (let i = innings.length; i < 9; i++) {
+                    html += `<td>-</td>`;
+                }
+                html += `<td><strong>${totalHomeRuns}</strong></td><td>${totalHomeHits}</td><td>${totalHomeErrors}</td></tr>`;
                 html += `</tbody></table></div>`;
             }
 
-            html += `<h4 style="margin:16px 0 8px;">📜 Últimos enfrentamientos</h4><div id="mlbHeadToHead">Cargando...</div>`;
-            content.innerHTML = html;
+            html += `
+                <div class="mlb-pitcher-stats">
+                    <div><span class="label">Ganador</span><br><strong>${winner}</strong> ${winnerRecord ? `(${winnerRecord})` : ''}</div>
+                    <div><span class="label">Perdedor</span><br><strong>${loser}</strong> ${loserRecord ? `(${loserRecord})` : ''}</div>
+                    <div><span class="label">Salvamento</span><br><strong>${save}</strong> ${saveCount ? `(${saveCount} SV)` : ''}</div>
+                </div>
+            `;
 
-            const h2h = await fetchHeadToHead(awayTeamId, homeTeamId);
-            const h2hContainer = document.getElementById('mlbHeadToHead');
-            if (h2hContainer) {
-                if (h2h && h2h.length > 0) {
-                    let h2hHtml = `<ul style="list-style:none;padding:0;font-size:.85rem;">`;
-                    h2h.forEach(g => {
-                        const date = new Date(g.gameDate).toLocaleDateString('es-ES');
-                        const hScore = g.teams.home.score || 0;
-                        const aScore = g.teams.away.score || 0;
-                        const result = g.teams.home.team.id === homeTeamId ?
-                            `${home.team.name} ${hScore}-${aScore} ${away.team.name}` :
-                            `${away.team.name} ${aScore}-${hScore} ${home.team.name}`;
-                        h2hHtml += `<li style="padding:4px 0;border-bottom:1px solid var(--border);">${date}: ${result}</li>`;
-                    });
-                    h2hHtml += '</ul>';
-                    h2hContainer.innerHTML = h2hHtml;
-                } else {
-                    h2hContainer.innerHTML = '<p style="color:var(--muted);font-size:.85rem;">No hay enfrentamientos recientes.</p>';
-                }
-            }
+            html += `<div style="margin-top:12px;text-align:center;">
+                <button onclick="alert('Resumen del partido no disponible en esta vista.')" style="background:var(--blue);color:#fff;border:none;border-radius:6px;padding:6px 18px;font-weight:600;cursor:pointer;">▶ Ver Resumen</button>
+            </div>`;
+
+            content.innerHTML = html;
         }
 
         // ============================================================
-        // API MUNDIAL 2026 (FÚTBOL) - solo para mantener la cobertura
+        // API MUNDIAL 2026 (FÚTBOL)
         // ============================================================
         async function fetchWorldCupGames(force = false) {
             if (cachedGames && !force) return cachedGames;
@@ -2179,18 +2453,13 @@
             return '<span class="status-badge badge-programado">Programado</span>';
         }
 
-        function matchCardHtml(m, isMLB = false) {
+        function matchCardHtml(m) {
             const flagL = m.flagL || '';
             const flagV = m.flagV || '';
             const score = m.score && m.score !== 'vs' ? m.score.split('-') : null;
             const s1 = score ? score[0] : '-';
             const s2 = score ? score[1] : '-';
-            let clickAttr = '';
-            if (isMLB && m.gameId) {
-                clickAttr =
-                    ` onclick="mostrarDetallePartidoMLB('${m.gameId}', ${m.homeId || 0}, ${m.awayId || 0})" style="cursor:pointer;"`;
-            }
-            return `<div class="match-card"${clickAttr}>
+            return `<div class="match-card">
                 <div class="match-header">${badgeHtml(m.status)}${m.fecha ? '<span class="match-date">' + m.fecha + '</span>' : ''}</div>
                 <div class="team-row"><div class="team-info">${flagL ? '<span class="team-flag">' + flagL + '</span>' : ''}<span class="team-name">${m.local || ''}</span></div><span class="team-score">${s1}</span></div>
                 <div class="team-row"><div class="team-info">${flagV ? '<span class="team-flag">' + flagV + '</span>' : ''}<span class="team-name">${m.visitante}</span></div><span class="team-score">${s2}</span></div>
@@ -2363,9 +2632,16 @@
             if (deporte === 'mlb') {
                 ds.style.display = 'flex';
                 const hoy = getFechaMLB();
-                ds.innerHTML = `<span class="date-label">📅 Fecha:</span>
-                    <input type="date" id="mlbDatePicker" value="${hoy}" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text);font-family:inherit;font-size:.85rem;">
-                    <button class="date-btn" onclick="cargarMLBDesdeFecha()">Buscar</button>`;
+                ds.innerHTML = `
+                    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                        <span class="date-label">📅</span>
+                        <button class="date-btn ${hoy === getFechaMLB() ? 'active' : ''}" onclick="cambiarFechaMLB('${getFechaMLB()}')">HOY</button>
+                        <button class="date-btn" onclick="cambiarFechaMLB('${getFechaMLB(-1)}')">${getDiaSemana(-1)}</button>
+                        <button class="date-btn" onclick="cambiarFechaMLB('${getFechaMLB(1)}')">${getDiaSemana(1)}</button>
+                        <input type="date" id="mlbDatePicker" value="${hoy}" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:4px 8px;color:var(--text);font-family:inherit;font-size:.8rem;">
+                        <button class="date-btn" onclick="cargarMLBDesdeFecha()">Buscar</button>
+                    </div>
+                `;
             } else if (deporte === 'futbol') {
                 const fechas = [];
                 for (let d = 1; d <= 19; d++) fechas.push(String(d).padStart(2, '0'));
@@ -2385,9 +2661,9 @@
                     getFechaMLB();
                 const partidos = await fetchMLBSchedule(fechaMLB);
                 if (partidos && partidos.length > 0) {
-                    ml.innerHTML = partidos.map(p => matchCardHtml(p, true)).join('');
+                    ml.innerHTML = partidos.map(g => renderMLBGameCard(g)).join('');
                 } else if (partidos === null) {
-                    ml.innerHTML = d.partidos.map(p => matchCardHtml(p, true)).join('');
+                    ml.innerHTML = d.partidos.map(p => renderMLBGameCard(parseMLBGame(p, fechaMLB))).join('');
                 } else {
                     ml.innerHTML = emptyHtml('No hay partidos en esta fecha.');
                 }
@@ -2419,7 +2695,7 @@
                 sp.innerHTML = html;
 
             } else if (deporte === 'futbol') {
-                // Renderizado de fútbol (Mundial) - mantener la cobertura
+                // Renderizado de fútbol (Mundial)
                 const games = await fetchWorldCupGames();
                 if (games) {
                     const stats = {
@@ -2443,6 +2719,13 @@
                 '<div class="stat-card"><h4>🏀 Líderes NBA</h4><div class="stat-item"><span>Puntos</span><span class="stat-val">L. Doncic (32.5)</span></div><div class="stat-item"><span>Rebotes</span><span class="stat-val">V. Wembanyama (12.8)</span></div><div class="stat-item"><span>Asistencias</span><span class="stat-val">T. Haliburton (11.2)</span></div></div>';
             }
         }
+
+        function cambiarFechaMLB(fecha) {
+            document.getElementById('mlbDatePicker').value = fecha;
+            cargarMLBDesdeFecha();
+        }
+
+        function cargarMLBDesdeFecha() { renderInicio(); }
 
         async function cargarPartidosInicio() {
             const ml = document.getElementById('matchesList');
@@ -2472,8 +2755,6 @@
             }
         }
 
-        function cargarMLBDesdeFecha() { renderInicio(); }
-
         function selFecha(f) {
             fecha = f;
             document.querySelectorAll('.date-btn').forEach(b => b.classList.toggle('active', b.textContent == f));
@@ -2493,11 +2774,11 @@
                 const games = await fetchMLBSchedule(fechaMLB);
                 if (games) {
                     const vivos = games.filter(g => g.status === 'Vivo');
-                    lv.innerHTML = vivos.length ? vivos.map(p => matchCardHtml(p, true)).join('') :
+                    lv.innerHTML = vivos.length ? vivos.map(g => renderMLBGameCard(g)).join('') :
                         emptyHtml('No hay partidos en vivo en este momento.');
                 } else {
                     const vivos = d.partidos.filter(p => p.status === 'Vivo');
-                    lv.innerHTML = vivos.length ? vivos.map(p => matchCardHtml(p)).join('') :
+                    lv.innerHTML = vivos.length ? vivos.map(p => renderMLBGameCard(parseMLBGame(p, fechaMLB))).join('') :
                         emptyHtml('No hay partidos en vivo.');
                 }
             } else if (deporte === 'futbol') {
@@ -2529,18 +2810,24 @@
             const ds = document.getElementById('dateSelectorPartidos');
             if (!pl) return;
             if (deporte === 'mlb') {
-                ds.innerHTML =
-                    `<span class="date-label">📅 Fecha:</span>
-                    <input type="date" id="mlbDatePickerPartidos" value="${getFechaMLB()}" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text);font-family:inherit;font-size:.85rem;">
-                    <button class="date-btn" onclick="cargarMLBPartidos()">Buscar</button>`;
+                ds.innerHTML = `
+                    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                        <span class="date-label">📅</span>
+                        <button class="date-btn" onclick="cambiarFechaMLBPartidos('${getFechaMLB()}')">HOY</button>
+                        <button class="date-btn" onclick="cambiarFechaMLBPartidos('${getFechaMLB(-1)}')">${getDiaSemana(-1)}</button>
+                        <button class="date-btn" onclick="cambiarFechaMLBPartidos('${getFechaMLB(1)}')">${getDiaSemana(1)}</button>
+                        <input type="date" id="mlbDatePickerPartidos" value="${getFechaMLB()}" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:4px 8px;color:var(--text);font-family:inherit;font-size:.8rem;">
+                        <button class="date-btn" onclick="cargarMLBPartidos()">Buscar</button>
+                    </div>
+                `;
                 pl.innerHTML = spinnerHtml();
                 const fechaMLB = document.getElementById('mlbDatePickerPartidos') ? document.getElementById(
                     'mlbDatePickerPartidos').value : getFechaMLB();
                 const games = await fetchMLBSchedule(fechaMLB);
                 if (games && games.length > 0) {
-                    pl.innerHTML = games.map(p => matchCardHtml(p, true)).join('');
+                    pl.innerHTML = games.map(g => renderMLBGameCard(g)).join('');
                 } else if (games === null) {
-                    pl.innerHTML = d.partidos.map(p => matchCardHtml(p)).join('');
+                    pl.innerHTML = d.partidos.map(p => renderMLBGameCard(parseMLBGame(p, fechaMLB))).join('');
                 } else {
                     pl.innerHTML = emptyHtml('No hay partidos en esta fecha.');
                 }
@@ -2571,6 +2858,11 @@
             }
         }
 
+        function cambiarFechaMLBPartidos(fecha) {
+            document.getElementById('mlbDatePickerPartidos').value = fecha;
+            cargarMLBPartidos();
+        }
+
         function selFechaPartidos(f) { fecha = f;
             renderPartidos(); }
 
@@ -2592,7 +2884,6 @@
                 cg.innerHTML = spinnerHtml();
                 const games = await fetchWorldCupGames();
                 if (games && games.length > 0) {
-                    // Calcular clasificación (simplificado)
                     const grupos = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'];
                     let html = '';
                     grupos.forEach(letra => {
@@ -2640,10 +2931,17 @@
         async function renderEquipos() {
             const eq = document.getElementById('equiposGrid');
             if (!eq) return;
+
             if (deporte === 'mlb') {
-                eq.innerHTML = mlbTeams.map(t =>
-                    `<div class="team-card"><div class="team-icon">⚾</div><div class="team-card-name">${t.name}</div></div>`
-                ).join('');
+                eq.innerHTML = mlbTeams.map(t => `
+                    <div class="team-card" style="padding:12px;">
+                        <img src="https://www.mlbstatic.com/team-logos/${t.id}.svg" 
+                             alt="${t.name}" 
+                             loading="lazy"
+                             style="width:70px; height:70px; object-fit:contain; display:block; margin:0 auto;">
+                        <div class="team-card-name" style="margin-top:8px;">${t.name}</div>
+                    </div>
+                `).join('');
             } else if (deporte === 'futbol') {
                 eq.innerHTML = spinnerHtml();
                 const games = await fetchWorldCupGames();
@@ -2674,7 +2972,6 @@
             nl.innerHTML = d.noticias.map(n =>
                 `<div class="news-card"><div class="news-meta"><span class="news-sport-tag">${d.nombre}</span><span class="news-date">${n.fecha}</span></div><div class="news-title">${n.titulo}</div><div class="news-summary">${n.resumen}</div><div class="news-more">Leer más →</div></div>`
             ).join('');
-            // Cargar noticias MLB si estamos en la página de noticias
             if (document.getElementById('page-noticias').classList.contains('active')) {
                 renderMLBNews();
             }
